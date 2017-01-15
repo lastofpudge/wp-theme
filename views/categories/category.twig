@@ -7,7 +7,7 @@
             <img src="{{post.thumbnail.src}}" />
         {% endif %}
 
-        {{post.content | truncate(20)}}
+        {{post.get_preview(20, false, '', true)}}
 
         {{function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>')}}
     </div>

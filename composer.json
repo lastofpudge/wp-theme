@@ -1,20 +1,20 @@
 {
-    "name": "blank",
-    "type": "Wordpress-theme",
-    "description": "Wordpress Theme Boilerplate",
-    "license": "GNU GPL",
-    "authors": [
-        {
-            "name": "Andrew Dudin",
-            "email": "iluxor@yandex.ru"
-        }
-    ],
-    "require": {
-        "php": ">=5.6.4",
-        "nesbot/carbon": "^1.21",
-        "twig/twig": "~1.0",
-        "timber/timber": "^1.2"
-    },
+  "name": "blank",
+  "type": "Wordpress-theme",
+  "description": "Wordpress Theme Boilerplate",
+  "license": "GNU GPL",
+  "authors": [
+    {
+      "name": "Andrew Dudin",
+      "email": "iluxor@yandex.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.4",
+    "nesbot/carbon": "^1.21",
+    "twig/twig": "~1.0",
+    "timber/timber": "^1.2"
+  },
   "autoload": {
     "files": ["http/AdminControllers/AdminController.php"]
   }

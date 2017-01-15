@@ -10,7 +10,11 @@
 
                 {{ post.content }}
 
-                {{ post.tags }}
+                <ul class="tag-list">
+                    {% for term in post.terms('tags') %}
+                        <li><a href="{{term.link}}">{{term.name}}</a></li>
+                    {% endfor %}
+                </ul>
 
                 <p class="byline">
                     <span class="name">By {{post.author.name}}</span>
