@@ -1,4 +1,5 @@
 <?php
+
     /* is homepage */
     if (is_front_page()) : 
         makeView('homeController@index', 'index');
