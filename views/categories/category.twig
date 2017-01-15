@@ -1,7 +1,7 @@
 {% for post in posts %}
 
     <div class="category-post" style="padding:15px;">
-        {{post.title}}
+        <h2><a href="{{post.link}}">{{post.title}}</a></h2>
 
         {% if post.get_thumbnail %}
             <img src="{{post.thumbnail.src}}" />

@@ -2,8 +2,7 @@
 
 {% block content %}
     <div class="post-wrap" id="post-{{post.ID}}">
-        {{ post.title }}
+        <h1>{{ post.title }}</h1>
         {{ post.content }}
     </div>
-    {#{{dump(post)}}#}
 {% endblock %}

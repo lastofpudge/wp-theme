@@ -9,8 +9,8 @@ function makeView($controller, $view) {
      */
     $ctr = explode("@", $controller, 2);
 
-    require_once "/../http/controllers/Controller.php";
-    require_once "/../http/controllers/" .$ctr[0]. ".php";
+    require_once "/../http/Controllers/Controller.php";
+    require_once "/../http/Controllers/" .$ctr[0]. ".php";
 
     $data = $d::{$ctr[1]}();
 

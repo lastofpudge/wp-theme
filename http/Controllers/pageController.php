@@ -11,8 +11,8 @@
         public static function index(){
             $data = Timber::get_context();
             $post = new TimberPost();
-            $context['post'] = $post;
-            return $context;
+            $data['post'] = $post;
+            return $data;
         }
 
     }
