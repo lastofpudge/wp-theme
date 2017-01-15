@@ -1,0 +1,17 @@
+{% for post in posts %}
+
+    <div class="category-post" style="padding:15px;">
+        {{post.title}}
+
+        {% if post.get_thumbnail %}
+            <img src="{{post.thumbnail.src}}" />
+        {% endif %}
+
+        {{post.content | truncate(20)}}
+
+        {{function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>')}}
+    </div>
+
+{% endfor %}
+
+{% include 'particals/pagination.twig' %}

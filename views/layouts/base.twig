@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+
+    <head>
+        {% include 'particals/head.twig' %}
+    </head>
+
+    <body class="{{ body_class }}">
+
+        <section id="content" role="main" class="content-wrapper">
+            <div class="wrapper">
+                {% block content %}
+                    Sorry, no content
+                {% endblock %}
+            </div>
+        </section>
+
+        {% include 'particals/footer.twig' %}
+    </body>
+</html>
