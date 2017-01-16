@@ -1,8 +1,9 @@
 <?php
 
     /* is homepage */
-    if (is_front_page()) : 
+    if (is_front_page()) :
         makeView('homeController@index', 'index');
+        echo Redux::getOption($redux_opt, 'text-example');
     endif;
 
     /* is category */

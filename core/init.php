@@ -30,4 +30,4 @@
      * custom modules
      */
     require_once(__DIR__ . '/modules/redux-framework/ReduxCore/framework.php');
-    require_once(__DIR__ . '/modules/redux-framework/sample/sample-config.php');
+    require_once(__DIR__ . '/modules/redux-framework/sample/config.php');
