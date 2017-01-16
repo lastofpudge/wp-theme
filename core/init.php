@@ -25,3 +25,9 @@
      * custom routes
      */
     require_once(__DIR__ . '/../routes/custom.php');
+
+    /*
+     * custom modules
+     */
+    require_once(__DIR__ . '/modules/redux-framework/ReduxCore/framework.php');
+    require_once(__DIR__ . '/modules/redux-framework/sample/sample-config.php');

@@ -1,2 +1,4 @@
 /vendor
 /.idea
+_temp/
+views/archives/
