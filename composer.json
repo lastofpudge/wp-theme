@@ -16,6 +16,6 @@
     "timber/timber": "^1.2"
   },
   "autoload": {
-    "files": ["http/AdminControllers/AdminController.php", "models/custom.php"]
+    "files": ["http/AdminControllers/AdminController.php", "models/Model.php", "models/customModel.php"]
   }
 }
