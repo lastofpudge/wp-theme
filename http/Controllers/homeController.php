@@ -1,9 +1,9 @@
 <?php
 
 	namespace Http\Controllers;
-	use Timber;
+	use Timber, Redux;
 
-	class homeController extends baseController
+ 	class homeController extends baseController
 	{
 	    public function __construct(){
 	        $this->prev_next();
@@ -12,8 +12,17 @@
 	     * get home data
 	     */
 	    public static function index(){
+            /*
+             * get timber data
+             */
 	        $data = Timber::get_context();
 	        $data['foo'] = 'it is data!';
+
+            /*
+             * get redux data
+             */
+            global $redux_opt;
+            $data['redux_option_example'] = Redux::getOption($redux_opt, 'text-example');
 	        return $data;
 	    }
 
