@@ -8,23 +8,35 @@
 	    public function __construct(){
 	        $this->prev_next();
 	    }
-	    /*
-	     * get home data
-	     */
-	    public static function index(){
+
+        public static function index(){
             /*
              * get timber data
              */
-	        $data = Timber::get_context();
-	        $data['foo'] = 'it is data!';
+            $data = Timber::get_context();
+            $data['foo'] = 'it is data!';
 
             /*
              * get redux data
              */
             global $redux_opt;
             $data['redux_option_example'] = Redux::getOption($redux_opt, 'text-example');
-	        return $data;
-	    }
+
+            /*
+             * get etc function
+             */
+            $data['php_function'] = self::getSomeData();
+            return $data;
+        }
+
+        /*
+         * example function
+         */
+        public static function getSomeData(){
+            return function (){
+                echo 'hello world from function';
+            };
+        }
 
 	    /*
 	     * remove prev/next links on homepage
