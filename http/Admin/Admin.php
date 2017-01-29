@@ -38,4 +38,4 @@
 	    }
 	}
 
-new adminController();
+	new adminController();
