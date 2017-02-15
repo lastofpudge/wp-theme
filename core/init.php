@@ -23,6 +23,17 @@ function makeView($controller, $view)
 }
 
 /*
+ * helper function die and dump
+ */
+function dd($data)
+{
+    echo '<pre>';
+    die(var_dump($data));
+    echo '</pre>';
+}
+
+
+/*
  * custom routes
  */
 require_once(__DIR__ . '/../routes/custom.php');
