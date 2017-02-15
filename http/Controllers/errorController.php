@@ -1,20 +1,20 @@
 <?php
 
-    namespace Http\Controllers;
-    use Timber;
+namespace Http\Controllers;
 
-    class errorController extends baseController
+use Timber;
+
+class errorController extends Controller
+{
+    /*
+     * get post data
+     */
+    public static function index()
     {
-        /*
-         * get post data
-         */
-        public static function index(){
-            $data = Timber::get_context();
-            return $data;
-        }
-
+        $data = Timber::get_context();
+        return $data;
     }
+}
 
 
-    $d = new errorController();
-
+$d = new errorController();

@@ -1,8 +1,7 @@
 <?php
 
-    namespace Http\Controllers;
+namespace Http\Controllers;
 
-    class baseController
-    {
-
-    }
+class Controller
+{
+}

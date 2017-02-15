@@ -1,23 +1,24 @@
 <?php
 
-    namespace Http\Controllers;
-    use Timber;
+namespace Http\Controllers;
 
-    class categoryController extends baseController
-    {
-        /*
-         * get post data
-         */
-        public static function index(){
-            $data = Timber::get_context();
-            $data['pagination'] = Timber::get_pagination();
-            $data['posts'] = Timber::get_posts();
-            return $data;
-        }
+use Timber;
 
-    }
-
+class categoryController extends Controller
+{
     /*
-     * get controller data
+     * get post data
      */
-    $d = new categoryController();
+    public static function index()
+    {
+        $data = Timber::get_context();
+        $data['pagination'] = Timber::get_pagination();
+        $data['posts'] = Timber::get_posts();
+        return $data;
+    }
+}
+
+/*
+ * get controller data
+ */
+$d = new categoryController();

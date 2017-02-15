@@ -1,23 +1,24 @@
 <?php
 
-    namespace Http\Controllers;
-    use Timber;
+namespace Http\Controllers;
 
-    class postController extends baseController
-    {
-        /*
-         * get post data
-         */
-        public static function index(){
-            $context = Timber::get_context();
-            $post = Timber::query_post();
-            $context['post'] = $post;
-            return $context;
-        }
+use Timber;
 
-    }
-
+class postController extends Controller
+{
     /*
-     * get controller data
+     * get post data
      */
-    $d = new postController();
+    public static function index()
+    {
+        $context = Timber::get_context();
+        $post = Timber::query_post();
+        $context['post'] = $post;
+        return $context;
+    }
+}
+
+/*
+ * get controller data
+ */
+$d = new postController();

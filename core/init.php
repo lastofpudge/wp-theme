@@ -1,33 +1,34 @@
 <?php
 
+/*
+ * load site controllers
+ */
+function makeView($controller, $view)
+{
     /*
-     * load site controllers
+     * explode classname and method
      */
-    function makeView($controller, $view) {
-        /*
-         * explode classname and method
-         */
-        $ctr = explode("@", $controller, 2);
+    $ctr = explode("@", $controller, 2);
 
-        require_once "/../http/Controllers/Controller.php";
-        require_once "/../http/Controllers/" .$ctr[0]. ".php";
+    require_once __DIR__. "/../http/Controllers/Controller.php";
+    require_once __DIR__."/../http/Controllers/" .$ctr[0]. ".php";
 
-        $data = $d::{$ctr[1]}();
-        
-        /*
-        * render views
-        */
-        $v = 'views/'.$view.'.twig';
-        Timber::render( $v, $data );
-    }
+    $data = $d::{$ctr[1]}();
 
     /*
-     * custom routes
-     */
-    require_once(__DIR__ . '/../routes/custom.php');
+    * render views
+    */
+    $v = 'views/'.$view.'.twig';
+    Timber::render($v, $data);
+}
 
-    /*
-     * custom modules
-     */
-    require_once(__DIR__ . '/modules/redux-framework/ReduxCore/framework.php');
-    require_once(__DIR__ . '/../http/Admin/AdminOptions.php');
+/*
+ * custom routes
+ */
+require_once(__DIR__ . '/../routes/custom.php');
+
+/*
+ * custom modules
+ */
+require_once(__DIR__ . '/modules/redux-framework/ReduxCore/framework.php');
+require_once(__DIR__ . '/../http/Admin/AdminOptions.php');
