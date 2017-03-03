@@ -11,11 +11,16 @@
   ],
   "require": {
     "php": ">=5.6.4",
-    "nesbot/carbon": "^1.21",
     "twig/twig": "~1.0",
     "timber/timber": "^1.2"
   },
   "autoload": {
-    "files": ["http/Admin/Admin.php"]
+      "psr-4": {
+         "App\\": "app/"
+    },
+    "files": [
+        "core/modules/carbon-fields/carbon-fields-plugin.php",
+        "core/modules/redux-framework/redux-framework.php"
+    ]
   }
 }
