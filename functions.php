@@ -9,8 +9,7 @@
 
 
     // "files": [
-    //   "app/Admin/Admin.php",
     //   "app/Admin/AdminOptions.php",
-    //   "core/modules/redux-framework/ReduxCore/framework.php",
+    //   "app/CarbonFields/PostFields.php",
     //   "core/modules/carbon-fields/carbon-fields-plugin.php"
     // ]
