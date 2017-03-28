@@ -1,20 +1,24 @@
 <?php
 
-namespace Http\Controllers;
+namespace App\Controllers;
 
 use Timber;
 
 class postController extends Controller
 {
+
+    use Traits\GlobalData;
+
     /*
      * get post data
      */
     public static function index()
     {
-        $context = Timber::get_context();
+        $returned_data = self::getData();
         $post = Timber::query_post();
-        $context['post'] = $post;
-        return $context;
+        $returned_data['post'] = $post;
+
+        return $returned_data;
     }
 }
 

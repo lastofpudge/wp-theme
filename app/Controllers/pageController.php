@@ -1,21 +1,25 @@
 <?php
 
-namespace Http\Controllers;
+namespace App\Controllers;
 
 use Timber;
 use TimberPost;
 
 class pageController extends Controller
 {
+
+    use Traits\GlobalData;
+
     /*
      * get post data
      */
     public static function index()
     {
-        $data = Timber::get_context();
+        $returned_data = self::getData();
         $post = new TimberPost();
-        $data['post'] = $post;
-        return $data;
+        $returned_data['post'] = $post;
+
+        return $returned_data;
     }
 }
 

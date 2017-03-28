@@ -1,12 +1,16 @@
 <?php
 
-namespace Http\Controllers;
+namespace App\Controllers;
 
 use Timber;
-use Redux;
+
+require_once(__DIR__ . '/Traits/GlobalData.php');
 
 class homeController extends Controller
 {
+
+    use Traits\GlobalData;
+
     public function __construct()
     {
         $this->prev_next();
@@ -17,30 +21,10 @@ class homeController extends Controller
         /*
          * get timber data
          */
-        $data = Timber::get_context();
-        $data['foo'] = 'it is data!';
+        $returned_data = self::getData();
+        $returned_data['foo'] = 'it is data!';
 
-        /*
-         * get redux data
-         */
-        global $redux_opt;
-        $data['redux_option_example'] = Redux::getOption($redux_opt, 'text-example');
-
-        /*
-         * get etc function
-         */
-        $data['php_function'] = self::getSomeData();
-        return $data;
-    }
-
-    /*
-     * example function
-     */
-    public static function getSomeData()
-    {
-        return function () {
-            echo 'hello world from function';
-        };
+        return $returned_data;
     }
 
     /*

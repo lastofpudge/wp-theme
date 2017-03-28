@@ -1,20 +1,23 @@
 <?php
 
-namespace Http\Controllers;
+namespace App\Controllers;
 
 use Timber;
 
 class categoryController extends Controller
 {
+
+    use Traits\GlobalData;
+
     /*
      * get post data
      */
     public static function index()
     {
-        $data = Timber::get_context();
-        $data['pagination'] = Timber::get_pagination();
-        $data['posts'] = Timber::get_posts();
-        return $data;
+        $returned_data = self::getData();
+        $returned_data['pagination'] = Timber::get_pagination();
+        $returned_data['posts'] = Timber::get_posts();
+        return $returned_data;
     }
 }
 

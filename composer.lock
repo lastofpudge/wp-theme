@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5752b5336781814a0307b8343ce552db",
-    "content-hash": "d4e50e0029a5882f56a777bce5db8d2c",
+    "content-hash": "00ebd831b41af9ac79128795b1dbc279",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -56,7 +55,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2014-04-16 09:44:40"
+            "time": "2014-04-16T09:44:40+00:00"
         },
         {
             "name": "asm89/twig-cache-extension",
@@ -110,7 +109,7 @@
                 "extension",
                 "twig"
             ],
-            "time": "2017-01-10 22:04:15"
+            "time": "2017-01-10T22:04:15+00:00"
         },
         {
             "name": "composer/installers",
@@ -217,7 +216,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2016-08-13 20:53:52"
+            "time": "2016-08-13T20:53:52+00:00"
         },
         {
             "name": "timber/timber",
@@ -278,20 +277,20 @@
                 "timber",
                 "twig"
             ],
-            "time": "2017-02-22 19:54:49"
+            "time": "2017-02-22T19:54:49+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "9935b662e24d6e634da88901ab534cc12e8c728f"
+                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9935b662e24d6e634da88901ab534cc12e8c728f",
-                "reference": "9935b662e24d6e634da88901ab534cc12e8c728f",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
+                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
                 "shasum": ""
             },
             "require": {
@@ -300,12 +299,12 @@
             "require-dev": {
                 "psr/container": "^1.0",
                 "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~3.2"
+                "symfony/phpunit-bridge": "~3.3@dev"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.32-dev"
+                    "dev-master": "1.33-dev"
                 }
             },
             "autoload": {
@@ -340,7 +339,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-02-27 00:07:03"
+            "time": "2017-03-22T15:40:09+00:00"
         },
         {
             "name": "upstatement/routes",
@@ -391,7 +390,7 @@
                 "routes",
                 "routing"
             ],
-            "time": "2016-07-06 12:53:24"
+            "time": "2016-07-06T12:53:24+00:00"
         }
     ],
     "packages-dev": [],
