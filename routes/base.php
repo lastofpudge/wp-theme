@@ -5,7 +5,7 @@ if (is_front_page()) :
     makeView('homeController@index', 'index');
 endif;
 
-/* is category test */
+/* custom post type category */
 if (is_post_type_archive('test')) :
     makeView('categoryController@index', 'categories/category');
 endif;
