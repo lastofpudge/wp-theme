@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use Timber;
 
-
 class homeController extends Controller
 {
 
