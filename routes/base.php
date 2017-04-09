@@ -5,6 +5,11 @@ if (is_front_page()) :
     makeView('homeController@index', 'index');
 endif;
 
+/* is category test */
+if (is_post_type_archive('test')) :
+    makeView('categoryController@index', 'categories/category');
+endif;
+
 /* is category */
 if (is_category()) :
     makeView('categoryController@index', 'categories/category');
