@@ -7,9 +7,9 @@
     require_once(__DIR__ . '/vendor/autoload.php');
     $timber = new \Timber\Timber();
 
+    require_once(__DIR__ . '/app/Admin/AdminOptions.php');
+    require_once(__DIR__ . '/app/Admin/PostTypes.php');
 
-    // "files": [
-    //   "app/Admin/AdminOptions.php",
-    //   "app/CarbonFields/PostFields.php",
-    //   "core/modules/carbon-fields/carbon-fields-plugin.php"
-    // ]
+    require_once(__DIR__ . '/core/modules/carbon-fields/carbon-fields-plugin.php');
+    require_once(__DIR__ . '/app/CarbonFields/PostFields.php');
+    require_once(__DIR__ . '/app/CarbonFields/OptionFields.php');

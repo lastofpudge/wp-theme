@@ -27,7 +27,7 @@ class AdminOptions
     {
         register_nav_menus(array(
             'header_menu' => 'Header Menu',
-            'footer_menu' => 'Footer menu'
+            // 'footer_menu' => 'Footer menu'
         ));
     }
 

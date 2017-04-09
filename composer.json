@@ -17,9 +17,6 @@
   "autoload": {
       "psr-4": {
          "App\\": "app/"
-    },
-    "files": [
-        "core/modules/carbon-fields/carbon-fields-plugin.php"
-    ]
+    }
   }
 }
