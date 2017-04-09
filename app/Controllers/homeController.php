@@ -4,12 +4,9 @@ namespace App\Controllers;
 
 use Timber;
 
-require_once(__DIR__ . '/Traits/GlobalData.php');
 
 class homeController extends Controller
 {
-
-    use Traits\GlobalData;
 
     public function __construct()
     {
@@ -21,7 +18,7 @@ class homeController extends Controller
         /*
          * get timber data
          */
-        $returned_data = self::getData();
+        $returned_data = parent::getData();
         $returned_data['foo'] = 'it is data!';
 
         return $returned_data;

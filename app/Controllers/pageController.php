@@ -8,14 +8,12 @@ use TimberPost;
 class pageController extends Controller
 {
 
-    use Traits\GlobalData;
-
     /*
      * get post data
      */
     public static function index()
     {
-        $returned_data = self::getData();
+        $returned_data = parent::getData();
         $post = new TimberPost();
         $returned_data['post'] = $post;
 
