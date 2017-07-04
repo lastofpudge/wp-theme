@@ -11,7 +11,7 @@ function contactMail()
     if ( !empty($_POST))
     {
         $nonce = $_POST['nonce'];
-        if( ! wp_verify_nonce( $nonce, 'myajax-nonce' ) ) die( 'Stop!');
+        if( ! wp_verify_nonce( $nonce, 'ajax-nonce' ) ) die( 'Stop!');
 
         $return = (array(
             'type' => 'success',

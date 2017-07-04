@@ -30,7 +30,7 @@ class AdminOptions
         // ajax data prepare
         $ajax_data = array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce('myajax-nonce'),
+            'nonce' => wp_create_nonce('ajax-nonce'),
         );
 
         // send data to script
