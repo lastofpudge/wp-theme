@@ -10,6 +10,7 @@ class AdminOptions
     {
         self::index();
         add_action('after_setup_theme', array( $this, 'registerMenus' ));
+        add_action( 'wp_enqueue_scripts', array( $this, 'ajaxScripts' ));
         add_filter('timber_context', array( $this, 'addToContext' ));
     }
 
@@ -20,6 +21,20 @@ class AdminOptions
     {
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
+    }
+
+    public function ajaxScripts()
+    {
+        wp_enqueue_script( 'ajax_forms', get_template_directory_uri() . '/assets/js/ajaxForms.js' );
+
+        // ajax data prepare
+        $ajax_data = array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce('myajax-nonce'),
+        );
+
+        // send data to script
+        wp_localize_script( 'ajax_forms', 'vars',  $ajax_data );
     }
 
     /*
@@ -43,7 +58,7 @@ class AdminOptions
         /*
          * assets version
          */
-        $context['version'] = '1';
+        $context['version'] = '1.1';
         return $context;
     }
 
