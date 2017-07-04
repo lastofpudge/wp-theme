@@ -3,14 +3,6 @@
   "type": "Wordpress-theme",
   "description": "Wordpress Theme Boilerplate",
   "license": "GNU GPL",
-  "config": {
-        "vendor-dir": "core/vendor"
-    },
-    "extra": {
-        "installer-paths": {
-            "core/vendor/{$name}": ["htmlburger/carbon-fields"]
-        }
-    },
   "authors": [
     {
       "name": "Andrew Dudin",
@@ -27,6 +19,16 @@
   "autoload": {
       "psr-4": {
          "App\\": "app/"
+      }
+  },
+  "config": {
+        "vendor-dir": "core/vendor",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "installer-paths": {
+            "core/vendor/{$name}": ["htmlburger/carbon-fields"]
+        }
     }
-  }
 }
