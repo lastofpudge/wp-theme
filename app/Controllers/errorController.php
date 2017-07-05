@@ -12,7 +12,7 @@ class errorController extends Controller
     public static function index()
     {
         $returned_data = parent::getData();
-        $returned_data = Timber::get_context();
+        $returned_data['context'] = Timber::get_context();
 
         return $returned_data;
     }
