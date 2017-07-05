@@ -58,7 +58,7 @@ class AdminOptions
         /*
          * assets version
          */
-        $context['version'] = '1.1';
+        $context['ver'] = '1.0';
 
         return $context;
     }
