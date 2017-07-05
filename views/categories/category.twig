@@ -4,12 +4,12 @@
         <h2><a href="{{post.link}}">{{post.title}}</a></h2>
 
         {% if post.get_thumbnail %}
-            <img src="{{post.thumbnail.src}}" />
+            <img src="{{ post.thumbnail.src }}" />
         {% endif %}
 
-        {{post.get_preview(20, false, '', true)}}
+        {{ post.get_preview(20, false, '', true) }}
 
-        {{function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>')}}
+        {{ function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
     </div>
 
 {% endfor %}
