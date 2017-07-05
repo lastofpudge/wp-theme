@@ -12,8 +12,9 @@ class Controller
     public static function getData()
     {
         $data = Timber::get_context();
-        global $redux_opt;
         $data['test'] = '1';
+
+        // $data['pll_e'] = TimberHelper::function_wrapper('pll_e');
         // $data['vk_url'] = carbon_get_theme_option('crb_vkontakte_url');
         // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
 
