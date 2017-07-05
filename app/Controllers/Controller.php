@@ -22,7 +22,7 @@ class Controller
 
     /**
      * [render_pagination]
-     * use {% do action('breads_func') %} in twig tpl to render pagination
+     * use {% do action('breads_func') %} in twig tpl to render pagination.
      */
     public static function render_pagination()
     {

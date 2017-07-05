@@ -6,7 +6,6 @@ use Timber;
 
 class errorController extends Controller
 {
-
     /*
      * get post data
      */
@@ -18,6 +17,5 @@ class errorController extends Controller
         return $returned_data;
     }
 }
-
 
 $d = new errorController();
