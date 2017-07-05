@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Autload.
+     * Autoload.
      */
     if (!file_exists(__DIR__.'/core/vendor/autoload.php')) {
         wp_die('No "autoload.php" file');
