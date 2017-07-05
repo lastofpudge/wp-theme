@@ -21,7 +21,8 @@
     "phpmailer/phpmailer": "^5.2",
     "timber/timber": "^1.3.3",
     "twig/twig": "^2.4.3",
-    "wpackagist-plugin/polylang": "*"
+    "wpackagist-plugin/polylang": "*",
+    "wpackagist-plugin/tinymce-advanced": "*"
   },
   "autoload": {
       "psr-4": {
@@ -36,7 +37,7 @@
     "extra": {
         "installer-paths": {
             "core/vendor/{$name}": ["htmlburger/carbon-fields"],
-            "../../plugins/{$name}": ["wpackagist-plugin/polylang"]
+            "../../plugins/{$name}": ["wpackagist-plugin/polylang", "wpackagist-plugin/tinymce-advanced"]
         }
     }
 }

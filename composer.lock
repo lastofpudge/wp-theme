@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb08984dfda51d11c42c4bed5ccd876e",
+    "content-hash": "3f4ff1326df3ac556dfa8f80679cf00d",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -227,30 +227,31 @@
         },
         {
             "name": "htmlburger/carbon-fields",
-            "version": "v1.6",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/htmlburger/carbon-fields.git",
-                "reference": "03b28ded9b3eb44347091935185ab8fbb844d2f4"
+                "reference": "1211828f00cc0c439f824b4d0c9040d268d334a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/htmlburger/carbon-fields/zipball/03b28ded9b3eb44347091935185ab8fbb844d2f4",
-                "reference": "03b28ded9b3eb44347091935185ab8fbb844d2f4",
+                "url": "https://api.github.com/repos/htmlburger/carbon-fields/zipball/1211828f00cc0c439f824b4d0c9040d268d334a3",
+                "reference": "1211828f00cc0c439f824b4d0c9040d268d334a3",
                 "shasum": ""
             },
             "require": {
-                "composer/installers": "~1.0"
+                "composer/installers": "~1.0",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.7",
+                "phpunit/phpunit": "~4.8"
             },
             "type": "wordpress-plugin",
             "autoload": {
                 "psr-4": {
                     "Carbon_Fields\\": "core/"
-                },
-                "files": [
-                    "carbon-fields.php",
-                    "core/functions.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -331,11 +332,22 @@
                     "name": "Atanas Angelov",
                     "email": "atanas.angelov.dev@gmail.com",
                     "role": "Developer"
+                },
+                {
+                    "name": "Alexander Panayotov",
+                    "email": "alexander.panayotov@gmail.com",
+                    "homepage": "http://alexanderpanayotov.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Viktor Vasilev",
+                    "email": "liberalcho@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
             "homepage": "http://carbonfields.net/",
-            "time": "2017-05-23T08:19:29+00:00"
+            "time": "2017-07-05T07:59:17+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -671,6 +683,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/polylang/"
+        },
+        {
+            "name": "wpackagist-plugin/tinymce-advanced",
+            "version": "4.6.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/tinymce-advanced/",
+                "reference": "tags/4.6.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/tinymce-advanced.4.6.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/tinymce-advanced/"
         }
     ],
     "packages-dev": [],
