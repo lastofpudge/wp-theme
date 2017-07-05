@@ -1,5 +1,8 @@
     jQuery(document).ready(function($) {
 
+        /**
+         * send contact form
+         */
         $('.contactForm').on('submit', function(event) {
             event.preventDefault();
             var user_name = $(this).find('input[name="name"]').val();
