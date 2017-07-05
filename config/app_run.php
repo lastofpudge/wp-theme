@@ -5,9 +5,19 @@ class AppConfig
     public function __construct(array $config)
     {
         $this->config = $config;
+        self::check_bars();
         add_action('admin_menu', [$this, 'hide_items']);
         add_action('admin_menu', [$this, 'hide_comments']);
         add_action('admin_menu', [$this, 'hide_tools']);
+    }
+
+    /**
+     * show/hide admin bar
+     */
+    public function check_bars() {
+        if ($this->config['show_admin_bar'] === false) {
+            add_filter('show_admin_bar', '__return_false');
+        }
     }
 
     /**
