@@ -28,12 +28,14 @@ class Controller
      */
     public static function render_pagination()
     {
-        return function () {
-            if (function_exists('yoast_breadcrumb')) {
+        return function ()
+        {
+            if (function_exists('yoast_breadcrumb'))
+            {
                 yoast_breadcrumb('', '');
-            } else {
-                echo '<pre style="background-color: orange; padding:3px; color: #fff;">Plugin Youst Seo is not active!</pre>';
+                return;
             }
+            echo '<pre style="background-color: orange; padding:3px; color: #fff;">Plugin Youst Seo is not active!</pre>';
         };
     }
 }
