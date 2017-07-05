@@ -6,7 +6,6 @@ use Timber;
 
 class homeController extends Controller
 {
-
     public function __construct()
     {
         $this->prev_next();

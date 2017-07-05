@@ -2,12 +2,10 @@
 
 namespace App\Controllers;
 
-use Timber;
 use TimberPost;
 
 class pageController extends Controller
 {
-
     /*
      * get post data
      */

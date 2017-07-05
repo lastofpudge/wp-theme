@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use Timber;
-
 class customUrlController extends Controller
 {
     /*
@@ -11,8 +9,9 @@ class customUrlController extends Controller
      */
     public static function index()
     {
-        $params = array();
+        $params = [];
         $params['my_title'] = 'This is my custom title';
+
         return $params;
     }
 }

@@ -6,7 +6,6 @@ use Timber;
 
 class postController extends Controller
 {
-
     /*
      * get post data
      */

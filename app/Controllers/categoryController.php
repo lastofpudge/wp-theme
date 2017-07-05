@@ -6,7 +6,6 @@ use Timber;
 
 class categoryController extends Controller
 {
-
     /*
      * get post data
      */
@@ -15,6 +14,7 @@ class categoryController extends Controller
         $returned_data = parent::getData();
         $returned_data['pagination'] = Timber::get_pagination();
         $returned_data['posts'] = Timber::get_posts();
+
         return $returned_data;
     }
 }

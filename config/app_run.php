@@ -2,29 +2,28 @@
 
 class AppConfig
 {
-
     public function __construct(array $config)
     {
         $this->config = $config;
-        add_action('admin_menu', array($this, 'hide_items'));
-        add_action('admin_menu', array($this, 'hide_comments'));
-        add_action('admin_menu', array($this, 'hide_tools'));
+        add_action('admin_menu', [$this, 'hide_items']);
+        add_action('admin_menu', [$this, 'hide_comments']);
+        add_action('admin_menu', [$this, 'hide_tools']);
     }
 
     /**
-     * hide admin posts and pages
+     * hide admin posts and pages.
      */
     public function hide_items()
     {
         if ($this->config['show_posts'] === false) {
             remove_menu_page('edit.php');
-            add_action('wp_before_admin_bar_render', array($this, 'hide_post_add'));
+            add_action('wp_before_admin_bar_render', [$this, 'hide_post_add']);
         }
 
-         if ($this->config['show_pages'] === false) {
+        if ($this->config['show_pages'] === false) {
             remove_menu_page('edit.php?post_type=page');
-            add_action('wp_before_admin_bar_render', array($this, 'hide_page_add'));
-         }
+            add_action('wp_before_admin_bar_render', [$this, 'hide_page_add']);
+        }
     }
 
     public function hide_post_add()
@@ -40,7 +39,7 @@ class AppConfig
     }
 
     /**
-     * hide comments
+     * hide comments.
      */
     public function hide_comments()
     {
@@ -51,12 +50,12 @@ class AppConfig
         }
     }
 
-    public function hide_tools() {
+    public function hide_tools()
+    {
         if ($this->config['show_tools'] === false) {
             remove_menu_page('tools.php');
         }
     }
-
 }
 
 new AppConfig($config);

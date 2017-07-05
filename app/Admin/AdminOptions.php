@@ -9,9 +9,9 @@ class AdminOptions
     public function __construct()
     {
         self::index();
-        add_action('after_setup_theme', array( $this, 'registerMenus' ));
-        add_action( 'wp_enqueue_scripts', array( $this, 'ajaxScripts' ));
-        add_filter('timber_context', array( $this, 'addToContext' ));
+        add_action('after_setup_theme', [$this, 'registerMenus']);
+        add_action('wp_enqueue_scripts', [$this, 'ajaxScripts']);
+        add_filter('timber_context', [$this, 'addToContext']);
     }
 
     /*
@@ -25,16 +25,16 @@ class AdminOptions
 
     public function ajaxScripts()
     {
-        wp_enqueue_script( 'ajax_forms', get_template_directory_uri() . '/assets/js/ajaxForms.js' );
+        wp_enqueue_script('ajax_forms', get_template_directory_uri().'/assets/js/ajaxForms.js');
 
         // ajax data prepare
-        $ajax_data = array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce('ajax-nonce'),
-        );
+        $ajax_data = [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('ajax-nonce'),
+        ];
 
         // send data to script
-        wp_localize_script( 'ajax_forms', 'vars',  $ajax_data );
+        wp_localize_script('ajax_forms', 'vars', $ajax_data);
     }
 
     /*
@@ -42,10 +42,10 @@ class AdminOptions
      */
     public function registerMenus()
     {
-        register_nav_menus(array(
+        register_nav_menus([
             'header_menu' => 'Header Menu',
             // 'footer_menu' => 'Footer menu'
-        ));
+        ]);
     }
 
     /*
@@ -59,9 +59,9 @@ class AdminOptions
          * assets version
          */
         $context['version'] = '1.1';
+
         return $context;
     }
-
- }
+}
 
 new AdminOptions();
