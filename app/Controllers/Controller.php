@@ -48,9 +48,11 @@ class Controller
          return function () {
              if (function_exists('yoast_breadcrumb')) {
                  yoast_breadcrumb('', '');
-                 return;
              }
-            echo '<pre style="background-color: orange; padding:3px; color: #fff;">Plugin Youst Seo is not active!</pre>';
+             else
+             {
+                echo '<pre style="background-color: orange; padding:3px; color: #fff;">Plugin Youst Seo is not active!</pre>';
+            }
         }
     }
 }
