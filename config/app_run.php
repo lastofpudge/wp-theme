@@ -12,9 +12,10 @@ class AppConfig
     }
 
     /**
-     * show/hide admin bar
+     * show/hide admin bar.
      */
-    public function check_bars() {
+    public function check_bars()
+    {
         if ($this->config['show_admin_bar'] === false) {
             add_filter('show_admin_bar', '__return_false');
         }

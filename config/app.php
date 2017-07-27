@@ -1,8 +1,8 @@
 <?php
 
-/**
- * basic theme options
- */
+ /**
+  * basic theme options.
+  */
 $config = [
 
     'show_posts' => true,
@@ -17,7 +17,7 @@ $config = [
 
 ];
 
-/**
- * disablew file edit from admin
- */
+ /*
+  * disablew file edit from admin
+  */
 define('DISALLOW_FILE_EDIT', true);
