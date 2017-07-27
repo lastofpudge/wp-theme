@@ -1,7 +1,7 @@
 <?php
 
 /**
- * basic theme options
+ * basic theme options.
  */
 $config = [
 
@@ -17,7 +17,7 @@ $config = [
 
 ];
 
-/**
+/*
  * disablew file edit from admin
  */
 define('DISALLOW_FILE_EDIT', true);
