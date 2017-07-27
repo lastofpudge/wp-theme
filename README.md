@@ -1,3 +1,4 @@
+[![StyleCI](https://styleci.io/repos/79059090/shield?branch=master)](https://styleci.io/repos/79059090)
 ## Timber based wp theme
 
 - used Timber with Twig template engine
