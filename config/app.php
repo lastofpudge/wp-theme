@@ -1,8 +1,8 @@
 <?php
 
- /**
-  * basic theme options.
-  */
+/**
+ * basic theme options.
+ */
 $config = [
 
     'show_posts' => true,
