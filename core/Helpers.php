@@ -15,6 +15,7 @@ if (!function_exists('makeView')) {
 
         $v = 'views/'.$view.'.twig';
         Timber::render($v, $data);
+        exit;
     }
 }
 

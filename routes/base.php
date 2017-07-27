@@ -15,10 +15,16 @@ if (is_category()) :
     makeView('categoryController@index', 'categories/category');
 endif;
 
+/* is single post type-page */
+if (is_singular('test')) :
+    makeView('postController@index', 'posts/post');
+endif;
+
 /* is single page */
 if (is_single()) :
     makeView('postController@index', 'posts/post');
 endif;
+
 
 /* is page */
 if (is_page()) :

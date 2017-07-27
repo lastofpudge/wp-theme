@@ -25,7 +25,7 @@ class AdminOptions
 
     public function ajaxScripts()
     {
-        wp_enqueue_script('ajax_forms', get_template_directory_uri().'/assets/js/ajaxForms.js');
+        wp_enqueue_script('ajax_forms', get_template_directory_uri().'/assets/dist/js/ajaxForms.js');
 
         // ajax data prepare
         $ajax_data = [
