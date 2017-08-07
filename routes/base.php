@@ -25,7 +25,6 @@ if (is_single()) :
     makeView('postController@index', 'posts/post');
 endif;
 
-
 /* is page */
 if (is_page()) :
     makeView('pageController@index', 'pages/page');
