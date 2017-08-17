@@ -12,13 +12,11 @@ add_action('init', 'create_topics_hierarchical_taxonomy', 0);
 function create_topics_hierarchical_taxonomy()
 {
 
-
-  /**
+  /*
    * [$url, $name, $singular, $public, $has_archive, $menu_icon, $supports] - paramas.
    */
 
   // PostType::register('uslugi', 'Услуги', 'Услуга', true, true, 'dashicons-format-aside', ['title', 'editor', 'thumbnail']);
-
 
    /*
    * Услуги таксономии
@@ -37,7 +35,6 @@ function create_topics_hierarchical_taxonomy()
   //   'menu_name' => __('Категории'),
   // );
 
-
   // register_taxonomy('usls-cat', array('uslugi'), array(
   //     'hierarchical' => true,
   //     'public' =>  true,
@@ -51,5 +48,4 @@ function create_topics_hierarchical_taxonomy()
   //   ));
 
   //   flush_rewrite_rules();
-
 }
