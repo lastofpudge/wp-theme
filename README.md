@@ -5,6 +5,7 @@
 - support custom routes/controllers
 - support composer package manager
 - easy custom post type integration
+- built-in phpmailer, carbon fields, polylang and tinymce-advanced
 
 ## To build
 
