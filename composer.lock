@@ -113,16 +113,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "79ad876c7498c0bbfe7eed065b8651c93bfd6045"
+                "reference": "9ce17fb70e9a38dd8acff0636a29f5cf4d575c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/79ad876c7498c0bbfe7eed065b8651c93bfd6045",
-                "reference": "79ad876c7498c0bbfe7eed065b8651c93bfd6045",
+                "url": "https://api.github.com/repos/composer/installers/zipball/9ce17fb70e9a38dd8acff0636a29f5cf4d575c1b",
+                "reference": "9ce17fb70e9a38dd8acff0636a29f5cf4d575c1b",
                 "shasum": ""
             },
             "require": {
@@ -168,6 +168,7 @@
                 "Hurad",
                 "ImageCMS",
                 "Kanboard",
+                "Lan Management System",
                 "MODX Evo",
                 "Mautic",
                 "Maya",
@@ -191,6 +192,7 @@
                 "croogo",
                 "dokuwiki",
                 "drupal",
+                "eZ Platform",
                 "elgg",
                 "expressionengine",
                 "fuelphp",
@@ -207,6 +209,7 @@
                 "mediawiki",
                 "modulework",
                 "moodle",
+                "osclass",
                 "phpbb",
                 "piwik",
                 "ppi",
@@ -223,31 +226,30 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2017-04-24T06:37:16+00:00"
+            "time": "2017-08-09T07:53:48+00:00"
         },
         {
             "name": "htmlburger/carbon-fields",
-            "version": "2.0.0",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/htmlburger/carbon-fields.git",
-                "reference": "1211828f00cc0c439f824b4d0c9040d268d334a3"
+                "reference": "63a01d19f5fbd88ca701ed94fded5ea497504753"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/htmlburger/carbon-fields/zipball/1211828f00cc0c439f824b4d0c9040d268d334a3",
-                "reference": "1211828f00cc0c439f824b4d0c9040d268d334a3",
+                "url": "https://api.github.com/repos/htmlburger/carbon-fields/zipball/63a01d19f5fbd88ca701ed94fded5ea497504753",
+                "reference": "63a01d19f5fbd88ca701ed94fded5ea497504753",
                 "shasum": ""
             },
             "require": {
-                "composer/installers": "~1.0",
                 "php": ">=5.3"
             },
             "require-dev": {
                 "mockery/mockery": "^0.9.7",
                 "phpunit/phpunit": "~4.8"
             },
-            "type": "wordpress-plugin",
+            "type": "library",
             "autoload": {
                 "psr-4": {
                     "Carbon_Fields\\": "core/"
@@ -347,23 +349,24 @@
             ],
             "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
             "homepage": "http://carbonfields.net/",
-            "time": "2017-07-05T07:59:17+00:00"
+            "time": "2017-07-26T13:17:03+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.23",
+            "version": "v5.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "7115df4a6f76281109ebe352900c42403b728bb4"
+                "reference": "22d04c6a58145a244696f3f254c1875aa653b26a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/7115df4a6f76281109ebe352900c42403b728bb4",
-                "reference": "7115df4a6f76281109ebe352900c42403b728bb4",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/22d04c6a58145a244696f3f254c1875aa653b26a",
+                "reference": "22d04c6a58145a244696f3f254c1875aa653b26a",
                 "shasum": ""
             },
             "require": {
+                "ext-ctype": "*",
                 "php": ">=5.0.0"
             },
             "require-dev": {
@@ -423,20 +426,20 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-03-15T19:32:56+00:00"
+            "time": "2017-07-26T21:00:20+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937"
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f29dca382a6485c3cbe6379f0c61230167681937",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
                 "shasum": ""
             },
             "require": {
@@ -448,7 +451,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -482,20 +485,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09T14:24:12+00:00"
+            "time": "2017-06-14T15:44:48+00:00"
         },
         {
             "name": "timber/timber",
-            "version": "1.3.3",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "8f54e7cb27f66859f43f82d3f7ad318c772f3218"
+                "reference": "06e2a3247ca80894bcf6332290ff5d2158ec3369"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/8f54e7cb27f66859f43f82d3f7ad318c772f3218",
-                "reference": "8f54e7cb27f66859f43f82d3f7ad318c772f3218",
+                "url": "https://api.github.com/repos/timber/timber/zipball/06e2a3247ca80894bcf6332290ff5d2158ec3369",
+                "reference": "06e2a3247ca80894bcf6332290ff5d2158ec3369",
                 "shasum": ""
             },
             "require": {
@@ -511,8 +514,6 @@
                 "wpackagist-plugin/co-authors-plus": "3.*"
             },
             "suggest": {
-                "jarednova/markdowndocs": "dev-master for generating docs",
-                "phpdocumentor/phpdocumentor": "2.* for generating docs",
                 "satooshi/php-coveralls": "1.0.* for code coverage"
             },
             "type": "library",
@@ -545,7 +546,7 @@
                 "timber",
                 "twig"
             ],
-            "time": "2017-06-19T14:24:56+00:00"
+            "time": "2017-08-10T05:48:30+00:00"
         },
         {
             "name": "twig/twig",
@@ -666,15 +667,15 @@
         },
         {
             "name": "wpackagist-plugin/polylang",
-            "version": "2.1.5",
+            "version": "2.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/polylang/",
-                "reference": "tags/2.1.5"
+                "reference": "tags/2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/polylang.2.1.5.zip",
+                "url": "https://downloads.wordpress.org/plugin/polylang.2.2.zip",
                 "reference": null,
                 "shasum": null
             },
