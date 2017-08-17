@@ -77,7 +77,6 @@ function contactMail()
     // }
 }
 
-
 /*
  * notify about all pending reviews
  */

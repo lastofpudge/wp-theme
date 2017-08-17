@@ -3,11 +3,6 @@
 namespace App\Admin;
 
 use TimberMenu;
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
-use Carbon_Fields;
-
-
 
 class AdminOptions
 {
@@ -62,7 +57,7 @@ class AdminOptions
      */
     public function addToContext($context)
     {
-        $context['left_menu']  = new TimberMenu('left_menu');
+        $context['left_menu'] = new TimberMenu('left_menu');
         // $context['right_menu'] = new TimberMenu('right_menu');
 
         /*
