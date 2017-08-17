@@ -9,10 +9,37 @@
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
+  "dependencies": {
+    "browser-sync": "*",
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-babel": "*",
+    "gulp-changed": "*",
+    "gulp-if": "*",
+    "gulp-imagemin": "*",
+    "gulp-notify": "*",
+    "gulp-plumber": "*",
+    "gulp-pug": "*",
+    "gulp-sass": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-uglify": "*",
+    "babel-core": "*",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "*"
+  },
   "devDependencies": {
-    "chosen-npm": "*",
-    "cross-env": "^3.2.3",
-    "laravel-mix": "0.*",
-    "vue": "^2.1.10"
+    "aos": "^2.2.0",
+    "chosen-js": "^1.7.0",
+    "cross-env": "^5.0.1",
+    "gulp-load-plugins": "^1.5.0",
+    "jquery": "^3.2.1",
+    "jquery.inputmask": "^3.3.4",
+    "laravel-mix": "^1.0",
+    "magnific-popup": "^1.1.0",
+    "noty": "^3.1.2",
+    "parsleyjs": "^2.7.2",
+    "slick-carousel": "^1.6.0",
+    "uglify-js-plugin": "0.0.6",
+    "webpack-stream": "^4.0.0"
   }
 }

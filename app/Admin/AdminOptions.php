@@ -3,13 +3,18 @@
 namespace App\Admin;
 
 use TimberMenu;
+use Carbon_Fields\Container;
+use Carbon_Fields\Field;
+use Carbon_Fields;
+
+
 
 class AdminOptions
 {
     public function __construct()
     {
         self::index();
-        add_action('after_setup_theme', [$this, 'registerMenus']);
+        add_action('init', [$this, 'registerStuff']);
         add_action('wp_enqueue_scripts', [$this, 'ajaxScripts']);
         add_filter('timber_context', [$this, 'addToContext']);
     }
@@ -26,6 +31,7 @@ class AdminOptions
     public function ajaxScripts()
     {
         wp_enqueue_script('ajax_forms', get_template_directory_uri().'/assets/dist/js/ajaxForms.js');
+        // wp_enqueue_script('noty', get_template_directory_uri().'/assets/dist/js/noty.js');
 
         // ajax data prepare
         $ajax_data = [
@@ -40,11 +46,14 @@ class AdminOptions
     /*
      * register menus
      */
-    public function registerMenus()
+    public function registerStuff()
     {
+        // flush_rewrite_rules();
+
+        //register menus
         register_nav_menus([
-            'header_menu' => 'Header Menu',
-            // 'footer_menu' => 'Footer menu'
+            'left_menu' => 'Меню слева',
+            // 'right_menu' => 'Меню справа'
         ]);
     }
 
@@ -53,7 +62,8 @@ class AdminOptions
      */
     public function addToContext($context)
     {
-        $context['header_menu'] = new TimberMenu();
+        $context['left_menu']  = new TimberMenu('left_menu');
+        // $context['right_menu'] = new TimberMenu('right_menu');
 
         /*
          * assets version

@@ -1,23 +1,17 @@
 <?php
 
-// namespace App\CarbonFields;
+use Carbon_Fields\Container;
+use Carbon_Fields\Field;
 
-// use Carbon_Fields\Container;
-// use Carbon_Fields\Field;
-// use Carbon_Fields\Datastore\Datastore_Interface;
 
-/*
- * set post fields
- */
+add_action( 'carbon_fields_register_fields', 'crb_attach_post_options' );
+function crb_attach_post_options() {
 
-/*
- * slider on single pages
- */
-// Container::make('post_meta', 'Слайдер (Рекомендованный размер изображений: 500x600)')
-//     ->show_on_post_type('post')
-//     ->add_fields(array(
-//         Field::make('complex', 'post_images', '')
-//             ->add_fields('', array(
-//                 Field::make('image', 'single_img', 'Изображение')
-//             ))
-//     ));
+    // Container::make('post_meta', 'Дополнительные поля')
+    //     ->show_on_post_type('novosti')
+    //     ->add_fields(array(
+    //         Field::make('rich_text', 'new_short_text', 'Описание на главной')
+    // ));
+
+
+}

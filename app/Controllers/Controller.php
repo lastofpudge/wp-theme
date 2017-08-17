@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Timber;
+use TimberHelper;
 
 class Controller
 {
@@ -28,11 +29,6 @@ class Controller
           * test posts
           */
          // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
-
-        /*
-         * main menu, use in twig: {{ menu }}
-         */
-        // $data['menu'] = TimberHelper::function_wrapper('wp_nav_menu', array('theme_location' => 'header_menu', 'container'=> false, 'menu_class'=> false));
 
         add_action('breads_func', self::render_pagination());
 
