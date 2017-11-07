@@ -18,7 +18,7 @@ class homeController extends Controller
          */
         $returned_data = parent::getData();
         $returned_data['foo'] = 'it is data!';
-
+        // $returned_data['some_post_type'] = Timber::get_posts('post_type=some_post_type&numberposts=-1');
         return $returned_data;
     }
 

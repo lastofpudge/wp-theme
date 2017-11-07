@@ -8,73 +8,62 @@ add_action('wp_ajax_nopriv_contactMail', 'contactMail');
  */
 function contactMail()
 {
-    // if (!empty($_POST)) {
-    //     //validate nonce
-    //     $nonce = $_POST['nonce'];
-    //     if (!wp_verify_nonce($nonce, 'ajax-nonce')) {
-    //         $return = ([
-    //             'type'    => 'error',
-    //             'message' => 'Ошибка nonce',
-    //         ]);
-    //         wp_send_json($return);
-    //         die();
-    //     }
+    if (!empty($_POST)) {
+        //validate nonce
+        $nonce = $_POST['nonce'];
+        if (!wp_verify_nonce($nonce, 'ajax-nonce')) {
+            $return = ([
+                'type'    => 'error',
+                'message' => 'Ошибка nonce',
+            ]);
+            wp_send_json($return);
+            die();
+        }
 
-    //     //data from form
-    //     $name    = htmlspecialchars(strip_tags($_POST['user_name']));
-    //     $tel     = htmlspecialchars(strip_tags($_POST['user_tel']));
-    //     $comment = htmlspecialchars(strip_tags($_POST['user_comment']));
-    //     $checked = isset($_POST['checker']) ? 1 : 0;
+        //data from form
+        $name    = htmlspecialchars(strip_tags($_POST['user_name']));
+        $mail     = htmlspecialchars(strip_tags($_POST['user_mail']));
 
-    //    //validate fields
-    //    if (empty($name) || empty($tel)) {
-    //         $return = ([
-    //             'type'    => 'error',
-    //             'message' => 'Вы не заполнили все обязательные поля',
-    //         ]);
-    //         wp_send_json($return);
-    //         die();
-    //    }
+       //validate fields
+       if (empty($name) || empty($mail)) {
+            $return = ([
+                'type'    => 'error',
+                'message' => 'Вы не заполнили все обязательные поля',
+            ]);
+            wp_send_json($return);
+            die();
+       }
 
-    //    //validate for checkbox
-    //    if ($checked === 0) {
-    //         $return = ([
-    //             'type'    => 'error',
-    //             'message' => 'Вы не согласились с условиями',
-    //         ]);
-    //         wp_send_json($return);
-    //        die();
-    //    }
+       // create post with data
+        // $new_post = array(
+        //     'post_type'         => 'zayavki',
+        //     'post_status'       => 'pending',
+        //     'post_title'        => wp_strip_all_tags($name)
+        // );
 
-    //     $new_post = array(
-    //         'post_type'         => 'zayavki',
-    //         'post_status'       => 'pending',
-    //         'post_title'        => wp_strip_all_tags($name)
-    //     );
+        // $post_id = wp_insert_post( $new_post );
+        // add_post_meta($post_id, '_user_tel', wp_strip_all_tags($tel));
+        // add_post_meta($post_id, '_user_text', wp_strip_all_tags($comment));
 
-    //     $post_id = wp_insert_post( $new_post );
-    //     add_post_meta($post_id, '_user_tel', wp_strip_all_tags($tel));
-    //     add_post_meta($post_id, '_user_text', wp_strip_all_tags($comment));
+        //validate post create
+        // if (is_wp_error($post_id)) {
+        //      $return = ([
+        //         'type'    => 'error',
+        //         'message' => 'Ошибка при создании заявки',
+        //     ]);
+        //     wp_send_json($return);
+        //    die();
+        // }
 
-    //     //validate post create
-    //     if (is_wp_error($post_id)) {
-    //          $return = ([
-    //             'type'    => 'error',
-    //             'message' => 'Ошибка при создании заявки',
-    //         ]);
-    //         wp_send_json($return);
-    //        die();
-    //     }
+        //return success
+        $return = ([
+            'type'    => 'success',
+            'message' => 'Ваша заявка была успешно отправлена',
+        ]);
 
-    //     //return success
-    //     $return = ([
-    //         'type'    => 'success',
-    //         'message' => 'Ваша заявка была успешно отправлена',
-    //     ]);
-
-    //     wp_send_json($return);
-    //     die();
-    // }
+        wp_send_json($return);
+        die();
+    }
 }
 
 /*
