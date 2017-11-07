@@ -19,7 +19,7 @@ function create_topics_hierarchical_taxonomy()
   // PostType::register('uslugi', 'Услуги', 'Услуга', true, true, 'dashicons-format-aside', ['title', 'editor', 'thumbnail']);
 
    /*
-   * Услуги таксономии
+   * Register tax for 'uslugi' post type
    */
   // $labels = array(
   //   'name' => _x('Категории для услуг', 'taxonomy general name'),

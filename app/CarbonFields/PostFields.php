@@ -3,6 +3,9 @@
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
+/*
+ * post/page fields
+ */
 add_action('carbon_fields_register_fields', 'crb_attach_post_options');
 function crb_attach_post_options()
 {
@@ -12,4 +15,5 @@ function crb_attach_post_options()
     //     ->add_fields(array(
     //         Field::make('rich_text', 'new_short_text', 'Описание на главной')
     // ));
+
 }
