@@ -3,19 +3,11 @@
 /*
  * register custom tax
  */
-
-add_action('init', 'create_topics_hierarchical_taxonomy', 0);
-
-/*
- * tax for cpt
- */
-function create_topics_hierarchical_taxonomy()
-{
+add_action('init', function(){
 
   /*
    * [$url, $name, $singular, $public, $has_archive, $menu_icon, $supports] - paramas.
    */
-
   // PostType::register('uslugi', 'Услуги', 'Услуга', true, true, 'dashicons-format-aside', ['title', 'editor', 'thumbnail']);
 
    /*
@@ -48,4 +40,5 @@ function create_topics_hierarchical_taxonomy()
   //   ));
 
   //   flush_rewrite_rules();
-}
+
+}, 0);
