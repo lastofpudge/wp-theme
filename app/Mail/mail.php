@@ -21,20 +21,20 @@ function contactMail()
         }
 
         //data from form
-        $name    = htmlspecialchars(strip_tags($_POST['user_name']));
-        $mail     = htmlspecialchars(strip_tags($_POST['user_mail']));
+        $name = htmlspecialchars(strip_tags($_POST['user_name']));
+        $mail = htmlspecialchars(strip_tags($_POST['user_mail']));
 
-       //validate fields
-       if (empty($name) || empty($mail)) {
+        //validate fields
+        if (empty($name) || empty($mail)) {
             $return = ([
                 'type'    => 'error',
                 'message' => 'Вы не заполнили все обязательные поля',
             ]);
             wp_send_json($return);
             die();
-       }
+        }
 
-       // create post with data
+        // create post with data
         // $new_post = array(
         //     'post_type'         => 'zayavki',
         //     'post_status'       => 'pending',
