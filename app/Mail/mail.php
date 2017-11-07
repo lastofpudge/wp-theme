@@ -24,6 +24,10 @@ function contactMail()
         $name = htmlspecialchars(strip_tags($_POST['user_name']));
         $mail = htmlspecialchars(strip_tags($_POST['user_mail']));
 
+        // example test data
+        // $tel = 'tel';
+        // $comment = 'comment';
+
         //validate fields
         if (empty($name) || empty($mail)) {
             $return = ([
