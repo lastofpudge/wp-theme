@@ -7,8 +7,6 @@
         wp_die('No "autoload.php" file');
     }
 
-
-
     add_action('after_setup_theme', function () {
         \Carbon_Fields\Carbon_Fields::boot();
     });
@@ -16,18 +14,19 @@
     require_once __DIR__.'/core/vendor/autoload.php';
     require_once __DIR__.'/core/Autoload.php';
 
-    /**
+    /*
      * Twig langs
      *
      * @param Twig_Environment $twig
      * @return $twig
      */
-    add_filter( 'timber/twig', function( \Twig_Environment $twig ) {
-        $twig->addFunction( new Twig_Function( 'pll_e', 'pll_e' ) );
-        $twig->addFunction( new Twig_Function( 'pll_', 'pll_' ) );
+    add_filter('timber/twig', function (\Twig_Environment $twig) {
+        $twig->addFunction(new Twig_Function('pll_e', 'pll_e'));
+        $twig->addFunction(new Twig_Function('pll_', 'pll_'));
         $twig->addGlobal('_post', $_POST);
         $twig->addGlobal('_get', $_GET);
+
         return $twig;
-    } );
+    });
 
     new \Timber\Timber();

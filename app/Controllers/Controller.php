@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use Timber;
-use TimberHelper;
 
 class Controller
 {
@@ -51,14 +50,18 @@ class Controller
     public static function render_langs()
     {
         return function () {
-            if ( function_exists( 'pll_the_languages' ) ) {
-                $raw = pll_the_languages( array( 'raw' => 1 ) );
-                foreach ( $raw as $lang ) {
-                    if ( $lang['current_lang'] == 1) { $act = 'active'; } else { $act = ''; }
+            if (function_exists('pll_the_languages')) {
+                $raw = pll_the_languages(['raw' => 1]);
+                foreach ($raw as $lang) {
+                    if ($lang['current_lang'] == 1) {
+                        $act = 'active';
+                    } else {
+                        $act = '';
+                    }
                     echo '<div class="language-item '.$act.'">';
-                        echo '<a href="' .$lang['url']. '">';
-                            echo $lang['slug'];
-                        echo '</a>';
+                    echo '<a href="'.$lang['url'].'">';
+                    echo $lang['slug'];
+                    echo '</a>';
                     echo '</div>';
                 }
             }
