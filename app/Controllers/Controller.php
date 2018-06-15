@@ -13,13 +13,6 @@ class Controller
     public static function getData()
     {
         $data = Timber::get_context();
-        $data['test'] = '1';
-
-        /*
-         * polylang theme strings wrapper
-         */
-        // $data['pll_e'] = TimberHelper::function_wrapper('pll_e');
-
         /*
          * theme option field
          */
@@ -31,6 +24,7 @@ class Controller
         // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
 
         add_action('breads_func', self::render_pagination());
+        add_action('langs_func', self::render_langs());
 
         return $data;
     }
@@ -46,6 +40,27 @@ class Controller
                 yoast_breadcrumb('', '');
             } else {
                 echo '<pre style="background-color: orange; padding:3px; color: #fff;">Plugin Youst Seo is not active!</pre>';
+            }
+        };
+    }
+
+    /**
+     * [render_langs]
+     * use {% do action('langs_func') %} in twig tpl to render pagination.
+     */
+    public static function render_langs()
+    {
+        return function () {
+            if ( function_exists( 'pll_the_languages' ) ) {
+                $raw = pll_the_languages( array( 'raw' => 1 ) );
+                foreach ( $raw as $lang ) {
+                    if ( $lang['current_lang'] == 1) { $act = 'active'; } else { $act = ''; }
+                    echo '<div class="language-item '.$act.'">';
+                        echo '<a href="' .$lang['url']. '">';
+                            echo $lang['slug'];
+                        echo '</a>';
+                    echo '</div>';
+                }
             }
         };
     }
