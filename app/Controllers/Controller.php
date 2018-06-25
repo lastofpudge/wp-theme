@@ -12,15 +12,25 @@ class Controller
     public static function getData()
     {
         $data = Timber::get_context();
-        /*
-         * theme option field
+        /**
+         * Theme option example
          */
         // $data['vk_url'] = carbon_get_theme_option('crb_vkontakte_url');
 
-        /*
-         * test posts
+        /**
+         * Test posts
          */
         // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
+
+        /**
+         * Custom logo
+         */
+        if( $custom_logo_id = get_theme_mod('custom_logo') ){
+            $data['custom_logo'] = wp_get_attachment_image( $custom_logo_id, 'full', false, array(
+                'class'    => 'custom-logo',
+                'itemprop' => 'logo',
+            ) );
+        }
 
         add_action('breads_func', self::render_pagination());
         add_action('langs_func', self::render_langs());

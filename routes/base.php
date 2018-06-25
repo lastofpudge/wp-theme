@@ -10,6 +10,12 @@ if (is_post_type_archive('test')) :
     makeView('categoryController@index', 'categories/category');
 endif;
 
+/* is single post type-page */
+if (is_singular('zayavki')) :
+    wp_redirect('/',301);
+endif;
+
+
 /* is category */
 if (is_category()) :
     makeView('categoryController@index', 'categories/category');

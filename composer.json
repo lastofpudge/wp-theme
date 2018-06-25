@@ -6,7 +6,7 @@
   "authors": [
     {
       "name": "Andrew Dudin",
-      "email": "iluxor@yandex.ru"
+      "email": "iluxor1991@gmail.com"
     }
   ],
   "repositories":[
@@ -18,11 +18,15 @@
   "require": {
     "php": "^7.0",
     "htmlburger/carbon-fields": "*",
-    "phpmailer/phpmailer": "^5.2",
+    "phpmailer/phpmailer": "*",
     "timber/timber": "^1.3.3",
     "twig/twig": "^2.4.3",
     "wpackagist-plugin/polylang": "*",
-    "wpackagist-plugin/tinymce-advanced": "*"
+    "wpackagist-plugin/tinymce-advanced": "*",
+    "wpackagist-plugin/cyr3lat": "*",
+    "wpackagist-plugin/all-in-one-wp-migration": "*",
+    "wpackagist-plugin/polylang": "*",
+    "wpackagist-plugin/wordpress-seo": "*"
   },
   "autoload": {
       "psr-4": {
@@ -37,7 +41,13 @@
     "extra": {
         "installer-paths": {
             "core/vendor/{$name}": ["htmlburger/carbon-fields"],
-            "../../plugins/{$name}": ["wpackagist-plugin/polylang", "wpackagist-plugin/tinymce-advanced"]
+            "../../plugins/{$name}": [
+              "wpackagist-plugin/tinymce-advanced",
+              "wpackagist-plugin/cyr3lat",
+              "wpackagist-plugin/all-in-one-wp-migration",
+              "wpackagist-plugin/polylang",
+              "wpackagist-plugin/wordpress-seo"
+            ]
         }
     }
 }

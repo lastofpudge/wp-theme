@@ -19,6 +19,7 @@ function contactMail()
             wp_send_json($return);
             die();
         }
+        require_once(__DIR__ . '/mailer-config.php');
 
         //data from form
         $name = htmlspecialchars(strip_tags($_POST['user_name']));
@@ -59,11 +60,38 @@ function contactMail()
         //    die();
         // }
 
-        //return success
-        $return = ([
-            'type'    => 'success',
-            'message' => 'Ваша заявка была успешно отправлена',
-        ]);
+        //send mail
+        // header("Access-Control-Allow-Origin: *");
+
+        // $email_to = get_bloginfo('admin_email');
+        // $site_name = get_bloginfo( 'name' );
+
+        // $mail->addAddress($email_to, 'SiteTitle');
+        // $mail->setFrom = 'SiteTitle';
+        // $email->From = $email_to;
+        // $email->FromName = "SiteTitle Support";
+        // $mail->isHTML(true);
+
+        // $mail->Subject = "New order ".$site_name;
+        // $mail->Body = '<html><body>';
+        // $mail->Body .= "<strong style='display:block; margin-bottom:15px;'> New order: </strong>";
+        // $mail->Body .= '<table rules="all" style="border-color: #666; width:100%;border: 1px solid #666;font-size: 12px;" cellpadding="10">';
+        // $mail->Body .= "<tr style='background: #eee;'><td><strong>User:</strong> </td><td>".  $name ."</td></tr>";
+        // $mail->Body .= "<tr><td><strong>Email:</strong> </td><td>". $mail ."</td></tr>";
+        // $mail->Body .= "<tr style='background: #eee;'><td><strong>Phone:</strong> </td><td>".  $phone ."</td></tr>";
+        // $mail->Body .= "<tr><td><strong>Message:</strong> </td><td>". $message ."</td></tr>";
+        // $mail->Body .= "</table>";
+        // $mail->Body .= "</body></html>";
+
+        // if(!$mail->send())
+        // {
+        //     $return = ([
+        //         'type'    => 'success',
+        //         'message' => 'Fail send email',
+        //     ]);
+        //     wp_send_json($return);
+        //     exit;
+        // }
 
         wp_send_json($return);
         die();
