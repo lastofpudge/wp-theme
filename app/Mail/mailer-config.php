@@ -20,4 +20,3 @@
 
     // $mail->Host       = 'smtp.gmail.com';
     // $mail->Port       = 587;
-

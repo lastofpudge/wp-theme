@@ -19,7 +19,7 @@ function contactMail()
             wp_send_json($return);
             die();
         }
-        require_once(__DIR__ . '/mailer-config.php');
+        require_once __DIR__.'/mailer-config.php';
 
         //data from form
         $name = htmlspecialchars(strip_tags($_POST['user_name']));
