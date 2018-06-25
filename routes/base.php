@@ -12,9 +12,8 @@ endif;
 
 /* is single post type-page */
 if (is_singular('zayavki')) :
-    wp_redirect('/',301);
+    wp_redirect('/', 301);
 endif;
-
 
 /* is category */
 if (is_category()) :

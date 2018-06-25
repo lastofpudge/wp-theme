@@ -37,5 +37,4 @@ add_action('carbon_fields_register_fields', function () {
     //     ->add_fields( array(
     //         Field::make( 'text', 'comment_rating', 'Рейтинг' ),
     //     ) );
-
 });
