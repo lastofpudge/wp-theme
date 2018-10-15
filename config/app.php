@@ -20,4 +20,4 @@ $config = [
 /*
  * disablew file edit from admin.
  */
-define('DISALLOW_FILE_EDIT', true);
+define('DISALLOW_FILE_EDIT', false);
