@@ -12,6 +12,7 @@ if (!function_exists('makeView')) {
         require_once __DIR__.'/../app/Controllers/'.$ctr[0].'.php';
 
         $data = $d::{$ctr[1]}();
+        // $data = $d::$ctr[1];
 
         $v = 'views/'.$view.'.twig';
         Timber::render($v, $data);

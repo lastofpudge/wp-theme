@@ -2,11 +2,13 @@
     <nav>
         <ul class="main-nav">
             {% for item in left_menu.get_items %}
-                    <li class="nav-main-item {{item.classes | join(' ')}}"><a class="nav-main-link" href="{{item.get_link}}">{{item.title}}</a>
+                    <li
+                    class="{{ item.classes | join(' ') }} {% if item.current %} cur__page__item {% endif %}"><a class="nav-main-link"
+                    href="{{ item.get_link }}">{{ item.title }}</a>
                         {% if item.get_children %}
                             <ul class="nav-drop">
                               {% for child in item.get_children %}
-                                <li class="nav-drop-item"><a href="{{child.get_link}}">{{child.title}}</a></li>
+                                <li class="nav-drop-item"><a href="{{ child.get_link }}">{{ child.title }}</a></li>
                               {% endfor %}
                             </ul>
                          {% endif %}

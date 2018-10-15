@@ -1,17 +1,19 @@
 <?php
 
-add_action('wp_ajax_contactMail', 'contactMail');
-add_action('wp_ajax_nopriv_contactMail', 'contactMail');
+header('Content-type: text/html; charset=utf-8');
 
-/**
- * contact mail form.
- */
-function contactMail()
-{
-    if (!empty($_POST)) {
-        //validate nonce
-        $nonce = $_POST['nonce'];
-        if (!wp_verify_nonce($nonce, 'ajax-nonce')) {
+$parse_uri = explode('wp-content', $_SERVER['SCRIPT_FILENAME']);
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php' );
+
+if (!empty($_POST)) {
+
+
+    $action = $_POST['action'];
+
+
+    if ($action == "testAction") {
+        // check nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
             $return = ([
                 'type'    => 'error',
                 'message' => 'Ошибка nonce',
@@ -19,27 +21,24 @@ function contactMail()
             wp_send_json($return);
             die();
         }
+        // load phpmailer
         require_once __DIR__.'/mailer-config.php';
 
-        //data from form
+        // load data
         $name = htmlspecialchars(strip_tags($_POST['user_name']));
         $mail = htmlspecialchars(strip_tags($_POST['user_mail']));
 
-        // example test data
-        // $tel = 'tel';
-        // $comment = 'comment';
+        //validate data
+        // if (empty($name) || empty($mail)) {
+        //     $return = ([
+        //         'type'    => 'error',
+        //         'message' => 'Вы не заполнили все обязательные поля',
+        //     ]);
+        //     wp_send_json($return);
+        //     die();
+        // }
 
-        //validate fields
-        if (empty($name) || empty($mail)) {
-            $return = ([
-                'type'    => 'error',
-                'message' => 'Вы не заполнили все обязательные поля',
-            ]);
-            wp_send_json($return);
-            die();
-        }
-
-        // create post with data
+        // // create post with data
         // $new_post = array(
         //     'post_type'         => 'zayavki',
         //     'post_status'       => 'pending',
@@ -50,7 +49,7 @@ function contactMail()
         // add_post_meta($post_id, '_user_tel', wp_strip_all_tags($tel));
         // add_post_meta($post_id, '_user_text', wp_strip_all_tags($comment));
 
-        //validate post create
+        // validate post create
         // if (is_wp_error($post_id)) {
         //      $return = ([
         //         'type'    => 'error',
@@ -60,7 +59,7 @@ function contactMail()
         //    die();
         // }
 
-        //send mail
+        ////send mail
         // header("Access-Control-Allow-Origin: *");
 
         // $email_to = get_bloginfo('admin_email');
@@ -86,7 +85,7 @@ function contactMail()
         // if(!$php_mailer->send())
         // {
         //     $return = ([
-        //         'type'    => 'success',
+        //         'type'    => 'fail',
         //         'message' => 'Fail send email',
         //     ]);
         //     wp_send_json($return);
@@ -96,7 +95,9 @@ function contactMail()
         wp_send_json($return);
         die();
     }
+
 }
+
 
 /*
  * notify about all pending reviews

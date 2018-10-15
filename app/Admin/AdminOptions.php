@@ -26,17 +26,18 @@ class AdminOptions
 
     public function ajaxScripts()
     {
-        wp_enqueue_script('ajax_forms', get_template_directory_uri().'/assets/dist/js/ajaxForms.js');
+        wp_enqueue_script('wp_main', get_template_directory_uri().'/assets/dist/js/wp_main.js');
         // wp_enqueue_script('noty', get_template_directory_uri().'/assets/dist/js/noty.js');
 
         // ajax data prepare
         $ajax_data = [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ajax-nonce'),
+            'ajax_url'  => admin_url('admin-ajax.php'),
+            'ajax_main' => get_template_directory_uri().'/app/Mail/mail.php',
+            'nonce'     => wp_create_nonce('ajax-nonce'),
         ];
 
         // send data to script
-        wp_localize_script('ajax_forms', 'vars', $ajax_data);
+        wp_localize_script('wp_main', 'vars', $ajax_data);
     }
 
     /*
@@ -44,8 +45,6 @@ class AdminOptions
      */
     public function registerStuff()
     {
-        // flush_rewrite_rules();
-
         //register menus
         register_nav_menus([
             'left_menu' => 'Меню слева',
