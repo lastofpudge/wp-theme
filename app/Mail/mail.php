@@ -66,24 +66,24 @@ function contactMail()
         // $email_to = get_bloginfo('admin_email');
         // $site_name = get_bloginfo( 'name' );
 
-        // $mail->addAddress($email_to, 'SiteTitle');
-        // $mail->setFrom = 'SiteTitle';
-        // $email->From = $email_to;
-        // $email->FromName = "SiteTitle Support";
-        // $mail->isHTML(true);
+        // $php_mailer->addAddress($email_to, 'SiteTitle');
+        // $php_mailer->setFrom = 'SiteTitle';
+        // $php_mailer->From = $email_to;
+        // $php_mailer->FromName = "SiteTitle Support";
+        // $php_mailer->isHTML(true);
 
-        // $mail->Subject = "New order ".$site_name;
-        // $mail->Body = '<html><body>';
-        // $mail->Body .= "<strong style='display:block; margin-bottom:15px;'> New order: </strong>";
-        // $mail->Body .= '<table rules="all" style="border-color: #666; width:100%;border: 1px solid #666;font-size: 12px;" cellpadding="10">';
-        // $mail->Body .= "<tr style='background: #eee;'><td><strong>User:</strong> </td><td>".  $name ."</td></tr>";
-        // $mail->Body .= "<tr><td><strong>Email:</strong> </td><td>". $mail ."</td></tr>";
-        // $mail->Body .= "<tr style='background: #eee;'><td><strong>Phone:</strong> </td><td>".  $phone ."</td></tr>";
-        // $mail->Body .= "<tr><td><strong>Message:</strong> </td><td>". $message ."</td></tr>";
-        // $mail->Body .= "</table>";
-        // $mail->Body .= "</body></html>";
+        // $php_mailer->Subject = "New order ".$site_name;
+        // $php_mailer->Body = '<html><body>';
+        // $php_mailer->Body .= "<strong style='display:block; margin-bottom:15px;'> New order: </strong>";
+        // $php_mailer->Body .= '<table rules="all" style="border-color: #666; width:100%;border: 1px solid #666;font-size: 12px;" cellpadding="10">';
+        // $php_mailer->Body .= "<tr style='background: #eee;'><td><strong>User:</strong> </td><td>".  $name ."</td></tr>";
+        // $php_mailer->Body .= "<tr><td><strong>Email:</strong> </td><td>". $mail ."</td></tr>";
+        // $php_mailer->Body .= "<tr style='background: #eee;'><td><strong>Phone:</strong> </td><td>".  $phone ."</td></tr>";
+        // $php_mailer->Body .= "<tr><td><strong>Message:</strong> </td><td>". $message ."</td></tr>";
+        // $php_mailer->Body .= "</table>";
+        // $php_mailer->Body .= "</body></html>";
 
-        // if(!$mail->send())
+        // if(!$php_mailer->send())
         // {
         //     $return = ([
         //         'type'    => 'success',

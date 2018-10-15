@@ -1,22 +1,27 @@
 <?php
-    // $mail = new PHPMailer;
-    // $mail->isSMTP();
-    // $mail->SMTPAuth = true;
-    // $mail->SMTPSecure = 'tls';
 
-    // $mail->SMTPOptions = array(
-    //     'ssl' => array(
-    //         'verify_peer' => false,
-    //         'verify_peer_name' => false,
-    //         'allow_self_signed' => true
-    //     )
-    // );
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
 
-    // $mail->CharSet = "utf-8";
-    // // $mail->SMTPDebug = 2;
+    $php_mailer = new PHPMailer;
+    $php_mailer->isSMTP();
+    $php_mailer->SMTPAuth = true;
+    $php_mailer->SMTPSecure = 'tls';
 
-    // $mail->Username   = "";
-    // $mail->Password   = "";
+    $php_mailer->SMTPOptions = array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        )
+    );
 
-    // $mail->Host       = 'smtp.gmail.com';
-    // $mail->Port       = 587;
+    $php_mailer->CharSet = "utf-8";
+    // $php_mailer->SMTPDebug = 2;
+
+    $php_mailer->Username   = "";
+    $php_mailer->Password   = "";
+
+    $php_mailer->Host       = 'smtp.gmail.com';
+    $php_mailer->Port       = 587;
