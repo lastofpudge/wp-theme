@@ -1,5 +1,5 @@
 <?php
-
+// ini_set('display_errors', '1');
 header('Content-type: text/html; charset=utf-8');
 
 $parse_uri = explode('wp-content', $_SERVER['SCRIPT_FILENAME']);
