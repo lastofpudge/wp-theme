@@ -19,7 +19,6 @@ if (!empty($_POST)) {
                 'message' => 'Ошибка nonce',
             ]);
             wp_send_json($return);
-            die();
         }
         // load phpmailer
         require_once __DIR__.'/mailer-config.php';
@@ -35,7 +34,6 @@ if (!empty($_POST)) {
         //         'message' => 'Вы не заполнили все обязательные поля',
         //     ]);
         //     wp_send_json($return);
-        //     die();
         // }
 
         // // create post with data
