@@ -1,0 +1,21 @@
+{% extends "layouts/base.twig" %}
+
+    {% block content %}
+        {% for post in posts %}
+
+            <div class="category-post" style="padding:15px;">
+                <h2><a href="{{post.link}}">{{post.title}}</a></h2>
+
+                {% if post.get_thumbnail %}
+                    <img src="{{ post.thumbnail.src }}" />
+                {% endif %}
+
+                {{ post.get_preview(20, false, '', true) }}
+
+                {{ function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
+            </div>
+
+        {% endfor %}
+    {% include 'particals/pagination.twig' %}
+
+{% endblock %}

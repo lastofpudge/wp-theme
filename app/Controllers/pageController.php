@@ -3,48 +3,47 @@
 namespace App\Controllers;
 
 use TimberPost;
+use Timber;
 
 class pageController extends Controller
 {
-    /*
-     * get post data
-     */
+    // homepage
     public static function index()
     {
         $returned_data = parent::getData();
         $post = new TimberPost();
+
         $returned_data['post'] = $post;
-        // $returned_data['test_posts'] = Timber::get_posts('post_type=test_postsy&numberposts=4');
+        return $returned_data;
+    }
 
-        // if (is_page_template('page-home.php')) {
-        //        $returned_data['field_1'] = carbon_get_post_meta(get_the_ID(), 'field_1');
-        // }
+    // about
+    public static function about() {
+        $returned_data = parent::getData();
+        $post = new TimberPost();
 
-        /*
-         * Custom paginated page
-         */
-        // if (is_page_template('page-list.php'))
-        // {
-        //     global $paged;
+        $returned_data['post'] = $post;
+        return $returned_data;
+    }
 
-        //     if (!isset($paged) || !$paged){ $paged = 1; }
+    // list
+    public static function list() {
+        $returned_data = parent::getData();
 
-        //     $context = Timber::get_context();
+        global $paged;
+        if (!isset($paged) || !$paged){ $paged = 1; }
 
-        //     $args = array(
-        //       'post_type' => 'post',
-        //       'posts_per_page' => 10,
-        //       'paged' => $paged
-        //     );
+        $context = Timber::get_context();
+        $args = array(
+            'post_type' => 'post',
+            'posts_per_page' => 10,
+            'paged' => $paged
+        );
 
-        //     query_posts($args);
-        //     $returned_data['posts'] = new Timber\PostQuery($args);
-        //     $returned_data['pagination'] = Timber::get_pagination();
-        //     $returned_data['categories'] = Timber::get_terms('category');
-        // }
-
-
-
+        query_posts($args);
+        $returned_data['posts'] = new Timber\PostQuery($args);
+        $returned_data['pagination'] = Timber::get_pagination();
+        $returned_data['categories'] = Timber::get_terms('category');
         return $returned_data;
     }
 }

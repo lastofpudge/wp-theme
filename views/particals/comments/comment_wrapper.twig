@@ -1,0 +1,18 @@
+<section class="comment-box">
+    <!-- comments -->
+    <div class="comments">
+        {% if post.comments %}
+            <h3> comments </h3>
+            {% for cmt in post.comments %}
+                {% include "particals/comments/comment.twig" with {comment:cmt} %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if post.comment_status == "closed" %}
+        <p> comments for this post are closed </p>
+    {% else %}
+        <!-- comment form -->
+        {% include "particals/comments/comment-form.twig" %}
+    {% endif %}
+</section>

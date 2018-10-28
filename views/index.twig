@@ -10,6 +10,8 @@
             <a class="hdr-logo-link" href="{{ site.url }}" rel="home">{{ site.name }}</a>
         </div>
         <div class="col-12">
+            {# example ajax #}
+            <h2>Ajax form</h2>
             <form method="POST" class="contactForm" id="contactForm" accept-charset="utf-8">
               <div class="form-group">
                 <input name="name">
@@ -21,7 +23,17 @@
                 <button type="submit" class="btn btn-primary">submit</button>
             </div>
         </form>
-    </div>
+        {# example search #}
+        <h2>Search form</h2>
+        <form method="get" accept-charset="utf-8" action="/">
+          <div class="form-group">
+            <input name="s">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">submit</button>
+        </div>
+    </form>
+</div>
 </div>
 
 {% endblock %}

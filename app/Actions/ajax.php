@@ -6,10 +6,10 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php' );
 if (isset($_POST["action"]) && !empty($_POST["action"]))
 {
     $action = $_POST["action"];
-    if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) { wp_send_json([ 'type' => 'error', 'message' => 'Ошибка nonce',]); }
 
     if ($action === "testAction")
     {
+        if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) { wp_send_json([ 'type' => 'error', 'message' => 'Ошибка nonce',]); }
         $mail_subject = "New order";
         require_once __DIR__.'/mailer__config.php';
 

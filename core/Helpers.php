@@ -46,7 +46,7 @@ if (!function_exists('crb_get_i18n_suffix')) {
 /*
  * Translate string
  */
-if (!crb_get_i18n_theme_option('crb_get_i18n_suffix')) {
+if (!function_exists('crb_get_i18n_theme_option')) {
     function crb_get_i18n_theme_option( $option_name ) {
         $suffix = crb_get_i18n_suffix();
         return carbon_get_theme_option( $option_name . $suffix );
