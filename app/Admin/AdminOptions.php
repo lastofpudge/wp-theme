@@ -32,7 +32,7 @@ class AdminOptions
         // ajax data prepare
         $ajax_data = [
             'ajax_url'  => admin_url('admin-ajax.php'),
-            'ajax_main' => get_template_directory_uri().'/app/Mail/mail.php',
+            'ajax_main' => get_template_directory_uri().'/app/Actions/ajax.php',
             'nonce'     => wp_create_nonce('ajax-nonce'),
         ];
 
