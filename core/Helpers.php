@@ -31,3 +31,24 @@ if (!function_exists('dd')) {
         echo '</pre>';
     }
 }
+
+if (!function_exists('crb_get_i18n_suffix')) {
+    function crb_get_i18n_suffix() {
+        $suffix = '';
+        if ( ! defined( 'ICL_LANGUAGE_CODE' ) ) {
+            return $suffix;
+        }
+        $suffix = '_' . ICL_LANGUAGE_CODE;
+        return $suffix;
+    }
+}
+
+/*
+ * Translate string
+ */
+if (!crb_get_i18n_theme_option('crb_get_i18n_suffix')) {
+    function crb_get_i18n_theme_option( $option_name ) {
+        $suffix = crb_get_i18n_suffix();
+        return carbon_get_theme_option( $option_name . $suffix );
+    }
+}
