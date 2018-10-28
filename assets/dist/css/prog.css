@@ -12,6 +12,11 @@
   max-width: 90%;
 }
 
+.noty_body {
+    background: #007bff;
+    color: #fff;
+}
+
 #noty_layout__top {
   top: 0;
   left: 5%;

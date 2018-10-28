@@ -90,6 +90,10 @@ if (!empty($_POST)) {
         //     exit;
         // }
 
+        $return = ([
+            'type'    => 'success',
+            'message' => 'TEST',
+        ]);
         wp_send_json($return);
         die();
     }

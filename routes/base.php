@@ -6,9 +6,9 @@ if (is_front_page()) :
 endif;
 
 /* custom post type category */
-if (is_post_type_archive('test')) :
-    makeView('categoryController@index', 'categories/category');
-endif;
+// if (is_post_type_archive('test')) :
+//     makeView('categoryController@index', 'categories/category');
+// endif;
 
 /* is single post type-page */
 if (is_singular('zayavki')) :
@@ -21,9 +21,9 @@ if (is_category()) :
 endif;
 
 /* is single post type-page */
-if (is_singular('test')) :
-    makeView('postController@index', 'posts/post');
-endif;
+// if (is_singular('test')) :
+//     makeView('postController@index', 'posts/post');
+// endif;
 
 /* is single page */
 if (is_single()) :

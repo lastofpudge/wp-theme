@@ -1,17 +1,21 @@
-{% for post in posts %}
+{% extends "layouts/base.twig" %}
 
-    <div class="category-post" style="padding:15px;">
-        <h2><a href="{{post.link}}">{{post.title}}</a></h2>
+    {% block content %}
+        {% for post in posts %}
 
-        {% if post.get_thumbnail %}
-            <img src="{{ post.thumbnail.src }}" />
-        {% endif %}
+            <div class="category-post" style="padding:15px;">
+                <h2><a href="{{post.link}}">{{post.title}}</a></h2>
 
-        {{ post.get_preview(20, false, '', true) }}
+                {% if post.get_thumbnail %}
+                    <img src="{{ post.thumbnail.src }}" />
+                {% endif %}
 
-        {{ function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
-    </div>
+                {{ post.get_preview(20, false, '', true) }}
 
-{% endfor %}
+                {{ function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
+            </div>
 
-{% include 'particals/pagination.twig' %}
+        {% endfor %}
+    {% include 'particals/pagination.twig' %}
+
+{% endblock %}

@@ -1,6 +1,7 @@
 <?php
-    // ini_set('display_errors', '1');
-    require __DIR__.'/../../core/vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
+    ini_set('display_errors', '1');
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
 
     $php_mailer = new PHPMailer;
     $php_mailer->isSMTP();
