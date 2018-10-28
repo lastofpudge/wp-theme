@@ -1,7 +1,5 @@
 <?php
 
-    ini_set('display_errors', '1');
-
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
@@ -38,3 +36,11 @@
     $php_mailer->Host       = 'smtp.mailtrap.io';
     $php_mailer->Port       = 2525;
     $php_mailer->isHTML(true);
+
+    $email_to = get_bloginfo('admin_email');
+    $site_name = get_bloginfo( 'name' );
+    $php_mailer->addAddress($email_to, $site_name);
+    $php_mailer->setFrom = $site_name;
+    $php_mailer->From = $email_to;
+    $php_mailer->FromName = $site_name." Support";
+    $php_mailer->Subject = $mail_subject." - ".$site_name;

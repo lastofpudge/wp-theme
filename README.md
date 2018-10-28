@@ -11,4 +11,3 @@
 - use "composer install" in project folder
 - "npm i" and "npm run watch" to work with css/js
 - set "wp_debug" to "true" in wp-config.php
-
