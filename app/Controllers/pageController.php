@@ -18,7 +18,8 @@ class pageController extends Controller
     }
 
     // about
-    public static function about() {
+    public static function about()
+    {
         $returned_data = parent::getData();
         $post = new TimberPost();
 
@@ -27,7 +28,8 @@ class pageController extends Controller
     }
 
     // list
-    public static function list() {
+    public static function list()
+    {
         $returned_data = parent::getData();
 
         global $paged;
