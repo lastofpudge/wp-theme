@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use TimberPost;
 use Timber;
+use TimberPost;
 
 class pageController extends Controller
 {
@@ -14,6 +14,7 @@ class pageController extends Controller
         $post = new TimberPost();
 
         $returned_data['post'] = $post;
+
         return $returned_data;
     }
 
@@ -24,6 +25,7 @@ class pageController extends Controller
         $post = new TimberPost();
 
         $returned_data['post'] = $post;
+
         return $returned_data;
     }
 
@@ -33,19 +35,22 @@ class pageController extends Controller
         $returned_data = parent::getData();
 
         global $paged;
-        if (!isset($paged) || !$paged){ $paged = 1; }
+        if (!isset($paged) || !$paged) {
+            $paged = 1;
+        }
 
         $context = Timber::get_context();
-        $args = array(
-            'post_type' => 'post',
+        $args = [
+            'post_type'      => 'post',
             'posts_per_page' => 10,
-            'paged' => $paged
-        );
+            'paged'          => $paged,
+        ];
 
         query_posts($args);
         $returned_data['posts'] = new Timber\PostQuery($args);
         $returned_data['pagination'] = Timber::get_pagination();
         $returned_data['categories'] = Timber::get_terms('category');
+
         return $returned_data;
     }
 }
