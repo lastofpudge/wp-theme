@@ -15,6 +15,7 @@ class Controller
         // theme options
         // $data['data'] = carbon_get_theme_option('option');
         $data['is_home'] = is_page_template('page-home.php');
+        $data['show_cookie_text'] = carbon_get_theme_option('show_cookie_text');
         // test posts
         // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
 
