@@ -32,8 +32,6 @@ if (is_page()) :
     makeView('pageController@index', 'pages/page');
 endif;
 
-
-
 /* is 404 */
 if (is_404()) :
     makeView('errorController@index', 'pages/404');

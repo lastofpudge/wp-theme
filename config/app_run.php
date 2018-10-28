@@ -17,8 +17,7 @@ class AppConfig
      */
     public function check_bars()
     {
-        if ($this->config['show_admin_bar'] === false)
-        {
+        if ($this->config['show_admin_bar'] === false) {
             add_filter('show_admin_bar', '__return_false');
         }
     }
@@ -28,14 +27,12 @@ class AppConfig
      */
     public function hide_items()
     {
-        if ($this->config['show_posts'] === false)
-        {
+        if ($this->config['show_posts'] === false) {
             remove_menu_page('edit.php');
             add_action('wp_before_admin_bar_render', [$this, 'hide_post_add']);
         }
 
-        if ($this->config['show_pages'] === false)
-        {
+        if ($this->config['show_pages'] === false) {
             remove_menu_page('edit.php?post_type=page');
             add_action('wp_before_admin_bar_render', [$this, 'hide_page_add']);
         }
@@ -58,8 +55,7 @@ class AppConfig
      */
     public function hide_comments()
     {
-        if ($this->config['enable_comments'] === false)
-        {
+        if ($this->config['enable_comments'] === false) {
             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
             remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
             remove_menu_page('edit-comments.php');
@@ -68,33 +64,38 @@ class AppConfig
 
     public function hide_tools()
     {
-        if ($this->config['show_tools'] === false)
-        {
+        if ($this->config['show_tools'] === false) {
             remove_menu_page('tools.php');
         }
     }
 
-    public function show_orders_pending_numbers() {
-        if ($this->config['create_orders_post_type'] === true)
-        {
-            $type = "zayavki";
-            $status = "pending";
-            $num_posts = wp_count_posts( $type, 'readable' );
+    public function show_orders_pending_numbers()
+    {
+        if ($this->config['create_orders_post_type'] === true) {
+            $type = 'zayavki';
+            $status = 'pending';
+            $num_posts = wp_count_posts($type, 'readable');
             $pending_count = 0;
 
-            if ( !empty($num_posts->$status) ) { $pending_count = $num_posts->$status; }
-            if ($type == 'post') { $menu_str = 'edit.php'; } else { $menu_str = 'edit.php?post_type=' . $type; }
+            if (!empty($num_posts->$status)) {
+                $pending_count = $num_posts->$status;
+            }
+            if ($type == 'post') {
+                $menu_str = 'edit.php';
+            } else {
+                $menu_str = 'edit.php?post_type='.$type;
+            }
 
-            foreach ($menu as $menu_key => $menu_data ) {
-                if ($menu_str != $menu_data[2] ) continue;
-                $menu[$menu_key][0] .= " <span class='update-plugins count-$pending_count'><span class='plugin-count'>" . number_format_i18n($pending_count) . '</span></span>';
+            foreach ($menu as $menu_key => $menu_data) {
+                if ($menu_str != $menu_data[2]) {
+                    continue;
+                }
+                $menu[$menu_key][0] .= " <span class='update-plugins count-$pending_count'><span class='plugin-count'>".number_format_i18n($pending_count).'</span></span>';
             }
 
             return $menu;
         }
     }
-
-
 }
 
 new AppConfig($config);
