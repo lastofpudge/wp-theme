@@ -3,8 +3,7 @@
 /*
  * register custom tax
  */
-add_action('init', function ()
-{
+add_action('init', function () {
 
   /*
    * [$url, $name, $singular, $public, $has_archive, $menu_icon, $supports] - paramas.
