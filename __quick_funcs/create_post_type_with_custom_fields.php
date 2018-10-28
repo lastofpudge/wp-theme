@@ -1,13 +1,13 @@
 <?php
 
 // create post with data
-$new_post = array(
+$new_post = [
     'post_type'         => 'zayavki',
     'post_status'       => 'pending',
-    'post_title'        => wp_strip_all_tags($name)
-);
+    'post_title'        => wp_strip_all_tags($name),
+];
 
-$post_id = wp_insert_post( $new_post );
+$post_id = wp_insert_post($new_post);
 add_post_meta($post_id, '_user_tel', wp_strip_all_tags($tel));
 add_post_meta($post_id, '_user_text', wp_strip_all_tags($comment));
 

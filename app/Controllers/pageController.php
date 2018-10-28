@@ -43,8 +43,6 @@ class pageController extends Controller
         //     $returned_data['categories'] = Timber::get_terms('category');
         // }
 
-
-
         return $returned_data;
     }
 }

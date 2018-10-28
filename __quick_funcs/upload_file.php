@@ -2,12 +2,12 @@
 
 if (isset($_FILES['user_file']) && !empty($_FILES['user_file'])) {
     // allowed mimes
-    $mimes = array(
+    $mimes = [
         'png'  => 'image/png',
         'jpg'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
-        'jpg'  => 'image/jpeg'
-    );
+        'jpg'  => 'image/jpeg',
+    ];
 
     // userfile
     $file = $_FILES['user_file'];
@@ -15,11 +15,10 @@ if (isset($_FILES['user_file']) && !empty($_FILES['user_file'])) {
     // validate file image
     $filetype = wp_check_filetype($file, $mimes);
 
-    if (!$filetype['ext'] )
-    {
+    if (!$filetype['ext']) {
         wp_send_json([
             'type'    => 'error',
-            'message' => 'Invalid file format (Only images allowed)'
+            'message' => 'Invalid file format (Only images allowed)',
         ]);
     }
 
