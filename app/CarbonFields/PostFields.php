@@ -6,8 +6,7 @@ use Carbon_Fields\Field;
 /*
  * post/page fields
  */
-add_action('carbon_fields_register_fields', function ()
-{
+add_action('carbon_fields_register_fields', function () {
     /*
      * HOME
      */
