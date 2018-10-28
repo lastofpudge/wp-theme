@@ -10,7 +10,7 @@ add_action('carbon_fields_register_fields', function () {
     /*
      * HOME
      */
-     require_once  __DIR__.'/Models/home.php';
+    require_once __DIR__.'/Models/home.php';
     // Container::make('post_meta', 'Дополнительные поля')
     //     ->show_on_post_type('post')
     //     ->add_fields(array(
