@@ -1,10 +1,12 @@
 <header>
-    <nav>
-        <ul class="main-nav">
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+         <ul class="navbar-nav mr-auto">
             {% for item in left_menu.get_items %}
                     <li
-                    class="{{ item.classes | join(' ') }} {% if item.current %} cur__page__item {% endif %}"><a class="nav-main-link"
-                    href="{{ item.get_link }}">{{ item.title }}</a>
+                    class="nav-item {{ item.classes | join(' ') }} {% if item.current %} active {% endif %}">
+                    <a class="nav-main-link" href="{{ item.get_link }}">
+                        {{ item.title }}
+                    </a>
                         {% if item.get_children %}
                             <ul class="nav-drop">
                               {% for child in item.get_children %}

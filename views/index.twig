@@ -1,14 +1,27 @@
 {% extends "layouts/base.twig" %}
 
 {% block content %}
-    <!-- {% do action('breads_func') %} -->
-    <a class="hdr-logo-link" href="{{ site.url }}" rel="home">{{ site.name }}</a>
-    <br><br>
-    <br>
-    <form method="POST" class="contactForm" id="contactForm" accept-charset="utf-8">
-        <input name="name">
-        <input name="mail">
-        <button type="submit">submit</button>
-    </form>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {# {% do action('breads_func') %} #}
+
+    <div class="cotainer">
+        <div class="col-12">
+            <a class="hdr-logo-link" href="{{ site.url }}" rel="home">{{ site.name }}</a>
+        </div>
+        <div class="col-12">
+            <form method="POST" class="contactForm" id="contactForm" accept-charset="utf-8">
+              <div class="form-group">
+                <input name="name">
+            </div>
+            <div class="form-group">
+                <input name="mail">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">submit</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
