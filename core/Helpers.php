@@ -3,7 +3,8 @@
 /*
  * load site controllers
  */
-if (!function_exists('makeView')) {
+if (!function_exists('makeView'))
+{
     function makeView($controller, $view)
     {
         $ctr = explode('@', $controller, 2);
@@ -23,7 +24,8 @@ if (!function_exists('makeView')) {
 /*
  * helper function die and dump
  */
-if (!function_exists('dd')) {
+if (!function_exists('dd'))
+{
     function dd($data)
     {
         echo '<pre>';
@@ -32,7 +34,8 @@ if (!function_exists('dd')) {
     }
 }
 
-if (!function_exists('crb_get_i18n_suffix')) {
+if (!function_exists('crb_get_i18n_suffix'))
+{
     function crb_get_i18n_suffix()
     {
         $suffix = '';
@@ -48,11 +51,24 @@ if (!function_exists('crb_get_i18n_suffix')) {
 /*
  * Translate string
  */
-if (!function_exists('crb_get_i18n_theme_option')) {
+if (!function_exists('crb_get_i18n_theme_option'))
+{
     function crb_get_i18n_theme_option($option_name)
     {
         $suffix = crb_get_i18n_suffix();
 
         return carbon_get_theme_option($option_name.$suffix);
     }
+}
+
+/*
+ * Write log helper
+ */
+if (!function_exists('write_log'))
+{
+    function write_log($log)
+    {
+        if (true === WP_DEBUG) { if (is_array($log) || is_object($log)) { error_log(print_r($log, true)); } else { error_log($log); } }
+    }
+
 }
