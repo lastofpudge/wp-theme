@@ -7,6 +7,7 @@ $data = [
     'post_register_types' => __DIR__.'/PostType.php',
     'admin_options'       => __DIR__.'/../app/Admin/AdminOptions.php',
     'acts'                => __DIR__.'/../app/Actions/ajax.php',
+    'langs'               => __DIR__.'/../app/Langs/strings.php',
     'hidden_wp_data'      => __DIR__.'/../app/Admin/HiddenData.php',
     'theme_options'       => __DIR__.'/../app/CarbonFields/OptionFields.php',
     'post_fields'         => __DIR__.'/../app/CarbonFields/PostFields.php',
