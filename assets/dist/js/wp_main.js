@@ -1,4 +1,6 @@
 $(function() {
+    var preloader = $('.js__preloader__main');
+
     $(document).on('submit', '#contactForm', function(event) {
         event.preventDefault();
         var form = $(this);
@@ -7,8 +9,11 @@ $(function() {
 
         form_data.append( "user_name", $(this).find('input[name="name"]').val());
         form_data.append( "user_mail", $(this).find('input[name="mail"]').val());
+        form_data.append( "action", "testAction");
         form_data.append( "nonce", vars.nonce);
 
+
+        preloader.addClass('js__preloading');
         $.ajax({
             type: "POST",
             url: vars.ajax_main,
@@ -16,6 +21,7 @@ $(function() {
             contentType: false,
             data: form_data,
             success: function(data, text) {
+                preloader.removeClass('js__preloading');
                 if (data) {
                     // if is modal form - close modal before show message
                     // $.magnificPopup.close();
@@ -29,6 +35,7 @@ $(function() {
                 }
             },
             fail: function(errors) {
+                preloader.removeClass('js__preloading');
                 new Noty({
                     theme: 'mint',
                     text: 'Ошибка отправки',

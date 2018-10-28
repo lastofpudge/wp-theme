@@ -1,5 +1,9 @@
 <?php
 
+    if( WP_DEBUG && WP_DEBUG_DISPLAY && (defined('DOING_AJAX') && DOING_AJAX) ){
+        @ini_set( 'display_errors', 1 );
+    }
+
     /**
      * Autoload.
      */
