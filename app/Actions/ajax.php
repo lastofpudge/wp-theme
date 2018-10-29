@@ -37,6 +37,4 @@ if (isset($_POST['action']) && !empty($_POST['action']) && !is_admin()) {
         }
         wp_send_json(['type' => 'success', 'message' => 'TEST']);
     }
-
-
 }
