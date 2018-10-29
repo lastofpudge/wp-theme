@@ -22,6 +22,7 @@
     add_filter('timber/twig', function (\Twig_Environment $twig) {
         $twig->addGlobal('_post', $_POST);
         $twig->addGlobal('_get', $_GET);
+
         return $twig;
     });
 
