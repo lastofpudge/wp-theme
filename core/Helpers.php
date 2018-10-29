@@ -26,7 +26,7 @@ if (!function_exists('makeView')) {
 if (!function_exists('dd')) {
     function dd($data)
     {
-        echo '<pre>';
+        echo '<pre style="background-color: #252424; color: #33ff00; padding: 15px; font-size: 16px; line-height: 2; overflow: hidden; clear: both;">';
         die(var_dump($data));
         echo '</pre>';
     }
@@ -70,5 +70,20 @@ if (!function_exists('write_log')) {
                 error_log($log);
             }
         }
+    }
+}
+
+    // multilang
+if (!function_exists('trans_string')) {
+    function trans_string($string)
+    {
+        return pll_e($string);
+    }
+}
+
+if (!function_exists('trans_string_var')) {
+    function trans_string_var($string)
+    {
+        return pll_($string);
     }
 }

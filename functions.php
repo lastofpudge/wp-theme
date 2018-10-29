@@ -18,21 +18,10 @@
     require_once __DIR__.'/core/vendor/autoload.php';
     require_once __DIR__.'/core/Autoload.php';
 
-    // multilang
-    function trans_string($string)
-    {
-        return pll_e($string);
-    }
-    function trans_string_var($string)
-    {
-        return pll_($string);
-    }
-
     // params
     add_filter('timber/twig', function (\Twig_Environment $twig) {
         $twig->addGlobal('_post', $_POST);
         $twig->addGlobal('_get', $_GET);
-
         return $twig;
     });
 

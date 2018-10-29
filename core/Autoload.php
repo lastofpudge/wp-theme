@@ -13,6 +13,7 @@ $data = [
     'wp__post_fields'         => __DIR__.'/../app/CarbonFields/PostFields.php',
     'wp__post_types'          => __DIR__.'/../app/Admin/PostTypes.php',
     'wp__cron_tasks'          => __DIR__.'/../app/Jobs/Cron.php',
+    'wp__routes'              => __DIR__.'/../routes/api.php',
 ];
 
 foreach ($data as $key => $value) {
