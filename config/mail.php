@@ -28,6 +28,7 @@
 
     $email_to = get_bloginfo('admin_email');
     $site_name = get_bloginfo('name');
+    //
     $php_mailer->addAddress($email_to, $site_name);
     $php_mailer->setFrom = $site_name;
     $php_mailer->From = $email_to;

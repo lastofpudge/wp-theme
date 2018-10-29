@@ -87,3 +87,13 @@ if (!function_exists('trans_string_var')) {
         return pll_($string);
     }
 }
+
+if (!function_exists('loadMail')) {
+    function loadMail($filename, $data)
+    {
+        ob_start();
+        require_once __DIR__.'/../views/mails/'.$filename.'.php';
+        $data['php_mailer']->Body = ob_get_contents();
+        ob_end_clean();
+    }
+}

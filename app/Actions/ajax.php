@@ -12,30 +12,31 @@ if (isset($_POST['action']) && !empty($_POST['action']) && !is_admin()) {
         }
 
         $mail_subject = 'New order';
-        require_once __DIR__.'/mailer__config.php';
+        require_once __DIR__.'/../../config/mail.php';
 
-        // load data
         $name = sanitize_text_field($_POST['user_name']);
         $mail = sanitize_text_field($_POST['user_mail']);
-        $phone = '123';
-        $message = '456';
-
         //validate data
         if (empty($name) || empty($mail)) {
             wp_send_json(['type' => 'error', 'message' => 'Вы не заполнили все обязательные поля']);
         }
 
         // wp_send_json(['type' => 'test', 'message' => $name. ' '. $mail ]);
-
-        // create html letter
-        ob_start();
-        include __DIR__.'/Templates/testAction.php';
-        $php_mailer->Body = ob_get_contents();
-        ob_end_clean();
+        $site_name = get_bloginfo('name');
+        loadMail('testMail', [
+            'php_mailer' => $php_mailer,
+            'site_name'  => $site_name,
+            'name'       => $name,
+            'mail'       => $mail,
+            'phone'      => '09912313',
+            'message'    => 'message test',
+        ]);
 
         if (!$php_mailer->send()) {
             wp_send_json(['type' => 'fail', 'message' => 'Fail send email']);
         }
         wp_send_json(['type' => 'success', 'message' => 'TEST']);
     }
+
+
 }

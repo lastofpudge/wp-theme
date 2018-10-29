@@ -3,7 +3,7 @@
 $data = [
     'wp__helpers'             => __DIR__.'/Helpers.php',
     'wp__config'              => __DIR__.'/../config/app.php',
-    'wp__config_run'          => __DIR__.'/../config/app_run.php',
+    'wp__config_run'          => __DIR__.'/AppConfig.php',
     'wp__post_register_types' => __DIR__.'/PostType.php',
     'wp__admin_options'       => __DIR__.'/../app/Admin/AdminOptions.php',
     'wp__acts'                => __DIR__.'/../app/Actions/ajax.php',
