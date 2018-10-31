@@ -11,11 +11,11 @@ class homeController extends Controller
         $this->prev_next();
     }
 
+    /*
+     * get timber data
+     */
     public static function index()
     {
-        /*
-         * get timber data
-         */
         $returned_data = parent::getData();
         // $returned_data['some_post_type'] = Timber::get_posts('post_type=some_post_type&numberposts=-1');
         return $returned_data;
