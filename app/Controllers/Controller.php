@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use Timber;
 
-
 class Controller
 {
     /*
@@ -75,6 +74,5 @@ class Controller
         };
     }
 }
-
 
 // new Controller();
