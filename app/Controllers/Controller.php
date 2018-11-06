@@ -9,14 +9,13 @@ class Controller
     /*
      * get data from all pages
      */
-    public static function getData()
-    {
+    public function __construct() {
         $data = Timber::get_context();
         // theme options
         // $data['data'] = carbon_get_theme_option('option');
         $data['is_home'] = is_page_template('page-home.php');
         $data['show_cookie_text'] = carbon_get_theme_option('show_cookie_text');
-        $data['test'] = 'test';
+        // $data['test'] = 'test';
         // test posts
         // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
 
@@ -32,6 +31,10 @@ class Controller
         add_action('langs_func', self::render_langs());
 
         return $data;
+    }
+    public static function getData()
+    {
+
     }
 
     /**

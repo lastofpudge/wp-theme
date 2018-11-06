@@ -10,9 +10,9 @@ class pageController extends Controller
     // homepage
     public static function index()
     {
-        $returned_data = parent::getData();
         $post = new TimberPost();
 
+        $returned_data = parent::getData();
         $returned_data['post'] = $post;
 
         return $returned_data;
@@ -21,9 +21,8 @@ class pageController extends Controller
     // about
     public static function about()
     {
-        $returned_data = parent::getData();
         $post = new TimberPost();
-
+        $returned_data = parent::getData();
         $returned_data['post'] = $post;
 
         return $returned_data;

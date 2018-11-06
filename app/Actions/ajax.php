@@ -14,8 +14,8 @@ if (isset($_POST['action']) && !empty($_POST['action']) && !is_admin()) {
         $mail_subject = 'New order';
         require_once __DIR__.'/../../config/mail.php';
 
-        $name = sanitize_text_field($_POST['user_name']);
-        $mail = sanitize_text_field($_POST['user_mail']);
+        $name = sanitize_text_field($_POST['user_name'] ?? '');
+        $mail = sanitize_text_field($_POST['user_mail'] ?? '');
         //validate data
         if (empty($name) || empty($mail)) {
             wp_send_json(['type' => 'error', 'message' => 'Вы не заполнили все обязательные поля']);
