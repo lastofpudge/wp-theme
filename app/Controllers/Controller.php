@@ -4,12 +4,14 @@ namespace App\Controllers;
 
 use Timber;
 
+
 class Controller
 {
     /*
      * get data from all pages
      */
-    public function __construct() {
+    public static function getData()
+    {
         $data = Timber::get_context();
         // theme options
         // $data['data'] = carbon_get_theme_option('option');
@@ -31,10 +33,6 @@ class Controller
         add_action('langs_func', self::render_langs());
 
         return $data;
-    }
-    public static function getData()
-    {
-
     }
 
     /**
@@ -77,3 +75,6 @@ class Controller
         };
     }
 }
+
+
+// new Controller();

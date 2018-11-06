@@ -22,6 +22,7 @@ class pageController extends Controller
     public static function about()
     {
         $post = new TimberPost();
+
         $returned_data = parent::getData();
         $returned_data['post'] = $post;
 
