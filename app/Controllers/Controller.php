@@ -9,7 +9,8 @@ class Controller
     /*
      * get data from all pages
      */
-    public function __construct() {
+    public function __construct()
+    {
         $data = Timber::get_context();
         // theme options
         // $data['data'] = carbon_get_theme_option('option');
@@ -32,9 +33,9 @@ class Controller
 
         return $data;
     }
+
     public static function getData()
     {
-
     }
 
     /**
