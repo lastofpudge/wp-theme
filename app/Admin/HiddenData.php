@@ -1,7 +1,5 @@
 <?php
 
-// namespace App\Admin;
-
 class HiddenData
 {
     public function __construct()

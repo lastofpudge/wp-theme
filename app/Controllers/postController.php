@@ -6,12 +6,14 @@ use Timber;
 
 class postController extends Controller
 {
+    public function __construct() {
+        $returned_data = parent::getData();
+    }
     /*
      * get post data
      */
     public static function index()
     {
-        $returned_data = parent::getData();
         $post = Timber::query_post();
         $returned_data['post'] = $post;
 
