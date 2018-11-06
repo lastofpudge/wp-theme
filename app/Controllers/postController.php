@@ -6,9 +6,11 @@ use Timber;
 
 class postController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $returned_data = parent::getData();
     }
+
     /*
      * get post data
      */
