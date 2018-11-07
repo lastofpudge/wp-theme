@@ -2,8 +2,8 @@
 
 namespace App\Admin;
 
-use TimberMenu;
 use Timber;
+use TimberMenu;
 
 class AdminOptions
 {
