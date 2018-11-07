@@ -12,7 +12,8 @@ class Controller
         add_filter('timber_context', [$this, 'get_data']);
     }
 
-    public function get_data($context) {
+    public function get_data($context)
+    {
         // theme options
         // $data['data'] = carbon_get_theme_option('option');
         $context['is_home'] = is_page_template('page-home.php');
@@ -31,6 +32,7 @@ class Controller
 
         add_action('breads_func', self::render_pagination());
         add_action('langs_func', self::render_langs());
+
         return $context;
     }
 
@@ -74,6 +76,5 @@ class Controller
         };
     }
 }
-
 
 new Controller();
