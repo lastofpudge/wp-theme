@@ -10,6 +10,7 @@ class pageController extends Controller
     public function __construct() {
         $this->returned_data = Timber::get_context();
     }
+
     // homepage
     public function index()
     {
