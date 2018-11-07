@@ -8,10 +8,9 @@ if (!function_exists('makeView')) {
     {
         $ctr = explode('@', $controller, 2);
 
-        require_once __DIR__.'/../app/Controllers/Controller.php';
         require_once __DIR__.'/../app/Controllers/'.$ctr[0].'.php';
 
-        $data = $d::{$ctr[1]}();
+        $data = $d->{$ctr[1]}();
         // $data = $d::$ctr[1];
 
         $v = 'views/'.$view.'.twig';

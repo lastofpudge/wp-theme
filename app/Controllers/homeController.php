@@ -9,16 +9,16 @@ class homeController extends Controller
     public function __construct()
     {
         $this->prev_next();
+        $this->returned_data = Timber::get_context();
     }
 
     /*
      * get timber data
      */
-    public static function index()
+    public function index()
     {
-        $returned_data = parent::getData();
         // $returned_data['some_post_type'] = Timber::get_posts('post_type=some_post_type&numberposts=-1');
-        return $returned_data;
+        return $this->returned_data;
     }
 
     /*

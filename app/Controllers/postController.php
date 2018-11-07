@@ -7,17 +7,17 @@ use Timber;
 class postController extends Controller
 {
     public function __construct() {
-        $returned_data = parent::getData();
+        $this->returned_data = Timber::get_context();
     }
     /*
      * get post data
      */
-    public static function index()
+    public function index()
     {
         $post = Timber::query_post();
-        $returned_data['post'] = $post;
+        $this->returned_data['post'] = $post;
 
-        return $returned_data;
+        return $this->returned_data;
     }
 }
 

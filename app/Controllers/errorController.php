@@ -7,16 +7,14 @@ use Timber;
 class errorController extends Controller
 {
     public function __construct() {
-        $returned_data = parent::getData();
+        $this->returned_data = Timber::get_context();
     }
     /*
      * get post data
      */
-    public static function index()
+    public function index()
     {
-        $returned_data['context'] = Timber::get_context();
-
-        return $returned_data;
+        return $this->returned_data;
     }
 }
 

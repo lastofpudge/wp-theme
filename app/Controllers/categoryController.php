@@ -8,18 +8,18 @@ use TimberTerm;
 class categoryController extends Controller
 {
     public function __construct() {
-        $returned_data = parent::getData();
+        $this->returned_data = Timber::get_context();
     }
     /*
      * get post data
      */
-    public static function index()
+    public function index()
     {
-        $returned_data['term'] = new TimberTerm();
-        $returned_data['pagination'] = Timber::get_pagination();
-        $returned_data['posts'] = Timber::get_posts();
+        $this->returned_data['term'] = new TimberTerm();
+        $this->returned_data['pagination'] = Timber::get_pagination();
+        $this->returned_data['posts'] = Timber::get_posts();
 
-        return $returned_data;
+        return $this->returned_data;
     }
 }
 
