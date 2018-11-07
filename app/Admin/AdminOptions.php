@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use TimberMenu;
+use Timber;
 
 class AdminOptions
 {
@@ -57,6 +58,7 @@ class AdminOptions
      */
     public function addToContext($context)
     {
+        // $context['globals'] = Timber::get_context();
         $context['left_menu'] = new TimberMenu('left_menu');
         $context['template_url'] = get_bloginfo('template_url');
         // $context['right_menu'] = new TimberMenu('right_menu');

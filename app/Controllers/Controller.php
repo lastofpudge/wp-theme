@@ -12,18 +12,18 @@ class Controller
         add_filter('timber_context', [$this, 'get_data']);
     }
 
-    public function get_data() {
+    public function get_data($context) {
         // theme options
         // $data['data'] = carbon_get_theme_option('option');
-        $data['is_home'] = is_page_template('page-home.php');
-        $data['show_cookie_text'] = carbon_get_theme_option('show_cookie_text');
-        $data['test'] = 'test123';
+        $context['is_home'] = is_page_template('page-home.php');
+        $context['show_cookie_text'] = carbon_get_theme_option('show_cookie_text');
+        $context['test'] = 'test123';
         // test posts
         // $data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
 
         // custom logo
         if ($custom_logo_id = get_theme_mod('custom_logo')) {
-            $data['custom_logo'] = wp_get_attachment_image($custom_logo_id, 'full', false, [
+            $context['custom_logo'] = wp_get_attachment_image($custom_logo_id, 'full', false, [
                 'class'    => 'custom-logo',
                 'itemprop' => 'logo',
             ]);
@@ -31,7 +31,7 @@ class Controller
 
         add_action('breads_func', self::render_pagination());
         add_action('langs_func', self::render_langs());
-        return $data;
+        return $context;
     }
 
     /**

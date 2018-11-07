@@ -9,7 +9,7 @@ class homeController extends Controller
     public function __construct()
     {
         $this->prev_next();
-        $this->returned_data['context'] = Timber::get_context();
+        $this->returned_data = Timber::get_context();
     }
 
     /*
