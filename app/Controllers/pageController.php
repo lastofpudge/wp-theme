@@ -7,7 +7,8 @@ use TimberPost;
 
 class pageController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->returned_data = Timber::get_context();
     }
 
@@ -16,6 +17,7 @@ class pageController extends Controller
     {
         $post = new TimberPost();
         $this->returned_data['post'] = $post;
+
         return $this->returned_data;
     }
 
@@ -24,6 +26,7 @@ class pageController extends Controller
     {
         $post = new TimberPost();
         $this->returned_data['post'] = $post;
+
         return $this->returned_data;
     }
 
