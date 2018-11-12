@@ -1,12 +1,9 @@
 {% extends "layouts/base.twig" %}
 
 {% block content %}
+    {% do action('breads_func') %}
     <div class="post-wrap" id="post-{{ post.ID }}">
         <h1>{{ post.title }}</h1>
         {{ post.content }}
     </div>
-
-    <!-- comment box -->
-    {% include 'particals/comments/comment_wrapper.twig' %}
-
 {% endblock %}

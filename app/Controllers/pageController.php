@@ -15,18 +15,14 @@ class pageController extends Controller
     // homepage
     public function index()
     {
-        $post = new TimberPost();
-        $this->returned_data['post'] = $post;
-
+        $this->returned_data['post'] = new TimberPost();
         return $this->returned_data;
     }
 
     // about
     public function about()
     {
-        $post = new TimberPost();
-        $this->returned_data['post'] = $post;
-
+        $this->returned_data['post'] = new TimberPost();
         return $this->returned_data;
     }
 

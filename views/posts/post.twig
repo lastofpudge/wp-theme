@@ -2,6 +2,7 @@
 
 {% block content %}
         <div class="post-wrap" id="post-{{ post.ID }}">
+                {% do action('breads_func') %}
                 <h1>{{ post.title }}</h1>
 
                 <!-- post thumbnail -->
@@ -25,27 +26,9 @@
                     <span class="date">{{ post.post_date|date('F j, Y') }}</span>
                 </p>
 
-                <!-- comment box -->
-                <section class="comment-box">
-                    <!-- comments -->
-                    <div class="comments">
-                        {% if post.comments %}
-                        <h3> comments </h3>
-                        {% for cmt in post.comments %}
-                            {% include "particals/comments/comment.twig" with {comment:cmt} %}
-                        {% endfor %}
-                        {% endif %}
-                    </div>
+                {% include 'particals/comments/comment_wrapper.twig' %}
 
-                    {% if post.comment_status == "closed" %}
-                        <p> comments for this post are closed </p>
-                    {% else %}
-                        <!-- comment form -->
-                        {% include "particals/comments/comment-form.twig" %}
-                    {% endif %}
-                </section>
-
-                {{ function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}
+                {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}
         </div>
         {#{{dump(post)}}#}
 {% endblock %}
