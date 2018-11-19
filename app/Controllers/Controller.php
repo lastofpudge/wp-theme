@@ -54,7 +54,6 @@ class Controller
     }
 
     public function set_item_link_wrap($output, $crumb) {
-        var_dump($crumb);
         $output = '<a class="custom__bread__link" property="v:title" rel="v:url" href="'. $crumb['url']. '" >';
         $output.= $crumb['text'];
         $output.= '</a>';
