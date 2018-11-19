@@ -33,4 +33,3 @@
     $php_mailer->setFrom = $site_name;
     $php_mailer->From = $email_to;
     $php_mailer->FromName = $site_name.' Support';
-    $php_mailer->Subject = $mail_subject.' - '.$site_name;
