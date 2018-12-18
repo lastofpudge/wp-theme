@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "28f9469f62bfe77e1bda35428e9ff73f",
+    "content-hash": "7b971a0d3721f254827944e60232d721",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -233,16 +233,16 @@
         },
         {
             "name": "htmlburger/carbon-fields",
-            "version": "2.2.0",
+            "version": "v3.0.0-rc.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/htmlburger/carbon-fields.git",
-                "reference": "f2e7e7b306f872b606b16909d2a2ee906381d5d1"
+                "reference": "b5e165c05aef28a985a1a4126d20967787fb689d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/htmlburger/carbon-fields/zipball/f2e7e7b306f872b606b16909d2a2ee906381d5d1",
-                "reference": "f2e7e7b306f872b606b16909d2a2ee906381d5d1",
+                "url": "https://api.github.com/repos/htmlburger/carbon-fields/zipball/b5e165c05aef28a985a1a4126d20967787fb689d",
+                "reference": "b5e165c05aef28a985a1a4126d20967787fb689d",
                 "shasum": ""
             },
             "require": {
@@ -348,24 +348,34 @@
                     "name": "Viktor Vasilev",
                     "email": "liberalcho@gmail.com",
                     "role": "Developer"
+                },
+                {
+                    "name": "Georgi Georgiev",
+                    "email": "george.georgiev96@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Atanas Vasilev",
+                    "email": "atanasvasilev91@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
             "homepage": "http://carbonfields.net/",
-            "time": "2018-03-16T09:06:14+00:00"
+            "time": "2018-12-14T09:21:06+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.0.5",
+            "version": "v6.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "cb3ea134d4d3729e7857737d5f320cce9caf4d32"
+                "reference": "8190d73eb5def11a43cfb020b7f36db65330698c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/cb3ea134d4d3729e7857737d5f320cce9caf4d32",
-                "reference": "cb3ea134d4d3729e7857737d5f320cce9caf4d32",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/8190d73eb5def11a43cfb020b7f36db65330698c",
+                "reference": "8190d73eb5def11a43cfb020b7f36db65330698c",
                 "shasum": ""
             },
             "require": {
@@ -418,11 +428,11 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2018-03-27T13:49:45+00:00"
+            "time": "2018-11-16T00:41:32+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -480,16 +490,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
                 "shasum": ""
             },
             "require": {
@@ -535,20 +545,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2018-09-21T13:07:52+00:00"
         },
         {
             "name": "timber/timber",
-            "version": "1.8.1",
+            "version": "1.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "51314124b9608de85dc0400c9a2c71caf336eb6c"
+                "reference": "f8d5bdce44e8638d646a9be9ff3557a783173b05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/51314124b9608de85dc0400c9a2c71caf336eb6c",
-                "reference": "51314124b9608de85dc0400c9a2c71caf336eb6c",
+                "url": "https://api.github.com/repos/timber/timber/zipball/f8d5bdce44e8638d646a9be9ff3557a783173b05",
+                "reference": "f8d5bdce44e8638d646a9be9ff3557a783173b05",
                 "shasum": ""
             },
             "require": {
@@ -597,36 +607,36 @@
                 "timber",
                 "twig"
             ],
-            "time": "2018-09-30T14:50:29+00:00"
+            "time": "2018-11-22T13:56:21+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v2.5.0",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "6a5f676b77a90823c2d4eaf76137b771adf31323"
+                "reference": "a11dd39f5b6589e14f0ff3b36675d06047c589b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/6a5f676b77a90823c2d4eaf76137b771adf31323",
-                "reference": "6a5f676b77a90823c2d4eaf76137b771adf31323",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a11dd39f5b6589e14f0ff3b36675d06047c589b1",
+                "reference": "a11dd39f5b6589e14f0ff3b36675d06047c589b1",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0",
                 "symfony/polyfill-ctype": "^1.8",
-                "symfony/polyfill-mbstring": "~1.0"
+                "symfony/polyfill-mbstring": "^1.3"
             },
             "require-dev": {
                 "psr/container": "^1.0",
                 "symfony/debug": "^2.7",
-                "symfony/phpunit-bridge": "^3.3"
+                "symfony/phpunit-bridge": "^3.4.19|^4.1.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -664,7 +674,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-07-13T07:18:09+00:00"
+            "time": "2018-12-16T10:36:48+00:00"
         },
         {
             "name": "upstatement/routes",
@@ -719,16 +729,16 @@
         },
         {
             "name": "wpackagist-plugin/all-in-one-wp-migration",
-            "version": "6.78",
+            "version": "6.81",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/all-in-one-wp-migration/",
-                "reference": "tags/6.78"
+                "reference": "tags/6.81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/all-in-one-wp-migration.6.78.zip",
-                "reference": null,
+                "url": "https://downloads.wordpress.org/plugin/all-in-one-wp-migration.6.81.zip",
+                "reference": "tags/6.81",
                 "shasum": null
             },
             "require": {
@@ -748,7 +758,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://downloads.wordpress.org/plugin/cyr3lat.3.5.zip",
-                "reference": null,
+                "reference": "tags/3.5",
                 "shasum": null
             },
             "require": {
@@ -759,16 +769,16 @@
         },
         {
             "name": "wpackagist-plugin/polylang",
-            "version": "2.3.11",
+            "version": "2.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/polylang/",
-                "reference": "tags/2.3.11"
+                "reference": "tags/2.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/polylang.2.3.11.zip",
-                "reference": null,
+                "url": "https://downloads.wordpress.org/plugin/polylang.2.5.zip",
+                "reference": "tags/2.5",
                 "shasum": null
             },
             "require": {
@@ -779,16 +789,16 @@
         },
         {
             "name": "wpackagist-plugin/tinymce-advanced",
-            "version": "4.8.0",
+            "version": "4.8.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/tinymce-advanced/",
-                "reference": "tags/4.8.0"
+                "reference": "tags/4.8.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/tinymce-advanced.4.8.0.zip",
-                "reference": null,
+                "url": "https://downloads.wordpress.org/plugin/tinymce-advanced.4.8.2.zip",
+                "reference": "tags/4.8.2",
                 "shasum": null
             },
             "require": {
@@ -799,16 +809,16 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "9.0.2",
+            "version": "9.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/9.0.2"
+                "reference": "tags/9.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.9.0.2.zip",
-                "reference": null,
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.9.3.zip",
+                "reference": "tags/9.3",
                 "shasum": null
             },
             "require": {
@@ -821,7 +831,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "htmlburger/carbon-fields": 5
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -7,5 +7,5 @@ Container::make( 'post_meta', __( 'Section Options', 'crb' ) )
     ->where( 'post_type', '=', 'page' )
     ->where( 'post_template', '=', 'template-about.php' )
     ->add_fields(array(
-        Field::make('rich_text', 'new_short_text', 'Описание на главной')
+        Field::make('rich_text', 'new_short_text', 'Описание на about')
 ));
