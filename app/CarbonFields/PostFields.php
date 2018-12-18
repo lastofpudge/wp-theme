@@ -12,7 +12,7 @@ add_action('carbon_fields_register_fields', function () {
      */
     require_once __DIR__.'/Models/home.php';
     require_once __DIR__.'/Models/about.php';
-   // Container::make( 'comment_meta', 'Доп. поля' )
+    // Container::make( 'comment_meta', 'Доп. поля' )
     //     ->add_fields( array(
     //         Field::make( 'text', 'comment_rating', 'Рейтинг' ),
     //     ) );
