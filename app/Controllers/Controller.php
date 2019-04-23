@@ -53,20 +53,23 @@ class Controller
         };
     }
 
-    public function set_item_link_wrap($output, $crumb) {
-        $output = '<a class="custom__bread__link" property="v:title" rel="v:url" href="'. $crumb['url']. '" >';
-        $output.= $crumb['text'];
-        $output.= '</a>';
+    public function set_item_link_wrap($output, $crumb)
+    {
+        $output = '<a class="custom__bread__link" property="v:title" rel="v:url" href="'.$crumb['url'].'" >';
+        $output .= $crumb['text'];
+        $output .= '</a>';
+
         return $output;
     }
 
-    public function remove_page_bread_title($links) {
-        if( sizeof($links) > 1 ){
+    public function remove_page_bread_title($links)
+    {
+        if (count($links) > 1) {
             array_pop($links);
         }
+
         return $links;
     }
-
 
     /**
      * [render_langs]
