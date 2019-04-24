@@ -16,6 +16,7 @@ class pageController extends Controller
     public function index()
     {
         $this->returned_data['post'] = new TimberPost();
+        //$this->returned_data['p_items'] = carbon_get_post_meta(get_the_ID(), 'p_items');
         return $this->returned_data;
     }
 
