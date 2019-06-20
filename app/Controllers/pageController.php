@@ -24,6 +24,7 @@ class pageController extends Controller
     public function about()
     {
         $this->returned_data['post'] = new TimberPost();
+
         return $this->returned_data;
     }
 
