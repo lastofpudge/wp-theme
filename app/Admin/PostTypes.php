@@ -15,6 +15,4 @@ add_action('init', function () {
    */
   // PostType::loadtax('uslugi', 'uslugi_cat', 'Категории');
   //   flush_rewrite_rules();
-
-
 }, 0);
