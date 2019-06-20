@@ -23,8 +23,3 @@ $config = [
  * disablew file edit from admin.
  */
 define('DISALLOW_FILE_EDIT', false);
-
-/*
- * alow update without ftp
- */
-define('FS_METHOD', 'direct');
