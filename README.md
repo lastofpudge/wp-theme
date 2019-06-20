@@ -14,8 +14,4 @@
 
 ## Fix for ubuntu localhost
 
-- put in wp-config.php directive:
-/*
- * alow update without ftp
- */
-define('FS_METHOD', 'direct');
+- put in wp-config.php directive: define('FS_METHOD', 'direct');
