@@ -1,8 +1,5 @@
 <?php
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
-
 $data = [
     'helpers'             => __DIR__.'/Helpers.php',
     'config'              => __DIR__.'/../config/app.php',
