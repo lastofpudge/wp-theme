@@ -1,4 +1,5 @@
 <?php
+
         //
          if (!empty($_POST['test'])) {
              $test = sanitize_text_field($_GET['test']);
@@ -10,10 +11,10 @@
                     'order'          => 'DESC',
                     'meta_query'     => [
                         [
-                                'key'     => 'test', // for custom fields use: "_fieldsname"
-                                'value'   => $test,
-                                'compare' => 'LIKE',
-                            ],
+                            'key'     => 'test', // for custom fields use: "_fieldsname"
+                            'value'   => $test,
+                            'compare' => 'LIKE',
+                        ],
                     ],
                 ]);
          }
