@@ -8,4 +8,4 @@ Container::make('post_meta', __('Section Options', 'crb'))
     ->where('post_template', '=', 'template-about.php')
     ->add_fields([
         Field::make('rich_text', 'new_short_text', 'Описание на about'),
-]);
+    ]);
