@@ -27,7 +27,7 @@ class AdminOptions
 
     public function ajaxScripts()
     {
-        wp_enqueue_script('wp_main', get_template_directory_uri().'/assets/dist/js/wp_main.js', array(), filemtime(get_theme_file_path('/assets/dist/js/wp_main.js')));
+        wp_enqueue_script('wp_main', get_template_directory_uri().'/assets/dist/js/wp_main.js', [], filemtime(get_theme_file_path('/assets/dist/js/wp_main.js')));
         // wp_enqueue_script('noty', get_template_directory_uri().'/assets/dist/js/noty.js');
 
         // ajax data prepare
