@@ -11,6 +11,7 @@ $data = [
     'post_fields'         => __DIR__.'/../app/CarbonFields/PostFields.php',
     'post_types'          => __DIR__.'/../app/Admin/PostTypes.php',
     'share_slugs'         => __DIR__.'/ShareSlugs.php',
+    'trans_strings'        => __DIR__.'/../app/Langs/strings.php',
 ];
 
 foreach ($data as $key => $value) {

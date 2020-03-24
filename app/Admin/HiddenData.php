@@ -25,7 +25,6 @@ class HiddenData
         remove_action('wp_head', 'wlwmanifest_link');
         remove_action('wp_head', 'rest_output_link_wp_head');
 
-        // hide wp generator
         add_filter('the_generator', function () {
             return '';
         });

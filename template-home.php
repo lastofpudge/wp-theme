@@ -1,6 +1,6 @@
 <?php
-/*
- * Template Name: Главная
- */
 
+/*
+* Template Name: Homepage
+*/
 makeView('pageController@index', 'pages/home');

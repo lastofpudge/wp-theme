@@ -10,23 +10,27 @@ class Controller
     public function __construct()
     {
         add_filter('timber_context', [$this, 'get_data']);
-        // add_filter( 'wpseo_breadcrumb_single_link', [$this, 'set_item_link_wrap'] , 10, 2); // set bread link html
-        // add_filter( 'wpseo_breadcrumb_links', [$this, 'remove_page_bread_title'] , 10, 2); // remove page title
+
+        // set bread link html
+        // add_filter( 'wpseo_breadcrumb_single_link', [$this, 'set_item_link_wrap'] , 10, 2); 
+
+        // remove page title
+        // add_filter( 'wpseo_breadcrumb_links', [$this, 'remove_page_bread_title'] , 10, 2); 
     }
 
-    public function get_data($context)
+    public function get_data($returned_data)
     {
         // theme options
-        // $context['data'] = carbon_get_theme_option('option');
-        $context['is_home'] = is_page_template('page-home.php');
-        $context['show_cookie_text'] = carbon_get_theme_option('show_cookie_text');
-        $context['test'] = 'test123';
+        // $returned_data['data'] = carbon_get_theme_option('option');
+        $returned_data['is_home'] = is_page_template('page-home.php');
+        $returned_data['show_cookie_text'] = carbon_get_theme_option('show_cookie_text');
+        $returned_data['test'] = 'test123';
         // test posts
-        // $context['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
+        // $returned_data['test_posts'] = Timber::get_posts('post_type=test&numberposts=-1');
 
         // custom logo
         if ($custom_logo_id = get_theme_mod('custom_logo')) {
-            $context['custom_logo'] = wp_get_attachment_image($custom_logo_id, 'full', false, [
+            $returned_data['custom_logo'] = wp_get_attachment_image($custom_logo_id, 'full', false, [
                 'class'    => 'custom-logo',
                 'itemprop' => 'logo',
             ]);
@@ -35,7 +39,7 @@ class Controller
         add_action('breads_func', self::render_breads());
         add_action('langs_func', self::render_langs());
 
-        return $context;
+        return $returned_data;
     }
 
     /**

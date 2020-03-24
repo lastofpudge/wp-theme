@@ -24,6 +24,7 @@
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/cyr3lat": "*",
     "wpackagist-plugin/polylang": "*",
+    "wpackagist-plugin/theme-translation-for-polylang": "*",
     "wpackagist-plugin/tinymce-advanced": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },

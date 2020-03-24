@@ -1,6 +1,6 @@
 <?php
-/*
- * Template Name: Новости/Категории
- */
 
+/*
+* Template Name: News/Lists
+*/
 makeView('pageController@list', 'pages/list');

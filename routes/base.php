@@ -1,6 +1,5 @@
 <?php
 
-/* is homepage */
 if (is_front_page()) {
     makeView('homeController@index', 'index');
 }
@@ -22,17 +21,14 @@ if (is_category()) {
 //     makeView('postController@index', 'posts/post');
 // endif;
 
-/* is single page */
 if (is_single()) {
     makeView('postController@index', 'posts/post');
 }
 
-/* is page */
 if (is_page()) {
     makeView('pageController@index', 'pages/page');
 }
 
-/* is 404 */
 if (is_404()) {
     makeView('errorController@index', 'pages/404');
 }
