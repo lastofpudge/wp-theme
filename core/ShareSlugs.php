@@ -35,6 +35,7 @@ if (
   version_compare(POLYLANG_VERSION, '1.7', '=<') ||
   version_compare($GLOBALS['wp_version'], '4.0', '=<')) {
     add_action('admin_notices', 'polylang_slug_admin_notices');
+
     return;
 }
 

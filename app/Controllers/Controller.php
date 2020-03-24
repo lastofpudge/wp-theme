@@ -12,10 +12,10 @@ class Controller
         add_filter('timber_context', [$this, 'get_data']);
 
         // set bread link html
-        // add_filter( 'wpseo_breadcrumb_single_link', [$this, 'set_item_link_wrap'] , 10, 2); 
+        // add_filter( 'wpseo_breadcrumb_single_link', [$this, 'set_item_link_wrap'] , 10, 2);
 
         // remove page title
-        // add_filter( 'wpseo_breadcrumb_links', [$this, 'remove_page_bread_title'] , 10, 2); 
+        // add_filter( 'wpseo_breadcrumb_links', [$this, 'remove_page_bread_title'] , 10, 2);
     }
 
     public function get_data($returned_data)
