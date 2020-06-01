@@ -1,25 +1,37 @@
 <?php
 
-    if (defined('WP_DEBUG') && true === WP_DEBUG) {
-        @ini_set('display_errors', 1);
-    }
+if (defined('WP_DEBUG') && true === WP_DEBUG) {
+    @ini_set('display_errors', 1);
+}
 
-    if (!file_exists(__DIR__.'/core/vendor/autoload.php')) {
-        wp_die('No "autoload.php" file');
-    }
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our theme. We will simply require it into the script here so that we
+| don't have to worry about manually loading any of our classes later on.
+|
+*/
+if (!file_exists(__DIR__.'/core/vendor/autoload.php')) {
+    wp_die('Error locating autoloader. Please run <code>composer install</code>.');
+}
 
-    add_action('after_setup_theme', function () {
-        \Carbon_Fields\Carbon_Fields::boot();
+require_once __DIR__.'/core/vendor/autoload.php';
+
+/*
+|--------------------------------------------------------------------------
+| Register Theme Files
+|--------------------------------------------------------------------------
+*/
+collect(['core/Autoload', 'core/Setup', 'core/Helpers', 'core/PostType', 'core/ShareSlugs'])
+    ->each(function ($file) {
+        $file = "/{$file}.php";
+
+        if (! locate_template($file, true, true)) {
+            wp_die(
+                sprintf('Error locating <code>%s</code> for inclusion. {$file}')
+            );
+        }
     });
-
-    require_once __DIR__.'/core/vendor/autoload.php';
-    require_once __DIR__.'/core/Autoload.php';
-
-    add_filter('timber/twig', function (\Twig_Environment $twig) {
-        $twig->addGlobal('_post', $_POST);
-        $twig->addGlobal('_get', $_GET);
-
-        return $twig;
-    });
-
-    new \Timber\Timber();

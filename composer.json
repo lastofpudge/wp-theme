@@ -19,6 +19,7 @@
     "php": "^7.0",
     "htmlburger/carbon-fields": "^3.1.1",
     "phpmailer/phpmailer": "*",
+    "tightenco/collect": "^7.12",
     "timber/timber": "^1.9.4",
     "twig/twig": "^2.8.1",
     "wpackagist-plugin/all-in-one-wp-migration": "*",

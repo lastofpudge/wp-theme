@@ -4,6 +4,7 @@ $data = [
     'helpers'              => __DIR__.'/Helpers.php',
     'config'               => __DIR__.'/../config/app.php',
     'post_register_types'  => __DIR__.'/PostType.php',
+    'app_config'           => __DIR__.'/AppConfig.php',
     'admin_options'        => __DIR__.'/../app/Admin/AdminOptions.php',
     'ajaxs'                => __DIR__.'/../app/Actions/ajax.php',
     'hidden_wp_data'       => __DIR__.'/../app/Admin/HiddenData.php',
