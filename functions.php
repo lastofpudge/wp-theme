@@ -29,7 +29,7 @@ collect(['core/Autoload', 'core/Setup', 'core/Helpers', 'core/PostType', 'core/S
     ->each(function ($file) {
         $file = "/{$file}.php";
 
-        if (! locate_template($file, true, true)) {
+        if (!locate_template($file, true, true)) {
             wp_die(
                 sprintf('Error locating <code>%s</code> for inclusion. {$file}')
             );
