@@ -28,7 +28,6 @@ require_once __DIR__.'/core/vendor/autoload.php';
 define('MAIL_CONFIG', __DIR__.'/config/mail.php');
 define('APP_PATH', __DIR__.'/app');
 
-
 /*
 |--------------------------------------------------------------------------
 | Register Theme Files
