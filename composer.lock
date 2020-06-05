@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "800ebe8aa7fb52f90ad99d60beebdcd3",
+    "content-hash": "30428d1f781b6945a8ad9fde8e3122ea",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -1069,7 +1069,48 @@
             "homepage": "https://wordpress.org/plugins/wordpress-seo/"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "php-stubs/wordpress-stubs",
+            "version": "v5.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-stubs/wordpress-stubs.git",
+                "reference": "726e541337276f1648ef860efcfe7298bce3a1c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-stubs/wordpress-stubs/zipball/726e541337276f1648ef860efcfe7298bce3a1c5",
+                "reference": "726e541337276f1648ef860efcfe7298bce3a1c5",
+                "shasum": ""
+            },
+            "replace": {
+                "giacocorsiglia/wordpress-stubs": "*"
+            },
+            "require-dev": {
+                "giacocorsiglia/stubs-generator": "^0.5.0",
+                "php": "~7.1"
+            },
+            "suggest": {
+                "paragonie/sodium_compat": "Pure PHP implementation of libsodium",
+                "symfony/polyfill-php73": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions",
+                "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "WordPress function and class declaration stubs for static analysis.",
+            "homepage": "https://github.com/php-stubs/wordpress-stubs",
+            "keywords": [
+                "PHPStan",
+                "static analysis",
+                "wordpress"
+            ],
+            "time": "2020-04-29T23:43:44+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

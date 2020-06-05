@@ -1,5 +1,5 @@
 {
-  "name": "blank",
+  "name": "theme/blank",
   "type": "wp-theme",
   "description": "Wordpress Theme Boilerplate",
   "license": "GNU GPL",
@@ -49,5 +49,8 @@
         "wpackagist-plugin/wordpress-seo"
       ]
     }
+  },
+  "require-dev": {
+    "php-stubs/wordpress-stubs": "^5.4"
   }
 }

@@ -10,9 +10,9 @@ class AdminOptions
     public function __construct()
     {
         self::index();
-        add_action('init', [$this, 'registerStuff']);
-        add_action('wp_enqueue_scripts', [$this, 'ajaxScripts']);
-        add_filter('timber_context', [$this, 'addToContext']);
+        add_action('init', [$this, 'registerMenus']);
+        add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
+        add_filter('timber_context', [$this, 'registerContext']);
     }
 
     /*
@@ -25,7 +25,7 @@ class AdminOptions
         add_theme_support('custom-logo');
     }
 
-    public function ajaxScripts()
+    public function registerScripts()
     {
         wp_enqueue_script('wp_main', get_template_directory_uri().'/assets/dist/js/wp_main.js', [], filemtime(get_theme_file_path('/assets/dist/js/wp_main.js')));
         // wp_enqueue_script('noty', get_template_directory_uri().'/assets/dist/js/noty.js');
@@ -44,7 +44,7 @@ class AdminOptions
     /*
      * register menus
      */
-    public function registerStuff()
+    public function registerMenus()
     {
         //register menus
         register_nav_menus([
@@ -56,18 +56,12 @@ class AdminOptions
     /*
      * add menus to timber
      */
-    public function addToContext($context)
+    public function registerContext($context)
     {
         // $context['globals'] = Timber::get_context();
         $context['left_menu'] = new TimberMenu('left_menu');
         $context['template_url'] = get_bloginfo('template_url');
         // $context['right_menu'] = new TimberMenu('right_menu');
-
-        /*
-         * assets version
-         */
-        $context['ver'] = '1.0';
-
         return $context;
     }
 }
