@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": "^7.0",
+    "php": "^7.2.5",
     "htmlburger/carbon-fields": "^3.1.1",
     "phpmailer/phpmailer": "*",
     "tightenco/collect": "^7.12",
