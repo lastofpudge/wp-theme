@@ -14,7 +14,7 @@ if (defined('WP_DEBUG') && true === WP_DEBUG) {
 | don't have to worry about manually loading any of our classes later on.
 |
 */
-if (! file_exists($composer = __DIR__ . '/core/vendor/autoload.php')) {
+if (!file_exists($composer = __DIR__.'/core/vendor/autoload.php')) {
     wp_die('Error locating autoloader. Please run <code>composer install</code>.');
 }
 
@@ -27,7 +27,6 @@ require $composer;
 */
 define('MAIL_CONFIG', __DIR__.'/config/mail.php');
 define('APP_PATH', __DIR__.'/app');
-
 
 /*
 |--------------------------------------------------------------------------
