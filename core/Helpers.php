@@ -22,7 +22,7 @@ if (!function_exists('dd')) {
     function dd($data)
     {
         echo '<pre style="background-color: #252424; color: #33ff00; padding: 15px; font-size: 16px; line-height: 2; overflow: hidden; clear: both;">';
-        die(var_dump($data));
+        exit(var_dump($data));
         echo '</pre>';
     }
 }
