@@ -24,16 +24,6 @@
             <td style="width:50%;padding: 5px;">Email:</td>
             <td style="width:50%;padding: 5px;"><?php echo $data['mail']; ?></td>
         </tr>
-        <!-- phone -->
-        <tr style="background: #eee;">
-            <td style="width:50%;padding: 5px;">Phone:</td>
-            <td style="width:50%;padding: 5px;"><?php echo $data['phone']; ?></td>
-        </tr>
-        <!-- message -->
-        <tr>
-            <td style="width:50%;padding: 5px;">Message:</td>
-            <td style="width:50%;padding: 5px;"><?php echo $data['message']; ?></td>
-        </tr>
     </table>
 </body>
 </html>

@@ -18,8 +18,3 @@ $config = [
     'create_orders_post_type' => false,
 
 ];
-
-/*
- * disablew file edit from admin.
- */
-define('DISALLOW_FILE_EDIT', false);

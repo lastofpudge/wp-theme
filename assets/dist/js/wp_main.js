@@ -7,22 +7,22 @@ $(function() {
         var form_data = new FormData();
         // form_data.append( "file", $('#file')[0].files[0]);
 
-        form_data.append( "user_name", $(this).find('input[name="name"]').val());
-        form_data.append( "user_mail", $(this).find('input[name="mail"]').val());
-        form_data.append( "action", "testAction");
-        form_data.append( "nonce", vars.nonce);
+        form_data.append( "name", $(this).find('input[name="name"]').val());
+        form_data.append( "mail", $(this).find('input[name="mail"]').val());
+        form_data.append( "action", "test_action");
+        form_data.append( "nonce", data.nonce);
 
 
         preloader.addClass('js__preloading');
         $.ajax({
             type: "POST",
-            url: vars.ajax_main,
+            url: data.ajax_url,
             processData: false,
             contentType: false,
             data: form_data,
             success: function(data, text) {
                 preloader.removeClass('js__preloading');
-                if (data) {
+                if (data.type === true) {
                     // if is modal form - close modal before show message
                     // $.magnificPopup.close();
                     new Noty({
