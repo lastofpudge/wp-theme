@@ -16,8 +16,8 @@ if (empty($name) || empty($mail)) {
 wp_send_json([
     'type' => send_mail_cst('testMail', [
         'subject'    => 'subject',
-        'site_name'  =>  get_bloginfo('name'),
+        'site_name'  => get_bloginfo('name'),
         'name'       => $name,
-        'mail'       => $mail
-    ])
- ]);
+        'mail'       => $mail,
+    ]),
+]);

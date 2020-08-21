@@ -90,6 +90,7 @@ if (!function_exists('send_mail_cst')) {
         require_once __DIR__.'/../views/mails/'.$filename.'.php';
         $body = ob_get_contents();
         ob_end_clean();
+
         return wp_mail('iluxor1991@gmail.com', $data['subject'], $body);
     }
 }
