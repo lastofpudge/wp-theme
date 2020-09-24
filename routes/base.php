@@ -1,9 +1,5 @@
 <?php
 
-if (is_front_page()) {
-    makeView('homeController@index', 'index');
-}
-
 if (is_singular('zayavki')) {
     wp_redirect('/', 301);
 }
