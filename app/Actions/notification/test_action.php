@@ -13,15 +13,15 @@ if (empty($name) || empty($mail)) {
 
 $sended = send_mail_cst('testMail', [
     'subject'        => 'test form',
-    'site_name'      =>  get_bloginfo('name'),
+    'site_name'      => get_bloginfo('name'),
     'name'           => $firstname,
-    'mail'           => $mail
+    'mail'           => $mail,
 ]);
 
 if ($sended != null && $sended != false) {
     wp_send_json([
-        'type' => 'success',
-        'sended' => $sended,
-        'message' => 'Your request has been successfully sent, thank you!'
+        'type'    => 'success',
+        'sended'  => $sended,
+        'message' => 'Your request has been successfully sent, thank you!',
     ]);
 }
