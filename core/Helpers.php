@@ -90,19 +90,31 @@ if (!function_exists('send_mail_cst')) {
         require_once __DIR__.'/../views/mails/'.$filename.'.php';
         $body = ob_get_contents();
         ob_end_clean();
-        return wp_mail('iluxor1991@gmail.com', $data['subject'], $body);
+        $admin_email = get_bloginfo('admin_email');
+        $headers[] = 'Content-type: text/html; charset=utf-8';
+        $sent = wp_mail($admin_email, $data['subject'], $body, $headers);
+        if ($sent) {
+            return $sent;
+        }
     }
 }
+
+add_action('wp_mail_failed', function ($wp_error) {
+    wp_send_json([
+        'type'    => 'false',
+        'sended' => $wp_error
+    ]);
+}, 10, 1);
 
 if (!function_exists('add_ajax_action')) {
     function add_ajax_action($name)
     {
-        add_action("wp_ajax_{$name}", function ($name) {
-            get_template_part("app/Actions/notification/{$name}.php");
+        add_action("wp_ajax_{$name}", function () use ($name) {
+            require_once __DIR__.'/../app/Actions/notification/'.$name.'.php';
         });
 
-        add_action("wp_ajax_nopriv_{$name}", function ($name) {
-            get_template_part("app/Actions/notification/{$name}.php");
+        add_action("wp_ajax_nopriv_{$name}", function () use ($name) {
+            require_once __DIR__.'/../app/Actions/notification/'.$name.'.php';
         });
     }
 }

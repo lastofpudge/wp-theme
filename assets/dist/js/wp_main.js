@@ -22,9 +22,9 @@ $(function() {
             data: form_data,
             success: function(data, text) {
                 preloader.removeClass('js__preloading');
-                if (data.type === true) {
-                    // if is modal form - close modal before show message
-                    // $.magnificPopup.close();
+
+                // $.magnificPopup.close();
+                if (data.type == 'success') {
                     new Noty({
                         theme: 'mint',
                         text: data.message,
@@ -32,13 +32,23 @@ $(function() {
                         progressBar: false,
                         closeWith: ['click', 'button'],
                     }).show();
+                }else{
+                    console.warn(data);
+                    new Noty({
+                        theme: 'mint',
+                        type: 'error',
+                        text: data.sended.errors.wp_mail_failed[0],
+                        timeout: 5000,
+                        progressBar: false,
+                        closeWith: ['click', 'button'],
+                    }).show();         
                 }
             },
             fail: function(errors) {
                 preloader.removeClass('js__preloading');
                 new Noty({
                     theme: 'mint',
-                    text: 'Ошибка отправки',
+                    text: 'Error send email',
                     timeout: 5000,
                     progressBar: false,
                     closeWith: ['click', 'button'],

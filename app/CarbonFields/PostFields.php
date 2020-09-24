@@ -6,10 +6,7 @@ use Carbon_Fields\Field;
 /*
  * post/page fields
  */
-add_action('carbon_register_fields', function () {
-    /*
-     * HOME
-     */
+add_action('carbon_fields_register_fields', function () {
     require_once __DIR__.'/Models/home.php';
     require_once __DIR__.'/Models/about.php';
     // Container::make( 'comment_meta', 'Доп. поля' )
