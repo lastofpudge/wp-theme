@@ -102,7 +102,7 @@ if (!function_exists('send_mail_cst')) {
 add_action('wp_mail_failed', function ($wp_error) {
     wp_send_json([
         'type'    => 'false',
-        'sended' => $wp_error
+        'sended'  => $wp_error,
     ]);
 }, 10, 1);
 
