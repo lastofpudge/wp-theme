@@ -84,9 +84,9 @@ class Controller
         return function () {
             if (function_exists('pll_the_languages')) {
                 $raw = pll_the_languages(['raw' => 1]);
-                
+
                 $locale = str_replace('_', '-', get_locale());
-                
+
                 echo '<div class="langs__cover">';
                 echo '<div class="langs__cover__inner">';
                 foreach ($raw as $lang) {
