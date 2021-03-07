@@ -84,18 +84,26 @@ class Controller
         return function () {
             if (function_exists('pll_the_languages')) {
                 $raw = pll_the_languages(['raw' => 1]);
+                
+                $locale = str_replace('_', '-', get_locale());
+                
+                echo '<div class="langs__cover">';
+                echo '<div class="langs__cover__inner">';
                 foreach ($raw as $lang) {
-                    if ($lang['current_lang'] == 1) {
-                        $act = 'active';
+                    if ($lang['locale'] == $locale
+                        ) {
+                        echo
+                            '<a data-lang="'.$lang['locale'].'" class="button--lang lang--active" href="'.$lang['url'].'">
+                                <img src="'.$lang['flag'].'">
+                            </a>';
                     } else {
-                        $act = '';
+                        echo '<a data-lang="'.$lang['locale'].'" class="button--lang" href="'.$lang['url'].'">
+                                <img src="'.$lang['flag'].'">
+                            </a>';
                     }
-                    echo '<div class="language-item '.$act.'">';
-                    echo '<a href="'.$lang['url'].'">';
-                    echo $lang['slug'];
-                    echo '</a>';
-                    echo '</div>';
                 }
+                echo '</div>';
+                echo '</div>';
             }
         };
     }
