@@ -5,6 +5,7 @@
 - support custom routes/controllers
 - easy custom fields/posts integration
 - integrated ajax mail/actions
+- integrataed multilanguage with Polylang
 - support composer package manager
 
 ## How to use
