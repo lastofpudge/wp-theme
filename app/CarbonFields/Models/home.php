@@ -5,7 +5,7 @@ use Carbon_Fields\Field;
 
 // Container::make('post_meta', __('Поля для Home', 'crb'))
 //    ->where('post_type', '=', 'page')
-//    ->where('post_template', '=', 'views_php/template-home.php')
+//    ->where('post_template', '=', 'template-home.php')
 //    ->add_fields(array(
 //        Field::make('text', 'th_sub_title', 'Subtitle'),
 //        Field::make('text', 'th_sub_title2', 'Description'),
