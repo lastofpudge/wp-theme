@@ -16,11 +16,11 @@
     }
   ],
   "require": {
-    "php": "^7.2.5",
-    "htmlburger/carbon-fields": "^3.1.1",
-    "tightenco/collect": "^7.12",
-    "timber/timber": "^1.9.4",
-    "twig/twig": "^2.8.1",
+    "php": "^7.4",
+    "htmlburger/carbon-fields": "^3.3.0",
+    "tightenco/collect": "^8.34.0",
+    "timber/timber": "^1.18.2",
+    "twig/twig": "^2.1.0",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/cyr3lat": "*",
     "wpackagist-plugin/tinymce-advanced": "*",
