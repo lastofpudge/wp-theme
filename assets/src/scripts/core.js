@@ -50,7 +50,7 @@ $(function() {
     mainClass: "mfp-no-margins mfp-with-zoom",
   });
 
-  //image
+  //video
   $(".js-mfi-vid").magnificPopup({
     type: "iframe",
     mainClass: "mfp-fade",
