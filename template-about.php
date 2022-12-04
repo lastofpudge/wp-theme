@@ -5,4 +5,3 @@
 */
 
 makeView('pageController@about', 'pages/about');
-

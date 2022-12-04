@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use Timber\Timber;
 use Timber\Term as TimberTerm;
+use Timber\Timber;
 
 class categoryController extends Controller
 {
