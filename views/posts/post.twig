@@ -18,11 +18,12 @@
                 <li><a href="{{ term.link }}">{{ term.name }}</a></li>
             {% endfor %}
         </ul>
-        <!-- post author -->
+
         <p class="byline">
             <span class="name">By {{ post.author.name }}</span>
             <span class="date">{{ post.post_date|date('F j, Y') }}</span>
         </p>
+        
         {% include 'particals/comments/comment_wrapper.twig' %}
 
         {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}

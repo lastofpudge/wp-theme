@@ -14,11 +14,6 @@
     color: #fff;
 }
 
-/*
- * prelaoder
- */
-
-
 .preloader__main{
     position: absolute;
     left: 0;
@@ -35,8 +30,7 @@
 }
 
 .js__preloading.js__preloader__main{
-    background: rgba(255, 255, 255, 0.78) url(../images/preloader.svg) 50%/15% no-repeat;
-    background-position: 50% 50%;
+    background: rgba(255, 255, 255, 0.78) url(../images/preloader.svg) no-repeat 50% 50%;
     position: fixed;
     z-index: 300;
     pointer-events: all;

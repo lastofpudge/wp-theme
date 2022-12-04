@@ -3,27 +3,30 @@
 <head>
     {% include 'particals/head.twig' %}
 </head>
-<body class="{{ body_class }}">
-<div class="preloader__main js__preloader__main"></div>
-{% include 'particals/header.twig' %}
-<section id="content" role="main" class="content-wrapper">
-    <div class="wrapper">
-        {% block content %}
-            Sorry, no content
+    <body class="{{ body_class }}">
+        <div class="preloader__main js__preloader__main"></div>
+
+        {% include 'particals/header.twig' %}
+
+        <section id="content" role="main" class="content-wrapper">
+            <div class="wrapper">
+                {% block content %}
+                    Sorry, no content
+                {% endblock %}
+            </div>
+        </section>
+
+        {% block modals %}
+            {% include 'particals/modals.twig' %}
         {% endblock %}
-    </div>
-</section>
-{% block modals %}
-    {% include 'particals/modals.twig' %}
-{% endblock %}
 
-{% block footer %}
-    {% include 'particals/footer.twig' %}
-    {{ fn('wp_footer') }}
-{% endblock %}
+        {% block footer %}
+            {% include 'particals/footer.twig' %}
+            {{ fn('wp_footer') }}
+        {% endblock %}
 
-{% block javascripts %}
-    {% include 'particals/devs.twig' %}
-{% endblock %}
-</body>
+        {% block javascripts %}
+            {% include 'particals/devs.twig' %}
+        {% endblock %}
+    </body>
 </html>
