@@ -1,6 +1,7 @@
 <?php
 
-class AppConfig {
+class AppConfig
+{
     /**
      * @var array
      */
@@ -20,8 +21,7 @@ class AppConfig {
      */
     public function checkBars()
     {
-        if ($this->config['show_admin_bar'] === false)
-        {
+        if ($this->config['show_admin_bar'] === false) {
             add_filter('show_admin_bar', '__return_false');
         }
     }
@@ -31,14 +31,12 @@ class AppConfig {
      */
     public function hideItems()
     {
-        if ($this->config['show_posts'] === false)
-        {
+        if ($this->config['show_posts'] === false) {
             remove_menu_page('edit.php');
             add_action('wp_before_admin_bar_render', [$this, 'hide_post_add']);
         }
 
-        if ($this->config['show_pages'] === false)
-        {
+        if ($this->config['show_pages'] === false) {
             remove_menu_page('edit.php?post_type=page');
             add_action('wp_before_admin_bar_render', [$this, 'hide_page_add']);
         }
@@ -55,8 +53,7 @@ class AppConfig {
      */
     public function hideComments()
     {
-        if ($this->config['enable_comments'] === false)
-        {
+        if ($this->config['enable_comments'] === false) {
             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
             remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
             remove_menu_page('edit-comments.php');
@@ -65,12 +62,10 @@ class AppConfig {
 
     public function hideTools()
     {
-        if ($this->config['show_tools'] === false)
-        {
+        if ($this->config['show_tools'] === false) {
             remove_menu_page('tools.php');
         }
     }
-
 }
 
 new AppConfig($config);
