@@ -5,27 +5,22 @@ use App\Controllers\ErrorController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
 
-if (is_search())
-{
-    makeView(CategoryController::class,'index', 'categories/category');
+if (is_search()) {
+    makeView(CategoryController::class, 'index', 'categories/category');
 }
 
-if (is_category())
-{
-    makeView(CategoryController::class,'index', 'categories/category');
+if (is_category()) {
+    makeView(CategoryController::class, 'index', 'categories/category');
 }
 
-if (is_single())
-{
-    makeView(PostController::class,'index', 'posts/post');
+if (is_single()) {
+    makeView(PostController::class, 'index', 'posts/post');
 }
 
-if (is_page())
-{
-    makeView(PageController::class,'index', 'pages/page');
+if (is_page()) {
+    makeView(PageController::class, 'index', 'pages/page');
 }
 
-if (is_404())
-{
-    makeView(ErrorController::class,'index', 'pages/404');
+if (is_404()) {
+    makeView(ErrorController::class, 'index', 'pages/404');
 }
