@@ -72,7 +72,6 @@ class AppConfig
             remove_menu_page('tools.php');
         }
     }
-
 }
 
 new AppConfig($config);
