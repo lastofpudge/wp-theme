@@ -1,5 +1,7 @@
 <?php
 
+use Carbon_Fields\Carbon_Fields;
+
 if (defined('WP_DEBUG') && true === WP_DEBUG) {
     @ini_set('display_errors', 1);
 }
@@ -9,11 +11,10 @@ if (!file_exists(__DIR__.'/core/vendor/autoload.php')) {
 }
 
 add_action('after_setup_theme', function () {
-    \Carbon_Fields\Carbon_Fields::boot();
+    Carbon_Fields::boot();
 });
 
-define('MAIL_CONFIG', __DIR__.'/config/mail.php');
-define('APP_PATH', __DIR__.'/app');
+const APP_PATH = __DIR__.'/app';
 
 require_once __DIR__.'/core/vendor/autoload.php';
 

@@ -6,13 +6,13 @@
 add_action('init', function () {
 
   /*
-   * [$url, $name, $singular, $public, $has_archive, $menu_icon, $supports] - paramas.
+   * [$url, $name, $singular, $public, $has_archive, $menu_icon, $supports] - params.
    */
-  // PostType::register('uslugi', 'Услуги', 'Услуга', true, true, 'dashicons-format-aside', ['title', 'editor', 'thumbnail']);
+  // PostType::register('services', 'Services', 'Service', true, true, 'dashicons-format-aside', ['title', 'editor', 'thumbnail']);
 
   /*
-   * [$post_Type, $post_tax, $tax_cat_name] - paramas.
+   * [$post_Type, $post_tax, $tax_cat_name] - params.
    */
-  // PostType::loadtax('uslugi', 'uslugi_cat', 'Категории');
+  // PostType::loadTax('services', 'services_cat', 'Category');
   //   flush_rewrite_rules();
 }, 0);

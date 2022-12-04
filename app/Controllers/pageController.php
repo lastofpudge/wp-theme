@@ -2,56 +2,59 @@
 
 namespace App\Controllers;
 
-use Timber;
-use TimberPost;
+use Timber\Post as TimberPost;
+use Timber\Timber;
 
 class pageController extends Controller
 {
+    /**
+     * @var array
+     */
+    private $data;
+
     public function __construct()
     {
-        $this->returned_data = Timber::get_context();
+        $this->data = Timber::get_context();
     }
 
-    // homepage
-    public function index()
+    public function index(): array
     {
-        $this->returned_data['post'] = new TimberPost();
-        //$this->returned_data['p_items'] = carbon_get_post_meta(get_the_ID(), 'p_items');
-        return $this->returned_data;
+        $this->data['post'] = new TimberPost();
+        //$this->data['p_items'] = carbon_get_post_meta(get_the_ID(), 'p_items');
+        return $this->data;
     }
 
     // about
-    public function about()
+    public function about(): array
     {
-        $this->returned_data['post'] = new TimberPost();
+        $this->data['post'] = new TimberPost();
 
-        return $this->returned_data;
+        return $this->data;
     }
 
     // list
-    public function list()
+    public function list(): array
     {
         global $paged;
-        if (!isset($paged) || !$paged) {
+        if (!isset($paged) || !$paged)
+        {
             $paged = 1;
         }
 
         $args = [
-            'post_type'      => 'post',
+            'post_type' => 'post',
             'posts_per_page' => 10,
-            'paged'          => $paged,
+            'paged' => $paged,
         ];
 
         query_posts($args);
-        $this->returned_data['posts'] = new Timber\PostQuery($args);
-        $this->returned_data['pagination'] = Timber::get_pagination();
-        $this->returned_data['categories'] = Timber::get_terms('category');
 
-        return $this->returned_data;
+        $this->data['posts'] = new Timber\PostQuery($args);
+        $this->data['pagination'] = Timber::get_pagination();
+        $this->data['categories'] = Timber::get_terms('category');
+
+        return $this->data;
     }
 }
 
-/*
- * get controller data
- */
 $d = new pageController();

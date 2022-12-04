@@ -2,13 +2,18 @@
 
 namespace App\Controllers;
 
-use Timber;
+use Timber\Timber;
 
 class postController extends Controller
 {
+    /**
+     * @var array
+     */
+    private $data;
+
     public function __construct()
     {
-        $this->returned_data = Timber::get_context();
+        $this->data = Timber::get_context();
     }
 
     /*
@@ -16,13 +21,10 @@ class postController extends Controller
      */
     public function index()
     {
-        $this->returned_data['post'] = Timber::query_post();
+        $this->data['post'] = Timber::query_post();
 
-        return $this->returned_data;
+        return $this->data;
     }
 }
 
-/*
- * get controller data
- */
 $d = new postController();

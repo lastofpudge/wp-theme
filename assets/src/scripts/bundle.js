@@ -10,7 +10,7 @@ $(function() {
         init: function() {
             //svg init
             svg4everybody();
-            // aos amnimate
+            // aos animate
             AOS.init({
                 disable: 'mobile'
             });
@@ -18,7 +18,7 @@ $(function() {
 
     };
 
-    var app = new App();
+    const app = new App();
 
     app.init();
 

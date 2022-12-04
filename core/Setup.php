@@ -1,8 +1,6 @@
 <?php
 
-add_action('after_setup_theme', function () {
-    \Carbon_Fields\Carbon_Fields::boot();
-});
+use Timber\Timber;
 
 add_filter('timber/twig', function (Twig\Environment $twig) {
     $twig->addGlobal('_post', $_POST);
@@ -11,4 +9,4 @@ add_filter('timber/twig', function (Twig\Environment $twig) {
     return $twig;
 });
 
-new \Timber\Timber();
+new Timber();

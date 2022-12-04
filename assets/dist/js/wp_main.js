@@ -1,10 +1,11 @@
 $(function() {
-    var preloader = $('.js__preloader__main');
+    const preloader = $('.js__preloader__main');
 
     $(document).on('submit', '#contactForm', function(event) {
         event.preventDefault();
-        var form = $(this);
-        var form_data = new FormData();
+
+        const form = $(this);
+        const form_data = new FormData();
         // form_data.append( "file", $('#file')[0].files[0]);
 
         form_data.append( "name", $(this).find('input[name="name"]').val());
@@ -24,7 +25,7 @@ $(function() {
                 preloader.removeClass('js__preloading');
 
                 // $.magnificPopup.close();
-                if (data.type == 'success') {
+                if (data.type === 'success') {
                     new Noty({
                         theme: 'mint',
                         text: data.message,

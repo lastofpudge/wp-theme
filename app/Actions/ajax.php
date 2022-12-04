@@ -1,3 +1,3 @@
 <?php
 
-add_ajax_action('test_action');
+add_ajax_action('sendMailAction');

@@ -18,7 +18,7 @@ $(function() {
       showCloseBtn: false,
       callbacks: {
         beforeOpen: function() {
-          var effect = this.st.el.attr("data-effect");
+          const effect = this.st.el.attr("data-effect");
           if (effect) this.st.mainClass = this.st.el.attr("data-effect");
           else this.st.mainClass = "mfp-with-fade";
         },
@@ -53,9 +53,8 @@ $(function() {
   //video
   $(".js-mfi-vid").magnificPopup({
     type: "iframe",
-    mainClass: "mfp-fade",
     removalDelay: 160,
     preloader: false,
-    mainClass: "mfp-no-margins mfp-with-zoom",
+    mainClass: "mfp-fade mfp-no-margins mfp-with-zoom",
   });
 });

@@ -2,26 +2,31 @@
 
 namespace App\Controllers;
 
-use Timber;
-use TimberTerm;
+use Timber\Timber;
+use Timber\Term as TimberTerm;
 
 class categoryController extends Controller
 {
+    /**
+     * @var array
+     */
+    private $data;
+
     public function __construct()
     {
-        $this->returned_data = Timber::get_context();
+        $this->data = Timber::get_context();
     }
 
     /*
      * get post data
      */
-    public function index()
+    public function index(): array
     {
-        $this->returned_data['term'] = new TimberTerm();
-        $this->returned_data['pagination'] = Timber::get_pagination();
-        $this->returned_data['posts'] = Timber::get_posts();
+        $this->data['term'] = new TimberTerm();
+        $this->data['pagination'] = Timber::get_pagination();
+        $this->data['posts'] = Timber::get_posts();
 
-        return $this->returned_data;
+        return $this->data;
     }
 }
 

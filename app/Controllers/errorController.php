@@ -2,13 +2,18 @@
 
 namespace App\Controllers;
 
-use Timber;
+use Timber\Timber;
 
 class errorController extends Controller
 {
+    /**
+     * @var array
+     */
+    private $data;
+
     public function __construct()
     {
-        $this->returned_data = Timber::get_context();
+        $this->data = Timber::get_context();
     }
 
     /*
@@ -16,7 +21,7 @@ class errorController extends Controller
      */
     public function index()
     {
-        return $this->returned_data;
+        return $this->data;
     }
 }
 

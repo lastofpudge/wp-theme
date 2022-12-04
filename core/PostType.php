@@ -22,20 +22,20 @@ class PostType
         );
     }
 
-    public static function loadtax($post_type, $tax_url, $tax_name)
+    public static function loadTax($post_type, $tax_url, $tax_name)
     {
         $labels = [
             'name'              => _x($tax_name, 'taxonomy general name'),
-            'singular_name'     => _x('Категорий', 'taxonomy singular name'),
-            'search_items'      => __('Поиск'),
-            'all_items'         => __('Все категории'),
-            'parent_item'       => __('Родительская категория'),
-            'parent_item_colon' => __('Родительская категория:'),
+            'singular_name'     => _x('Category', 'taxonomy singular name'),
+            'search_items'      => __('Search'),
+            'all_items'         => __('All categories'),
+            'parent_item'       => __('Parent category'),
+            'parent_item_colon' => __('Child category:'),
             'edit_item'         => __('Edit'),
             'update_item'       => __('Update'),
             'add_new_item'      => __('Add'),
             'new_item_name'     => __('New'),
-            'menu_name'         => __('Категории'),
+            'menu_name'         => __('Categories'),
         ];
 
         register_taxonomy($tax_url, [$post_type], [

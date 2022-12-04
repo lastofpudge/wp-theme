@@ -5,7 +5,7 @@
   "license": "GNU GPL",
   "authors": [
     {
-      "name": "Andrew Dudin",
+      "name": "Andrii Dudin",
       "email": "iluxor1991@gmail.com"
     }
   ],
@@ -16,14 +16,12 @@
     }
   ],
   "require": {
-    "php": "^7.4",
+    "php": "^7.3|^7.4|8.*",
     "htmlburger/carbon-fields": "^3.3.0",
     "tightenco/collect": "^8.34.0",
-    "timber/timber": "^1.18.2",
-    "twig/twig": "^2.1.0",
+    "timber/timber": "^1.22.1",
+    "twig/twig": "2.*",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
-    "wpackagist-plugin/cyr3lat": "*",
-    "wpackagist-plugin/tinymce-advanced": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },
   "autoload": {
