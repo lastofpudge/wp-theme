@@ -21,7 +21,7 @@ class Controller
         }
 
         add_action('showBreads', self::renderBreads());
-        add_action('showLangs', self::renderLangs());
+//        add_action('showLangs', self::renderLangs());
 
         return $data;
     }
