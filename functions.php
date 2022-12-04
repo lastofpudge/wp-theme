@@ -17,9 +17,9 @@ add_action('after_setup_theme', function () {
 const APP_PATH = __DIR__.'/app';
 const BASE_PATH = __DIR__;
 
-require_once __DIR__.'/core/vendor/autoload.php';
+require_once BASE_PATH.'/core/vendor/autoload.php';
 
-collect(['core/Autoload', 'core/Setup', 'core/Helpers', 'core/PostType', 'core/ShareSlugs'])
+collect(['core/Autoload', 'core/Setup', 'core/Helpers', 'routes/custom', 'core/PostType', 'core/ShareSlugs'])
 ->each(function ($file) {
     $file = "/{$file}.php";
     locate_template($file, true, true);

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ad26f5ff6dcf6ffb698e1c78c462e4c",
+    "content-hash": "d5b9461ddd89e4a9a17e799c69134d3d",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -210,6 +210,94 @@
                 }
             ],
             "time": "2022-08-20T06:45:11+00:00"
+        },
+        {
+            "name": "hellonico/timber-dump-extension",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nlemoine/timber-dump-extension.git",
+                "reference": "05d0ea9e13c044a3b78926ab4695b28e739aa205"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nlemoine/timber-dump-extension/zipball/05d0ea9e13c044a3b78926ab4695b28e739aa205",
+                "reference": "05d0ea9e13c044a3b78926ab4695b28e739aa205",
+                "shasum": ""
+            },
+            "require": {
+                "hellonico/twig-dump-extension": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "functions.php"
+                ],
+                "psr-4": {
+                    "HelloNico\\Timber\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Lemoine",
+                    "email": "dev@helloni.co",
+                    "homepage": "https://github.com/nlemoine"
+                }
+            ],
+            "description": "Provides Symfony VarDumper component for Timber",
+            "homepage": "https://github.com/nlemoine/timber-dump-extension",
+            "support": {
+                "issues": "https://github.com/nlemoine/timber-dump-extension/issues",
+                "source": "https://github.com/nlemoine/timber-dump-extension/tree/master"
+            },
+            "time": "2019-03-05T10:25:36+00:00"
+        },
+        {
+            "name": "hellonico/twig-dump-extension",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nlemoine/twig-dump-extension.git",
+                "reference": "fb5fbea20032254d32aaaba5fc1113a4a4877aaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nlemoine/twig-dump-extension/zipball/fb5fbea20032254d32aaaba5fc1113a4a4877aaf",
+                "reference": "fb5fbea20032254d32aaaba5fc1113a4a4877aaf",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/var-dumper": "^4.2 || ^5.0 || ^6.0",
+                "twig/twig": "^2.4 || ^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HelloNico\\Twig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Lemoine",
+                    "email": "nico@niconico.fr",
+                    "homepage": "https://github.com/nlemoine"
+                }
+            ],
+            "description": "VarDumper Twig extension",
+            "homepage": "https://github.com/nlemoine/twig-dump-extension",
+            "support": {
+                "issues": "https://github.com/nlemoine/twig-dump-extension/issues",
+                "source": "https://github.com/nlemoine/twig-dump-extension/tree/1.2.0"
+            },
+            "time": "2022-07-12T15:30:32+00:00"
         },
         {
             "name": "htmlburger/carbon-fields",
@@ -1183,7 +1271,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^7.4|8.*"
+        "php": "^7.3|8.*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"

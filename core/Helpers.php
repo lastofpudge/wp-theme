@@ -13,17 +13,6 @@ if (!function_exists('makeView')) {
     }
 }
 
-/*
- * helper function die and dump
- */
-if (!function_exists('dd')) {
-    function dd($data)
-    {
-        echo '<pre style="background-color: #252424; color: #33ff00; padding: 15px; font-size: 16px; line-height: 2; overflow: hidden; clear: both;">';
-        exit(var_dump($data));
-    }
-}
-
 if (!function_exists('crb_get_i18n_suffix')) {
     function crb_get_i18n_suffix(): string
     {
@@ -60,20 +49,6 @@ if (!function_exists('write_log')) {
                 error_log($log);
             }
         }
-    }
-}
-
-if (!function_exists('trans_string')) {
-    function trans_string($string)
-    {
-        return pll_e($string);
-    }
-}
-
-if (!function_exists('trans_string_var')) {
-    function trans_string_var($string)
-    {
-        return pll_($string);
     }
 }
 
