@@ -1,51 +1,44 @@
 {% extends "layouts/base.twig" %}
 
 {% block content %}
-        <div class="post-wrap" id="post-{{ post.ID }}">
-                <h1>{{ post.title }}</h1>
-
-                <!-- post thumbnail -->
-                {% if post.thumbnail.src %}
-                    <img src="{{ post.thumbnail.src('full') }}" />
-                {% endif %}
-
-                <!-- post content -->
-                {{ post.content }}
-
-                <!-- post tags -->
-                <ul class="tag-list">
-                    {% for term in post.terms('tags') %}
-                        <li><a href="{{ term.link }}">{{ term.name }}</a></li>
+    <div class="post-wrap" id="post-{{ post.ID }}">
+        <h1>{{ post.title }}</h1>
+        <!-- post thumbnail -->
+        {% if post.thumbnail.src %}
+            <img src="{{ post.thumbnail.src('full') }}"/>
+        {% endif %}
+        <!-- post content -->
+        {{ post.content }}
+        <!-- post tags -->
+        <ul class="tag-list">
+            {% for term in post.terms('tags') %}
+                <li><a href="{{ term.link }}">{{ term.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <!-- post author -->
+        <p class="byline">
+            <span class="name">By {{ post.author.name }}</span>
+            <span class="date">{{ post.post_date|date('F j, Y') }}</span>
+        </p>
+        <!-- comment box -->
+        <section class="comment-box">
+            <!-- comments -->
+            <div class="comments">
+                {% if post.comments %}
+                    <h3> comments </h3>
+                    {% for cmt in post.comments %}
+                        {% include "particals/comment.twig" with {comment:cmt} %}
                     {% endfor %}
-                </ul>
-
-                <!-- post author -->
-                <p class="byline">
-                    <span class="name">By {{ post.author.name }}</span>
-                    <span class="date">{{ post.post_date|date('F j, Y') }}</span>
-                </p>
-
-                <!-- comment box -->
-                <section class="comment-box">
-                    <!-- comments -->
-                    <div class="comments">
-                        {% if post.comments %}
-                        <h3> comments </h3>
-                        {% for cmt in post.comments %}
-                            {% include "particals/comment.twig" with {comment:cmt} %}
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    {% if post.comment_status == "closed" %}
-                        <p> comments for this post are closed </p>
-                    {% else %}
-                        <!-- comment form -->
-                        {% include "particals/comment-form.twig" %}
-                    {% endif %}
-                </section>
-
-                {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}
-        </div>
-        {#{{dump(post)}}#}
+                {% endif %}
+            </div>
+            {% if post.comment_status == "closed" %}
+                <p> comments for this post are closed </p>
+            {% else %}
+                <!-- comment form -->
+                {% include "particals/comment-form.twig" %}
+            {% endif %}
+        </section>
+        {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}
+    </div>
+    {# {{dump(post)}} #}
 {% endblock %}

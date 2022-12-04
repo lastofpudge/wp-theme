@@ -1,33 +1,35 @@
-    {% if pagination.pages %}
-      <div class="m-size m-size-pagin">
+{% if pagination.pages %}
+    <div class="m-size m-size-pagin">
         <div class="pagination">
-          <div class="m-pagin-cover">
-            <spa class="mp-text">Pages</spa>
-            <ul>
-              {% if pagination.prev %}
-                <li>
-                  <a href="{{ pagination.prev.link }}" class="prev {{ pagination.prev.link|length ? '' : 'invisible' }}"><span>Назад</span></a>
-                </li>
-              {% endif %}
-              {% for page in pagination.pages %}
-                <li class="{{ page.class }}">
-                  {% if page.link %}
-                    <a href="{{ page.link }}" class="{{ page.class }}"><span>{{ page.title }}</span></a>
-                  {% else %}
-                    <span class="{{ page.class }}">{{ page.title }}</span>
-                  {% endif %}
-                </li>
-              {% endfor %}
+            <div class="m-pagin-cover">
+                <spa class="mp-text">Pages</spa>
+                <ul>
+                    {% if pagination.prev %}
+                        <li>
+                            <a href="{{ pagination.prev.link }}"
+                               class="prev {{ pagination.prev.link|length ? '' : 'invisible' }}"><span>Prev</span></a>
+                        </li>
+                    {% endif %}
+                    {% for page in pagination.pages %}
+                        <li class="{{ page.class }}">
+                            {% if page.link %}
+                                <a href="{{ page.link }}" class="{{ page.class }}"><span>{{ page.title }}</span></a>
+                            {% else %}
+                                <span class="{{ page.class }}">{{ page.title }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
 
-              {% if pagination.next %}
-                <li class="next-link">
-                  <a class="{{ pagination.next.link|length ? '' : 'invisible' }}" href="{{ pagination.next.link }}">
-                    <span>далее</span>
-                  </a>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
+                    {% if pagination.next %}
+                        <li class="next-link">
+                            <a class="{{ pagination.next.link|length ? '' : 'invisible' }}"
+                               href="{{ pagination.next.link }}">
+                                <span>Next</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-      </div>
-    {% endif %}
+    </div>
+{% endif %}

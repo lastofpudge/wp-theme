@@ -1,13 +1,15 @@
 {% extends "layouts/base.twig" %}
 
 {% block content %}
+
     <div class="post-wrap" id="post-{{ post.ID }}">
         {{ post.title }}
         {{ post.content }}
         <form action="?" id="contactForm">
-        <input type="text" name="name">
-        <input type="text" name="mail">
-        <button>submit</button>
+            <input type="text" name="name">
+            <input type="text" name="mail">
+            <button>submit</button>
         </form>
     </div>
+
 {% endblock %}

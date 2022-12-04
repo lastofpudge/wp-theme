@@ -5,21 +5,23 @@
     {% for post in posts %}
 
         <div class="category-post" style="padding:15px;">
-            <h2><a href="{{post.link}}">{{post.title}}</a></h2>
-            <p class="entry-meta">Posted: <time>{{post.post_date_gmt|time_ago}}</time></p>
+            <h2><a href="{{ post.link }}">{{ post.title }}</a></h2>
+            <p class="entry-meta">Posted:
+                <time>{{ post.post_date_gmt|time_ago }}</time>
+            </p>
             {% if post.get_thumbnail %}
                 <img src="{{ post.thumbnail.src }}" alt="">
             {% else %}
-                <img src="{{ theme.path}}/assets/dist/images/placeholders/no-image-default.png" alt="">
+                <img src="{{ theme.path }}/assets/dist/images/placeholders/no-image-default.png" alt="">
             {% endif %}
             <div class="clear">
                 {{ post.preview.length(10).read_more('') }}
             </div>
-
             {{ function('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
         </div>
 
     {% endfor %}
+
     {% include 'particals/pagination.twig' %}
 
 {% endblock %}
