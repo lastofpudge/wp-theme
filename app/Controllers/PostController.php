@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Timber\Timber;
 
-class postController extends Controller
+class PostController extends Controller
 {
     /**
      * @var array
@@ -27,4 +27,4 @@ class postController extends Controller
     }
 }
 
-$d = new postController();
+$d = new PostController();

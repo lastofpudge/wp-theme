@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Timber\Post as TimberPost;
 use Timber\Timber;
 
-class pageController extends Controller
+class PageController extends Controller
 {
     /**
      * @var array
@@ -57,4 +57,4 @@ class pageController extends Controller
     }
 }
 
-$d = new pageController();
+$d = new PageController();

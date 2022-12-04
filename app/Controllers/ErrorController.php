@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Timber\Timber;
 
-class errorController extends Controller
+class ErrorController extends Controller
 {
     /**
      * @var array
@@ -25,4 +25,4 @@ class errorController extends Controller
     }
 }
 
-$d = new errorController();
+$d = new ErrorController();

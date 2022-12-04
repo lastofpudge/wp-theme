@@ -1,3 +1,5 @@
 <?php
 
-makeView('categoryController@index', 'categories/category');
+use App\Controllers\CategoryController;
+
+makeView(CategoryController::class,'index', 'categories/category');

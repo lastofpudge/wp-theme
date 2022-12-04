@@ -3,14 +3,13 @@
 use Timber\Timber;
 
 if (!function_exists('makeView')) {
-    function makeView($controller, $view)
+    function makeView($controller, $method, $view)
     {
-        $ctr = explode('@', $controller, 2);
-        require_once APP_PATH.'/Controllers/'.$ctr[0].'.php';
-        $data = $d->{$ctr[1]}();
+        require_once BASE_PATH.'/'.$controller.'.php';
+        $data = $d->{$method}();
         $v = 'views/'.$view.'.twig';
-        Timber::render($v, $data);
-        exit;
+
+        Timber::render($v, $data, false);
     }
 }
 
@@ -22,7 +21,6 @@ if (!function_exists('dd')) {
     {
         echo '<pre style="background-color: #252424; color: #33ff00; padding: 15px; font-size: 16px; line-height: 2; overflow: hidden; clear: both;">';
         exit(var_dump($data));
-        echo '</pre>';
     }
 }
 
@@ -93,6 +91,8 @@ if (!function_exists('send_mail_cst')) {
         if ($sent) {
             return $sent;
         }
+
+        return null;
     }
 }
 
@@ -107,11 +107,11 @@ if (!function_exists('add_ajax_action')) {
     function add_ajax_action($name)
     {
         add_action("wp_ajax_{$name}", function () use ($name) {
-            require_once __DIR__.'../app/Actions/notification/'.$name.'.php';
+            require_once APP_PATH.'/Actions/notification/'.$name.'.php';
         });
 
         add_action("wp_ajax_nopriv_{$name}", function () use ($name) {
-            require_once __DIR__.'../app/Actions/notification/'.$name.'.php';
+            require_once APP_PATH.'/Actions/notification/'.$name.'.php';
         });
     }
 }

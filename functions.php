@@ -15,16 +15,12 @@ add_action('after_setup_theme', function () {
 });
 
 const APP_PATH = __DIR__.'/app';
+const BASE_PATH = __DIR__;
 
 require_once __DIR__.'/core/vendor/autoload.php';
 
 collect(['core/Autoload', 'core/Setup', 'core/Helpers', 'core/PostType', 'core/ShareSlugs'])
 ->each(function ($file) {
     $file = "/{$file}.php";
-
-    if (!locate_template($file, true, true)) {
-        wp_die(
-            sprintf('Error locating <code>%s</code> for inclusion. {$file}')
-        );
-    }
+    locate_template($file, true, true);
 });

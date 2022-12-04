@@ -6,7 +6,7 @@ mix.setPublicPath('assets');
 //     devtool: "inline-source-map"
 // });
 
-mix.browserSync('http://local.dev/'); //url on server
+mix.browserSync('//local.dev/'); //url on server
 
 mix.sass(
     'assets/src/styles/bundle.scss',

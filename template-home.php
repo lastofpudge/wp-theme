@@ -3,4 +3,7 @@
 /*
 * Template Name: Homepage
 */
-makeView('pageController@index', 'pages/home');
+
+use App\Controllers\PageController;
+
+makeView(PageController::class,'index', 'pages/home');

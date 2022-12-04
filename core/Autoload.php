@@ -16,5 +16,5 @@ $data = [
 ];
 
 foreach ($data as $key => $value) {
-    require_once $data[$key];
+    require_once $value;
 }

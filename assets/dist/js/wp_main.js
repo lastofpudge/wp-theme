@@ -10,7 +10,7 @@ $(function() {
 
         form_data.append( "name", $(this).find('input[name="name"]').val());
         form_data.append( "mail", $(this).find('input[name="mail"]').val());
-        form_data.append( "action", "test_action");
+        form_data.append( "action", "sendMailAction");
         form_data.append( "nonce", data.nonce);
 
 

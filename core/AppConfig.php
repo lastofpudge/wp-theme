@@ -50,12 +50,6 @@ class AppConfig {
         $wp_admin_bar->remove_menu('new-post');
     }
 
-    public function hidePageAdd()
-    {
-        global $wp_admin_bar;
-        $wp_admin_bar->remove_menu('new-page');
-    }
-
     /**
      * hide comments.
      */

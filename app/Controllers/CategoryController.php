@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Timber\Timber;
 use Timber\Term as TimberTerm;
 
-class categoryController extends Controller
+class CategoryController extends Controller
 {
     /**
      * @var array
@@ -30,7 +30,4 @@ class categoryController extends Controller
     }
 }
 
-/*
- * get controller data
- */
-$d = new categoryController();
+$d = new CategoryController();
