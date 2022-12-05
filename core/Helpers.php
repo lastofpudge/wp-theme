@@ -5,8 +5,8 @@ use Timber\Timber;
 if (!function_exists('makeView')) {
     function makeView($controller, $method, $view)
     {
-        $controller = new $controller;
-        Timber::render('views/' . $view . '.twig', $controller->$method(), false);
+        $controller = new $controller();
+        Timber::render('views/'.$view.'.twig', $controller->$method(), false);
     }
 }
 
@@ -17,7 +17,7 @@ if (!function_exists('crb_get_i18n_suffix')) {
             return '';
         }
 
-        return '_' . ICL_LANGUAGE_CODE;
+        return '_'.ICL_LANGUAGE_CODE;
     }
 }
 
@@ -29,7 +29,7 @@ if (!function_exists('crb_get_i18n_theme_option')) {
     {
         $suffix = crb_get_i18n_suffix();
 
-        return carbon_get_theme_option($option_name . $suffix);
+        return carbon_get_theme_option($option_name.$suffix);
     }
 }
 
@@ -53,7 +53,7 @@ if (!function_exists('send_mail_cst')) {
     function send_mail_cst($filename, $data)
     {
         ob_start();
-        require_once __DIR__ . '/../views/mails/' . $filename.'.php';
+        require_once __DIR__.'/../views/mails/'.$filename.'.php';
         $body = ob_get_contents();
         ob_end_clean();
 
@@ -79,11 +79,11 @@ if (!function_exists('add_ajax_action')) {
     function add_ajax_action($name)
     {
         add_action("wp_ajax_$name", function () use ($name) {
-            require_once APP_PATH . '/Actions/notification/'.$name.'.php';
+            require_once APP_PATH.'/Actions/notification/'.$name.'.php';
         });
 
         add_action("wp_ajax_nopriv_$name", function () use ($name) {
-            require_once APP_PATH . '/Actions/notification/'.$name.'.php';
+            require_once APP_PATH.'/Actions/notification/'.$name.'.php';
         });
     }
 }
