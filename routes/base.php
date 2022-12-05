@@ -5,15 +5,7 @@ use App\Controllers\ErrorController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
 
-if (is_search()) {
-    makeView(CategoryController::class, 'index', 'categories/category');
-}
-
-if (is_category()) {
-    makeView(CategoryController::class, 'index', 'categories/category');
-}
-
-if (is_tag()) {
+if (is_category() || is_tag() || is_search()) {
     makeView(CategoryController::class, 'index', 'categories/category');
 }
 
