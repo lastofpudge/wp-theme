@@ -5,11 +5,12 @@ use Timber\Timber;
 if (!function_exists('makeView')) {
     function makeView($controller, $method, $view)
     {
-        require_once BASE_PATH.'/'.$controller.'.php';
-        $data = $d->{$method}();
-        $v = 'views/'.$view.'.twig';
+        $controller = new $controller;
 
-        Timber::render($v, $data, false);
+        $data = $controller->$method();
+        $view_full = 'views/'.$view.'.twig';
+
+        Timber::render($view_full, $data, false);
     }
 }
 

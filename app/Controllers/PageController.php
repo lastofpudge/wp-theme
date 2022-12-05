@@ -55,5 +55,3 @@ class PageController extends Controller
         return $this->data;
     }
 }
-
-$d = new PageController();

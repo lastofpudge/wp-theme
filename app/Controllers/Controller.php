@@ -32,7 +32,8 @@ class Controller
             if (function_exists('yoast_breadcrumb')) {
                 yoast_breadcrumb('<div class="breads__wrapper">', '</div>');
             } else {
-                echo '<pre style="background-color: orange; padding:3px; color: #fff;">Plugin Youst Seo is not active!</pre>';
+                echo '<pre style="background-color: orange; padding:3px; color: #fff;">
+                Plugin Yoast Seo is not active!</pre>';
             }
         };
     }

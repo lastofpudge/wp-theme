@@ -26,5 +26,3 @@ class PostController extends Controller
         return $this->data;
     }
 }
-
-$d = new PostController();

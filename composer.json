@@ -1,13 +1,16 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "description": "Wordpress Theme Boilerplate",
+  "description": "Wordpress starter theme with timber/twig",
   "license": "GNU GPL",
   "authors": [
     {
       "name": "Andrii Dudin",
       "email": "iluxor1991@gmail.com"
     }
+  ],
+  "keywords": [
+    "wordpress"
   ],
   "repositories": [
     {
@@ -16,7 +19,7 @@
     }
   ],
   "require": {
-    "php": "^7.3|8.*",
+    "php": "^7.2|8.*",
     "hellonico/timber-dump-extension": "^1.0",
     "htmlburger/carbon-fields": "^3.3.4",
     "tightenco/collect": "^8.34.0",
@@ -35,20 +38,24 @@
     "sort-packages": true,
     "optimize-autoloader": true
   },
+  "scripts": {
+    "lint": [
+      "phpcs --extensions=php --standard=PSR12 app"
+    ]
+  },
   "extra": {
     "installer-paths": {
       "core/vendor/{$name}": [
         "htmlburger/carbon-fields"
       ],
       "../../plugins/{$name}": [
-        "wpackagist-plugin/tinymce-advanced",
-        "wpackagist-plugin/cyr3lat",
         "wpackagist-plugin/all-in-one-wp-migration",
         "wpackagist-plugin/wordpress-seo"
       ]
     }
   },
   "require-dev": {
-    "php-stubs/wordpress-stubs": "^5.4"
+    "php-stubs/wordpress-stubs": "^5.4",
+    "squizlabs/php_codesniffer": "3.*"
   }
 }

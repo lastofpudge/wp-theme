@@ -29,5 +29,3 @@ class CategoryController extends Controller
         return $this->data;
     }
 }
-
-$d = new CategoryController();

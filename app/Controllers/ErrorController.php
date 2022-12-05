@@ -24,5 +24,3 @@ class ErrorController extends Controller
         return $this->data;
     }
 }
-
-$d = new ErrorController();
