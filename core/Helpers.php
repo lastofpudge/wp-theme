@@ -5,7 +5,7 @@ use Timber\Timber;
 if (!function_exists('makeView')) {
     function makeView($controller, $method, $view)
     {
-        $controller = new $controller;
+        $controller = new $controller();
 
         $data = $controller->$method();
         $view_full = 'views/'.$view.'.twig';
