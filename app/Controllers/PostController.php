@@ -19,7 +19,7 @@ class PostController extends Controller
     /*
      * get post data
      */
-    public function index()
+    public function index(): array
     {
         $this->data['post'] = Timber::query_post();
 

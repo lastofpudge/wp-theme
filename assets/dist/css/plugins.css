@@ -14,7 +14,7 @@
     color: #fff;
 }
 
-.preloader__main{
+.preloader-main{
     position: absolute;
     left: 0;
     top: 0;
@@ -29,7 +29,7 @@
     opacity: 0;
 }
 
-.js__preloading.js__preloader__main{
+.js-preloading.js-preloader-main{
     background: rgba(255, 255, 255, 0.78) url(../images/preloader.svg) no-repeat 50% 50%;
     position: fixed;
     z-index: 300;
@@ -38,7 +38,7 @@
 }
 
 @media screen and (min-width: 1024px) {
-    .js__preloading.js__preloader__main{
+    .js-preloading.js-preloader-main{
         background: rgba(255, 255, 255, 0.78) url(../images/preloader.svg) 50%/7% no-repeat;
     }
 }

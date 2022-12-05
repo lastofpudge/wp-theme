@@ -81,11 +81,11 @@ add_action('wp_mail_failed', function ($wp_error) {
 if (!function_exists('add_ajax_action')) {
     function add_ajax_action($name)
     {
-        add_action("wp_ajax_{$name}", function () use ($name) {
+        add_action("wp_ajax_$name", function () use ($name) {
             require_once APP_PATH.'/Actions/notification/'.$name.'.php';
         });
 
-        add_action("wp_ajax_nopriv_{$name}", function () use ($name) {
+        add_action("wp_ajax_nopriv_$name", function () use ($name) {
             require_once APP_PATH.'/Actions/notification/'.$name.'.php';
         });
     }

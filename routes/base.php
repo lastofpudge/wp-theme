@@ -13,6 +13,10 @@ if (is_category()) {
     makeView(CategoryController::class, 'index', 'categories/category');
 }
 
+if (is_front_page()) {
+    makeView(PageController::class, 'index', 'index');
+}
+
 if (is_single()) {
     makeView(PostController::class, 'index', 'posts/post');
 }

@@ -8,12 +8,6 @@ $(function() {
 
     App.prototype = {
         init: function() {
-            //svg init
-            svg4everybody();
-            // aos animate
-            AOS.init({
-                disable: 'mobile'
-            });
         },
 
     };

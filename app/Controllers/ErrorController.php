@@ -19,7 +19,7 @@ class ErrorController extends Controller
     /*
      * get post data
      */
-    public function index()
+    public function index(): array
     {
         return $this->data;
     }

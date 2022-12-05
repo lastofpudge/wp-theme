@@ -21,6 +21,6 @@ require_once BASE_PATH.'/core/vendor/autoload.php';
 
 collect(['core/Autoload', 'core/Setup', 'core/Helpers', 'routes/custom', 'core/PostType', 'core/ShareSlugs'])
 ->each(function ($file) {
-    $file = "/{$file}.php";
-    locate_template($file, true, true);
+    $file = "/$file.php";
+    locate_template($file, true);
 });

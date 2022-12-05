@@ -1,18 +1,13 @@
 window.$ = window.jQuery = require("jquery");
 
 require("magnific-popup");
-// require('parsleyjs');
-// require('slick-carousel');
-// require('./mmenu.js');
 window.Noty = require("noty");
 
-// window.chosen = require('chosen-js');
-// window.AOS = require('aos');
 
 $(function() {
   //popup
   $(".js-mfi").each(function(index, el) {
-    var _el = $(this);
+    const _el = $(this);
     _el.magnificPopup({
       removalDelay: 500,
       showCloseBtn: false,
@@ -41,7 +36,7 @@ $(function() {
       tCounter: "%curr% из %total%",
     },
     image: {
-      tError: '<a href="%url%">Картинка #%curr%</a> не может быть загружена.',
+      tError: '<a href="%url%">Image #%curr%</a> cannot be loaded.',
       verticalFit: true,
       titleSrc: function(item) {
         return item.el.attr("title");

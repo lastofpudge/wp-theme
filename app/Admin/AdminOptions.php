@@ -2,8 +2,6 @@
 
 namespace App\Admin;
 
-use TimberMenu;
-
 class AdminOptions
 {
     public function __construct()
@@ -45,7 +43,7 @@ class AdminOptions
 
     public function registerContext($context)
     {
-        $context['left_menu'] = new TimberMenu('left_menu');
+        $context['left_menu'] = new Timber\Menu('left_menu');
         $context['template_url'] = get_bloginfo('template_url');
 
         return $context;
