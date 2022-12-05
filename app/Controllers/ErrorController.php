@@ -13,6 +13,7 @@ class ErrorController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->data = Timber::get_context();
     }
 

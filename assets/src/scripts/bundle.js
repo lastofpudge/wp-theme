@@ -1,14 +1,13 @@
 require('./core.js');
 
-
-$(function() {
+$(function () {
     "use strict";
 
-    function App() {}
+    function App()
+    {}
 
     App.prototype = {
-        init: function() {
-        },
+        init: function () {}
 
     };
 

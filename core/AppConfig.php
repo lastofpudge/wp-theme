@@ -1,5 +1,7 @@
 <?php
 
+namespace Core;
+
 class AppConfig
 {
     /**
@@ -33,12 +35,11 @@ class AppConfig
     {
         if ($this->config['show_posts'] === false) {
             remove_menu_page('edit.php');
-            add_action('wp_before_admin_bar_render', [$this, 'hide_post_add']);
+            add_action('wp_before_admin_bar_render', [$this, 'hidePostAdd']);
         }
 
         if ($this->config['show_pages'] === false) {
             remove_menu_page('edit.php?post_type=page');
-            add_action('wp_before_admin_bar_render', [$this, 'hide_page_add']);
         }
     }
 
@@ -68,4 +69,5 @@ class AppConfig
     }
 }
 
+/** @var array $config */
 new AppConfig($config);

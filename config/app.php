@@ -15,6 +15,4 @@ $config = [
 
     'show_admin_bar' => true,
 
-    'create_orders_post_type' => false,
-
 ];

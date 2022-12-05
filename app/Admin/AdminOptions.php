@@ -2,6 +2,8 @@
 
 namespace App\Admin;
 
+use Timber\Menu;
+
 class AdminOptions
 {
     public function __construct()
@@ -21,12 +23,13 @@ class AdminOptions
 
     public function registerScripts()
     {
-        wp_enqueue_script('wp_jquery', get_template_directory_uri().'/assets/dist/js/jquery.js');
-        wp_enqueue_script('wp_main', get_template_directory_uri().'/assets/dist/js/wp_main.js', [], filemtime(get_theme_file_path('/assets/dist/js/wp_main.js')));
-        wp_enqueue_script('wp_noty', get_template_directory_uri().'/assets/dist/js/noty.js');
+        wp_enqueue_script('wp_jquery', get_template_directory_uri() . '/assets/dist/js/jquery.js');
+        wp_enqueue_script('wp_main', get_template_directory_uri() .
+            '/assets/dist/js/wp_main.js', [], filemtime(get_theme_file_path('/assets/dist/js/wp_main.js')));
+        wp_enqueue_script('wp_noty', get_template_directory_uri() . '/assets/dist/js/noty.js');
 
-        wp_enqueue_style('wp_bundle', get_template_directory_uri().'/assets/dist/css/bundle.css', [], false);
-        wp_enqueue_style('wp_plugins', get_template_directory_uri().'/assets/dist/css/plugins.css', [], false);
+        wp_enqueue_style('wp_bundle', get_template_directory_uri() . '/assets/dist/css/bundle.css', [], false);
+        wp_enqueue_style('wp_plugins', get_template_directory_uri() . '/assets/dist/css/plugins.css', [], false);
 
         wp_localize_script('wp_main', 'data', [
             'ajax_url'  => admin_url('admin-ajax.php'),
@@ -43,11 +46,8 @@ class AdminOptions
 
     public function registerContext($context)
     {
-        $context['left_menu'] = new \Timber\Menu('left_menu');
-        $context['template_url'] = get_bloginfo('template_url');
+        $context['left_menu'] = new Menu('left_menu');
 
         return $context;
     }
 }
-
-new AdminOptions();

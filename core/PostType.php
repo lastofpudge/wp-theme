@@ -1,5 +1,7 @@
 <?php
 
+namespace Core;
+
 /**
  * Custom post types register.
  */

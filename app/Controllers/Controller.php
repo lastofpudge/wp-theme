@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use Closure;
+
 class Controller
 {
     public function __construct()
@@ -9,24 +11,16 @@ class Controller
         add_filter('timber_context', [$this, 'getData']);
     }
 
-    public function getData($data)
+    public function getData(): array
     {
-        $data['isHome'] = is_page_template('page-home.php');
-
-        if ($custom_logo_id = get_theme_mod('custom_logo')) {
-            $data['customLogo'] = wp_get_attachment_image($custom_logo_id, 'full', false, [
-                'class'    => 'custom-logo',
-                'itemprop' => 'logo',
-            ]);
-        }
-
+        $data = [];
         add_action('showBreads', self::renderBreads());
 //        add_action('showLangs', self::renderLangs());
 
         return $data;
     }
 
-    public static function renderBreads(): \Closure
+    public static function renderBreads(): Closure
     {
         return function () {
             if (function_exists('yoast_breadcrumb')) {
@@ -38,7 +32,7 @@ class Controller
         };
     }
 
-    public static function renderLangs(): \Closure
+    public static function renderLangs(): Closure
     {
         return function () {
             if (function_exists('pll_the_languages')) {
@@ -66,5 +60,3 @@ class Controller
         };
     }
 }
-
-new Controller();

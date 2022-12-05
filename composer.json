@@ -30,7 +30,8 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "app/"
+      "App\\": "app/",
+      "App\\Admin\\": "app/Admin"
     }
   },
   "config": {
@@ -40,7 +41,7 @@
   },
   "scripts": {
     "lint": [
-      "phpcs --extensions=php --standard=PSR12 app"
+      "phpcs --extensions=php --standard=PSR12 ./index.php"
     ]
   },
   "extra": {

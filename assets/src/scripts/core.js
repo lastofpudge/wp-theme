@@ -4,15 +4,15 @@ require("magnific-popup");
 window.Noty = require("noty");
 
 
-$(function() {
+$(function () {
   //popup
-  $(".js-mfi").each(function(index, el) {
+  $(".js-mfi").each(function () {
     const _el = $(this);
     _el.magnificPopup({
       removalDelay: 500,
       showCloseBtn: false,
       callbacks: {
-        beforeOpen: function() {
+        beforeOpen: function () {
           const effect = this.st.el.attr("data-effect");
           if (effect) this.st.mainClass = this.st.el.attr("data-effect");
           else this.st.mainClass = "mfp-with-fade";
