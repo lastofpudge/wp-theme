@@ -1,5 +1,5 @@
 $(function() {
-    const preloader = $('.js__preloader__main');
+    const preloader = $('.js-preloader-main');
 
     $(document).on('submit', '#contactForm', function(event) {
         event.preventDefault();
@@ -14,7 +14,7 @@ $(function() {
         form_data.append( "nonce", data.nonce);
 
 
-        preloader.addClass('js__preloading');
+        preloader.addClass('js-preloading');
         $.ajax({
             type: "POST",
             url: data.ajax_url,
@@ -22,7 +22,7 @@ $(function() {
             contentType: false,
             data: form_data,
             success: function(data, text) {
-                preloader.removeClass('js__preloading');
+                preloader.removeClass('js-preloading');
 
                 // $.magnificPopup.close();
                 if (data.type === 'success') {
@@ -46,7 +46,7 @@ $(function() {
                 }
             },
             fail: function(errors) {
-                preloader.removeClass('js__preloading');
+                preloader.removeClass('js-preloading');
                 new Noty({
                     theme: 'mint',
                     text: 'Error send email',
