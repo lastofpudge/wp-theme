@@ -38,7 +38,7 @@ $(function() {
                     new Noty({
                         theme: 'mint',
                         type: 'error',
-                        text: data.sended.errors.wp_mail_failed[0],
+                        ttext: data.sended?.errors?.wp_mail_failed[0] || data.message,
                         timeout: 5000,
                         progressBar: false,
                         closeWith: ['click', 'button'],
