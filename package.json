@@ -1,16 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npm run development",
-    "development": "mix",
+    "dev": "mix",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production"
+    "prod": "mix --production"
   },
   "devDependencies": {
     "axios": "^1.1.2",
+    "browser-sync": "^2.27.10",
+    "browser-sync-webpack-plugin": "^2.3.0",
     "cross-env": "^7.0",
     "git-commit-msg-linter": "^4.4.0",
     "laravel-mix": "^6.0.6",
