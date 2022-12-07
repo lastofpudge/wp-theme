@@ -4,10 +4,10 @@
 - support custom routes/controllers
 - easy custom fields/posts integration
 - integrated ajax mail/actions
-- integrated metalanguage with Polylang
+- integrated multilang with Polylang plugin
 - support composer package manager
 
 ## How to use
 
 - use "composer install" in project folder
-- "npm i" && "npm run watch" to work with css/js
+- "yarn" && "npm run watch" to work with css/js
