@@ -10,7 +10,7 @@ class Controller
     {
         // add_filter('timber_context', [$this, 'getData']);
     }
-    
+
     public function getData(): array
     {
         $data = [];

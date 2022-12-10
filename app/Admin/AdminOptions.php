@@ -24,7 +24,7 @@ class AdminOptions
     public function registerScripts()
     {
         wp_enqueue_script('wp_jquery', get_template_directory_uri().'/assets/dist/js/jquery.js');
-        
+
         wp_enqueue_script('wp_main', get_template_directory_uri().
             '/assets/dist/js/wp_main.js', [], filemtime(get_theme_file_path('/assets/dist/js/wp_main.js')));
 

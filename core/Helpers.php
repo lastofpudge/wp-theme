@@ -60,7 +60,7 @@ if (!function_exists('send_mail_cst')) {
         $admin_email = get_bloginfo('admin_email');
         $headers[] = 'Content-type: text/html; charset=utf-8';
         $sent = wp_mail($admin_email, $data['subject'], $body, $headers);
-        
+
         if ($sent) {
             return $sent;
         }
