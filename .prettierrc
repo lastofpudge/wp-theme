@@ -3,5 +3,13 @@
   "printWidth": 150,
   "bracketSameLine": true,
   "tabWidth": 2,
-  "plugins": ["./node_modules/prettier-plugin-twig-melody"]
+  "plugins": ["./node_modules/prettier-plugin-twig-melody"],
+  "overrides": [
+    {
+      "files": "*.php",
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
 }
