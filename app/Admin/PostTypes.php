@@ -6,9 +6,9 @@ use Core\PostType;
 
 class PostTypes
 {
-  public function __construct()
-  {
-    // add_action(
+    public function __construct()
+    {
+        // add_action(
     //   "init",
     //   function () {
     //     PostType::register("services", "Services", "Service", true, true, "dashicons-format-aside", ["title", "editor", "thumbnail"]);
@@ -18,5 +18,5 @@ class PostTypes
     //   },
     //   0
     // );
-  }
+    }
 }

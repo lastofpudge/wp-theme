@@ -6,4 +6,4 @@
 
 use App\Controllers\PageController;
 
-makeView(PageController::class, "about", "pages/about");
+makeView(PageController::class, 'about', 'pages/about');
