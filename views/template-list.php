@@ -6,4 +6,4 @@
 
 use App\Controllers\PageController;
 
-makeView(PageController::class, "list", "pages/list");
+makeView(PageController::class, 'list', 'pages/list');
