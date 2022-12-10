@@ -26,14 +26,14 @@
                 {% if post.comments %}
                     <h3> comments </h3>
                     {% for cmt in post.comments %}
-                        {% include "particals/comment.twig" with {comment:cmt} %}
+                        {% include "components/comment.twig" with {comment:cmt} %}
                     {% endfor %}
                 {% endif %}
             </div>
             {% if post.comment_status == "closed" %}
                 <p> comments for this post are closed </p>
             {% else %}
-                {% include "particals/comment-form.twig" %}
+                {% include "components/comment-form.twig" %}
             {% endif %}
         </section>
 

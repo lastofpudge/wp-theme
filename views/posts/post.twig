@@ -24,7 +24,7 @@
             <span class="date">{{ post.post_date|date('F j, Y') }}</span>
         </p>
         
-        {% include 'particals/comments/comment_wrapper.twig' %}
+        {% include 'components/comments/comment_wrapper.twig' %}
 
         {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}
     </div>

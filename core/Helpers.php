@@ -53,13 +53,14 @@ if (!function_exists('send_mail_cst')) {
     function send_mail_cst($filename, $data)
     {
         ob_start();
-        require_once __DIR__.'/../views/mails/'.$filename.'.php';
+        require_once __DIR__.'/../views/emails/'.$filename.'.php';
         $body = ob_get_contents();
         ob_end_clean();
 
         $admin_email = get_bloginfo('admin_email');
         $headers[] = 'Content-type: text/html; charset=utf-8';
         $sent = wp_mail($admin_email, $data['subject'], $body, $headers);
+        
         if ($sent) {
             return $sent;
         }
