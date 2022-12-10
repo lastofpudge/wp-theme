@@ -2,7 +2,9 @@
 
 {% block content %}
   <div class="post-wrap" id="post-{{ post.ID }}">
-    {% do action('showBreads') %}
+    {% if breads %}
+      {{ breads }}
+    {% endif %}
 
     <h1>
       {{ post.title }}

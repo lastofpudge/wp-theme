@@ -1,9 +1,9 @@
 <?php
 
 /*
-* Template Name: About page
-*/
+ * Template Name: About page
+ */
 
 use App\Controllers\PageController;
 
-makeView(PageController::class, 'about', 'pages/about');
+makeView(PageController::class, "about", "pages/about");

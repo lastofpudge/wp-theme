@@ -1,26 +1,32 @@
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <ul class="navbar-nav mr-auto">
-      {% for item in left_menu.get_items %}
-        <li class="nav-item {{ item.classes|join(' ') }} {{
-          item.current
-            ? 'active'
-            : ''
-          }}">
-          <a class="nav-main-link" href="{{ item.get_link }}">
-            {{ item.title }}
-          </a>
-          {% if item.get_children %}
-            <ul class="nav-drop">
-              {% for child in item.get_children %}
-                <li class="nav-drop-item">
-                  <a href="{{ child.get_link }}">{{ child.title }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <ul class="navbar-nav mr-auto">
+            {% for item in left_menu.get_items %}
+              <li class="nav-item {{ item.classes|join(' ') }} {{
+                item.current
+                  ? 'active'
+                  : ''
+                }}">
+                <a class="nav-main-link" href="{{ item.get_link }}">
+                  {{ item.title }}
+                </a>
+                {% if item.get_children %}
+                  <ul class="nav-drop">
+                    {% for child in item.get_children %}
+                      <li class="nav-drop-item">
+                        <a href="{{ child.get_link }}">{{ child.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
 </header>

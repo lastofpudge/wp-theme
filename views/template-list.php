@@ -1,9 +1,9 @@
 <?php
 
 /*
-* Template Name: News/Lists
-*/
+ * Template Name: News/Lists
+ */
 
 use App\Controllers\PageController;
 
-makeView(PageController::class, 'list', 'pages/list');
+makeView(PageController::class, "list", "pages/list");

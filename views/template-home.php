@@ -1,9 +1,9 @@
 <?php
 
 /*
-* Template Name: Homepage
-*/
+ * Template Name: Homepage
+ */
 
 use App\Controllers\PageController;
 
-makeView(PageController::class, 'index', 'pages/home');
+makeView(PageController::class, "index", "pages/home");
