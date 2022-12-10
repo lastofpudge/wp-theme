@@ -6,9 +6,9 @@ use Core\PostType;
 
 class PostTypes
 {
-  public function __construct()
-  {
-    //        add_action('init', function ()
+    public function __construct()
+    {
+        //        add_action('init', function ()
     //        {
     //            PostType::register('services', 'Services', 'Service', true, true,
     //                'dashicons-format-aside', ['title', 'editor', 'thumbnail']);
@@ -16,5 +16,5 @@ class PostTypes
     //            PostType::loadTax('services', 'services_cat', 'Category');
     //            flush_rewrite_rules();
     //        }, 0);
-  }
+    }
 }
