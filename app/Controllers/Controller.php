@@ -8,9 +8,9 @@ class Controller
 {
     public function __construct()
     {
-        add_filter('timber_context', [$this, 'getData']);
+        // add_filter('timber_context', [$this, 'getData']);
     }
-
+    
     public function getData(): array
     {
         $data = [];

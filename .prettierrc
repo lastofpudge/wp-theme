@@ -1,0 +1,7 @@
+{
+  "useTabs": false,
+  "printWidth": 150,
+  "bracketSameLine": true,
+  "tabWidth": 2,
+  "plugins": ["./node_modules/prettier-plugin-twig-melody"]
+}

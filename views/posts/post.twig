@@ -1,32 +1,41 @@
-{% extends "layouts/base.twig" %}
+{% extends 'layouts/base.twig' %}
 
 {% block content %}
-    <div class="post-wrap" id="post-{{ post.ID }}">
+  <div class="post-wrap" id="post-{{ post.ID }}">
+    {% do action('showBreads') %}
 
-        {% do action('showBreads') %}
+    <h1>
+      {{ post.title }}
+    </h1>
 
-        <h1>{{ post.title }}</h1>
+    {% if post.thumbnail.src %}
+      <img src="{{ post.thumbnail.src('full') }}" alt="" />
+    {% endif %}
 
-        {% if post.thumbnail.src %}
-            <img src="{{ post.thumbnail.src('full') }}" alt=""/>
-        {% endif %}
+    {{ post.content }}
 
-        {{ post.content }}
+    <ul class="tag-list">
+      {% for term in post.terms('tags') %}
+        <li><a href="{{ term.link }}">{{ term.name }}</a></li>
+      {% endfor %}
+    </ul>
 
-        <ul class="tag-list">
-            {% for term in post.terms('tags') %}
-                <li><a href="{{ term.link }}">{{ term.name }}</a></li>
-            {% endfor %}
-        </ul>
+    <p class="byline">
+      <span class="name">By {{ post.author.name }}</span>
+      <span class="date">{{ post.post_date|date('F j, Y') }}</span>
+    </p>
 
-        <p class="byline">
-            <span class="name">By {{ post.author.name }}</span>
-            <span class="date">{{ post.post_date|date('F j, Y') }}</span>
-        </p>
-        
-        {% include 'components/comments/comment_wrapper.twig' %}
+    {% include 'components/comments/comment_wrapper.twig' %}
 
-        {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>', post.ID) }}
-    </div>
-    {# {{dump(post)}} #}
+    {{
+      fn(
+        'edit_post_link',
+        'Edit',
+        '<span class="edit-link">',
+        '</span>',
+        post.ID
+      )
+    }}
+  </div>
+  {# {{dump(post)}} #}
 {% endblock %}

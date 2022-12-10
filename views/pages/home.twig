@@ -1,19 +1,15 @@
-{% extends "layouts/base.twig" %}
+{% extends 'layouts/base.twig' %}
 
 {% block content %}
+  <div class="post-wrap" id="post-{{ post.ID }}">
+    {{ post.title }}
 
-    <div class="post-wrap" id="post-{{ post.ID }}">
+    {{ post.content }}
 
-        {{ post.title }}
-
-        {{ post.content }}
-
-        <form action="?" class="js-contact-form">
-            <input type="text" name="name">
-            <input type="text" name="mail">
-            <button>submit</button>
-        </form>
-
-    </div>
-
+    <form action="?" class="js-contact-form">
+      <input type="text" name="name" />
+      <input type="text" name="mail" />
+      <button>submit</button>
+    </form>
+  </div>
 {% endblock %}
