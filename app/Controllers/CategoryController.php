@@ -18,9 +18,6 @@ class CategoryController extends Controller
     $this->data = Timber::get_context();
   }
 
-  /*
-   * get post data
-   */
   public function index(): array
   {
     $this->data["term"] = new TimberTerm();

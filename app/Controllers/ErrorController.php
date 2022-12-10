@@ -17,9 +17,6 @@ class ErrorController extends Controller
     $this->data = Timber::get_context();
   }
 
-  /*
-   * get post data
-   */
   public function index(): array
   {
     return $this->data;

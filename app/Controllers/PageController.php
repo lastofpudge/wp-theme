@@ -25,7 +25,6 @@ class PageController extends Controller
     return $this->data;
   }
 
-  // about
   public function about(): array
   {
     $this->data["post"] = new TimberPost();
@@ -33,7 +32,6 @@ class PageController extends Controller
     return $this->data;
   }
 
-  // list
   public function list(): array
   {
     global $paged;
