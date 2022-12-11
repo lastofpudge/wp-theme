@@ -8,18 +8,18 @@ new AdminOptions();
 new HiddenData();
 new PostTypes();
 
-$data = [
-    "setup" => __DIR__ . "/Setup.php",
-    "helpers" => __DIR__ . "/Helpers.php",
-    "config" => __DIR__ . "/../config/app.php",
-    "post_register_types" => __DIR__ . "/PostType.php",
-    "app_config" => __DIR__ . "/AppConfig.php",
-    "ajax" => APP_PATH . "/Actions/ajax.php",
-    "theme_options" => APP_PATH . "/CarbonFields/OptionFields.php",
-    //    'share_slugs'          => __DIR__.'/ShareSlugs.php',
-    //    'trans_strings'        => __DIR__.'/../app/Langs/strings.php',
+$modules = [
+     __DIR__ . '/Setup.php',
+    __DIR__ . '/Helpers.php',
+    __DIR__ . '/../config/app.php',
+    __DIR__ . '/PostType.php',
+    __DIR__ . '/AppConfig.php',
+    APP_PATH . '/Actions/ajax.php',
+    APP_PATH . '/CarbonFields/OptionFields.php',
+//   __DIR__.'/ShareSlugs.php',
+//   __DIR__.'/../app/Langs/strings.php',
 ];
 
-foreach ($data as $key => $value) {
-    require_once $value;
+foreach ($modules as $module) {
+    require_once $module;
 }

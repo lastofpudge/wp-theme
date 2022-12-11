@@ -5,5 +5,6 @@
  */
 
 use App\Controllers\PageController;
+use Core\Route;
 
-makeView(PageController::class, "about", "pages/about");
+Route::load(PageController::class, 'about', 'pages/pages');

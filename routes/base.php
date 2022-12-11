@@ -1,26 +1,27 @@
 <?php
 
 use App\Controllers\CategoryController;
-use App\Controllers\ErrorController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
 
+use Core\Route;
+
 if (is_category() || is_tag() || is_search()) {
-    makeView(CategoryController::class, "index", "categories/category");
+    Route::load(CategoryController::class, 'index', 'categories/category');
 }
 
 if (is_front_page()) {
-    makeView(PageController::class, "index", "index");
+    Route::load(PageController::class, 'index', 'index');
 }
 
 if (is_single()) {
-    makeView(PostController::class, "index", "posts/post");
+    Route::load(PostController::class, 'index', 'posts/post');
 }
 
 if (is_page()) {
-    makeView(PageController::class, "index", "pages/page");
+    Route::load(PageController::class, 'index', 'pages/page');
 }
 
 if (is_404()) {
-    makeView(ErrorController::class, "index", "pages/404");
+    Route::view('pages/404');
 }

@@ -31,7 +31,8 @@
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "App\\Admin\\": "app/Admin"
+      "App\\Admin\\": "app/Admin",
+      "Core\\": "core/"
     }
   },
   "config": {

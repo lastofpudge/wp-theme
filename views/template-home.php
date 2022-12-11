@@ -5,5 +5,6 @@
  */
 
 use App\Controllers\PageController;
+use Core\Route;
 
-makeView(PageController::class, "index", "pages/home");
+Route::load(PageController::class, 'index', 'pages/home');
