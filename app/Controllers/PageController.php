@@ -40,9 +40,9 @@ class PageController extends Controller
         }
 
         $args = [
-            'post_type' => 'post',
+            'post_type'      => 'post',
             'posts_per_page' => 10,
-            'paged' => $paged,
+            'paged'          => $paged,
         ];
 
         query_posts($args);

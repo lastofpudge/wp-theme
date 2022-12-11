@@ -44,7 +44,7 @@ if (version_compare(POLYLANG_VERSION, '1.7', '=<') || version_compare($GLOBALS['
  */
 function polylang_slug_admin_notices()
 {
-    echo '<div class="error"><p>' . __('Polylang Slug requires at the minimum Polylang v1.7 and WordPress 4.0', 'polylang-slug') . '</p></div>';
+    echo '<div class="error"><p>'.__('Polylang Slug requires at the minimum Polylang v1.7 and WordPress 4.0', 'polylang-slug').'</p></div>';
 }
 
 /**
@@ -157,7 +157,7 @@ function polylang_slug_filter_queries($query)
     $matches = array_values($matches);
 
     // SELECT, FROM, INNER JOIN, WHERE, WHERE CLAUSE (additional), ORBER BY (if included)
-    $sql_query = $matches[1] . $matches[2] . $join_clause . $matches[3] . $where_clause . $matches[4];
+    $sql_query = $matches[1].$matches[2].$join_clause.$matches[3].$where_clause.$matches[4];
 
     /**
      * Disable front end query modification.
