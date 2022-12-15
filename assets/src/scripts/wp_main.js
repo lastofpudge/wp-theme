@@ -1,3 +1,19 @@
+window.$ = window.jQuery = require("jquery");
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-right",
+  showClass: {
+    backdrop: "swal2-noanimation",
+    popup: "",
+    icon: "",
+  },
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+});
+
 $(function () {
   const preloader = $(".js-preloader-main");
 
@@ -25,33 +41,27 @@ $(function () {
 
         // $.magnificPopup.close();
         if (data.type === "success") {
-          new Noty({
-            theme: "mint",
-            text: data.message,
-            timeout: 5000,
-            progressBar: false,
-            closeWith: ["click", "button"],
-          }).show();
+          Toast.fire({
+            icon: "success",
+            iconColor: "#007cba",
+            title: data.message,
+          });
         } else {
-          new Noty({
-            theme: "mint",
-            type: "error",
-            text: data.sended?.errors?.wp_mail_failed[0] || data.message,
-            timeout: 5000,
-            progressBar: false,
-            closeWith: ["click", "button"],
-          }).show();
+          Toast.fire({
+            icon: "error",
+            iconColor: "red",
+            title: data.sended?.errors?.wp_mail_failed[0] || data.message,
+          });
         }
       },
       fail: function (errors) {
         preloader.removeClass("js-preloading");
-        new Noty({
-          theme: "mint",
-          text: "Error send email",
-          timeout: 5000,
-          progressBar: false,
-          closeWith: ["click", "button"],
-        }).show();
+
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          title: "Error send email",
+        });
         console.log(errors);
       },
     });

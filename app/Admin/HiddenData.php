@@ -10,9 +10,6 @@ class HiddenData
         add_action('init', [$this, 'unusedFeatures']);
     }
 
-    /**
-     * [unusedFeatures] Hide unused features.
-     */
     public function unusedFeatures()
     {
         remove_action('admin_print_styles', 'print_emoji_styles');

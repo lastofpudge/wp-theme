@@ -19,5 +19,5 @@ add_action('after_setup_theme', function () {
     Carbon_Fields::boot();
 });
 
-require_once BASE_PATH . '/core/vendor/autoload.php';
-require_once BASE_PATH . '/core/Autoload.php';
+require BASE_PATH . '/core/vendor/autoload.php';
+require BASE_PATH . '/core/Autoload.php';

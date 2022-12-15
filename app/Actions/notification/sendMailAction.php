@@ -8,7 +8,7 @@ $name = sanitize_text_field($_POST['name'] ?? '');
 $mail = sanitize_text_field($_POST['mail'] ?? '');
 
 if (empty($name) || empty($mail)) {
-    wp_send_json(['type' => 'error', 'message' => 'Please fill all required fields']);
+    wp_send_json(['type' => 'error', 'message' => 'Please fill in all required fields']);
 }
 
 $isSent = send_mail_cst('testMail', [

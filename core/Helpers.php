@@ -43,7 +43,7 @@ if (!function_exists('send_mail_cst')) {
     function send_mail_cst($filename, $data)
     {
         ob_start();
-        require_once __DIR__ . '/../views/emails/' . $filename . '.php';
+        require __DIR__ . '/../views/emails/' . $filename . '.php';
         $body = ob_get_contents();
         ob_end_clean();
 
@@ -75,11 +75,11 @@ if (!function_exists('add_ajax_action')) {
     function add_ajax_action($name)
     {
         add_action("wp_ajax_$name", function () use ($name) {
-            require_once APP_PATH . '/Actions/notification/' . $name . '.php';
+            require APP_PATH . '/Actions/notification/' . $name . '.php';
         });
 
         add_action("wp_ajax_nopriv_$name", function () use ($name) {
-            require_once APP_PATH . '/Actions/notification/' . $name . '.php';
+            require APP_PATH . '/Actions/notification/' . $name . '.php';
         });
     }
 }

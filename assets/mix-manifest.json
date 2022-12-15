@@ -1,4 +1,4 @@
 {
-    "/dist/js/bundle.js": "/dist/js/bundle.js",
-    "/dist/css/bundle.css": "/dist/css/bundle.css"
+    "/dist/js/wp_main.min.js": "/dist/js/wp_main.min.js",
+    "/dist/css/bundle.min.css": "/dist/css/bundle.min.css"
 }

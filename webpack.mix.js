@@ -10,9 +10,9 @@ mix.disableNotifications();
 // mix.browserSync('//local.dev/');
 
 mix
-  .sass("assets/src/styles/bundle.scss", "assets/dist/css/")
+  .sass("assets/src/styles/bundle.scss", "assets/dist/css/bundle.min.css")
   .options({
     processCssUrls: false,
     cssNano: { minifyFontValues: false },
   })
-  .js("assets/src/scripts/bundle.js", "assets/dist/js/bundle.js");
+  .js("assets/src/scripts/wp_main.js", "assets/dist/js/wp_main.min.js");
