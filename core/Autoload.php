@@ -9,13 +9,13 @@ new HiddenData();
 new PostTypes();
 
 $modules = [
-    __DIR__ . '/Setup.php',
-    __DIR__ . '/Helpers.php',
-    __DIR__ . '/../config/app.php',
-    __DIR__ . '/PostType.php',
-    __DIR__ . '/AppConfig.php',
-    APP_PATH . '/Actions/ajax.php',
-    APP_PATH . '/CarbonFields/OptionFields.php',
+    __DIR__.'/Setup.php',
+    __DIR__.'/Helpers.php',
+    __DIR__.'/../config/app.php',
+    __DIR__.'/PostType.php',
+    __DIR__.'/AppConfig.php',
+    APP_PATH.'/Actions/ajax.php',
+    APP_PATH.'/CarbonFields/OptionFields.php',
     //   __DIR__.'/ShareSlugs.php',
     //   __DIR__.'/../app/Langs/strings.php',
 ];
