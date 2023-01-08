@@ -23,22 +23,6 @@ if (!function_exists('crb_get_i18n_theme_option')) {
     }
 }
 
-/*
- * Write log helper
- */
-if (!function_exists('write_log')) {
-    function write_log($log)
-    {
-        if (true === WP_DEBUG) {
-            if (is_array($log) || is_object($log)) {
-                error_log(print_r($log, true));
-            } else {
-                error_log($log);
-            }
-        }
-    }
-}
-
 if (!function_exists('send_mail_cst')) {
     function send_mail_cst($filename, $data)
     {

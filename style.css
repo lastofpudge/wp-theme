@@ -1,9 +1,11 @@
 /*
 Theme Name: wp-theme
 Theme URI:https://github.com/lastofpudge/wp_theme
+Author: Andrii D.
 Version: 1.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 7.4
 Text Domain: wp-theme
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share with others
@@ -11,15 +13,14 @@ Use it to make something cool, have fun, and share with others
 
 /* =WordPress Core
 -------------------------------------------------------------- */
-.alignright{
-    float: right;
+.alignright {
+  float: right;
 }
 
-.alignleft{
-    float: left;
+.alignleft {
+  float: left;
 }
 
-.aligncenter{
-    text-align: center;
+.aligncenter {
+  text-align: center;
 }
-

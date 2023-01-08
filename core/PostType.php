@@ -24,8 +24,8 @@ class PostType
     public static function loadTax($post_type, $tax_url, $tax_name)
     {
         $labels = [
-            'name' => _x($tax_name, 'taxonomy general name'),
-            'singular_name' => _x('Category', 'taxonomy singular name'),
+            'name' => __($tax_name, 'taxonomy general name'),
+            'singular_name' => __('Category', 'taxonomy singular name'),
             'search_items' => __('Search'),
             'all_items' => __('All categories'),
             'parent_item' => __('Parent category'),

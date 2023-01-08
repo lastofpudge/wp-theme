@@ -16,7 +16,6 @@ $modules = [
     __DIR__ . '/AppConfig.php',
     APP_PATH . '/Actions/ajax.php',
     APP_PATH . '/CarbonFields/OptionFields.php',
-    //   __DIR__.'/ShareSlugs.php',
     //   __DIR__.'/../app/Langs/strings.php',
 ];
 
