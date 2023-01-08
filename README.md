@@ -1,4 +1,5 @@
-## Timber based WordPress starter theme
+Timber-based WordPress starter theme
+=======
 
 - use Timber with twig template engine
 - support custom routes/controllers
@@ -9,5 +10,5 @@
 
 ## How to use
 
-- use "composer install" in project folder
-- "yarn" && "npm run watch" to work with css/js
+- use `composer install` in the project folder
+- `yarn` && `npm run watch` to work with css/js
