@@ -19,8 +19,7 @@
     }
   ],
   "require": {
-    "php": "7.*|8.*",
-    "hellonico/timber-dump-extension": "^1.0",
+    "php": ">=7.4|8.*",
     "htmlburger/carbon-fields": "^3.3.4",
     "tightenco/collect": "^8.34.0",
     "timber/timber": "^1.22.1",
