@@ -7,7 +7,7 @@ class AppConfig
     /**
      * @var array
      */
-    private $config;
+    private array $config;
 
     public function __construct(array $config)
     {

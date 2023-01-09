@@ -5,11 +5,9 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <ul class="navbar-nav mr-auto">
             {% for item in left_menu.get_items %}
-              <li class="nav-item {{ item.classes|join(' ') }} {{
-                item.current
-                  ? 'active'
-                  : ''
-                }}">
+              <li class="nav-item {{ item.classes|join(' ') }} {{ item.current
+              ? 'active'
+              : '' }}">
                 <a class="nav-main-link" href="{{ item.get_link }}">
                   {{ item.title }}
                 </a>

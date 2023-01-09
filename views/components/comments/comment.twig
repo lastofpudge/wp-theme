@@ -1,8 +1,6 @@
-<div class="blog-comment {{ comment.comment_type }}"
-  id="blog-comment-{{ comment.ID }}">
+<div class="blog-comment {{ comment.comment_type }}" id="blog-comment-{{ comment.ID }}">
   <h5 class="comment-author">
-    {{ comment.author.name }} says
-  </h5>
+    {{ comment.author.name }} says </h5>
   <div class="comment-content">
     {{ comment.comment_content|wpautop }}
   </div>
@@ -10,8 +8,7 @@
     <!-- child comments -->
     {% if post.comments %}
       <h4>
-        replies
-      </h4>
+        replies </h4>
       <div class="comments comments-child">
         {% for cmt in comment.children %}
           {% include 'comment.twig' with {

@@ -5,30 +5,25 @@
     <h1>
       {{ post.title }}
     </h1>
-
     {% if post.thumbnail.src %}
       <img src="{{ post.thumbnail.src('full') }}" alt="" />
     {% endif %}
 
     {{ post.content }}
-
     <ul class="tag-list">
       {% for term in post.terms('tags') %}
         <li><a href="{{ term.link }}">{{ term.name }}</a></li>
       {% endfor %}
     </ul>
-
     <p class="byline">
       <span class="name">By {{ post.author.name }}</span>
       <span class="date">{{ post.post_date|date('F j, Y') }}</span>
     </p>
-
     <section class="comment-box">
       <div class="comments">
         {% if post.comments %}
           <h3>
-            comments
-          </h3>
+            comments </h3>
           {% for cmt in post.comments %}
             {% include 'components/comment.twig' with {
               comment: cmt
@@ -38,21 +33,17 @@
       </div>
       {% if post.comment_status == 'closed' %}
         <p>
-          comments for this post are closed
-        </p>
+          comments for this post are closed </p>
       {% else %}
         {% include 'components/comment-form.twig' %}
       {% endif %}
     </section>
-
-    {{
-      fn(
-        'edit_post_link',
-        'Edit',
-        '<span class="edit-link">',
-        '</span>',
-        post.ID
-      )
-    }}
+    {{ fn(
+      'edit_post_link',
+      'Edit',
+      '<span class="edit-link">',
+      '</span>',
+      post.ID
+    ) }}
   </div>
 {% endblock %}

@@ -1,43 +1,37 @@
 {% extends 'layouts/base.twig' %}
 
+
 {% block content %}
   <div class="post-wrap" id="post-{{ post.ID }}">
     {% if breads %}
       {{ breads }}
     {% endif %}
-
     <h1>
       {{ post.title }}
     </h1>
-
     {% if post.thumbnail.src %}
       <img src="{{ post.thumbnail.src('full') }}" alt="" />
     {% endif %}
 
     {{ post.content }}
-
     <ul class="tag-list">
       {% for term in post.terms('tags') %}
         <li><a href="{{ term.link }}">{{ term.name }}</a></li>
       {% endfor %}
     </ul>
-
     <p class="byline">
       <span class="name">By {{ post.author.name }}</span>
       <span class="date">{{ post.post_date|date('F j, Y') }}</span>
     </p>
-
     {% include 'components/comments/comment_wrapper.twig' %}
 
-    {{
-      fn(
-        'edit_post_link',
-        'Edit',
-        '<span class="edit-link">',
-        '</span>',
-        post.ID
-      )
-    }}
+    {{ fn(
+      'edit_post_link',
+      'Edit',
+      '<span class="edit-link">',
+      '</span>',
+      post.ID
+    ) }}
   </div>
   {# {{dump(post)}} #}
 {% endblock %}

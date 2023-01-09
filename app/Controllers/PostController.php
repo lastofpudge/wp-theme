@@ -9,7 +9,7 @@ class PostController extends Controller
     /**
      * @var array
      */
-    private $data;
+    private array $data;
 
     public function __construct()
     {

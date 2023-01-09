@@ -1,4 +1,5 @@
 {% if pagination.pages %}
+
   <div class="m-size m-size-pagin">
     <div class="pagination">
       <div class="m-pagin-cover">
@@ -6,13 +7,9 @@
         <ul>
           {% if pagination.prev %}
             <li>
-              <a rel="prev"
-                href="{{ pagination.prev.link }}"
-                class="prev {{
-                pagination.prev.link|length
-                  ? ''
-                  : 'invisible'
-                }}">
+              <a rel="prev" href="{{ pagination.prev.link }}" class="prev {{ pagination.prev.link|length
+              ? ''
+              : 'invisible' }}">
                 <span>Prev</span>
               </a>
             </li>
@@ -31,9 +28,8 @@
 
           {% if pagination.next %}
             <li class="next-link">
-              <a rel="next"
-                class="{{ pagination.next.link|length ? '' : 'invisible' }}"
-                href="{{ pagination.next.link }}">
+              <a rel="next" class="{{ pagination.next.link|length ? '' : 'invisible' }}"
+                 href="{{ pagination.next.link }}">
                 <span>Next</span>
               </a>
             </li>

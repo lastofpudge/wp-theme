@@ -10,7 +10,7 @@ class PageController extends Controller
     /**
      * @var array
      */
-    private $data;
+    private array $data;
 
     public function __construct()
     {
@@ -21,6 +21,7 @@ class PageController extends Controller
     public function index(): array
     {
         $this->data['post'] = new TimberPost();
+
         //$this->data['p_items'] = carbon_get_post_meta(get_the_ID(), 'p_items');
         return $this->data;
     }

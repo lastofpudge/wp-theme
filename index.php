@@ -1,3 +1,3 @@
 <?php
 
-require __DIR__ . '/routes/base.php';
+require BASE_PATH.'/routes/base.php';
