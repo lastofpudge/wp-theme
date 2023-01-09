@@ -7,4 +7,4 @@
 use App\Controllers\PageController;
 use Core\Route;
 
-Route::load(PageController::class, 'about', 'pages/pages');
+Route::load(PageController::class, 'about', 'pages/about');
