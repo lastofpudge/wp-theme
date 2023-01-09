@@ -36,21 +36,20 @@ $(function () {
       processData: false,
       contentType: false,
       data: form_data,
-      success: function (data, text) {
+      success: function (response) {
         preloader.removeClass("js-preloading");
 
-        // $.magnificPopup.close();
-        if (data.type === "success") {
+        if (response.type === "success") {
           Toast.fire({
             icon: "success",
             iconColor: "#007cba",
-            title: data.message,
+            title: response.message,
           });
         } else {
           Toast.fire({
             icon: "error",
             iconColor: "red",
-            title: data.sended?.errors?.wp_mail_failed[0] || data.message,
+            title: response.sended?.errors?.wp_mail_failed[0] || response.message,
           });
         }
       },
