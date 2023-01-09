@@ -3,7 +3,6 @@
 use App\Controllers\CategoryController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
-
 use Core\Route;
 
 if (is_category() || is_tag() || is_search()) {
