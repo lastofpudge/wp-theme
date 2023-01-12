@@ -12,26 +12,25 @@ class AppConfig
     public function __construct(array $config)
     {
         $this->config = $config;
-        self::checkBars();
-        add_action('admin_menu', [$this, 'hideItems']);
-        add_action('admin_menu', [$this, 'hideComments']);
-        add_action('admin_menu', [$this, 'hideTools']);
+        $this->configureAdminArea();
     }
 
-    /**
-     * show/hide admin bar.
-     */
-    public function checkBars()
+    public function configureAdminArea()
+    {
+        add_action('admin_menu', [$this, 'checkAdminBar']);
+        add_action('admin_menu', [$this, 'hideAdminItems']);
+        add_action('admin_menu', [$this, 'hideAdminComments']);
+        add_action('admin_menu', [$this, 'hideAdminTools']);
+    }
+
+    public function checkAdminBar()
     {
         if (!$this->config['show_admin_bar']) {
             add_filter('show_admin_bar', '__return_false');
         }
     }
 
-    /**
-     * hide admin posts and pages.
-     */
-    public function hideItems()
+    public function hideAdminItems()
     {
         if (!$this->config['show_posts']) {
             remove_menu_page('edit.php');
@@ -43,16 +42,7 @@ class AppConfig
         }
     }
 
-    public function hidePostAdd()
-    {
-        global $wp_admin_bar;
-        $wp_admin_bar->remove_menu('new-post');
-    }
-
-    /**
-     * hide comments.
-     */
-    public function hideComments()
+    public function hideAdminComments()
     {
         if (!$this->config['enable_comments']) {
             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
@@ -61,7 +51,7 @@ class AppConfig
         }
     }
 
-    public function hideTools()
+    public function hideAdminTools()
     {
         if (!$this->config['show_tools']) {
             remove_menu_page('tools.php');

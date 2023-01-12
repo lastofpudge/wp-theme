@@ -22,7 +22,6 @@ class PageController extends Controller
     {
         $this->data['post'] = new TimberPost();
 
-        //$this->data['p_items'] = carbon_get_post_meta(get_the_ID(), 'p_items');
         return $this->data;
     }
 
@@ -35,15 +34,10 @@ class PageController extends Controller
 
     public function list(): array
     {
-        global $paged;
-        if (!isset($paged) || !$paged) {
-            $paged = 1;
-        }
-
         $args = [
             'post_type' => 'post',
             'posts_per_page' => 10,
-            'paged' => $paged,
+            'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1,
         ];
 
         query_posts($args);
