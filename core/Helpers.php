@@ -47,7 +47,7 @@ add_action(
     'wp_mail_failed',
     function ($wp_error) {
         wp_send_json([
-            'type' => 'false',
+            'type'   => 'false',
             'sended' => $wp_error,
         ]);
     },

@@ -18,4 +18,3 @@ class Route
         Timber::render('views/'.$view.'.twig', [], false);
     }
 }
-

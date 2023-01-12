@@ -35,9 +35,9 @@ class PageController extends Controller
     public function list(): array
     {
         $args = [
-            'post_type' => 'post',
+            'post_type'      => 'post',
             'posts_per_page' => 10,
-            'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1,
+            'paged'          => (get_query_var('paged')) ? get_query_var('paged') : 1,
         ];
 
         query_posts($args);
