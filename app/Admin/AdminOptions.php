@@ -42,7 +42,7 @@ class AdminOptions
 
         wp_localize_script('wp_main', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('ajax-nonce'),
+            'nonce'    => wp_create_nonce('ajax-nonce'),
         ]);
     }
 
