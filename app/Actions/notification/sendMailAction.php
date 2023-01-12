@@ -18,7 +18,7 @@ $isSent = send_mail_cst('testMail', [
     'mail' => $mail,
 ]);
 
-if ($isSent != null) {
+if ($isSent) {
     wp_send_json([
         'type' => 'success',
         'message' => 'Your request has been successfully sent, thank you!',

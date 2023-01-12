@@ -1,10 +1,10 @@
 <?php
 
 if (!function_exists('crb_get_i18n_suffix')) {
-    function crb_get_i18n_suffix(): string
+    function crb_get_i18n_suffix(): ?string
     {
         if (!defined('ICL_LANGUAGE_CODE')) {
-            return '';
+            return null;
         }
 
         return '_'.ICL_LANGUAGE_CODE;
@@ -28,9 +28,7 @@ if (!function_exists('send_mail_cst')) {
     {
         ob_start();
         require __DIR__.'/../views/emails/'.$filename.'.php';
-        $body = ob_get_contents();
-        ob_end_clean();
-
+        $body = ob_get_clean();
         $admin_email = get_bloginfo('admin_email');
         $headers[] = 'Content-type: text/html; charset=utf-8';
         $sent = wp_mail($admin_email, $data['subject'], $body, $headers);
