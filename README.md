@@ -5,7 +5,7 @@ Timber-based WordPress starter theme
 - support custom routes/controllers
 - easy custom fields/posts integration
 - integrated ajax mail/actions
-- integrated multilang with Polylang plugin
+- integrated multilingual with Polylang plugin
 - support composer package manager
 
 ## How to use
