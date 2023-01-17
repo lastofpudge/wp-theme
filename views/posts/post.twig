@@ -10,7 +10,7 @@
       {{ post.title }}
     </h1>
     {% if post.thumbnail.src %}
-      <img src="{{ post.thumbnail.src('full') }}" alt="" />
+      <img src="{{ post.thumbnail.src('full') }}" alt="{{ post.title }}" title="{{ post.title }}" />
     {% endif %}
 
     {{ post.content }}
@@ -21,7 +21,7 @@
     </ul>
     <p class="byline">
       <span class="name">By {{ post.author.name }}</span>
-      <span class="date">{{ post.post_date|date('F j, Y') }}</span>
+      <time datetime="{{ post.post_date_gmt }}">{{ post.post_date|date('F j, Y') }}</time>
     </p>
     {% include 'components/comments/comment_wrapper.twig' %}
 
@@ -33,5 +33,4 @@
       post.ID
     ) }}
   </div>
-  {# {{dump(post)}} #}
 {% endblock %}
