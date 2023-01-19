@@ -3,12 +3,16 @@
 {% block content %}
   <div class="post-wrap" id="post-{{ post.ID }}">
     {{ post.title }}
-    
+
     {{ post.content }}
     <form action="?" class="js-contact-form">
-      <input type="text" name="name" />
-      <input type="text" name="mail" />
-      <button>submit</button>
+      <label>
+        <input type="text" name="name" />
+      </label>
+      <label>
+        <input type="text" name="mail" />
+      </label>
+      <button type="submit">submit</button>
     </form>
   </div>
 {% endblock %}
