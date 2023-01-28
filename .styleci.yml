@@ -3,9 +3,6 @@ version: 7.4
 tab-width: 4
 use-tabs: false
 
-concat_spacing:
-  enabled: true
-
 extend:
   - "@php_cs_fixer"
   - "@symfony"
