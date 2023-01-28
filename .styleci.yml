@@ -3,10 +3,6 @@ version: 7.4
 tab-width: 4
 use-tabs: false
 
-exclude:
-  - "node_modules/*"
-  - "vendor/*"
-
 concat_spacing:
   enabled: true
 
