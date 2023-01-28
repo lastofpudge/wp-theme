@@ -2,8 +2,3 @@ preset: psr12
 version: 7.4
 tab-width: 4
 use-tabs: false
-
-extend:
-  - "@php_cs_fixer"
-  - "@symfony"
-  - "@wp-style-guide"
