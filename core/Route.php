@@ -6,15 +6,20 @@ use Timber\Timber;
 
 class Route
 {
-    public static function load(string $controller, string $method, string $view)
+    public static function load(string $controller, string $method, string $view): void
     {
-        $controller = new $controller();
-
-        Timber::render('views/' . $view . '.twig', $controller->$method(), false);
+        $controllerInstance = new $controller();
+        $data = $controllerInstance->$method();
+        static::renderView($view, $data);
     }
 
-    public static function view(string $view)
+    public static function view(string $view): void
     {
-        Timber::render('views/' . $view . '.twig', [], false);
+        static::renderView($view, []);
+    }
+
+    private static function renderView(string $view, array $data): void
+    {
+        Timber::render('views/' . $view . '.twig', $data, false);
     }
 }

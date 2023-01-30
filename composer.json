@@ -1,7 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "description": "Wordpress starter theme with timber/twig",
+  "description": "Wordpress starter theme with Timber/Twig",
   "license": "GNU GPL",
   "authors": [
     {
@@ -19,11 +19,11 @@
     }
   ],
   "require": {
-    "php": ">=7.4|8.*",
+    "php": "^7.4|8.*",
     "htmlburger/carbon-fields": "^3.3.4",
     "tightenco/collect": "^8.34.0",
     "timber/timber": "^1.22.1",
-    "twig/twig": "2.*",
+    "twig/twig": "^2.0",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },
@@ -61,6 +61,6 @@
   },
   "require-dev": {
     "php-stubs/wordpress-stubs": "^5.4",
-    "squizlabs/php_codesniffer": "3.*"
+    "squizlabs/php_codesniffer": "^3.0"
   }
 }

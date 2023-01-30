@@ -1,67 +1,44 @@
 <?php
 
-if (!function_exists('crb_get_i18n_suffix')) {
-    function crb_get_i18n_suffix(): ?string
-    {
-        if (!defined('ICL_LANGUAGE_CODE')) {
-            return null;
-        }
-
-        return '_' . ICL_LANGUAGE_CODE;
-    }
-}
-
-/*
- * Translate string
- */
-if (!function_exists('crb_get_i18n_theme_option')) {
-    function crb_get_i18n_theme_option($option_name)
-    {
-        $suffix = crb_get_i18n_suffix();
-
-        return carbon_get_theme_option($option_name . $suffix);
-    }
-}
-
 if (!function_exists('send_mail_cst')) {
-    function send_mail_cst($filename, $data)
+    function send_mail_cst(string $filename, array $data)
+    {
+        $body = render_email_template($filename, $data);
+        $sent = send_email($data['subject'], $body);
+        return $sent ?: null;
+    }
+
+    function render_email_template(string $filename, array $data): string
     {
         ob_start();
         require __DIR__ . '/../views/emails/' . $filename . '.php';
-        $body = ob_get_clean();
+        return ob_get_clean();
+    }
+
+    function send_email(string $subject, string $body): bool
+    {
         $admin_email = get_bloginfo('admin_email');
         $headers[] = 'Content-type: text/html; charset=utf-8';
-        $sent = wp_mail($admin_email, $data['subject'], $body, $headers);
-
-        if ($sent) {
-            return $sent;
-        }
-
-        return null;
+        return wp_mail($admin_email, $subject, $body, $headers);
     }
 }
 
-add_action(
-    'wp_mail_failed',
-    function ($wp_error) {
-        wp_send_json([
-            'type'   => 'false',
-            'sended' => $wp_error,
-        ]);
-    },
-    10,
-    1
-);
+add_action('wp_mail_failed', function ($wp_error) {
+    wp_send_json(['type' => 'false', 'sended' => $wp_error]);
+});
 
 if (!function_exists('add_ajax_action')) {
-    function add_ajax_action($name)
+    function add_ajax_action(string $name)
     {
-        add_action("wp_ajax_$name", function () use ($name) {
-            require APP_PATH . '/Actions/notification/' . $name . '.php';
-        });
+        $action_path = APP_PATH . '/Actions/notification/' . $name . '.php';
+        add_ajax_action_impl($name, 'wp_ajax', $action_path);
+        add_ajax_action_impl($name, 'wp_ajax_nopriv', $action_path);
+    }
 
-        add_action("wp_ajax_nopriv_$name", function () use ($name) {
-            require APP_PATH . '/Actions/notification/' . $name . '.php';
+    function add_ajax_action_impl(string $name, string $hook, string $action_path)
+    {
+        add_action($hook . "_$name", function () use ($action_path) {
+            require $action_path;
         });
     }
 }
