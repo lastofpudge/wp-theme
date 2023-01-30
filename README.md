@@ -1,5 +1,13 @@
+<a href="https://github.styleci.io/repos/79059090/shield" target="_blank" rel="noopener noreferrer"><img src="https://github.styleci.io/repos/79059090/shield" alt="StyleCI"></a>
+
 Timber-based WordPress starter theme
 =======
+
+## Requirements
+
+- PHP 7.4 or higher.
+
+## Features
 
 - use Timber with twig template engine
 - support custom routes/controllers
