@@ -16,7 +16,10 @@ class AdminOptions
 
     public function index()
     {
-        add_theme_support('html5', ['caption', 'comment-form', 'comment-list', 'gallery', 'search-form', 'script', 'style']);
+        add_theme_support('html5', [
+            'caption', 'comment-form',
+            'comment-list', 'gallery', 'search-form', 'script', 'style'
+        ]);
         remove_theme_support('block-templates');
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
@@ -45,7 +48,7 @@ class AdminOptions
 
         wp_localize_script('wp_main', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('ajax-nonce'),
+            'nonce'    => wp_create_nonce('ajax-nonce'),
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Timber\Post as TimberPost;
+use Timber\PostQuery as TimberQuery;
 use Timber\Timber;
 
 class PageController extends Controller
@@ -42,7 +43,7 @@ class PageController extends Controller
 
         query_posts($args);
 
-        $this->data['posts'] = new Timber\PostQuery($args);
+        $this->data['posts'] = new TimberQuery($args);
         $this->data['pagination'] = Timber::get_pagination();
         $this->data['categories'] = Timber::get_terms('category');
 
