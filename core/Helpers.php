@@ -11,7 +11,7 @@ if (!function_exists('send_mail_cst')) {
     function render_email_template(string $filename, array $data): string
     {
         ob_start();
-        require __DIR__ . '/../views/emails/' . $filename . '.php';
+        require BASE_PATH . '/resources/views/emails/' . $filename . '.php';
         return ob_get_clean();
     }
 

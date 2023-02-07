@@ -1,0 +1,13 @@
+/* =WordPress Core
+-------------------------------------------------------------- */
+.alignright {
+  float: right;
+}
+
+.alignleft {
+  float: left;
+}
+
+.aligncenter {
+  text-align: center;
+}

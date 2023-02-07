@@ -33,14 +33,15 @@ class AdminOptions
 
     public function registerScripts()
     {
+        wp_enqueue_style('wp_main_css', get_theme_file_uri('/resources/style.css'), [], false);
+        wp_enqueue_style('wp_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'), [], false);
+
         wp_enqueue_script(
             'wp_main',
-            get_theme_file_uri('/assets/dist/js/wp_main.min.js'),
+            get_theme_file_uri('/resources/assets/dist/js/wp_main.min.js'),
             [],
-            filemtime(get_theme_file_path('/assets/dist/js/wp_main.min.js'))
+            filemtime(get_theme_file_path('/resources/assets/dist/js/wp_main.min.js'))
         );
-
-        wp_enqueue_style('wp_bundle_css', get_theme_file_uri('/assets/dist/css/bundle.min.css'), [], false);
 
         wp_localize_script('wp_main', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),

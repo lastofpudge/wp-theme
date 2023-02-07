@@ -17,7 +17,7 @@ class AppConfig
 
     public function configureAdminArea()
     {
-        add_action('admin_menu', [$this, 'checkAdminBar']);
+        $this->checkAdminBar();
         add_action('admin_menu', [$this, 'hideAdminItems']);
         add_action('admin_menu', [$this, 'hideAdminComments']);
         add_action('admin_menu', [$this, 'hideAdminTools']);
@@ -34,7 +34,7 @@ class AppConfig
     {
         if (!$this->config['show_posts']) {
             remove_menu_page('edit.php');
-            add_action('wp_before_admin_bar_render', [$this, 'hidePostAdd']);
+            add_action('admin_menu', 'remove_posts_menu');
         }
 
         if (!$this->config['show_pages']) {

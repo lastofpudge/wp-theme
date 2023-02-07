@@ -1,12 +1,12 @@
 let mix = require("laravel-mix");
 
-mix.setPublicPath("assets");
+mix.setPublicPath("resources");
 mix.disableNotifications();
 
 mix
-  .sass("assets/src/styles/bundle.scss", "assets/dist/css/bundle.min.css")
+  .sass("resources/assets/src/styles/bundle.scss", "resources/assets/dist/css/bundle.min.css")
   .options({
     processCssUrls: false,
     cssNano: { minifyFontValues: false },
   })
-  .js("assets/src/scripts/wp_main.js", "assets/dist/js/wp_main.min.js");
+  .js("resources/assets/src/scripts/wp_main.js", "resources/assets/dist/js/wp_main.min.js");

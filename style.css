@@ -6,20 +6,7 @@ License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Text Domain: wp-theme
+Template: wp-theme/resources
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share with others
 */
-
-/* =WordPress Core
--------------------------------------------------------------- */
-.alignright {
-  float: right;
-}
-
-.alignleft {
-  float: left;
-}
-
-.aligncenter {
-  text-align: center;
-}
