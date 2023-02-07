@@ -24,6 +24,7 @@
     "tightenco/collect": "^8.34.0",
     "timber/timber": "^1.22.1",
     "twig/twig": "^2.0",
+    "vlucas/phpdotenv": "^5.5",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },

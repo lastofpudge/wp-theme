@@ -20,11 +20,22 @@ if (!function_exists('send_mail_cst')) {
 
     function send_email(string $subject, string $body): bool
     {
-        $admin_email = get_bloginfo('admin_email');
-        $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: '.$admin_email;
+        if ($_ENV['MAIL_FROM_ADDRESS']) {
+            $from_email = $_ENV['MAIL_FROM_ADDRESS'];
+        } else {
+            $from_email = get_bloginfo('admin_email');
+        }
 
-        $response = wp_mail($admin_email, $subject, $body, $headers);
+        if ($_ENV['MAIL_TO_ADDRESS']) {
+            $to_email = $_ENV['MAIL_TO_ADDRESS'];
+        } else {
+            $to_email = get_bloginfo('admin_email');
+        }
+
+        $headers[] = 'Content-type: text/html; charset=utf-8';
+        $headers[] = 'From: '.$from_email;
+
+        $response = wp_mail($to_email, $subject, $body, $headers);
 
         return $response;
     }

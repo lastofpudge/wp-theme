@@ -58,6 +58,3 @@ class AppConfig
         }
     }
 }
-
-/** @var array $config */
-new AppConfig($config);
