@@ -4,11 +4,11 @@ use App\Admin\AdminOptions;
 use App\Admin\HiddenData;
 
 $modules = [
-    __DIR__.'/Helpers.php',
-    __DIR__.'/../config/app.php',
-    __DIR__.'/PostType.php',
-    APP_PATH.'/Actions/ajax.php',
-    APP_PATH.'/CarbonFields/OptionFields.php',
+    __DIR__ . '/Helpers.php',
+    __DIR__ . '/../config/app.php',
+    __DIR__ . '/PostType.php',
+    APP_PATH . '/Actions/ajax.php',
+    APP_PATH . '/CarbonFields/OptionFields.php',
 ];
 
 foreach ($modules as $module) {
@@ -20,5 +20,5 @@ new \Core\AppConfig($config);
 new AdminOptions();
 new HiddenData();
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
