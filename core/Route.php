@@ -18,7 +18,7 @@ class Route
 
     private static function renderView(string $view, array $data): void
     {
-        Timber::render('views/'.$view.'.twig', $data);
+        Timber::render('views/' . $view . '.twig', $data);
     }
 
     public static function view(string $view): void
