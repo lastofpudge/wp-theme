@@ -13,6 +13,7 @@ class AppConfig
     {
         $this->config = $config;
         $this->configureAdminArea();
+        $this->configureErrorsNotifications();
     }
 
     public function configureAdminArea()
@@ -21,6 +22,13 @@ class AppConfig
         add_action('admin_menu', [$this, 'hideAdminItems']);
         add_action('admin_menu', [$this, 'hideAdminComments']);
         add_action('admin_menu', [$this, 'hideAdminTools']);
+    }
+
+    public function configureErrorsNotifications()
+    {
+        add_action('wp_mail_failed', function ($wp_error) {
+            wp_send_json(['type' => 'false', 'sended' => $wp_error]);
+        });
     }
 
     public function checkAdminBar()

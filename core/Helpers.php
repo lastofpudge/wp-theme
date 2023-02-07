@@ -13,7 +13,7 @@ if (!function_exists('send_mail_cst')) {
 
     function render_email_template(string $filename, array $data): string
     {
-        $compiled = Timber::compile('/resources/views/emails/'.$filename.'.twig', $data);
+        $compiled = Timber::compile('/resources/views/emails/' . $filename . '.twig', $data);
 
         return $compiled;
     }
@@ -33,7 +33,7 @@ if (!function_exists('send_mail_cst')) {
         }
 
         $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: '.$from_email;
+        $headers[] = 'From: ' . $from_email;
 
         $response = wp_mail($to_email, $subject, $body, $headers);
 
@@ -41,21 +41,17 @@ if (!function_exists('send_mail_cst')) {
     }
 }
 
-add_action('wp_mail_failed', function ($wp_error) {
-    wp_send_json(['type' => 'false', 'sended' => $wp_error]);
-});
-
 if (!function_exists('add_ajax_action')) {
     function add_ajax_action(string $name)
     {
-        $action_path = APP_PATH.'/Actions/notification/'.$name.'.php';
+        $action_path = APP_PATH . '/Actions/notification/' . $name . '.php';
         add_ajax_action_impl($name, 'wp_ajax', $action_path);
         add_ajax_action_impl($name, 'wp_ajax_nopriv', $action_path);
     }
 
     function add_ajax_action_impl(string $name, string $hook, string $action_path)
     {
-        add_action($hook."_$name", function () use ($action_path) {
+        add_action($hook . "_$name", function () use ($action_path) {
             require $action_path;
         });
     }
