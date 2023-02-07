@@ -1,6 +1,6 @@
 let mix = require("laravel-mix");
 
-mix.setPublicPath("resources");
+mix.setPublicPath("resources/assets/dist");
 mix.disableNotifications();
 
 mix
