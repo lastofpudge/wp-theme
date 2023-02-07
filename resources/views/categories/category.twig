@@ -12,22 +12,22 @@
       </h2>
       <p class="entry-meta">
         Posted:
-        <time datetime="{{ post.post_date_gmt }}">{{ post.post_date_gmt|time_ago }}</time>
+        <time datetime="{{ post.post_date_gmt }}">
+          {{ post.post_date_gmt|time_ago }}
+        </time>
       </p>
       {% if post.get_thumbnail %}
         <img src="{{ post.thumbnail.src }}" alt="{{ post.title }}" />
       {% else %}
-        <img src="{{ theme.path }}/assets/dist/images/placeholders/no-image-default.png" alt="" />
+        <img src="{{
+          theme.path
+          }}/assets/dist/images/placeholders/no-image-default.png"
+          alt="" />
       {% endif %}
       <div class="clear">
         {{ post.preview.length(10).read_more('') }}
       </div>
-      {{ function(
-        'edit_post_link',
-        'Edit',
-        '<span class="edit-link">',
-        '</span>'
-      ) }}
+      {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
     </div>
   {% endfor %}
 
