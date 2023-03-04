@@ -33,7 +33,16 @@
       "App\\": "app/",
       "App\\Admin\\": "app/Admin",
       "Core\\": "core/"
-    }
+    },
+     "files": [
+       "./core/Helpers.php",
+       "./config/app.php",
+       "./core/PostType.php",
+       "./app/Actions/ajax.php",
+       "./app/CarbonFields/OptionFields.php",
+       "./app/CarbonFields/PostFields.php",
+       "./app/CarbonFields/Blocks.php"
+     ]
   },
   "config": {
     "vendor-dir": "core/vendor",
