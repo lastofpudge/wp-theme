@@ -1,0 +1,11 @@
+.block__example{
+  min-width: 320px;
+  display: inline-block;
+  padding: 15px;
+  background-color: tan;
+}
+
+.block__example .block__image{
+  max-width: 100px;
+  height: auto;
+}
