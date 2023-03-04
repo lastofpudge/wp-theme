@@ -1,6 +1,8 @@
 <?php
 
 use Carbon_Fields\Carbon_Fields;
+use Carbon_Fields\Block;
+use Carbon_Fields\Field;
 
 const APP_PATH = __DIR__ . '/../app';
 const BASE_PATH = __DIR__ . '/..';

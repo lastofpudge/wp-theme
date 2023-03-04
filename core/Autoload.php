@@ -9,6 +9,8 @@ $modules = [
     __DIR__ . '/PostType.php',
     APP_PATH . '/Actions/ajax.php',
     APP_PATH . '/CarbonFields/OptionFields.php',
+    APP_PATH . '/CarbonFields/PostFields.php',
+    APP_PATH . '/CarbonFields/Blocks.php',
 ];
 
 foreach ($modules as $module) {
