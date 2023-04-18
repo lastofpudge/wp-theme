@@ -2,7 +2,7 @@
   "name": "theme/blank",
   "type": "wp-theme",
   "description": "Wordpress starter theme with Timber/Twig",
-  "license": "GNU GPL",
+  "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Andrii Dudin",
@@ -10,7 +10,11 @@
     }
   ],
   "keywords": [
-    "WordPress"
+    "WordPress",
+    "theme",
+    "starter",
+    "timber",
+    "twig"
   ],
   "repositories": [
     {
@@ -35,23 +39,20 @@
       "Core\\": "core/"
     },
      "files": [
-       "./core/Helpers.php",
-       "./config/app.php",
-       "./core/PostType.php",
-       "./app/Actions/ajax.php",
-       "./app/CarbonFields/OptionFields.php",
-       "./app/CarbonFields/PostFields.php",
-       "./app/CarbonFields/Blocks.php"
+       "core/Helpers.php",
+       "core/PostType.php",
+       "config/app.php",
+       "app/Actions/ajax.php",
+       "app/CarbonFields/OptionFields.php",
+       "app/CarbonFields/PostFields.php",
+       "app/CarbonFields/Blocks.php"
      ]
   },
   "config": {
     "vendor-dir": "core/vendor",
     "sort-packages": true,
     "optimize-autoloader": true,
-    "platform-check": false,
-    "allow-plugins": {
-      "composer/installers": true
-    }
+    "platform-check": false
   },
   "scripts": {
     "lint": [

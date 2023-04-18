@@ -11,7 +11,7 @@ class PageController extends Controller
     /**
      * @var array
      */
-    private array $data;
+    private array $data = [];
 
     public function __construct()
     {
