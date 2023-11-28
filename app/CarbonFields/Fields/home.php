@@ -3,7 +3,7 @@
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
-Container::make('post_meta', 'Fields for Homepage' )
+Container::make('post_meta', 'Fields for Homepage')
     ->where('post_type', '=', 'page')
     ->where('post_template', '=', 'views/template-home.php')
     ->add_fields([
