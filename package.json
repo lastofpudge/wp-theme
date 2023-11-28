@@ -14,7 +14,7 @@
     "git-commit-msg-linter": "^4.4.0",
     "laravel-mix": "^6.0.6",
     "lodash": "^4.17.19",
-    "postcss": "^8.1.14",
+    "postcss": "^8.4.31",
     "prettier": "^2.8.1",
     "prettier-plugin-twig-melody": "^0.4.6",
     "resolve-url-loader": "^3.1.0",
