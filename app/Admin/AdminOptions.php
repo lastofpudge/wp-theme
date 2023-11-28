@@ -2,7 +2,7 @@
 
 namespace App\Admin;
 
-use Timber\Menu;
+use Timber\Timber;
 
 class AdminOptions
 {
@@ -54,7 +54,7 @@ class AdminOptions
 
     public function registerContext($context)
     {
-        $context['left_menu'] = new Menu('left_menu');
+        $context['left_menu'] = Timber::get_menu('left_menu');
 
         return $context;
     }

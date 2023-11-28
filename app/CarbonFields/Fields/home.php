@@ -3,13 +3,13 @@
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
-Container::make('post_meta', __('Fields for Home', 'crb'))
+Container::make('post_meta', 'Fields for Homepage' )
     ->where('post_type', '=', 'page')
     ->where('post_template', '=', 'views/template-home.php')
     ->add_fields([
-        Field::make('text', 'th_sub_title', 'Subtitle'),
-        Field::make('text', 'th_sub_title2', 'Description'),
-        Field::make('rich_text', 'th_sub_title3', 'Rich text'),
+        Field::make('text', 'sub_title', 'Subtitle'),
+        Field::make('text', 'description', 'Description'),
+        Field::make('rich_text', 'textarea', 'Rich text'),
     ])
     ->add_tab(__('Complex'), [
         Field::make('complex', 'tech_items', 'Technologies list')->add_fields([

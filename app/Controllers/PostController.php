@@ -14,12 +14,12 @@ class PostController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->data = Timber::get_context();
+        $this->data = Timber::context();
     }
 
     public function index(): array
     {
-        $this->data['post'] = Timber::query_post();
+        $this->data['post'] = Timber::get_post();
 
         return $this->data;
     }

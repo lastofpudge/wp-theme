@@ -11,16 +11,18 @@ if (empty($name) || empty($mail)) {
     wp_send_json(['type' => 'error', 'message' => 'Please fill in all required fields']);
 }
 
-$isSent = send_mail_cst('test', [
+$isMailSent = send_custom_mail('test', [
     'subject' => 'test form',
     'site_name' => get_bloginfo('name'),
     'name' => $name,
     'mail' => $mail,
 ]);
 
-if ($isSent) {
+if ($isMailSent) {
     wp_send_json([
-        'type' => 'success',
+        'type'    => 'success',
         'message' => 'Your request has been successfully sent, thank you!',
     ]);
+} else {
+    wp_send_json(['type' => 'error', 'message' => 'Error sending email', 'error' => $isMailSent]);
 }

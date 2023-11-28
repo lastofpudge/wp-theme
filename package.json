@@ -22,7 +22,7 @@
     "sass-loader": "^8.0.0"
   },
   "dependencies": {
-    "jquery": "^3.6.2",
+    "jquery": "^3.7.1",
     "sweetalert2": "^11.6.15"
   }
 }

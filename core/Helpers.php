@@ -2,42 +2,35 @@
 
 use Timber\Timber;
 
-if (!function_exists('send_mail_cst')) {
-    function send_mail_cst(string $filename, array $data): ?bool
+if (!function_exists('send_custom_mail')) {
+    function send_custom_mail(string $templateFilename, array $templateData): ?bool
     {
-        $body = render_email_template($filename, $data);
-        $sent = send_email($data['subject'], $body);
+        $emailBody = compile_email_template($templateFilename, $templateData);
+        $isSent = dispatch_email($templateData['subject'], $emailBody);
 
-        return $sent ?: null;
+        return $isSent ?: null;
     }
 
-    function render_email_template(string $filename, array $data): string
+    function compile_email_template(string $filename, array $data): string
     {
-        $compiled = Timber::compile('/resources/views/emails/' . $filename . '.twig', $data);
+        $compiledTemplate = Timber::compile('/resources/views/emails/' . $filename . '.twig', $data);
 
-        return $compiled;
+        return $compiledTemplate;
     }
 
-    function send_email(string $subject, string $body): bool
+    function dispatch_email(string $subject, string $body): bool
     {
-        if ($_ENV['MAIL_FROM_ADDRESS']) {
-            $from_email = $_ENV['MAIL_FROM_ADDRESS'];
-        } else {
-            $from_email = get_bloginfo('admin_email');
-        }
+        $adminEmail = get_option('admin_email');
 
-        if ($_ENV['MAIL_TO_ADDRESS']) {
-            $to_email = $_ENV['MAIL_TO_ADDRESS'];
-        } else {
-            $to_email = get_bloginfo('admin_email');
-        }
+        $fromEmail = $_ENV['MAIL_FROM_ADDRESS'] ?? $adminEmail;
+        $toEmail = $_ENV['MAIL_TO_ADDRESS'] ?? $adminEmail;
 
         $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: ' . $from_email;
+        $headers[] = 'From: ' . $fromEmail;
 
-        $response = wp_mail($to_email, $subject, $body, $headers);
+        $isEmailSent = wp_mail($toEmail, $subject, $body, $headers);
 
-        return $response;
+        return $isEmailSent;
     }
 }
 

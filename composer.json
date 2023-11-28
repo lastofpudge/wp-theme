@@ -24,11 +24,11 @@
   ],
   "require": {
     "php": "^7.4|8.*",
-    "htmlburger/carbon-fields": "^3.3.4",
-    "tightenco/collect": "^8.34.0",
-    "timber/timber": "^1.22.1",
-    "twig/twig": "^2.10",
-    "vlucas/phpdotenv": "^5.5",
+    "htmlburger/carbon-fields": "^3.6.2",
+    "tightenco/collect": "^9.52.7",
+    "timber/timber": "^2.0.0",
+    "twig/twig": "^v3.8.0",
+    "vlucas/phpdotenv": "^v5.6.0",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },

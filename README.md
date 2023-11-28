@@ -9,11 +9,11 @@ Timber-based WordPress starter theme
 
 ## Features
 
-- use Timber with twig template engine
-- support custom routes/controllers
+- using Timber 2 with twig template engine
+- support custom controllers
 - easy custom fields/posts integration
 - integrated ajax mail/actions
-- integrated multilingual with Polylang plugin
+- env file support
 - support composer package manager
 
 ## How to use

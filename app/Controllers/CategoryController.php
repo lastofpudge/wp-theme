@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use Timber\Term as TimberTerm;
 use Timber\Timber;
 
 class CategoryController extends Controller
@@ -15,13 +14,12 @@ class CategoryController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->data = Timber::get_context();
+        $this->data = Timber::context();
     }
 
     public function index(): array
     {
-        $this->data['term'] = new TimberTerm();
-        $this->data['pagination'] = Timber::get_pagination();
+        $this->data['term'] = Timber::get_term();
         $this->data['posts'] = Timber::get_posts();
 
         return $this->data;
