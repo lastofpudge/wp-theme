@@ -3,6 +3,13 @@
 use Timber\Timber;
 
 if (!function_exists('send_custom_mail')) {
+    /**
+     * Send a custom email.
+     *
+     * @param string $templateFilename
+     * @param array $templateData
+     * @return bool|null
+     */
     function send_custom_mail(string $templateFilename, array $templateData): ?bool
     {
         $emailBody = compile_email_template($templateFilename, $templateData);
@@ -11,6 +18,13 @@ if (!function_exists('send_custom_mail')) {
         return $isSent ?: null;
     }
 
+    /**
+     * Compile an email template.
+     *
+     * @param string $filename
+     * @param array $data
+     * @return string
+     */
     function compile_email_template(string $filename, array $data): string
     {
         $compiledTemplate = Timber::compile('/resources/views/emails/' . $filename . '.twig', $data);
@@ -18,6 +32,13 @@ if (!function_exists('send_custom_mail')) {
         return $compiledTemplate;
     }
 
+    /**
+     * Dispatch an email.
+     *
+     * @param string $subject
+     * @param string $body
+     * @return bool
+     */
     function dispatch_email(string $subject, string $body): bool
     {
         $adminEmail = get_option('admin_email');

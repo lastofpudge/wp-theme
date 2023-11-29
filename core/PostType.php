@@ -7,7 +7,18 @@ namespace Core;
  */
 class PostType
 {
-    public static function register($url, $name, $singular, $public, $has_archive, $menu_icon, $supports)
+    /**
+     * Register a custom post type.
+     *
+     * @param string $url
+     * @param string $name
+     * @param string $singular
+     * @param bool $public
+     * @param bool $hasArchive
+     * @param string $menuIcon
+     * @param array $supports
+     */
+    public static function register($url, $name, $singular, $public, $hasArchive, $menuIcon, $supports)
     {
         register_post_type($url, [
             'labels' => [
@@ -15,20 +26,27 @@ class PostType
                 'singular_name' => __($singular),
             ],
             'public' => $public,
-            'has_archive' => $has_archive,
-            'menu_icon' => $menu_icon,
+            'has_archive' => $hasArchive,
+            'menu_icon' => $menuIcon,
             'supports' => $supports,
         ]);
     }
 
-    public static function loadTax($post_type, $tax_url, $tax_name)
+    /**
+     * Register a custom taxonomy.
+     *
+     * @param string $postType
+     * @param string $taxUrl
+     * @param string $taxName
+     */
+    public static function loadTax($postType, $taxUrl, $taxName)
     {
         register_taxonomy(
-            $tax_url,
-            [$post_type],
+            $taxUrl,
+            [$postType],
             [
                 'labels' => [
-                    'name' => __($tax_name),
+                    'name' => __($taxName),
                     'singular_name' => __('Category'),
                     'search_items' => __('Search'),
                     'all_items' => __('All categories'),

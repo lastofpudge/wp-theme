@@ -4,17 +4,13 @@
   <div class="post-wrap" id="post-{{ post.ID }}">
     {{ post.title }}
 
-    {{ post._sub_title }}
+    {# {{ post._sub_title }} #}
 
     {{ post.content }}
 
     <form action="?" class="js-contact-form">
-      <label>
-        <input type="text" name="name" />
-      </label>
-      <label>
-        <input type="text" name="mail" />
-      </label>
+      <label><input type="text" name="name" /></label>
+      <label><input type="text" name="mail" /></label>
       <button type="submit">submit</button>
     </form>
   </div>

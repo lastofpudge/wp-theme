@@ -20,9 +20,9 @@ $isMailSent = send_custom_mail('test', [
 
 if ($isMailSent) {
     wp_send_json([
-        'type'    => 'success',
+        'type' => 'success',
         'message' => 'Your request has been successfully sent, thank you!',
     ]);
 } else {
-    wp_send_json(['type' => 'error', 'message' => 'Error sending email', 'error' => $isMailSent]);
+    wp_send_json(['type' => 'error', 'message' => 'Error sending email']);
 }
