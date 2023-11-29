@@ -38,15 +38,16 @@
       "App\\Admin\\": "app/Admin",
       "Core\\": "core/"
     },
-     "files": [
-       "core/Helpers.php",
-       "core/PostType.php",
-       "config/app.php",
-       "app/Actions/ajax.php",
-       "app/CarbonFields/OptionFields.php",
-       "app/CarbonFields/PostFields.php",
-       "app/CarbonFields/Blocks.php"
-     ]
+    "files": [
+      "core/Initialize.php",
+      "core/Helpers.php",
+      "core/PostType.php",
+      "config/app.php",
+      "app/Actions/ajax.php",
+      "app/CarbonFields/OptionFields.php",
+      "app/CarbonFields/PostFields.php",
+      "app/CarbonFields/Blocks.php"
+    ]
   },
   "config": {
     "vendor-dir": "core/vendor",
