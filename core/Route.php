@@ -12,7 +12,7 @@ class Route
      * @param string $controller The fully qualified class name of the controller.
      * @param string $method The method to call on the controller.
      * @param string $view The view file to render.
-     * 
+     *
      * @throws \Exception If the controller or method does not exist.
      */
     public static function load(string $controller, string $method, string $view): void
