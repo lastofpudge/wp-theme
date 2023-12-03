@@ -20,10 +20,14 @@ export function initContactForm() {
     event.preventDefault();
 
     const form = $(this);
-
     preloader.addClass("js-preloading");
 
-    const formData = buildFormData(form);
+    const formData = new FormData();
+
+    formData.append("name", form.find('input[name="name"]').val());
+    formData.append("mail", form.find('input[name="mail"]').val());
+    formData.append("action", "sendMail");
+    formData.append("nonce", data.nonce);
 
     $.ajax({
       type: "POST",
@@ -45,17 +49,6 @@ export function initContactForm() {
 
     form.trigger("reset");
   });
-}
-
-function buildFormData(form) {
-  const formData = new FormData();
-
-  formData.append("name", form.find('input[name="name"]').val());
-  formData.append("mail", form.find('input[name="mail"]').val());
-  formData.append("action", "sendMail");
-  formData.append("nonce", data.nonce);
-
-  return formData;
 }
 
 function handleSuccess(response, Toast) {

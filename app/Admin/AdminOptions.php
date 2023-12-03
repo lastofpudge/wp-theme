@@ -41,17 +41,17 @@ class AdminOptions
 
     public function registerScripts()
     {
-        wp_enqueue_style('wp_main_css', get_theme_file_uri('/resources/style.css'), [], false);
-        wp_enqueue_style('wp_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'), [], false);
+        wp_enqueue_style('app_css', get_theme_file_uri('/resources/style.css'), [], false);
+        wp_enqueue_style('app_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'), [], false);
 
         wp_enqueue_script(
-            'wp_main',
-            get_theme_file_uri('/resources/assets/dist/js/wp_main.min.js'),
+            'app',
+            get_theme_file_uri('/resources/assets/dist/js/app.min.js'),
             [],
-            filemtime(get_theme_file_path('/resources/assets/dist/js/wp_main.min.js'))
+            filemtime(get_theme_file_path('/resources/assets/dist/js/app.min.js'))
         );
 
-        wp_localize_script('wp_main', 'data', [
+        wp_localize_script('app', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('ajax-nonce'),
         ]);

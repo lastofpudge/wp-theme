@@ -9,4 +9,4 @@ mix
     processCssUrls: false,
     cssNano: { minifyFontValues: false },
   })
-  .js("resources/assets/src/scripts/wp_main.js", "resources/assets/dist/js/wp_main.min.js");
+  .js("resources/assets/src/scripts/app.js", "resources/assets/dist/js/app.min.js");

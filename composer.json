@@ -25,7 +25,6 @@
   "require": {
     "php": "^7.4|8.*",
     "htmlburger/carbon-fields": "^3.6.3",
-    "tightenco/collect": "^8.83.27",
     "timber/timber": "^2.0.0",
     "twig/twig": "^v3.8.0",
     "vlucas/phpdotenv": "^v5.6.0",
@@ -53,7 +52,10 @@
     "vendor-dir": "core/vendor",
     "sort-packages": true,
     "optimize-autoloader": true,
-    "platform-check": false
+    "platform-check": false,
+    "allow-plugins": {
+      "composer/installers": true
+    }
   },
   "scripts": {
     "lint": [
