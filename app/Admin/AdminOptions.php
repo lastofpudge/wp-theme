@@ -8,13 +8,13 @@ class AdminOptions
 {
     public function __construct()
     {
-        self::index();
+        $this->index();
         add_action('init', [$this, 'registerMenus']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
         add_filter('timber_context', [$this, 'registerContext']);
     }
 
-    public function index()
+    public function index(): void
     {
         add_theme_support('html5', [
             'caption',
@@ -32,14 +32,14 @@ class AdminOptions
         add_theme_support('responsive-embeds');
     }
 
-    public function registerMenus()
+    public function registerMenus(): void
     {
         register_nav_menus([
             'left_menu' => 'Left menu',
         ]);
     }
 
-    public function registerScripts()
+    public function registerScripts(): void
     {
         wp_enqueue_style('app_css', get_theme_file_uri('/resources/style.css'), [], false);
         wp_enqueue_style('app_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'), [], false);
@@ -57,7 +57,7 @@ class AdminOptions
         ]);
     }
 
-    public function registerContext($context)
+    public function registerContext($context): array
     {
         $context['left_menu'] = Timber::get_menu('left_menu');
 

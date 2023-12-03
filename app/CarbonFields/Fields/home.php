@@ -8,7 +8,6 @@ Container::make('post_meta', 'Fields for Homepage')
     ->where('post_template', '=', 'views/template-home.php')
     ->add_fields([
         Field::make('text', 'sub_title', 'Subtitle'),
-        Field::make('text', 'description', 'Description'),
         Field::make('rich_text', 'textarea', 'Rich text'),
     ])
     ->add_tab(__('Complex'), [

@@ -12,7 +12,7 @@ class HiddenData
         add_action('wp_enqueue_scripts', [$this, 'removeStyles']);
     }
 
-    public function removeEmojiActions()
+    public function removeEmojiActions(): void
     {
         add_filter('emoji_svg_url', '__return_false');
         remove_action('admin_print_styles', 'print_emoji_styles');
@@ -24,7 +24,7 @@ class HiddenData
         remove_filter('comment_text_rss', 'wp_staticize_emoji');
     }
 
-    public function removeHeadActions()
+    public function removeHeadActions(): void
     {
         remove_action('wp_head', 'wp_shortlink_wp_head', 10);
         remove_action('wp_head', 'rsd_link');
@@ -34,12 +34,12 @@ class HiddenData
         remove_action('wp_head', 'feed_links', 2);
     }
 
-    public function removeTheGeneratorTag()
+    public function removeTheGeneratorTag(): void
     {
         remove_action('wp_head', 'wp_generator');
     }
 
-    public function removeStyles()
+    public function removeStyles(): void
     {
         wp_dequeue_style('global-styles');
         wp_dequeue_style('wp-block-library');

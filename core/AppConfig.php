@@ -15,7 +15,7 @@ class AppConfig
         $this->configureAdminArea();
     }
 
-    public function configureAdminArea()
+    public function configureAdminArea(): void
     {
         $this->checkAdminBar();
         add_action('admin_menu', [$this, 'hideAdminItems']);
@@ -23,14 +23,14 @@ class AppConfig
         add_action('admin_menu', [$this, 'hideAdminTools']);
     }
 
-    public function checkAdminBar()
+    public function checkAdminBar(): void
     {
         if (!$this->config['show_admin_bar']) {
             add_filter('show_admin_bar', '__return_false');
         }
     }
 
-    public function hideAdminItems()
+    public function hideAdminItems(): void
     {
         if (!$this->config['show_posts']) {
             remove_menu_page('edit.php');
@@ -42,7 +42,7 @@ class AppConfig
         }
     }
 
-    public function hideAdminComments()
+    public function hideAdminComments(): void
     {
         if (!$this->config['enable_comments']) {
             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
@@ -51,7 +51,7 @@ class AppConfig
         }
     }
 
-    public function hideAdminTools()
+    public function hideAdminTools(): void
     {
         if (!$this->config['show_tools']) {
             remove_menu_page('tools.php');
