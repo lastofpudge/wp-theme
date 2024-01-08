@@ -4,10 +4,6 @@ namespace App\Controllers;
 
 use Timber\Timber;
 
-/**
- * Class PostController
- * @mixin Controller
- */
 class PostController extends Controller
 {
     /** @var array */
