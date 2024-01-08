@@ -41,8 +41,8 @@ class AdminOptions
 
     public function registerScripts(): void
     {
-        wp_enqueue_style('app_css', get_theme_file_uri('/resources/style.css'), [], false);
-        wp_enqueue_style('app_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'), [], false);
+        wp_enqueue_style('app_css', get_theme_file_uri('/resources/style.css'));
+        wp_enqueue_style('app_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'));
 
         wp_enqueue_script(
             'app',

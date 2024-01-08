@@ -1,7 +1,7 @@
 <?php
 
 /*
- * basic theme options.
+ * basic admin theme options.
  */
 $config = [
     'show_posts' => true,

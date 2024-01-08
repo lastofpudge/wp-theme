@@ -1,11 +1,13 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-  <div class="post-wrap" id="post-{{ post.ID }}">
-    {{ post.title }}
+    <div class="post-wrap" id="post-{{ post.ID }}">
+        {{ post.title }}
 
-    {{ post.content }}
+        {{ post.content }}
 
-    {{ post.meta('_new_short_text') }}
-  </div>
+        {{ post.meta('_new_short_text') }}
+
+        {{ obj }}
+    </div>
 {% endblock %}

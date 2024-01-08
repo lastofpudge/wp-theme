@@ -1,7 +1,6 @@
-<a href="https://github.styleci.io/repos/79059090/shield" target="_blank" rel="noopener noreferrer"><img src="https://github.styleci.io/repos/79059090/shield" alt="StyleCI"></a>
+# Timber-based WordPress Starter Theme
 
-Timber-based WordPress starter theme
-=======
+![StyleCI](https://github.styleci.io/repos/79059090/shield)
 
 ## Requirements
 
@@ -9,14 +8,20 @@ Timber-based WordPress starter theme
 
 ## Features
 
-- using Timber 2 with twig template engine
-- support custom controllers
-- easy custom fields/posts integration
-- integrated ajax mail/actions
-- env file support
-- support composer package manager
+- Utilizes Timber 2 with Twig template engine.
+- Custom controllers support for enhanced functionality.
+- Seamless integration for custom fields and posts.
+- Integrated Ajax mail and actions for dynamic user interactions.
+- Support for .env file for easy configuration.
+- Utilizes Composer as the package manager.
+- Works seamlessly with Laravel Mix for JS and SCSS processing.
+- Supports custom helper functions for extended flexibility.
+- Utilizes [Carbon Fields](https://github.com/htmlburger/carbon-fields) for developer-friendly custom fields.
+- Easy deployment on hosting platforms with integrated support for [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/) plugin.
 
-## How to use
+## How to Use
 
-- use `composer install` in the project folder
-- `yarn` && `npm run watch` to work with css/js
+1. Run `composer install` in the project folder to install dependencies.
+2. Use `yarn` and `npm run watch` to work with CSS/JS for a smooth development experience.
+
+Feel free to explore, customize, and enhance the theme according to your project requirements.

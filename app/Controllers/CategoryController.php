@@ -6,9 +6,7 @@ use Timber\Timber;
 
 class CategoryController extends Controller
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private array $data;
 
     public function __construct()

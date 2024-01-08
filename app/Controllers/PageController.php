@@ -6,9 +6,7 @@ use Timber\Timber;
 
 class PageController extends Controller
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private array $data;
 
     public function __construct()
@@ -35,7 +33,7 @@ class PageController extends Controller
             $paged = 1;
         }
 
-        $this->data['posts'] =  Timber::get_posts([
+        $this->data['posts'] = Timber::get_posts([
             'post_type' => 'post',
             'posts_per_page' => 10,
             'paged' => $paged,

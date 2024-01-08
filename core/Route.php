@@ -13,21 +13,16 @@ class Route
      * @param string $method The method to call on the controller.
      * @param string $view The view file to render.
      *
-     * @throws \Exception If the controller or method does not exist.
      */
     public static function load(string $controller, string $method, string $view): void
     {
-        if (!class_exists($controller)) {
-            throw new \Exception("Controller class '$controller' not found");
+        if (!class_exists($controller) || !method_exists($controller, $method)) {
+            return;
         }
 
         $controllerInstance = new $controller();
-
-        if (!method_exists($controllerInstance, $method)) {
-            throw new \Exception("Method '$method' not found in controller '$controller'");
-        }
-
         $data = $controllerInstance->$method();
+
         static::renderView($view, $data);
     }
 

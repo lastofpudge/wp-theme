@@ -18,7 +18,7 @@ class PostType
      * @param string $menuIcon
      * @param array $supports
      */
-    public static function register($url, $name, $singular, $public, $hasArchive, $menuIcon, $supports): void
+    public static function register(string $url, string $name, string $singular, bool $public, bool $hasArchive, string $menuIcon, array $supports): void
     {
         register_post_type($url, [
             'labels' => [
@@ -39,7 +39,7 @@ class PostType
      * @param string $taxUrl
      * @param string $taxName
      */
-    public static function loadTax($postType, $taxUrl, $taxName): void
+    public static function loadTax(string $postType, string $taxUrl, string $taxName): void
     {
         register_taxonomy(
             $taxUrl,
