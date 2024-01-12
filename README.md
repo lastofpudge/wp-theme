@@ -1,23 +1,23 @@
-# Timber-based WordPress Starter Theme
+# Timber-based WordPress Starter Theme 🌲
 
 ![StyleCI](https://github.styleci.io/repos/79059090/shield)
 
 ## Requirements
 
-- PHP 7.4 or higher.
+- PHP 7.4 or higher. ⚙️
 
 ## Features
 
-- Utilizes Timber 2 with Twig template engine.
+- Timber@2 with Twig template engine.
 - Custom controllers support for enhanced functionality.
 - Seamless integration for custom fields and posts.
 - Integrated Ajax mail and actions for dynamic user interactions.
 - Support for .env file for easy configuration.
-- Utilizes Composer as the package manager.
-- Works seamlessly with Laravel Mix for JS and SCSS processing.
+- Composer support. 🎼
+- Works with Laravel Mix for JS and SCSS processing.
 - Supports custom helper functions for extended flexibility.
 - Utilizes [Carbon Fields](https://github.com/htmlburger/carbon-fields) for developer-friendly custom fields.
-- Easy deployment on hosting platforms with integrated support for [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/) plugin.
+- Easy deployment on hosting platforms with integrated support for [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/) plugin. 🚀
 
 ## How to Use
 
