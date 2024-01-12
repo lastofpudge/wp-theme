@@ -101,7 +101,7 @@ if (!function_exists('crb_get_i18n_suffix')) {
      *
      * @return string The suffix for the current language, or an empty string if not set.
      */
-    function crb_get_i18n_suffix()
+    function crb_get_i18n_suffix(): string
     {
         $suffix = '';
         if (!defined('ICL_LANGUAGE_CODE')) {
@@ -118,7 +118,7 @@ if (!function_exists('crb_get_i18n_theme_option')) {
      * @param string $option_name The name of the theme option.
      * @return mixed The value of the theme option for the current language.
      */
-    function crb_get_i18n_theme_option($option_name)
+    function crb_get_i18n_theme_option(string $option_name)
     {
         $suffix = crb_get_i18n_suffix();
         return carbon_get_theme_option($option_name . $suffix);

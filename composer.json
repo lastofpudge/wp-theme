@@ -1,12 +1,22 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
+  "version": "1.9.5",
   "description": "Wordpress starter theme with Timber/Twig",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Andrii Dudin",
       "email": "iluxor1991@gmail.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*"
+      ]
     }
   ],
   "keywords": [
@@ -18,24 +28,23 @@
   ],
   "require": {
     "php": "^7.4|8.*",
-    "htmlburger/carbon-fields": "^3.6.3",
+    "htmlburger/carbon-fields": "^3.6",
     "timber/timber": "^2.0.0",
     "twig/twig": "^v3.8.0",
     "vlucas/phpdotenv": "^v5.6.0",
+    "wp-theme/core": "^1.0",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "App\\Admin\\": "app/Admin",
-      "Core\\": "core/"
+      "App\\Admin\\": "app/Admin"
     },
     "files": [
-      "core/Initialize.php",
-      "core/Helpers.php",
-      "core/PostType.php",
       "config/app.php",
+      "bootstrap/app.php",
+      "bootstrap/helpers.php",
       "app/Actions/ajax.php",
       "app/CarbonFields/OptionFields.php",
       "app/CarbonFields/PostFields.php",
@@ -43,7 +52,6 @@
     ]
   },
   "config": {
-    "vendor-dir": "core/vendor",
     "sort-packages": true,
     "optimize-autoloader": true,
     "platform-check": false,
@@ -58,9 +66,6 @@
   },
   "extra": {
     "installer-paths": {
-      "core/vendor/{$name}": [
-        "htmlburger/carbon-fields"
-      ],
       "../../plugins/{$name}": [
         "wpackagist-plugin/all-in-one-wp-migration",
         "wpackagist-plugin/wordpress-seo"

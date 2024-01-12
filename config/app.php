@@ -3,7 +3,7 @@
 /*
  * basic admin theme options.
  */
-$config = [
+return [
     'show_posts' => true,
     'show_pages' => true,
     'enable_comments' => true,
