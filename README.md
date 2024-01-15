@@ -19,6 +19,9 @@
 - Utilizes [Carbon Fields](https://github.com/htmlburger/carbon-fields) for developer-friendly custom fields.
 - Easy deployment on hosting platforms with integrated support for [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/) plugin. 🚀
 
+## Want to know more?
+[Please check](https://github.com/timber/timber)
+
 ## How to Use
 
 1. Run `composer install` in the project folder to install dependencies.
