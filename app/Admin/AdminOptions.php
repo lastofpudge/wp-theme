@@ -11,7 +11,7 @@ class AdminOptions
         $this->index();
         add_action('init', [$this, 'registerMenus']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
-        add_filter('timber_context', [$this, 'registerContext']);
+        add_filter('timber/context', [$this, 'registerContext']);
     }
 
     public function index(): void

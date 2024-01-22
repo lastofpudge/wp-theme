@@ -6,7 +6,7 @@ class Controller
 {
     public function __construct()
     {
-        add_filter('timber_context', [$this, 'addBreadcrumbs']);
+        add_filter('timber/context', [$this, 'addBreadcrumbs']);
     }
 
     public function addBreadcrumbs($context): array
