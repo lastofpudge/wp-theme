@@ -47,9 +47,7 @@ if (!function_exists('send_custom_mail')) {
         $headers[] = 'Content-type: text/html; charset=utf-8';
         $headers[] = 'From: ' . $fromEmail;
 
-        $isEmailSent = wp_mail($toEmail, $subject, $body, $headers);
-
-        return $isEmailSent;
+        return wp_mail($toEmail, $subject, $body, $headers);
     }
 }
 
@@ -61,7 +59,7 @@ if (!function_exists('add_ajax_action')) {
      */
     function add_ajax_action(string $name)
     {
-        $action_path = APP_PATH . '/Actions/notification/' . $name . '.php';
+        $action_path = APP_PATH . '/Handlers/AjaxHandlers/' . $name . '.php';
         add_ajax_action_impl($name, 'wp_ajax', $action_path);
         add_ajax_action_impl($name, 'wp_ajax_nopriv', $action_path);
     }

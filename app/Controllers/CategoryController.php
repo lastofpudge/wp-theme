@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Timber\Timber;
 
+
 class CategoryController extends Controller
 {
     /** @var array */
@@ -12,6 +13,7 @@ class CategoryController extends Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->data = Timber::context();
     }
 

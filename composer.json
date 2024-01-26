@@ -1,7 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "version": "1.9.6",
+  "version": "2.0.0",
   "description": "Wordpress starter theme with Timber/Twig",
   "license": "GPL-3.0-or-later",
   "authors": [
@@ -45,7 +45,7 @@
       "config/app.php",
       "bootstrap/app.php",
       "bootstrap/helpers.php",
-      "app/Actions/ajax.php",
+      "app/Handlers/ajax.php",
       "app/CarbonFields/OptionFields.php",
       "app/CarbonFields/PostFields.php",
       "app/CarbonFields/Blocks.php"
@@ -73,6 +73,7 @@
     }
   },
   "require-dev": {
+    "laravel/pint": "^1.13",
     "php-stubs/wordpress-stubs": "^6.4",
     "squizlabs/php_codesniffer": "^3.7"
   }

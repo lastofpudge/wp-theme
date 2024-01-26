@@ -3,7 +3,7 @@ Timber-based WordPress starter theme
 - using Timber 2 with twig template engine
 - support custom controllers
 - easy custom fields/posts integration
-- integrated ajax mail/actions
+- integrated ajax handlers
 - env file support
 - support composer package manager
 
