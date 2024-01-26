@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use Timber\Timber;
 
-
 class CategoryController extends Controller
 {
     /** @var array */
