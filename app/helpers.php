@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 use Timber\Timber;
 
 if (!function_exists('send_custom_mail')) {
@@ -57,7 +59,7 @@ if (!function_exists('add_ajax_action')) {
      *
      * @param string $name The name of the AJAX action.
      */
-    function add_ajax_action(string $name)
+    function add_ajax_action(string $name): void
     {
         $action_path = APP_PATH . '/Handlers/AjaxHandlers/' . $name . '.php';
         add_ajax_action_impl($name, 'wp_ajax', $action_path);
@@ -71,7 +73,7 @@ if (!function_exists('add_ajax_action')) {
      * @param string $hook The WordPress hook to associate with the action.
      * @param string $action_path Path to the PHP file that handles the action.
      */
-    function add_ajax_action_impl(string $name, string $hook, string $action_path)
+    function add_ajax_action_impl(string $name, string $hook, string $action_path): void
     {
         add_action($hook . "_$name", function () use ($action_path) {
             require $action_path;
@@ -85,7 +87,7 @@ if (!function_exists('dd')) {
      *
      * @param mixed $result The variable to be dumped.
      */
-    function dd($result)
+    function dd(mixed $result): void
     {
         echo '<pre>';
         print_r($result);

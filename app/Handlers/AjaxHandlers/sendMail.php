@@ -11,7 +11,7 @@ if (empty($name) || empty($mail)) {
     wp_send_json(['type' => 'error', 'message' => 'Please fill in all required fields']);
 }
 
-$isMailSent = send_custom_mail('test', [
+$isMailSent = App\send_custom_mail('test', [
     'subject' => 'test form',
     'site_name' => get_bloginfo('name'),
     'name' => $name,
