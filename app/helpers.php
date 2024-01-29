@@ -33,6 +33,17 @@ if (!function_exists('send_custom_mail')) {
     }
 
     /**
+     * Get the value of an environment variable.
+     *
+     * @param string $variable The name of the environment variable.
+     * @return string|null The value of the environment variable or null if not set.
+     */
+    function env(string $variable): ?string
+    {
+        return $_ENV[$variable] ?? null;
+    }
+
+    /**
      * Dispatch an email.
      *
      * @param string $subject
@@ -42,9 +53,8 @@ if (!function_exists('send_custom_mail')) {
     function dispatch_email(string $subject, string $body): bool
     {
         $adminEmail = get_option('admin_email');
-
-        $fromEmail = $_ENV['MAIL_FROM_ADDRESS'] ?? $adminEmail;
-        $toEmail = $_ENV['MAIL_TO_ADDRESS'] ?? $adminEmail;
+        $fromEmail = env('MAIL_FROM_ADDRESS') ?? $adminEmail;
+        $toEmail = env('MAIL_TO_ADDRESS') ?? $adminEmail;
 
         $headers[] = 'Content-type: text/html; charset=utf-8';
         $headers[] = 'From: ' . $fromEmail;
