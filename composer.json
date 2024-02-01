@@ -1,7 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Wordpress starter theme with Timber/Twig",
   "license": "GPL-3.0-or-later",
   "authors": [
@@ -21,10 +21,8 @@
   ],
   "keywords": [
     "WordPress",
-    "theme",
     "starter",
-    "timber",
-    "twig"
+    "timber"
   ],
   "require": {
     "php": "7.4|8.*",
