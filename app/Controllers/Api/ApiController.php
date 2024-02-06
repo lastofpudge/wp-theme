@@ -10,5 +10,4 @@ class ApiController
             'title' => 'title'
         ];
     }
-
 }
