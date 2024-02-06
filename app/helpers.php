@@ -1,7 +1,5 @@
 <?php
 
-namespace App;
-
 use Timber\Timber;
 
 if (!function_exists('send_custom_mail')) {

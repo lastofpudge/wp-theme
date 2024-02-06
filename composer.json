@@ -30,7 +30,7 @@
     "timber/timber": "^2.0.0",
     "twig/twig": "^v3.8.0",
     "vlucas/phpdotenv": "^v5.6.0",
-    "wp-theme/core": "^1.0.3",
+    "wp-theme/core": "^1.0.4",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/wordpress-seo": "*"
   },
@@ -41,10 +41,12 @@
     },
     "files": [
       "bootstrap/app.php",
+      "app/helpers.php",
       "app/Handlers/ajax.php",
       "app/CarbonFields/OptionFields.php",
       "app/CarbonFields/PostFields.php",
-      "app/CarbonFields/Blocks.php"
+      "app/CarbonFields/Blocks.php",
+      "routes/api.php"
     ]
   },
   "config": {

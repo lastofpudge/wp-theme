@@ -14,7 +14,7 @@ Container::make('post_meta', 'Fields for Homepage')
         Field::make('complex', 'tech_items', 'Technologies list')->add_fields([
             Field::make('text', 'tech_title', 'Card title'),
             Field::make('complex', 'tech_sub_items', 'Technologies sub-items')
-                ->add_fields([Field::make('text', 'tech_title', 'Card title'), Field::make('image', 'tech_image', '')->set_value_type('url')])
+                ->add_fields([Field::make('text', 'tech_title', 'Card title'), Field::make('image', 'tech_image', '')])
                 ->set_layout('tabbed-horizontal'),
         ]),
     ]);

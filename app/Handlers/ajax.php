@@ -1,3 +1,3 @@
 <?php
 
-App\add_ajax_action('sendMail');
+add_ajax_action('sendMail');
