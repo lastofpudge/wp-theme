@@ -2,7 +2,7 @@
 
 use Timber\Timber;
 
-if (!function_exists('send_custom_mail')) {
+if (!function_exists('send_email')) {
     /**
      * Send a custom email.
      *
@@ -10,7 +10,7 @@ if (!function_exists('send_custom_mail')) {
      * @param array $templateData
      * @return bool|null
      */
-    function send_custom_mail(string $templateFilename, array $templateData): ?bool
+    function send_email(string $templateFilename, array $templateData): ?bool
     {
         $emailBody = compile_email_template($templateFilename, $templateData);
         $isSent = dispatch_email($templateData['subject'], $emailBody);

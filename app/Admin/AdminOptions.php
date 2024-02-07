@@ -9,6 +9,7 @@ class AdminOptions
     public function __construct()
     {
         $this->index();
+        $this->manageAdminAccess();
         add_action('init', [$this, 'registerMenus']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
         add_filter('timber/context', [$this, 'registerContext']);
@@ -30,6 +31,19 @@ class AdminOptions
         add_theme_support('post-thumbnails');
         add_theme_support('custom-logo');
         add_theme_support('responsive-embeds');
+
+
+    }
+
+    public function manageAdminAccess(): void
+    {
+        if (!current_user_can('administrator')) {
+            show_admin_bar(false);
+        }
+
+        if (!current_user_can('administrator') && is_admin() &!wp_doing_ajax()){
+            wp_redirect(home_url());
+        }
     }
 
     public function registerMenus(): void
