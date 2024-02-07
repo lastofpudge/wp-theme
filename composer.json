@@ -1,7 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Wordpress starter theme with Timber/Twig",
   "license": "GPL-3.0-or-later",
   "authors": [
@@ -59,7 +59,7 @@
   },
   "scripts": {
     "lint": [
-      "pint --preset psr12 app"
+      "pint --preset psr12"
     ]
   },
   "extra": {
