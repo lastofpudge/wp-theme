@@ -31,8 +31,6 @@ class AdminOptions
         add_theme_support('post-thumbnails');
         add_theme_support('custom-logo');
         add_theme_support('responsive-embeds');
-
-
     }
 
     public function manageAdminAccess(): void
@@ -41,7 +39,7 @@ class AdminOptions
             show_admin_bar(false);
         }
 
-        if (!current_user_can('administrator') && is_admin() &!wp_doing_ajax()){
+        if (!current_user_can('administrator') && is_admin() & !wp_doing_ajax()) {
             wp_redirect(home_url());
         }
     }

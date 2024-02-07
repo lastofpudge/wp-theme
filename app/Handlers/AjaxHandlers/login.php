@@ -17,9 +17,9 @@ $credentials = [
     'remember' => true,
 ];
 
-$user = wp_signon( $credentials, false );
+$user = wp_signon($credentials, false);
 
-if ( is_wp_error($user) ) {
+if (is_wp_error($user)) {
     wp_send_json([
         'type' => 'error',
         'message' => json_decode($user->get_error_message()),
