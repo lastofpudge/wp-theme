@@ -25,7 +25,7 @@ if (!function_exists('send_email')) {
      */
     function compile_email_template(string $filename, array $data): string
     {
-        return Timber::compile('/resources/views/emails/'.$filename.'.twig', $data);
+        return Timber::compile('/resources/views/emails/' . $filename . '.twig', $data);
     }
 
     /**
@@ -41,7 +41,7 @@ if (!function_exists('send_email')) {
         $toEmail = $adminEmail;
 
         $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: '.$fromEmail;
+        $headers[] = 'From: ' . $fromEmail;
 
         return wp_mail($toEmail, $subject, $body, $headers);
     }
@@ -54,7 +54,7 @@ if (!function_exists('add_ajax_action')) {
      */
     function add_ajax_action(string $name): void
     {
-        $action_path = APP_PATH.'/Handlers/AjaxHandlers/'.$name.'.php';
+        $action_path = APP_PATH . '/Handlers/AjaxHandlers/' . $name . '.php';
         add_ajax_action_impl($name, 'wp_ajax', $action_path);
         add_ajax_action_impl($name, 'wp_ajax_nopriv', $action_path);
     }
@@ -67,7 +67,7 @@ if (!function_exists('add_ajax_action')) {
      */
     function add_ajax_action_impl(string $name, string $hook, string $action_path): void
     {
-        add_action($hook."_$name", function () use ($action_path) {
+        add_action($hook . "_$name", function () use ($action_path) {
             require $action_path;
         });
     }
@@ -97,7 +97,7 @@ if (!function_exists('crb_get_i18n_suffix')) {
         if (!defined('ICL_LANGUAGE_CODE')) {
             return $suffix;
         }
-        return '_'.ICL_LANGUAGE_CODE;
+        return '_' . ICL_LANGUAGE_CODE;
     }
 }
 
@@ -110,6 +110,6 @@ if (!function_exists('crb_get_i18n_theme_option')) {
     function crb_get_i18n_theme_option(string $option_name)
     {
         $suffix = crb_get_i18n_suffix();
-        return carbon_get_theme_option($option_name.$suffix);
+        return carbon_get_theme_option($option_name . $suffix);
     }
 }
