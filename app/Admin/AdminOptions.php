@@ -27,6 +27,8 @@ class AdminOptions
             'style'
         ]);
         remove_theme_support('block-templates');
+        remove_theme_support('core-block-patterns');
+
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
         add_theme_support('custom-logo');
@@ -39,6 +41,7 @@ class AdminOptions
             show_admin_bar(false);
         }
 
+        // disallow default users access to admin panel
         if (!current_user_can('administrator') && is_admin() & !wp_doing_ajax()) {
             wp_redirect(home_url());
         }

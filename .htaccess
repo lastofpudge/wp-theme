@@ -2,3 +2,8 @@
   Order Allow,Deny
   Deny from all
 </FilesMatch>
+
+<FilesMatch "^\.env|^\.env\.example$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
