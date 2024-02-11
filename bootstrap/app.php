@@ -10,6 +10,3 @@ $config = include $configPath;
 new AppConfig($config);
 new AdminOptions();
 new HiddenData();
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
-$dotenv->safeLoad();

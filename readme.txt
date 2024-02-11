@@ -4,7 +4,6 @@ Timber-based WordPress starter theme
 - support custom controllers
 - easy custom fields/posts integration
 - integrated ajax handlers
-- env file support
 - support composer package manager
 
 How to use
