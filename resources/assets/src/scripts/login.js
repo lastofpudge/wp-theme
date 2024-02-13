@@ -17,7 +17,6 @@ export function initLoginForm() {
 
     try {
       const { data: response } = await axios.post(data.ajax_url, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
         params: { action: 'login' }
       })
 
