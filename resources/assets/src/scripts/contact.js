@@ -1,40 +1,38 @@
+import axios from 'axios'
 import Toast from './libs/Toast'
 
 export function initContactForm() {
-  const preloader = $('.js-preloader-main')
-  $(document).on('submit', '.js-contact-form', async function (event) {
+  const contactForm = document.querySelector('.js-contact-form')
+
+  if (!contactForm) return
+  contactForm.addEventListener('submit', async event => {
     event.preventDefault()
 
-    const form = $(this)
-    const formData = new FormData()
-
-    formData.append('name', form.find('input[name="name"]').val())
-    formData.append('mail', form.find('input[name="mail"]').val())
-    formData.append('action', 'sendMail')
+    const formData = new FormData(contactForm)
+    formData.append('action', 'contact')
     formData.append('nonce', data.nonce)
-    preloader.addClass('js-preloading')
+
+    const preloader = document.querySelector('.js-preloader-main')
+    preloader.classList.add('js-preloading')
 
     try {
       const { data: response } = await axios.post(data.ajax_url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        params: {
-          action: 'sendMail',
-          nonce: data.nonce
-        }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        params: { action: 'contact' }
       })
 
-      if (response.type === 'success') {
-        Toast.fire({ icon: 'success', iconColor: '#007cba', title: response.message })
-      } else {
-        Toast.fire({ icon: 'error', iconColor: 'red', title: 'Error sending email' })
+      const toastConfig = {
+        icon: response.type,
+        iconColor: response.type === 'success' ? '#007cba' : 'red',
+        title: response.message
       }
+
+      Toast.fire(toastConfig)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
 
-    preloader.removeClass('js-preloading')
-    form.trigger('reset')
+    preloader.classList.remove('js-preloading')
+    contactForm.reset()
   })
 }

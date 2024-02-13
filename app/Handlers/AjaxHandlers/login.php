@@ -4,7 +4,7 @@ if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
     wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
 }
 
-$email = sanitize_text_field($_POST['email '] ?? '');
+$email = sanitize_text_field($_POST['email'] ?? '');
 $password = sanitize_text_field($_POST['password'] ?? '');
 
 if (empty($email) || empty($password)) {

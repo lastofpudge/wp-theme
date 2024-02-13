@@ -1,28 +1,24 @@
 import Toast from './libs/Toast'
+import axios from 'axios'
 
 export function initLoginForm() {
-  const preloader = $('.js-preloader-main')
-  $(document).on('submit', '.js-login-form', async function (event) {
+  const loginForm = document.querySelector('.js-login-form')
+
+  if (!loginForm) return
+  loginForm.addEventListener('submit', async event => {
     event.preventDefault()
 
-    const form = $(this)
-    const formData = new FormData()
-
-    formData.append('email', form.find('input[name="email"]').val())
-    formData.append('password', form.find('input[name="password"]').val())
+    const formData = new FormData(loginForm)
     formData.append('action', 'login')
     formData.append('nonce', data.nonce)
-    preloader.addClass('js-preloading')
+
+    const preloader = document.querySelector('.js-preloader-main')
+    preloader.classList.add('js-preloading')
 
     try {
       const { data: response } = await axios.post(data.ajax_url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        params: {
-          action: 'login',
-          nonce: data.nonce
-        }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        params: { action: 'login' }
       })
 
       if (response.type === 'success') {
@@ -31,10 +27,10 @@ export function initLoginForm() {
         Toast.fire({ icon: 'error', iconColor: 'red', title: 'Error login' })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
 
-    preloader.removeClass('js-preloading')
-    form.trigger('reset')
+    preloader.classList.remove('js-preloading')
+    loginForm.reset()
   })
 }

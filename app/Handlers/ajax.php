@@ -1,4 +1,4 @@
 <?php
 
 add_ajax_action('login');
-add_ajax_action('sendMail');
+add_ajax_action('contact');
