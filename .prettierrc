@@ -1,16 +1,10 @@
 {
+  "trailingComma": "none",
   "useTabs": false,
+  "semi": false,
   "printWidth": 150,
+  "singleQuote": true,
+  "arrowParens": "avoid",
   "bracketSameLine": true,
-  "tabWidth": 2,
-  "plugins": ["./node_modules/prettier-plugin-twig-melody"],
-  "overrides": [
-    {
-      "files": "*.php",
-      "options": {
-        "tabWidth": 4,
-        "singleQuote": true
-      }
-    }
-  ]
+  "tabWidth": 2
 }

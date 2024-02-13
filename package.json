@@ -9,6 +9,7 @@
   "devDependencies": {
     "git-commit-msg-linter": "^4.4.0",
     "laravel-mix": "^6.0.6",
+    "prettier": "^3.2.5",
     "sass": "^1.70.0",
     "sass-loader": "^12.1.0"
   },

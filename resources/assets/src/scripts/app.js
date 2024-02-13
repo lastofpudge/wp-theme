@@ -1,14 +1,14 @@
-import jQuery from 'jquery';
+import jQuery from 'jquery'
 
-window.$ = window.jQuery = jQuery;
-import axios from 'axios';
+window.$ = window.jQuery = jQuery
+import axios from 'axios'
 
-window.axios = axios;
+window.axios = axios
 
-import {initContactForm} from './contact';
-import {initLoginForm} from "./login";
+import { initContactForm } from './contact'
+import { initLoginForm } from './login'
 
 $(function () {
-    initContactForm();
-    initLoginForm();
-});
+  initContactForm()
+  initLoginForm()
+})
