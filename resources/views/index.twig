@@ -5,15 +5,16 @@
         <div class="col-12">
             <a class="logo-link" href="{{ site.url }}" rel="home">{{ site.name }}"</a>
         </div>
+
         <div class="col-12">
             <h2>
                 Contact form </h2>
             <form method="POST" class="contact-form js-contact-form" accept-charset="utf-8">
                 <div class="form-group">
-                    <label><input name="name" placeholder="Name"/></label>
+                    <label><input name="name" placeholder="Name" autocomplete="true" /></label>
                 </div>
                 <div class="form-group">
-                    <label><input name="mail" type="email" placeholder="Email"/></label>
+                    <label><input name="mail" type="email" placeholder="Email" /></label>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">submit</button>
@@ -24,10 +25,10 @@
                 Login form </h2>
             <form method="POST" class="contact-form js-login-form" accept-charset="utf-8">
                 <div class="form-group">
-                    <label><input name="email" placeholder="Email"/></label>
+                    <label><input name="email" placeholder="Email" autocomplete="true" /></label>
                 </div>
                 <div class="form-group">
-                    <label><input name="password" type="password" placeholder="Password" autocomplete/></label>
+                    <label><input name="password" type="password" placeholder="Password" autocomplete="true" /></label>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">submit</button>
@@ -37,7 +38,7 @@
                 Search form </h2>
             <form method="get" accept-charset="utf-8" role="search" action="{{ site.url }}">
                 <div class="form-group">
-                    <label><input name="s" required/></label>
+                    <label><input name="s" required /></label>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">submit</button>

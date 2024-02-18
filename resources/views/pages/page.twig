@@ -1,13 +1,13 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-  {% do action('showBreads') %}
+    {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
 
-  <div class="post-wrap" id="post-{{ post.ID }}">
-    <h1>
-      {{ post.title }}
-    </h1>
+    <div class="post-wrap" id="post-{{ post.ID }}">
+        <h1>
+            {{ post.title }}
+        </h1>
 
-    {{ post.content }}
-  </div>
+        {{ post.content }}
+    </div>
 {% endblock %}

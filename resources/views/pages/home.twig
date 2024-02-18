@@ -1,18 +1,18 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-  <div class="post-wrap" id="post-{{ post.ID }}">
-    {{ post.title }}
+    <div class="post-wrap" id="post-{{ post.ID }}">
+        {{ post.title }}
 
-    {# {{ post.meta('_sub_title') }} #}
+        {# {{ post.meta('_sub_title') }} #}
 
-    {{ post.content }}
+        {{ post.content }}
 
-    <form action="?" class="js-contact-form">
-      <label><input type="text" name="name" /></label>
-      <label><input type="text" name="mail" /></label>
-      <button type="submit">submit</button>
-    </form>
+        <form action="?" class="js-contact-form">
+            <label><input type="text" name="name" /></label>
+            <label><input type="text" name="mail" /></label>
+            <button type="submit">submit</button>
+        </form>
 
-  </div>
+    </div>
 {% endblock %}
