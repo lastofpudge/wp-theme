@@ -3,16 +3,17 @@
 {% block content %}
     {% for post in posts %}
         <div class="category-post" style="padding:15px;">
-            <h2>
-                <a href="{{ post.link }}">{{ post.title }}</a>
-            </h2>
-            {% if post.get_thumbnail %}
-                <img src="{{ post.thumbnail.src }}" alt="" />
-            {% endif %}
+        <h2>
+            <a href="{{ post.link }}">{{ post.title }}</a>
+        </h2>
 
-            {{ post.excerpt(20, false, '', true) }}
+        {% if post.thumbnail %}
+        <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}" />
+    {% else %}
+
+        {{ post.excerpt(20, false, '', true) }}
         </div>
     {% endfor %}
-    
+
     {% include 'components/pagination.twig' %}
 {% endblock %}

@@ -5,8 +5,8 @@ use Timber\Timber;
 if (!function_exists('send_email')) {
     /**
      * Send a custom email.
-     * @param  string  $templateFilename
-     * @param  array  $templateData
+     * @param string $templateFilename
+     * @param array $templateData
      * @return bool|null
      */
     function send_email(string $templateFilename, array $templateData): ?bool
@@ -19,8 +19,8 @@ if (!function_exists('send_email')) {
 
     /**
      * Compile an email template.
-     * @param  string  $filename
-     * @param  array  $data
+     * @param string $filename
+     * @param array $data
      * @return string
      */
     function compile_email_template(string $filename, array $data): string
@@ -30,8 +30,8 @@ if (!function_exists('send_email')) {
 
     /**
      * Dispatch an email.
-     * @param  string  $subject
-     * @param  string  $body
+     * @param string $subject
+     * @param string $body
      * @return bool
      */
     function dispatch_email(string $subject, string $body): bool
@@ -50,7 +50,7 @@ if (!function_exists('send_email')) {
 if (!function_exists('add_ajax_action')) {
     /**
      * Registers an AJAX action with WordPress.
-     * @param  string  $name  The name of the AJAX action.
+     * @param string $name The name of the AJAX action.
      */
     function add_ajax_action(string $name): void
     {
@@ -61,9 +61,9 @@ if (!function_exists('add_ajax_action')) {
 
     /**
      * Helper function to implement AJAX action registration.
-     * @param  string  $name  The name of the AJAX action.
-     * @param  string  $hook  The WordPress hook to associate with the action.
-     * @param  string  $action_path  Path to the PHP file that handles the action.
+     * @param string $name The name of the AJAX action.
+     * @param string $hook The WordPress hook to associate with the action.
+     * @param string $action_path Path to the PHP file that handles the action.
      */
     function add_ajax_action_impl(string $name, string $hook, string $action_path): void
     {
@@ -76,7 +76,7 @@ if (!function_exists('add_ajax_action')) {
 if (!function_exists('dd')) {
     /**
      * Debug function to dump and die. Outputs the given variable and stops execution.
-     * @param  mixed  $result  The variable to be dumped.
+     * @param mixed $result The variable to be dumped.
      */
     function dd(mixed $result): void
     {
@@ -104,10 +104,10 @@ if (!function_exists('crb_get_i18n_suffix')) {
 if (!function_exists('crb_get_i18n_theme_option')) {
     /**
      * Retrieves a theme option value with internationalization support.
-     * @param  string  $option_name  The name of the theme option.
+     * @param string $option_name The name of the theme option.
      * @return mixed The value of the theme option for the current language.
      */
-    function crb_get_i18n_theme_option(string $option_name)
+    function crb_get_i18n_theme_option(string $option_name): mixed
     {
         $suffix = crb_get_i18n_suffix();
         return carbon_get_theme_option($option_name . $suffix);

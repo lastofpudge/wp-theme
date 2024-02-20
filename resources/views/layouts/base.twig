@@ -6,13 +6,11 @@
 <body class="{{ body_class }}">
 <div class="preloader-main js-preloader-main"></div>
 {% include 'components/header.twig' %}
-<main id="content" class="content-wrapper">
-    <div class="wrapper">
-        {% block content %}
-            <p>Sorry, no content</p>
-        {% endblock %}
-    </div>
-</main>
+
+<div class="wrapper">
+    {% block content %}
+    {% endblock %}
+</div>
 
 {% block modals %}
     {% include 'components/modals.twig' %}

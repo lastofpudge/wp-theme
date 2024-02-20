@@ -2,24 +2,29 @@
 
 {% block content %}
     <div class="post-wrap" id="post-{{ post.ID }}">
-        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', true ) }}
+
         <h1>
             {{ post.title }}
         </h1>
+
         {% if post.thumbnail.src %}
-            <img src="{{ post.thumbnail.src('full') }}" alt="{{ post.title }}" title="{{ post.title }}" />
+            <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt='' />
         {% endif %}
 
         {{ post.content }}
+        
         <ul class="tag-list">
             {% for term in post.terms('tags') %}
                 <li><a href="{{ term.link }}">{{ term.name }}</a></li>
             {% endfor %}
         </ul>
+
         <p class="byline">
             <span class="name">By {{ post.author.name }}</span>
             <time datetime="{{ post.post_date_gmt }}">{{ post.post_date|date('F j, Y') }}</time>
         </p>
+
         {% include 'components/comments/comment_wrapper.twig' %}
 
         {{ fn(

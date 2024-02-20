@@ -6,7 +6,7 @@
     </p>
 
     {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
-  
+
     {% for post in posts %}
         <div class="category-post" style="padding:15px;">
             <h2>
@@ -18,8 +18,8 @@
                     {{ post.post_date_gmt|time_ago }}
                 </time>
             </p>
-            {% if post.get_thumbnail %}
-                <img src="{{ post.thumbnail.src }}" alt="{{ post.title }}" />
+            {% if post.thumbnail %}
+                <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}" />
             {% else %}
                 <img src="{{ theme.path }}/resources/assets/dist/images/placeholders/no-image-default.png"
                      alt="" />
