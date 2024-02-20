@@ -25,7 +25,7 @@
                      alt="" />
             {% endif %}
             <div class="clear">
-                {{ post.preview.length(10).read_more('') }}
+                {{ post.excerpt(20, false, '', true) }}
             </div>
             {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
         </div>
