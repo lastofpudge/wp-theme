@@ -19,8 +19,9 @@
 - Easy deployment on hosting platforms with [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/) plugin. 🚀
 
 ## Want to know more?
-[Please check](https://github.com/timber/timber)
-For woocommerce [check](https://github.com/lastofpudge/wp-theme/tree/feature/woocommerce-integration)
+[Timber](https://github.com/timber/timber)
+
+For woocommerce please [check](https://github.com/lastofpudge/wp-theme/tree/feature/woocommerce-integration)
 
 ## How to Use
 
