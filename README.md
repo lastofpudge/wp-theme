@@ -20,6 +20,7 @@
 
 ## Want to know more?
 [Please check](https://github.com/timber/timber)
+For woocommerce [check](https://github.com/lastofpudge/wp-theme/tree/feature/woocommerce-integration)
 
 ## How to Use
 
