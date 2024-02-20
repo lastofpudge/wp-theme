@@ -6,6 +6,10 @@
 
 - PHP 7.4 or higher. ⚙️
 
+## Todo
+- [ ] woo product page
+- [ ] woo category page
+
 ## Features
 
 - Timber@2 with Twig template engine.

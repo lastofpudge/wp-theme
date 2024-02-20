@@ -1,0 +1,77 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+    {% do action('woocommerce_before_single_product') %}
+    <div class="post-wrap" id="post-{{ post.ID }}">
+
+        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+
+
+        <div class='container'>
+            <div class='row'>
+                <div class='col-6'>
+                    {% do action('woocommerce_before_single_product_summary') %}
+                </div>
+
+                <div class='col-6'>
+
+                    <div class="summary entry-summary">
+                        <h1 class="product_title entry-title">{{ post.title }}</h1>
+
+                        <div class="price">
+                            {{ function('wc_price', post.meta('_price')) }}
+                        </div>
+
+                        <div class="woocommerce-product-details__add-to-cart">
+                            {{ function('do_shortcode', '[add_to_cart id=' ~ post.ID ~ ' show_price="false"]') }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='col-12'>
+                    {% do action('woocommerce_after_single_product_summary') %}
+
+                    {% if related_products %}
+                        <div class="related-products">
+                            <h2>Related Products</h2>
+                            <div class="related-products-list row">
+                                {% for product in related_products %}
+                                    <div class="related-product col-4">
+                                        <a href="{{ product.link }}"
+                                           class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+                                            <img src="{{ product.thumbnail.src('medium-large') }}"
+                                                 alt="{{ product.title }}"
+                                                 class="{{ product.thumbnail.class }}"
+                                            >
+                                            <h6 class="woocommerce-loop-product__title">{{ product.title }}</h6>
+                                            <div class="price">
+                                                <div class='woocommerce-Price-amount amount'>{{ fn('wc_price', product._price) }}</div>
+                                            </div>
+                                        </a>
+                                        <a href="?add-to-cart={{ product.ID }}" data-quantity="1"
+                                           class="button product_type_simple add_to_cart_button ajax_add_to_cart"
+                                           data-product_id="{{ product.ID }}"
+                                           aria-label="Add to Cart: {{ product.title }}">Add to Cart</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {{ fn(
+                        'edit_post_link',
+                        'Edit',
+                        '<span class="edit-link">',
+                        '</span>',
+                        post.ID
+                    ) }}
+                </div>
+                {% do action('woocommerce_after_single_product') %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
