@@ -13,20 +13,19 @@
 
             <div class='row wc-block-cart wp-block-woocommerce-filled-cart-block is-large'>
                 <div class='col-6 wc-block-components-main wc-block-cart__main wp-block-woocommerce-cart-items-block'>
-                    <form class="woocommerce-cart-form" action="{{ site.url }}/cart/" method="post">
-                        {% do action('woocommerce_before_cart_table') %}
+                    <div class="woocommerce-cart-form">
 
                         <table class="table shop_table shop_table_responsive cart woocommerce-cart-form__contents">
                             <thead>
                             <tr>
-                                <th class="product-thumbnail"><span
-                                            class="screen-reader-text">Thumbnail image}</span></th>
+                                <th class="product-thumbnail">
+                                    <span class="screen-reader-text">Thumbnail image</span></th>
                                 <th class="product-name">Product</th>
                                 <th class="product-price">Price</th>
                                 <th class="product-quantity">Quantity</th>
                                 <th class="product-subtotal">Subtotal</th>
-                                <th class="product-remove"><span
-                                            class="screen-reader-text">Remove item</span></th>
+                                <th class="product-remove">
+                                    <span class="screen-reader-text">Remove item</span></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,8 +38,7 @@
 
                                 {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
 
-                                    {% set cart_item_class = 'cart-item' %}
-                                    <tr class="woocommerce-cart-form__cart-item {{ cart_item_class }}">
+                                    <tr class="woocommerce-cart-form__cart-item js-cart-item">
                                         <td class="product-thumbnail">
                                             {% set thumbnail = _product.get_image() %}
                                             <a href="{{ function('get_permalink', product_id) }}">
@@ -78,12 +76,10 @@
                                             {% endif %}
 
                                             {% set product_quantity %}
-                                                <div class="wc-block-cart-item__quantity">
-                                                    <div class="wc-block-components-quantity-selector">
-
-
-                                                        <button aria-label="Reduce quantity of Hat" type="button"
-                                                                class="wc-block-components-quantity-selector__button wc-block-components-quantity-selector__button--minus">
+                                                <div class="quantity">
+                                                    <div class="d-flex" style="max-width: 50px">
+                                                        <button type="button" data-key="{{ cart_item_key }}"
+                                                                class="js-decrement">
                                                             －
                                                         </button>
 
@@ -95,8 +91,8 @@
                                                             'product_name': product_name
                                                         }, _product, false) }}
 
-                                                        <button aria-label="Increase quantity of Hat" type="button"
-                                                                class="wc-block-components-quantity-selector__button wc-block-components-quantity-selector__button--plus">
+                                                        <button type="button" data-key="{{ cart_item_key }}"
+                                                                class="js-increment">
                                                             ＋
                                                         </button>
                                                     </div>
@@ -112,28 +108,24 @@
                                         </td>
 
                                         <td class="product-remove">
-                                            <a href="{{ site.url }}/cart/?remove_item={{ cart_item_key }}"
-                                               class="remove"
-                                               aria-label="Remove from cart"
-                                               data-product_id="{{ product_id }}"
-                                               data-product_sku="{{ _product.get_sku() }}">&times;</a>
+                                            <button class="js-remove-form-cart" data-key="{{ cart_item_key }}"
+                                                    type="button">&times;
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
 
-                            {% do action('woocommerce_cart_contents') %}
-
                             <tr>
                                 <td colspan="6" class="actions">
-                                    {% if coupons_enabled|default(false) %}
+                                    {% if coupons_enabled %}
                                         <div class="coupon">
                                             <label for="coupon_code" class="screen-reader-text">Coupon</label>
                                             <input type="text" name="coupon_code" class="input-text" id="coupon_code"
                                                    value=""
                                                    placeholder="Coupon code" />
                                             <button type="submit"
-                                                    class="button{{ ' ' ~ button_class_name|default('') }}"
+                                                    class="button"
                                                     name="apply_coupon" value="Apply coupon">
                                                 Apply coupon
                                             </button>
@@ -141,15 +133,13 @@
                                         </div>
                                     {% endif %}
 
-                                    <button type="submit" class="button{{ ' ' ~ button_class_name|default('') }}"
+                                    <button type="submit" class="button"
                                             name="update_cart" value="Update cart">
                                         Update cart
                                     </button>
 
                                     {% do action('woocommerce_cart_actions') %}
 
-                                    <input type="hidden" name="woocommerce-cart-nonce"
-                                           value="{{ woocommerce_cart_nonce }}" />
                                 </td>
                             </tr>
 
@@ -158,20 +148,50 @@
                         </table>
 
                         {% do action('woocommerce_after_cart_table') %}
-                    </form>
+                    </div>
 
                     {% do action('woocommerce_before_cart_collaterals') %}
                 </div>
                 <div class='col-6 wc-block-components-sidebar wc-block-cart__sidebar wp-block-woocommerce-cart-totals-block'>
                     <div class="cart-collaterals">
-                        {% do action('woocommerce_cart_collaterals') %}
+                        <table class="shop_table shop_table_responsive">
+                            <tbody>
+                            <tr class="cart-subtotal">
+                                <th>Sub-total</th>
+                                <td>
+                                    <bdi>
+                                        <span class="amount">
+                                            <span class="js-sub-total">{{ cart.subtotal }}</span>
+                                                <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
+                                        </span>
+                                    </bdi>
+                                </td>
+                            </tr>
+                            <tr class="order-total">
+                                <th>Total</th>
+                                <td>
+                                    <bdi>
+                                        <span class="amount">
+                                            <span class="js-total">{{ cart.total }}</span>
+                                            <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
+                                        </span>
+                                    </bdi>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{{ checkout_link }}">Continue</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 
     {% do action('woocommerce_after_cart') %}
 {% endblock %}
