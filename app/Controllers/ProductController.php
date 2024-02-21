@@ -37,4 +37,11 @@ class ProductController extends Controller
 
         return $this->data;
     }
+
+    public function cart(): array
+    {
+        $this->data['cart'] = WC()->cart;
+        $this->data['woocommerce_cart_nonce'] = wp_create_nonce('woocommerce-cart');
+        return $this->data;
+    }
 }

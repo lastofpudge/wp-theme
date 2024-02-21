@@ -24,9 +24,14 @@
                             {{ fn('wc_price', post.meta('_price')) }}
                         </div>
 
-                        <div class="woocommerce-product-details__add-to-cart">
-                            {{ fn('do_shortcode', '[add_to_cart id=' ~ post.ID ~ ' show_price="false"]') }}
+                        <div>
+                            <a href="?add-to-cart={{ post.ID }}" data-quantity="1"
+                               class="button add_to_cart_button ajax_add_to_cart"
+                               data-product_id="{{ post.ID }}"
+                               aria-label="Add to Cart: {{ product.title }}">Add to Cart</a>
                         </div>
+
+                        <div class="added_to_cart"></div>
 
                         {{ fn(
                             'edit_post_link',
