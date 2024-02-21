@@ -40,7 +40,7 @@ if ($order->get_billing_email()) {
  */
 do_action('woocommerce_email_customer_address_section', 'billing', $order, $sent_to_admin, true);
 
-if (! wc_ship_to_billing_address_only() && $order->needs_shipping_address()) {
+if (!wc_ship_to_billing_address_only() && $order->needs_shipping_address()) {
     $shipping = $order->get_formatted_shipping_address();
 
     if ($shipping) {
