@@ -1,7 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "version": "2.0.19",
+  "version": "2.0.20",
   "description": "Wordpress starter theme with Timber/Twig",
   "license": "GPL-3.0-or-later",
   "authors": [
