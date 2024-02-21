@@ -2,10 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <nav class="navbar navbar-expand-lg navbar-light">
                     <ul class="navbar-nav mr-auto">
                         {% for item in left_menu.get_items %}
-                            <li class="nav-item {{ item.classes|join(' ') }} {{ item.current
+                            <li class="mx-2 nav-item{{ item.classes|join(' ') }} {{ item.current
                             ? 'active'
                             : '' }}">
                                 <a class="nav-main-link" href="{{ item.get_link }}">
