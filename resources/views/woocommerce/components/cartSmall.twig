@@ -1,0 +1,35 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Cart
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <table class="table">
+                <tbody>
+                <tr class="cart-subtotal">
+                    <td>
+                        <span>Sub-total:</span>
+                        <bdi>
+                            <span class="amount">
+                                <span class="js-sub-total">{{ cart.subtotal }}</span>
+                                <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
+                            </span>
+                        </bdi>
+                    </td>
+                </tr>
+                <tr class="order-total">
+                    <td>
+                        <span>Total:</span>
+                        <bdi>
+                            <span class="amount">
+                                <span class="js-total">{{ cart.total }}</span>
+                                <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
+                            </span>
+                        </bdi>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+    </ul>
+</div>

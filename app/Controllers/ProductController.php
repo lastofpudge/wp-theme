@@ -7,7 +7,7 @@ use Timber\Timber;
 class ProductController extends Controller
 {
     /** @var array */
-    private array $data;
+    protected array $data;
 
     public function __construct()
     {
@@ -40,12 +40,8 @@ class ProductController extends Controller
 
     public function cart(): array
     {
-        $this->data['cart'] = WC()->cart;
-        $this->data['currency_symbol'] = get_woocommerce_currency_symbol();
         $this->data['checkout_link'] = wc_get_checkout_url();
         $this->data['coupons_enabled'] = wc_coupons_enabled();
-
-        //        dd($this->data['cart']);
 
         return $this->data;
     }

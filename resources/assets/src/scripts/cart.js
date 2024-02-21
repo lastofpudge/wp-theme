@@ -51,6 +51,11 @@ export function initCart() {
         })
 
         if (response.type === 'success') {
+          const total = document.querySelector('.js-total')
+          const subTotal = document.querySelector('.js-sub-total')
+
+          total.innerHTML = response.total
+          subTotal.innerHTML = response.subTotal
           Toast.fire({ icon: 'success', iconColor: '#007cba', title: response.message })
         }
 
