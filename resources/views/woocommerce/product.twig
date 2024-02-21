@@ -21,7 +21,7 @@
                         <h1 class="product_title entry-title">{{ product.name }}</h1>
 
                         <div class="price">
-                            {% if product.sale_price != '' %}
+                            {% if product.sale_price is not empty %}
                                 <s>{{ fn('wc_price', product.regular_price) }}</s>
                                 {{ fn('wc_price', product.sale_price) }}
                             {% else %}

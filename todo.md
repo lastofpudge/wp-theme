@@ -10,7 +10,7 @@
 - [ ] product
     - [ ] sku
     - [ ] category
-    - [ ] sale price
+    - [x] sale price
     - [ ] variants
     - [ ] partner product
     - [ ] html for tabs
