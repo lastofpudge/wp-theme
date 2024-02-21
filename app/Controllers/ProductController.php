@@ -38,6 +38,11 @@ class ProductController extends Controller
         return $this->data;
     }
 
+    public function archive(): array
+    {
+        return $this->data;
+    }
+
     public function cart(): array
     {
         $this->data['checkout_link'] = wc_get_checkout_url();

@@ -1,0 +1,42 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+    <div class='container'>
+        <div class='row'>
+            <div class='col-12'>
+                <p>
+                    {{ term.description }}
+                </p>
+
+                {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+
+                {% for post in posts %}
+                    <div class="category-post" style="padding:15px;">
+                        <h2>
+                            <a href="{{ post.link }}">{{ post.title }}</a>
+                        </h2>
+                        <p class="entry-meta">
+                            Posted:
+                            <time datetime="{{ post.post_date_gmt }}">
+                                {{ post.post_date_gmt|time_ago }}
+                            </time>
+                        </p>
+
+                        <div class="col-4">
+                            {% if post.thumbnail %}
+                                <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}"
+                                     alt="{{ post.title }}" />
+                            {% else %}
+                                <img src="{{ theme.path }}/resources/assets/dist/images/placeholders/no-image-default.png"
+                                     alt="" />
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {% include 'components/pagination.twig' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
