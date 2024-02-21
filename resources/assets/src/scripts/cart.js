@@ -1,7 +1,10 @@
 import axios from 'axios'
+import Toast from './libs/Toast'
 
 export function initCart() {
-  const removeButtons = document.querySelectorAll('.js-remove-form-cart')
+  const preloader = document.querySelector('.js-preloader-main')
+  const removeButtons = document.querySelectorAll('.js-remove-from-cart')
+  const addButtons = document.querySelectorAll('.js-add-to-cart')
 
   removeButtons.forEach(removeButton => {
     removeButton.addEventListener('click', async event => {
@@ -26,6 +29,36 @@ export function initCart() {
             cartItem.remove()
           }
         }
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  })
+
+  addButtons.forEach(addButton => {
+    addButton.addEventListener('click', async event => {
+      preloader.classList.add('js-preloading')
+
+      const formData = new FormData()
+      formData.append('action', 'addToCart')
+      formData.append('nonce', data.nonce)
+      formData.append('product_id', addButton.dataset.product_id)
+      formData.append('quantity', addButton.dataset.quantity)
+
+      try {
+        const { data: response } = await axios.post(data.ajax_url, formData, {
+          params: { action: 'addToCart' }
+        })
+
+        if (response.type === 'success') {
+          Toast.fire({ icon: 'success', iconColor: '#007cba', title: response.message })
+        }
+
+        if (response.type === 'error') {
+          Toast.fire({ icon: 'error', iconColor: 'red', title: response.message })
+        }
+
+        preloader.classList.remove('js-preloading')
       } catch (error) {
         console.error(error)
       }

@@ -49,12 +49,12 @@ echo wp_kses_post($before . sprintf(__('[Order #%s]', 'woocommerce') . $after . 
         echo wc_get_email_order_items( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             $order,
             array(
-                        'show_sku'      => $sent_to_admin,
-                        'show_image'    => false,
-                        'image_size'    => array( 32, 32 ),
-                        'plain_text'    => $plain_text,
-                        'sent_to_admin' => $sent_to_admin,
-                    )
+                                'show_sku'      => $sent_to_admin,
+                                'show_image'    => false,
+                                'image_size'    => array( 32, 32 ),
+                                'plain_text'    => $plain_text,
+                                'sent_to_admin' => $sent_to_admin,
+                            )
         );
 ?>
 		</tbody>
