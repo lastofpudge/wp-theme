@@ -25,11 +25,12 @@
                      alt="" />
             {% endif %}
             <div class="clear">
-                {{ post.excerpt(20, false, '', true) }}
+                {{ post.excerpt({ words: 20, read_more: '' }) }}
             </div>
             {{ fn('edit_post_link', 'Edit', '<span class="edit-link">', '</span>') }}
         </div>
     {% endfor %}
 
     {% include 'components/pagination.twig' %}
+
 {% endblock %}
