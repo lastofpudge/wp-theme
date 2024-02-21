@@ -1,10 +1,10 @@
 ## Basics todo
  
 - [ ] dropdown cart
-    - [ ] products list
+    - [x] products list
     - [ ] quantity change
-    - [ ] remove item
-    - [ ] sale
+    - [x] remove item
+    - [x] sale
     - [ ] cart link + checkout link
 
 - [ ] product

@@ -18,11 +18,10 @@ class ProductController extends Controller
 
     public function index(): array
     {
-        $this->data['post'] = Timber::get_post();
-        $this->data['product'] = wc_get_product($this->data['post']->ID);
+        $this->data['product'] = wc_get_product(get_the_ID());
 
         $related_limit = wc_get_loop_prop('columns');
-        $related_ids = wc_get_related_products($this->data['post']->id, $related_limit);
+        $related_ids = wc_get_related_products(get_the_ID(), $related_limit);
         $this->data['related_products'] = Timber::get_posts($related_ids);
 
         return $this->data;

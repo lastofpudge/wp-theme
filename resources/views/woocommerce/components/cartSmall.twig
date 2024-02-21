@@ -1,35 +1,74 @@
 <div class="btn-group">
     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        Cart
+        <i class="bi bi-cart-fill"></i> Cart (<span class='js-cart-total'>{{ cart.get_cart_contents_count }}</span>)<i
+                class="bi bi-caret-down-fill"></i>
     </button>
-    <ul class="dropdown-menu">
-        <li>
-            <table class="table">
-                <tbody>
-                <tr class="cart-subtotal">
-                    <td>
-                        <span>Sub-total:</span>
-                        <bdi>
-                                <span class="amount">
-                                    <span class="js-sub-total">{{ cart.subtotal }}</span>
-                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
-                                </span>
-                        </bdi>
-                    </td>
-                </tr>
-                <tr class="order-total">
-                    <td>
-                        <span>Total:</span>
-                        <bdi>
-                                <span class="amount">
-                                    <span class="js-total">{{ cart.total }}</span>
-                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
-                                </span>
-                        </bdi>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </li>
+    <ul class="dropdown-menu px-2">
+        {% for cart_item_key, cart_item in cart.get_cart() %}
+
+            <li class="js-cart-item list-unstyled list-cart">
+                {% set _product = cart_item['data'] %}
+                {% set product_id = cart_item['product_id'] %}
+                {% set product_name = _product.get_name() %}
+
+                {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown-image mx-2">
+                            {% set thumbnail = _product.get_image() %}
+                            {{ thumbnail|raw }}
+                        </div>
+
+                        <div>
+                            <a href="{{ function('get_permalink', product_id) }}">
+                                {{ product_name }}
+                            </a>
+
+                            <br>
+
+                            <div class="price" data-id="{{ product_id }}">
+                                {% if cart_item['data'].sale_price is not empty %}
+                                    <s>{{ fn('wc_price', cart_item['data'].regular_price) }}</s>
+                                    {{ fn('wc_price', cart_item['data'].sale_price) }}
+                                {% else %}
+                                    {{ fn('wc_price', cart_item['data'].regular_price) }}
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <button
+                                class="btn btn-danger ms-auto js-remove-from-cart items-center"
+                                data-key="{{ cart_item_key }}"
+                                type="button">&times;
+                        </button>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+        {#            <table class="table"> #}
+        {#                <tbody> #}
+        {#                <tr class="cart-subtotal"> #}
+        {#                    <td> #}
+        {#                        <span>Sub-total:</span> #}
+        {#                        <bdi> #}
+        {#                                <span class="amount"> #}
+        {#                                    <span class="js-sub-total">{{ cart.subtotal }}</span> #}
+        {#                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span> #}
+        {#                                </span> #}
+        {#                        </bdi> #}
+        {#                    </td> #}
+        {#                </tr> #}
+        {#                <tr class="order-total"> #}
+        {#                    <td> #}
+        {#                        <span>Total:</span> #}
+        {#                        <bdi> #}
+        {#                                <span class="amount"> #}
+        {#                                    <span class="js-total">{{ cart.total }}</span> #}
+        {#                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span> #}
+        {#                                </span> #}
+        {#                        </bdi> #}
+        {#                    </td> #}
+        {#                </tr> #}
+        {#                </tbody> #}
+        {#            </table> #}
     </ul>
 </div>

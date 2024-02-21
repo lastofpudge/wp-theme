@@ -2,7 +2,7 @@
 
 {% block content %}
     {% do action('woocommerce_before_single_product') %}
-    <div class="post-wrap" id="post-{{ post.ID }}">
+    <div class="post-wrap" id="post-{{ product.id }}">
 
         <div class='container'>
             <div class='row'>
@@ -18,14 +18,19 @@
                 <div class='col-6'>
 
                     <div class="summary entry-summary">
-                        <h1 class="product_title entry-title">{{ post.title }}</h1>
+                        <h1 class="product_title entry-title">{{ product.name }}</h1>
 
                         <div class="price">
-                            {{ fn('wc_price', post.meta('_price')) }}
+                            {% if product.sale_price != '' %}
+                                <s>{{ fn('wc_price', product.regular_price) }}</s>
+                                {{ fn('wc_price', product.sale_price) }}
+                            {% else %}
+                                {{ fn('wc_price', product.regular_price) }}
+                            {% endif %}
                         </div>
 
-                        <div>
-                            <button class='js-add-to-cart' data-quantity="1" data-product_id="{{ post.ID }}">Add to
+                        <div class="mt-2">
+                            <button class='js-add-to-cart' data-quantity="1" data-product_id="{{ product.id }}">Add to
                                 Cart
                             </button>
                         </div>
@@ -73,7 +78,6 @@
                         </div>
                     {% endif %}
                 </div>
-                {% do action('woocommerce_after_single_product') %}
             </div>
 
         </div>
