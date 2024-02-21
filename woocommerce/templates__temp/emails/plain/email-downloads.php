@@ -34,7 +34,7 @@ foreach ($downloads as $download) {
                     echo esc_html($download['download_name']) . ' - ' . esc_url($download['download_url']);
                     break;
                 case 'download-expires':
-                    if (! empty($download['access_expires'])) {
+                    if (!empty($download['access_expires'])) {
                         echo esc_html(date_i18n(get_option('date_format'), strtotime($download['access_expires'])));
                     } else {
                         esc_html_e('Never', 'woocommerce');
