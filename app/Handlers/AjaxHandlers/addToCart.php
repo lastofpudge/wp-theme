@@ -7,7 +7,11 @@ if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
 $product_id = sanitize_text_field($_POST['product_id']);
 $quantity = intval($_POST['quantity']);
 
-$result = WC()->cart->add_to_cart($product_id, $quantity);
+try {
+    $result = WC()->cart->add_to_cart($product_id, $quantity);
+} catch (Exception $e) {
+    wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
+}
 
 if ($result) {
     $total = WC()->cart->get_cart_contents_total();
@@ -15,5 +19,7 @@ if ($result) {
 
     wp_send_json(['type' => 'success', 'message' => 'Product added to the cart.', 'total' => $total, 'subTotal' => $subTotal, 'result' => $result]);
 } else {
-    wp_send_json(['type' => 'error', 'message' => 'Error adding product to the cart.']);
+    $error_message = '';
+
+    wp_send_json(['type' => 'error', 'message' => $error_message]);
 }
