@@ -4,7 +4,6 @@ add_action('woocommerce_product_after_variable_attributes', 'woo_custom_fields',
 
 function woo_custom_fields($loop, $variation_data, $variation)
 {
-
     woocommerce_wp_text_input(
         array(
             'id' => 'name[' . $loop . ']',
@@ -72,14 +71,12 @@ function woo_custom_fields($loop, $variation_data, $variation)
     //            'value' => 'hey there'
     //        )
     //    );
-
 }
 
 add_action('woocommerce_save_product_variation', 'woo_save_fields', 10, 2);
 
 function woo_save_fields($variation_id, $loop): void
 {
-
     // Text Field
     $name = !empty($_POST['name'][$loop]) ? $_POST['name'][$loop] : '';
     update_post_meta($variation_id, 'name', sanitize_text_field($name));
@@ -103,12 +100,9 @@ function woo_save_fields($variation_id, $loop): void
     //
     //    // Hidden
     //    update_post_meta($variation_id, '_hidden', $_POST['hidden_field'][$loop]);
-
 }
 
 add_filter('woocommerce_available_variation', function ($variation) {
-
     $variation['name'] = get_post_meta($variation['variation_id'], 'name', true);
     return $variation;
-
 });
