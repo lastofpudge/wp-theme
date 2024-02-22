@@ -45,13 +45,32 @@
                             </div>
                         {% endif %}
 
+                        {% if product.is_type('variable') %}
+                            {% set product_variations = product.get_available_variations %}
+                            {% if product_variations %}
+                                {% for variation in product_variations %}
+                                    {% if not empty variation.name %}
+                                        <p>Name: {{ variation.name }}</p>
+                                    {% endif %}
+                                    <p>Price: {{ variation.price_html }}</p>
+                                    <hr>
+                                {% endfor %}
+                            {% else %}
+                                <p>No variants found for this product.</p>
+                            {% endif %}
+                        {% endif %}
+
+
                         <div class=" mt-2">
-                            <button class="js-add-to-cart" data-quantity="1" data-product_id="{{ product.id }}">
+                            <button class="js-add-to-cart" data-quantity="1" data-product_id="{{ product.id }}"
+                                    {% if product.is_type('variable') %} disabled {% endif %}
+                            >
                                 Add to
                                 Cart
                             </button>
                         </div>
 
+                        <br>
                         {{ fn(
                             'edit_post_link',
                             'Edit',
