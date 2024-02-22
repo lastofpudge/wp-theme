@@ -2,7 +2,6 @@
  
 - [ ] dropdown cart
     - [x] products list
-    - [ ] quantity change
     - [x] remove item
     - [x] sale
     - [x] cart link + checkout link
@@ -12,7 +11,7 @@
     - [x] sku
     - [x] category
     - [x] sale price
-    - [ ] variants
+    - [x] variants
     - [ ] partner product
     - [ ] html for tabs
         - [ ] attributes

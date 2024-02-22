@@ -12,11 +12,14 @@ $total = WC()->cart->get_cart_contents_total();
 $subTotal = WC()->cart->get_subtotal();
 $cartItemCount = WC()->cart->get_cart_contents_count();
 
-//$formattedTotal = wc_price($total);
-//$formattedSubTotal = wc_price($subTotal);
-
 if ($response) {
-    wp_send_json(['type' => 'success', 'message' => 'Product removed from the cart.', 'total' => $total, 'subTotal' => $subTotal, 'count' => $cartItemCount]);
+    wp_send_json([
+        'type' => 'success',
+        'message' => 'Product removed from the cart.',
+        'total' => number_format($total, 2, '.', ''),
+        'subTotal' => $subTotal,
+        'count' => $cartItemCount
+    ]);
 } else {
     wp_send_json(['type' => 'error', 'response' => $response]);
 }

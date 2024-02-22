@@ -24,7 +24,7 @@ export function addToCart() {
             <td class="text-end">
                 ${
                   product.sale_price
-                    ? `<s><bdi>${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span></bdi></s> ${product.sale_price}`
+                    ? `<s><bdi>${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span></bdi></s> ${product.sale_price} ${product.currency_symbol}`
                     : `${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span>`
                 }
             </td>
