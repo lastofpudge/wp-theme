@@ -6,8 +6,10 @@ export function initCart() {
   const removeButtons = document.querySelectorAll('.js-remove-from-cart')
   const addButtons = document.querySelectorAll('.js-add-to-cart')
 
-  const total = document.querySelector('.js-total')
-  const subTotal = document.querySelector('.js-sub-total')
+  const totals = document.querySelectorAll('.js-total')
+  const subTotals = document.querySelectorAll('.js-sub-total')
+
+  const cartCount = document.querySelector('.js-cart-total')
 
   removeButtons.forEach(removeButton => {
     removeButton.addEventListener('click', async event => {
@@ -27,8 +29,15 @@ export function initCart() {
             cartItem.remove()
           }
 
-          total.innerHTML = response.total
-          subTotal.innerHTML = response.subTotal
+          totals.forEach(totalElement => {
+            totalElement.innerHTML = response.total
+          })
+
+          subTotals.forEach(subTotalElement => {
+            subTotalElement.innerHTML = response.subTotal
+          })
+
+          cartCount.innerHTML = response.count
         }
       } catch (error) {
         console.error(error)
@@ -52,8 +61,16 @@ export function initCart() {
         })
 
         if (response.type === 'success') {
-          total.innerHTML = response.total
-          subTotal.innerHTML = response.subTotal
+          totals.forEach(totalElement => {
+            totalElement.innerHTML = response.total
+          })
+
+          subTotals.forEach(subTotalElement => {
+            subTotalElement.innerHTML = response.subTotal
+          })
+
+          cartCount.innerHTML = response.count
+          
           Toast.fire({ icon: 'success', iconColor: '#007cba', title: response.message })
         }
 

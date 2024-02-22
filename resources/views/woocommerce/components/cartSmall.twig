@@ -34,7 +34,7 @@
                                     <s>{{ fn('wc_price', cart_item['data']._regular_price) }}</s> {{ fn('wc_price', cart_item['data']._sale_price) }}
                                 </td>
                             {% else %}
-                                <td>x1</td>
+                                <td>x{{ cart_item['quantity'] }}</td>
                                 <td class="text-end">{{ fn('wc_price', cart_item['data']._regular_price) }}</td>
                             {% endif %}
                             <td class="text-end">

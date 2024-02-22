@@ -5,7 +5,7 @@
     - [ ] quantity change
     - [x] remove item
     - [x] sale
-    - [ ] cart link + checkout link
+    - [x] cart link + checkout link
 
 - [ ] product
     - [ ] sku

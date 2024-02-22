@@ -16,8 +16,9 @@ try {
 if ($result) {
     $total = WC()->cart->get_cart_contents_total();
     $subTotal = WC()->cart->get_subtotal();
+    $cartItemCount = WC()->cart->get_cart_contents_count();
 
-    wp_send_json(['type' => 'success', 'message' => 'Product added to the cart.', 'total' => $total, 'subTotal' => $subTotal, 'result' => $result]);
+    wp_send_json(['type' => 'success', 'message' => 'Product added to the cart.', 'total' => $total, 'subTotal' => $subTotal, 'count' => $cartItemCount, 'result' => $result]);
 } else {
     $error_message = '';
 
