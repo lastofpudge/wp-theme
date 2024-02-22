@@ -10,7 +10,7 @@
         {% if post.thumbnail %}
         <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}" />
     {% else %}
-        {{ post.excerpt(20, false, '', true) }}
+        {{ post.excerpt({ words: 20, read_more: '' }) }}
         </div>
     {% endfor %}
 
