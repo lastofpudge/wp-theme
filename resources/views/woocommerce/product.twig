@@ -49,7 +49,7 @@
                             {% set product_variations = product.get_available_variations %}
                             {% if product_variations %}
                                 {% for variation in product_variations %}
-                                    {% if not empty variation.name %}
+                                    {% if variation.name %}
                                         <p>Name: {{ variation.name }}</p>
                                     {% endif %}
                                     <p>Price: {{ variation.price_html }}</p>
@@ -61,7 +61,7 @@
                         {% endif %}
 
 
-                        <div class=" mt-2">
+                        <div class="mt-2">
                             <button class="js-add-to-cart" data-quantity="1" data-product_id="{{ product.id }}"
                                     {% if product.is_type('variable') %} disabled {% endif %}
                             >
