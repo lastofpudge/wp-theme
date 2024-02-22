@@ -10,14 +10,14 @@
         {#        {{ dump(cart.get_cart()) }} #}
         <li>
             <table class="table table-striped mb-2">
-                <tbody>
+                <tbody class="js-cart-list">
                 {% for cart_item_key, cart_item in cart.get_cart() %}
                     {% set _product = cart_item['data'] %}
                     {% set product_id = cart_item['product_id'] %}
                     {% set product_name = _product.get_name() %}
 
                     {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
-                        <tr class="js-cart-item">
+                        <tr class="js-cart-item" data-key="{{ cart_item_key }}">
                             <td class="text-center">
                                 <a href="{{ fn('get_permalink', product_id) }}" class="d-block thumb-sm">
                                     {% set thumbnail = _product.get_image() %}
@@ -37,6 +37,7 @@
                                 <td>x{{ cart_item['quantity'] }}</td>
                                 <td class="text-end">{{ fn('wc_price', cart_item['data']._regular_price) }}</td>
                             {% endif %}
+
                             <td class="text-end">
                                 <button type="button"
                                         data-key="{{ cart_item_key }}"

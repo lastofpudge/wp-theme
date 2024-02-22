@@ -13,14 +13,43 @@ try {
     wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
 }
 
+
 if ($result) {
     $total = WC()->cart->get_cart_contents_total();
     $subTotal = WC()->cart->get_subtotal();
     $cartItemCount = WC()->cart->get_cart_contents_count();
 
-    wp_send_json(['type' => 'success', 'message' => 'Product added to the cart.', 'total' => $total, 'subTotal' => $subTotal, 'count' => $cartItemCount, 'result' => $result]);
-} else {
-    $error_message = '';
+    $originProduct = wc_get_product($product_id);
+    $productData = $originProduct->get_data();
+    $currencySymbol = get_woocommerce_currency_symbol();
 
-    wp_send_json(['type' => 'error', 'message' => $error_message]);
+    if (!empty($productData['sale_price'])) {
+        $productData['sale_price'] = number_format($productData['sale_price'], 2, ',', '');
+    } else {
+        $productData['sale_price'] = null;
+    }
+
+    $product = [
+        'id' => $product_id,
+        'name' => $productData['name'],
+        'link' => get_permalink($product_id),
+        'regular_price' => number_format($productData['price'], 2, ',', ''),
+        'quantity' => $quantity,
+        'sale_price' => $productData['sale_price'],
+        'currency_symbol' => $currencySymbol,
+        'cart_item_key' => $result,
+        'sku' => $productData['sku'],
+        'thumbnail' => $originProduct->get_image(),
+    ];
+
+    wp_send_json([
+        'type' => 'success',
+        'message' => 'Product added to the cart.',
+        'total' => $total,
+        'subTotal' => $subTotal,
+        'count' => $cartItemCount,
+        'product' => $product
+    ]);
+} else {
+    wp_send_json(['type' => 'error', 'message' => 'Error adding to cart']);
 }
