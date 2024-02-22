@@ -48,13 +48,35 @@
                         {% if product.is_type('variable') %}
                             {% set product_variations = product.get_available_variations %}
                             {% if product_variations %}
-                                {% for variation in product_variations %}
-                                    {% if variation.name %}
-                                        <p>Name: {{ variation.name }}</p>
-                                    {% endif %}
-                                    <p>Price: {{ variation.price_html }}</p>
-                                    <hr>
-                                {% endfor %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for variation in product_variations %}
+                                        <tr>
+                                            {% if variation.name %}
+                                                <td>{{ variation.name }}</td>
+                                            {% else %}
+                                                <td>N/A</td>
+                                            {% endif %}
+                                            <td>{{ variation.price_html }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <label>
+                                    <select name="variation" class="js-variant">
+                                        <option value="#" selected disabled>Select variation</option>
+                                        {% for variation in product_variations %}
+                                            <option value="{{ variation.variation_id }}">{{ variation.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
                             {% else %}
                                 <p>No variants found for this product.</p>
                             {% endif %}

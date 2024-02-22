@@ -1,59 +1,13 @@
 import axios from 'axios'
-import Toast from './libs/Toast'
+import Toast from '@/libs/Toast'
 
-export function initCart() {
+export function addToCart() {
   const preloader = document.querySelector('.js-preloader-main')
-  const cartContainer = document.querySelector('.js-cart-list')
-
   const addButtons = document.querySelectorAll('.js-add-to-cart')
 
   const totals = document.querySelectorAll('.js-total')
   const subTotals = document.querySelectorAll('.js-sub-total')
-
   const cartCount = document.querySelector('.js-cart-total')
-
-  cartContainer.addEventListener('click', async event => {
-    const target = event.target
-
-    if (target.classList.contains('js-remove-from-cart')) {
-      preloader.classList.add('js-preloading')
-
-      const formData = new FormData()
-      formData.append('action', 'removeFromCart')
-      formData.append('nonce', data.nonce)
-      formData.append('key', target.dataset.key)
-
-      try {
-        const { data: response } = await axios.post(data.ajax_url, formData, {
-          params: { action: 'removeFromCart' }
-        })
-
-        if (response.type === 'success') {
-          const cartItems = cartContainer.querySelectorAll(`[data-key="${target.dataset.key}"]`)
-
-          console.log(cartItems)
-          cartItems.forEach(cartItem => {
-            cartItem.remove()
-          })
-
-          totals.forEach(totalElement => {
-            totalElement.innerHTML = response.total
-          })
-
-          subTotals.forEach(subTotalElement => {
-            subTotalElement.innerHTML = response.subTotal
-          })
-
-          cartCount.innerHTML = response.count
-        }
-        preloader.classList.remove('js-preloading')
-      } catch (error) {
-        console.error(error)
-        preloader.classList.remove('js-preloading')
-      }
-    }
-  })
-
   const addedProduct = product => {
     return `
         <tr class="js-cart-item" data-ajax="true" data-key="${product.cart_item_key}">
@@ -70,7 +24,7 @@ export function initCart() {
             <td class="text-end">
                 ${
                   product.sale_price
-                    ? `<bdi>${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span></bdi> ${product.sale_price}`
+                    ? `<s><bdi>${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span></bdi></s> ${product.sale_price}`
                     : `${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span>`
                 }
             </td>
@@ -91,6 +45,9 @@ export function initCart() {
       formData.append('nonce', data.nonce)
       formData.append('product_id', addButton.dataset.product_id)
       formData.append('quantity', addButton.dataset.quantity)
+      if (addButton.dataset.variation) {
+        formData.append('variation', addButton.dataset.variation)
+      }
 
       try {
         const { data: response } = await axios.post(data.ajax_url, formData, {
