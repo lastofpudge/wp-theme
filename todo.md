@@ -6,10 +6,11 @@
     - [x] remove item
     - [x] sale
     - [x] cart link + checkout link
+    - [ ] combine same products
 
 - [ ] product
-    - [ ] sku
-    - [ ] category
+    - [x] sku
+    - [x] category
     - [x] sale price
     - [ ] variants
     - [ ] partner product

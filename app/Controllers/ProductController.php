@@ -19,6 +19,8 @@ class ProductController extends Controller
     public function index(): array
     {
         $this->data['product'] = wc_get_product(get_the_ID());
+        $this->data['post'] = Timber::get_post();
+        $this->data['categories'] = get_the_terms(get_the_ID(), 'product_cat');
 
         $related_limit = wc_get_loop_prop('columns');
         $related_ids = wc_get_related_products(get_the_ID(), $related_limit);
