@@ -1,74 +1,83 @@
-<div class="btn-group">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-cart-fill"></i> Cart (<span class='js-cart-total'>{{ cart.get_cart_contents_count }}</span>)<i
-                class="bi bi-caret-down-fill"></i>
+<div class="dropdown d-grid">
+    <button type="button" data-bs-toggle="dropdown" class="btn btn-lg btn-inverse btn-block dropdown-toggle"
+            aria-expanded="true"><i class="fa-solid fa-cart-shopping"></i> <span
+                class='js-cart-total'>{{ cart.get_cart_contents_count }}</span> item(s) - <span
+                class="js-total">{{ cart.total }}</span> {{ currency_symbol }}
     </button>
-    <ul class="dropdown-menu px-2">
-        {% for cart_item_key, cart_item in cart.get_cart() %}
+    <ul class="dropdown-menu dropdown-menu-end p-2"
+        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 42px, 0px);"
+        data-popper-placement="bottom-end">
+        {#        {{ dump(cart.get_cart()) }} #}
+        <li>
+            <table class="table table-striped mb-2">
+                <tbody>
+                {% for cart_item_key, cart_item in cart.get_cart() %}
+                    {% set _product = cart_item['data'] %}
+                    {% set product_id = cart_item['product_id'] %}
+                    {% set product_name = _product.get_name() %}
 
-            <li class="js-cart-item list-unstyled list-cart">
-                {% set _product = cart_item['data'] %}
-                {% set product_id = cart_item['product_id'] %}
-                {% set product_name = _product.get_name() %}
+                    {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
+                        <tr class="js-cart-item">
+                            <td class="text-center">
+                                <a href="{{ fn('get_permalink', product_id) }}" class="d-block thumb-sm">
+                                    {% set thumbnail = _product.get_image() %}
+                                    {{ thumbnail|raw }}
+                                </a>
+                            </td>
+                            <td class="text-start">
+                                <a href="{{ fn('get_permalink', product_id) }}">{{ product_name }}</a>
+                            </td>
 
-                {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
-                    <div class="d-flex align-items-center">
-                        <div class="dropdown-image mx-2">
-                            {% set thumbnail = _product.get_image() %}
-                            {{ thumbnail|raw }}
-                        </div>
+                            {% if cart_item['data']._sale_price is not empty %}
+                                <td>x{{ cart_item['quantity'] }}</td>
+                                <td class="text-end">
+                                    <s>{{ fn('wc_price', cart_item['data']._regular_price) }}</s> {{ fn('wc_price', cart_item['data']._sale_price) }}
+                                </td>
+                            {% else %}
+                                <td>x1</td>
+                                <td class="text-end">{{ fn('wc_price', cart_item['data']._regular_price) }}</td>
+                            {% endif %}
+                            <td class="text-end">
+                                <button type="button"
+                                        data-key="{{ cart_item_key }}"
+                                        title="Remove"
+                                        class="btn btn-danger js-remove-from-cart">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
 
-                        <div>
-                            <a href="{{ function('get_permalink', product_id) }}">
-                                {{ product_name }}
-                            </a>
-
-                            <br>
-
-                            <div class="price" data-id="{{ product_id }}">
-                                {% if cart_item['data'].sale_price is not empty %}
-                                    <s>{{ fn('wc_price', cart_item['data'].regular_price) }}</s>
-                                    {{ fn('wc_price', cart_item['data'].sale_price) }}
-                                {% else %}
-                                    {{ fn('wc_price', cart_item['data'].regular_price) }}
-                                {% endif %}
-                            </div>
-
-                        </div>
-                        <button
-                                class="btn btn-danger ms-auto js-remove-from-cart items-center"
-                                data-key="{{ cart_item_key }}"
-                                type="button">&times;
-                        </button>
-                    </div>
-                {% endif %}
-            </li>
-        {% endfor %}
-        {#            <table class="table"> #}
-        {#                <tbody> #}
-        {#                <tr class="cart-subtotal"> #}
-        {#                    <td> #}
-        {#                        <span>Sub-total:</span> #}
-        {#                        <bdi> #}
-        {#                                <span class="amount"> #}
-        {#                                    <span class="js-sub-total">{{ cart.subtotal }}</span> #}
-        {#                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span> #}
-        {#                                </span> #}
-        {#                        </bdi> #}
-        {#                    </td> #}
-        {#                </tr> #}
-        {#                <tr class="order-total"> #}
-        {#                    <td> #}
-        {#                        <span>Total:</span> #}
-        {#                        <bdi> #}
-        {#                                <span class="amount"> #}
-        {#                                    <span class="js-total">{{ cart.total }}</span> #}
-        {#                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span> #}
-        {#                                </span> #}
-        {#                        </bdi> #}
-        {#                    </td> #}
-        {#                </tr> #}
-        {#                </tbody> #}
-        {#            </table> #}
+            <div>
+                <table class="table table-sm table-bordered mb-2">
+                    <tbody>
+                    <tr>
+                        <td class="text-end"><strong>Sub-Total</strong></td>
+                        <td class="text-end"><span class="js-sub-total">{{ cart.subtotal }}</span> {{ currency_symbol }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-end"><strong>Total</strong></td>
+                        <td class="text-end"><span class="js-total">{{ cart.total }}</span> {{ currency_symbol }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="text-end">
+                    <a href="{{ cart_link }}">
+                        <strong>
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            View Cart
+                        </strong>
+                    </a>&nbsp;
+                    <a href="{{ checkout_link }}">
+                        <strong>
+                            <i class="fa-solid fa-share"></i> Checkout</strong>
+                    </a>
+                </p>
+            </div>
+        </li>
     </ul>
 </div>

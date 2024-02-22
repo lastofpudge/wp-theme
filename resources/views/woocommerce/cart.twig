@@ -3,16 +3,11 @@
 {% block content %}
     {% do action('woocommerce_before_cart') %}
 
-    <div class='container'>
+    <div class="container">
         <div data-block-name="woocommerce/cart" class="wp-block-woocommerce-cart alignwide">
 
-            <div class='wc-block-components-notices'></div>
-            <div class='wc-block-components-notices__snackbar wc-block-components-notice-snackbar-list'>
-                <div></div>
-            </div>
-
-            <div class='row wc-block-cart wp-block-woocommerce-filled-cart-block is-large'>
-                <div class='col-6 wc-block-components-main wc-block-cart__main wp-block-woocommerce-cart-items-block'>
+            <div class="row wc-block-cart wp-block-woocommerce-filled-cart-block is-large">
+                <div class="col-6 wc-block-components-main wc-block-cart__main wp-block-woocommerce-cart-items-block">
                     <div class="woocommerce-cart-form">
 
                         <table class="table shop_table shop_table_responsive cart woocommerce-cart-form__contents">
@@ -152,7 +147,7 @@
 
                     {% do action('woocommerce_before_cart_collaterals') %}
                 </div>
-                <div class='col-6 wc-block-components-sidebar wc-block-cart__sidebar wp-block-woocommerce-cart-totals-block'>
+                <div class="col-6 wc-block-components-sidebar wc-block-cart__sidebar wp-block-woocommerce-cart-totals-block">
                     <div class="cart-collaterals">
                         <table class="shop_table shop_table_responsive">
                             <tbody>

@@ -44,7 +44,6 @@ class ProductController extends Controller
 
     public function cart(): array
     {
-        $this->data['checkout_link'] = wc_get_checkout_url();
         $this->data['coupons_enabled'] = wc_coupons_enabled();
 
         return $this->data;

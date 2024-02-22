@@ -63,6 +63,7 @@ export function initCart() {
 
         preloader.classList.remove('js-preloading')
       } catch (error) {
+        preloader.classList.remove('js-preloading')
         console.error(error)
       }
     })

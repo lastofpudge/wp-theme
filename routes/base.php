@@ -10,7 +10,6 @@ if (is_category() || is_tag() || is_search()) {
     Route::load(CategoryController::class, 'index', 'categories/category');
 }
 
-
 if (is_front_page()) {
     Route::load(PageController::class, 'index', 'index');
 }
@@ -25,6 +24,10 @@ if (is_single()) {
 
 if (is_page()) {
     Route::load(PageController::class, 'index', 'pages/page');
+}
+
+if (is_shop()) {
+    Route::load(ProductController::class, 'archive', 'woocommerce/archive');
 }
 
 if (is_404()) {
