@@ -5,7 +5,7 @@
     - [x] remove item
     - [x] sale
     - [x] cart link + checkout link
-    - [ ] combine same products
+    - [x] combine same products
 
 - [ ] product
     - [x] sku
@@ -26,9 +26,9 @@
 - [ ] cart
     - [ ] apply coupon
     - [ ] quantity change
-    - [ ] delivery
-    - [ ] shipping + shipping change
 
 - [ ] checkout
+    - [ ] delivery
+    - [ ] shipping + shipping change
 
 - [ ] account

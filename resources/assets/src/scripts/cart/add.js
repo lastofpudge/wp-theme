@@ -8,6 +8,8 @@ export function addToCart() {
   const totals = document.querySelectorAll('.js-total')
   const subTotals = document.querySelectorAll('.js-sub-total')
   const cartCount = document.querySelector('.js-cart-total')
+
+  const cartList = document.querySelector('.js-cart-list')
   const addedProduct = product => {
     return `
         <tr class="js-cart-item" data-ajax="true" data-key="${product.cart_item_key}">
@@ -22,11 +24,7 @@ export function addToCart() {
            
             <td>x${product.quantity}</td>
             <td class="text-end">
-                ${
-                  product.sale_price
-                    ? `<s><bdi>${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span></bdi></s> ${product.sale_price} ${product.currency_symbol}`
-                    : `${product.regular_price}&nbsp;<span class="woocommerce-Price-currencySymbol">${product.currency_symbol}</span>`
-                }
+                ${product.sale_price ? `${product.sale_price}` : `${product.regular_price}`}
             </td>
             
             <td class="text-end">
@@ -55,20 +53,25 @@ export function addToCart() {
         })
 
         if (response.type === 'success') {
+          // totals
           totals.forEach(totalElement => {
             totalElement.innerHTML = response.total
           })
 
+          // sub-totals
           subTotals.forEach(subTotalElement => {
             subTotalElement.innerHTML = response.subTotal
           })
 
           cartCount.innerHTML = response.count
 
-          if (response.product) {
-            const newProduct = addedProduct(response.product)
-            const cartList = document.querySelector('.js-cart-list')
-            cartList.innerHTML += newProduct
+          // cart items
+          if (response.cart) {
+            cartList.innerHTML = ''
+            response.cart.forEach(product => {
+              const newProduct = addedProduct(product) // Pass each product data to your addedProduct function
+              cartList.innerHTML += newProduct
+            })
           }
 
           Toast.fire({ icon: 'success', iconColor: '#007cba', title: response.message })

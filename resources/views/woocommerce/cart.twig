@@ -25,7 +25,7 @@
                                 {% set product_name = _product.get_name() %}
 
                                 {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
-                                    <tr class="js-cart-item">
+                                    <tr data-key="{{ cart_item_key }}">
                                         <td class="text-center">
                                             {% set thumbnail = _product.get_image() %}
                                             <a href="{{ function('get_permalink', product_id) }}"

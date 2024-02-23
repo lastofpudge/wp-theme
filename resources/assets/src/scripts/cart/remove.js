@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function removeFromCart() {
   const preloader = document.querySelector('.js-preloader-main')
-  const cartContainer = document.querySelector('.js-cart-list')
+  const cartContainer = document.querySelector('body')
 
   const totals = document.querySelectorAll('.js-total')
   const subTotals = document.querySelectorAll('.js-sub-total')

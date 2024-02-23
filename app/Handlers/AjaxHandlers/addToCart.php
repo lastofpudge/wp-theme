@@ -16,41 +16,36 @@ try {
     wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
 }
 
-$total = WC()->cart->get_cart_contents_total();
-$subTotal = WC()->cart->get_subtotal();
-$cartItemCount = WC()->cart->get_cart_contents_count();
+$cart = WC()->cart->get_cart();
+$cart_data = [];
 
-$originProduct = wc_get_product($product_id);
-$productData = $originProduct->get_data();
-$product['sale_price'] = '';
+foreach ($cart as $cart_item_key => $cart_item) {
+    $_product = $cart_item['data'];
+    $sale_price = null;
 
-if ($variation_id) {
-    $product['name'] = wc_get_product($variation_id)->get_name();
-    $product['regular_price'] = number_format(get_post_meta($variation_id, '_regular_price', true), 2, ',', '');
-    ;
-    if (!empty(get_post_meta($variation_id, '_sale_price', true))) {
-        $product['sale_price'] = number_format(get_post_meta($variation_id, '_sale_price', true), 2, ',', '');
-        ;
+    if (!empty($_product->get_sale_price())) {
+        $sale_price = wc_price($_product->get_sale_price());
     }
-} else {
-    $product['name'] = $productData['name'];
-    $product['regular_price'] = number_format($productData['price'], 2, ',', '');
-    $product['sale_price'] = $productData['sale_price'];
-}
 
-$product = array_merge($product, [
-    'link' => get_permalink($product_id),
-    'quantity' => absint($_POST['quantity']),
-    'currency_symbol' => get_woocommerce_currency_symbol(),
-    'cart_item_key' => $result,
-    'thumbnail' => $originProduct->get_image(),
-]);
+    $item_data = [
+        'id' => $cart_item['product_id'],
+        'name' => $_product->get_name(),
+        'link' => get_permalink($cart_item['product_id']),
+        'thumbnail' => $_product->get_image(),
+        'quantity' => $cart_item['quantity'],
+        'cart_item_key' => $result,
+        'regular_price' => wc_price($_product->get_regular_price()),
+        'sale_price' => $sale_price,
+    ];
+
+    $cart_data[] = $item_data;
+}
 
 wp_send_json([
     'type' => 'success',
     'message' => 'Product added to the cart.',
-    'total' => number_format($total, 2, '.', ''),
-    'subTotal' => $subTotal,
-    'count' => $cartItemCount,
-    'product' => $product
+    'cart' => $cart_data,
+    'total' => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
+    'subTotal' => WC()->cart->get_subtotal(),
+    'count' => WC()->cart->get_cart_contents_count(),
 ]);
