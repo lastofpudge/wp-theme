@@ -4,64 +4,42 @@
     {% do action('woocommerce_before_cart') %}
 
     <div class="container">
-        <div data-block-name="woocommerce/cart" class="wp-block-woocommerce-cart alignwide">
-
-            <div class="row wc-block-cart wp-block-woocommerce-filled-cart-block is-large">
-                <div class="col-6 wc-block-components-main wc-block-cart__main wp-block-woocommerce-cart-items-block">
-                    <div class="woocommerce-cart-form">
-
-                        <table class="table shop_table shop_table_responsive cart woocommerce-cart-form__contents">
+        <div class="row wc-block-cart wp-block-woocommerce-filled-cart-block is-large">
+            <div class="col-12 ">
+                <div id="shopping-cart">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th class="product-thumbnail">
-                                    <span class="screen-reader-text">Thumbnail image</span></th>
-                                <th class="product-name">Product</th>
-                                <th class="product-price">Price</th>
-                                <th class="product-quantity">Quantity</th>
-                                <th class="product-subtotal">Subtotal</th>
-                                <th class="product-remove">
-                                    <span class="screen-reader-text">Remove item</span></th>
+                                <td class="text-center">Image</td>
+                                <td class="text-start">Product</td>
+                                <td class="text-start">Quantity</td>
+                                <td class="text-end">Total</td>
+                                <td></td>
                             </tr>
                             </thead>
                             <tbody>
-                            {% do action('woocommerce_before_cart_contents') %}
-
                             {% for cart_item_key, cart_item in cart.get_cart() %}
                                 {% set _product = cart_item['data'] %}
                                 {% set product_id = cart_item['product_id'] %}
                                 {% set product_name = _product.get_name() %}
 
                                 {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
-
-                                    <tr class="woocommerce-cart-form__cart-item js-cart-item">
-                                        <td class="product-thumbnail">
+                                    <tr class="js-cart-item">
+                                        <td class="text-center">
                                             {% set thumbnail = _product.get_image() %}
-                                            <a href="{{ function('get_permalink', product_id) }}">
+                                            <a href="{{ function('get_permalink', product_id) }}"
+                                               class="d-block thumb-sm">
                                                 {{ thumbnail|raw }}
                                             </a>
                                         </td>
-
-                                        <td class="product-name" data-title="Product">
-                                            <a href="{{ function('get_permalink', product_id) }}">
-                                                {{ product_name }}
-                                            </a>
-
-                                            {% do action('woocommerce_after_cart_item_name', cart_item, cart_item_key) %}
-
-                                            {{ formatted_cart_item_data|raw }}
-
-                                            {% if _product.backorders_require_notification() and _product.is_on_backorder(cart_item['quantity']) %}
-                                                <p class="backorder_notification">
-                                                    Available on backorder
-                                                </p>
-                                            {% endif %}
+                                        <td class="text-start text-wrap">
+                                            <a href="{{ function('get_permalink', product_id) }}">{{ product_name }}</a>
+                                            {#                                                <small> - Date &amp; Time: 2011-02-08 22:25</small> #}
+                                            {#                                                <br> #}
+                                            {#                                                <small> - Reward Points: 200</small> #}
                                         </td>
-
-                                        <td class="product-price" data-title="Price">
-                                            {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
-                                        </td>
-
-                                        <td class="product-quantity" data-title="Quantity">
+                                        <td class="text-start">
                                             {% if _product.is_sold_individually() %}
                                                 {% set min_quantity = 1 %}
                                                 {% set max_quantity = 1 %}
@@ -70,121 +48,88 @@
                                                 {% set max_quantity = _product.get_max_purchase_quantity() %}
                                             {% endif %}
 
-                                            {% set product_quantity %}
-                                                <div class="quantity">
-                                                    <div class="d-flex" style="max-width: 50px">
-                                                        <button type="button" data-key="{{ cart_item_key }}"
-                                                                class="js-decrement">
-                                                            －
-                                                        </button>
+                                            <div class="quantity">
+                                                <div class="d-flex" style="max-width: 50px">
+                                                    <button type="button" data-key="{{ cart_item_key }}"
+                                                            class="js-decrement">
+                                                        －
+                                                    </button>
 
-                                                        {{ function('woocommerce_quantity_input', {
-                                                            'input_name': "cart[#{cart_item_key}][qty]",
-                                                            'input_value': cart_item.quantity,
-                                                            'max_value': max_quantity,
-                                                            'min_value': min_quantity,
-                                                            'product_name': product_name
-                                                        }, _product, false) }}
+                                                    {{ function('woocommerce_quantity_input', {
+                                                        'input_name': "cart[#{cart_item_key}][qty]",
+                                                        'input_value': cart_item.quantity,
+                                                        'max_value': max_quantity,
+                                                        'min_value': min_quantity,
+                                                        'product_name': product_name
+                                                    }, _product, false) }}
 
-                                                        <button type="button" data-key="{{ cart_item_key }}"
-                                                                class="js-increment">
-                                                            ＋
-                                                        </button>
-                                                    </div>
+                                                    <button type="button" data-key="{{ cart_item_key }}"
+                                                            class="js-increment">
+                                                        ＋
+                                                    </button>
                                                 </div>
-                                            {% endset %}
+                                            </div>
 
-                                            {{ fn('apply_filters', 'woocommerce_cart_item_quantity', product_quantity, cart_item_key, cart_item) }}
+                                            {% if _product.backorders_require_notification() and _product.is_on_backorder(cart_item['quantity']) %}
+                                                <p class="backorder_notification">
+                                                    Available on backorder
+                                                </p>
+                                            {% endif %}
                                         </td>
-
-                                        <td class="product-subtotal" data-title="Subtotal">
+                                        <td class="text-end">
+                                            Unit
+                                            Price: {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
+                                            <br>
                                             {% set sub_total = cart.get_product_subtotal(_product, cart_item.quantity) %}
-                                            {{ fn('apply_filters', 'woocommerce_cart_item_subtotal', sub_total, cart_item, cart_item_key) }}
+                                            Total: {{ fn('apply_filters', 'woocommerce_cart_item_subtotal', sub_total, cart_item, cart_item_key) }}
                                         </td>
-
-                                        <td class="product-remove">
-                                            <button class="js-remove-from-cart" data-key="{{ cart_item_key }}"
-                                                    type="button">&times;
+                                        <td class="text-center">
+                                            <button class="btn btn-danger js-remove-from-cart"
+                                                    data-key="{{ cart_item_key }}"
+                                                    type="button">
+                                                <i class="fa-solid fa-circle-xmark"></i>
                                             </button>
                                         </td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
-
-                            <tr>
-                                <td colspan="6" class="actions">
-                                    {% if coupons_enabled %}
-                                        <div class="coupon">
-                                            <label for="coupon_code" class="screen-reader-text">Coupon</label>
-                                            <input type="text" name="coupon_code" class="input-text" id="coupon_code"
-                                                   value=""
-                                                   placeholder="Coupon code" />
-                                            <button type="submit"
-                                                    class="button"
-                                                    name="apply_coupon" value="Apply coupon">
-                                                Apply coupon
-                                            </button>
-                                            {% do action('woocommerce_cart_coupon') %}
-                                        </div>
-                                    {% endif %}
-
-                                    <button type="submit" class="button"
-                                            name="update_cart" value="Update cart">
-                                        Update cart
-                                    </button>
-
-                                    {% do action('woocommerce_cart_actions') %}
-
-                                </td>
-                            </tr>
-
-                            {% do action('woocommerce_after_cart_contents') %}
                             </tbody>
-                        </table>
-
-                        {% do action('woocommerce_after_cart_table') %}
-                    </div>
-
-                    {% do action('woocommerce_before_cart_collaterals') %}
-                </div>
-                <div class="col-6 wc-block-components-sidebar wc-block-cart__sidebar wp-block-woocommerce-cart-totals-block">
-                    <div class="cart-collaterals">
-                        <table class="shop_table shop_table_responsive">
-                            <tbody>
-                            <tr class="cart-subtotal">
-                                <th>Sub-total</th>
-                                <td>
-                                    <bdi>
-                                        <span class="amount">
-                                            <span class="js-sub-total">{{ cart.subtotal }}</span>
-                                                <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
-                                        </span>
-                                    </bdi>
-                                </td>
-                            </tr>
-                            <tr class="order-total">
-                                <th>Total</th>
-                                <td>
-                                    <bdi>
-                                        <span class="amount">
-                                            <span class="js-total">{{ cart.total }}</span>
-                                            <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
-                                        </span>
-                                    </bdi>
+                            <tfoot id="checkout-total">
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Sub-Total</strong></td>
+                                <td class="text-end">
+                                    <span class="js-sub-total">{{ cart.subtotal }}</span>
+                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <a href="{{ checkout_link }}">Continue</a>
+                                <td colspan="4" class="text-end"><strong>Eco Tax (-2.00)</strong></td>
+                                <td class="text-end">$4.00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>VAT (20%)</strong></td>
+                                <td class="text-end">$49.60</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Total</strong></td>
+                                <td class="text-end">
+                                    <span class="js-total">{{ cart.total }}</span>
+                                    <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
                                 </td>
                             </tr>
-                            </tbody>
+                            </tfoot>
                         </table>
+
+                        <div class="col text-end">
+                            <a class="btn btn-primary" href="{{ checkout_link }}">Continue</a>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     {% do action('woocommerce_after_cart') %}
+
 {% endblock %}
