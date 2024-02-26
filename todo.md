@@ -1,6 +1,6 @@
 ## Basics todo
  
-- [ ] dropdown cart
+- [x] dropdown cart
     - [x] products list
     - [x] remove item
     - [x] sale
@@ -12,7 +12,7 @@
     - [x] category
     - [x] sale price
     - [x] variants
-    - [ ] partner product
+    - [ ] partner product 
     - [ ] html for tabs
         - [ ] attributes
         - [ ] size + weight
