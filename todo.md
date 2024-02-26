@@ -16,7 +16,7 @@
     - [ ] html for tabs
         - [ ] attributes
         - [ ] size + weight
-    - [ ] quantity
+    - [x] quantity
     - [ ] reviews + check admin for reviews enabled
 
 - [ ] shop
