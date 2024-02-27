@@ -11,7 +11,9 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    {% do action('woocommerce_before_single_product_summary') %}
+                    <div class="position-relative">
+                        {% do action('woocommerce_before_single_product_summary') %}
+                    </div>
                 </div>
 
                 <div class="col-6">

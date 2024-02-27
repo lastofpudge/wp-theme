@@ -36,6 +36,11 @@
 
             <div class="col-10">
                 <div class="row">
+                    <div class="float-right">
+                        {{ fn('woocommerce_catalog_ordering') }}
+                    </div>
+                </div>
+                <div class="row">
                     {% if posts %}
                         {% for post in posts %}
                             <div class="col-4 mb-3">
@@ -51,6 +56,22 @@
                                         <img src="{{ theme.path }}/resources/assets/dist/images/placeholders/no-image-default.png"
                                              alt="" />
                                     {% endif %}
+
+                                    {% if post.is_type('variable') %}
+                                        <p>This is a variable product.</p>
+                                    {% else %}
+                                        <p>This is not a variable product.</p>
+                                    {% endif %}
+
+                                    <div class="mt-2">
+                                        <button class="btn btn-primary js-add-to-cart" data-quantity="1"
+                                                data-product_id="{{ post.id }}"
+                                                {% if post.is_type('variable') %} disabled {% endif %}
+                                        >
+                                            Add to
+                                            Cart
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}

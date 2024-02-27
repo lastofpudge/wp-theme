@@ -4,6 +4,8 @@ export function initRangeSlider() {
   const nonLinearStepSlider = document.getElementById('rangeSlider')
 
   if (nonLinearStepSlider) {
+    const nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value')
+
     const slider = noUiSlider.create(nonLinearStepSlider, {
       start: [0, 100],
       connect: true,
@@ -11,6 +13,10 @@ export function initRangeSlider() {
         min: 0,
         max: 100
       }
+    })
+
+    nonLinearStepSlider.noUiSlider.on('update', function (values) {
+      nonLinearStepSliderValueElement.innerHTML = values.join(' - ')
     })
 
     const valueElement = document.getElementById('slider-non-linear-step-value')

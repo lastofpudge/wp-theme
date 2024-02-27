@@ -31,11 +31,14 @@
                                 {% if cart_item['data']._sale_price is not empty %}
                                     <td>x{{ cart_item['quantity'] }}</td>
                                     <td class="text-end">
-                                        <s>{{ fn('wc_price', cart_item['data']._regular_price) }}</s> {{ fn('wc_price', cart_item['data']._sale_price) }}
+                                        <s>{{ fn('wc_price', cart_item['data']._regular_price) }}</s>
+                                        {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
                                     </td>
                                 {% else %}
                                     <td>x{{ cart_item['quantity'] }}</td>
-                                    <td class="text-end">{{ fn('wc_price', cart_item['data']._regular_price) }}</td>
+                                    <td class="text-end">
+                                        {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
+                                    </td>
                                 {% endif %}
 
                                 <td class="text-end">
