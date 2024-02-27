@@ -22,6 +22,14 @@ if (is_single()) {
     Route::load(PostController::class, 'index', 'posts/post');
 }
 
+if (is_account_page()) {
+    Route::load(PageController::class, 'index', 'woocommerce/account');
+}
+
+if (is_checkout()) {
+    Route::load(PageController::class, 'index', 'woocommerce/checkout');
+}
+
 if (is_page()) {
     Route::load(PageController::class, 'index', 'pages/page');
 }
