@@ -41,16 +41,14 @@ class ProductController extends Controller
 
     public function archive(): array
     {
-        $this->data['attributes'] = array_map(function ($taxonomy) {
-            return [
-                'label' => $taxonomy->attribute_label,
-                'name' => $taxonomy->attribute_name,
-                'terms' => get_terms([
-                        'taxonomy' => 'pa_' . $taxonomy->attribute_name,
-                        'hide_empty' => false,
-                    ]) ?? [],
-            ];
-        }, wc_get_attribute_taxonomies());
+        $this->data['attributes'] = array_map(fn ($taxonomy) => [
+            'label' => $taxonomy->attribute_label,
+            'name' => $taxonomy->attribute_name,
+            'terms' => get_terms([
+                    'taxonomy' => 'pa_' . $taxonomy->attribute_name,
+                    'hide_empty' => false,
+                ]) ?? [],
+        ], wc_get_attribute_taxonomies());
 
         return $this->data;
     }

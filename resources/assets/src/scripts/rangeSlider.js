@@ -4,8 +4,8 @@ export function initRangeSlider() {
   const nonLinearStepSlider = document.getElementById('rangeSlider')
 
   if (nonLinearStepSlider) {
-    noUiSlider.create(nonLinearStepSlider, {
-      start: [20, 80],
+    const slider = noUiSlider.create(nonLinearStepSlider, {
+      start: [0, 100],
       connect: true,
       range: {
         min: 0,
@@ -13,10 +13,26 @@ export function initRangeSlider() {
       }
     })
 
-    const nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value')
+    const valueElement = document.getElementById('slider-non-linear-step-value')
+    const urlParams = new URLSearchParams(window.location.search)
 
-    nonLinearStepSlider.noUiSlider.on('update', function (values) {
-      nonLinearStepSliderValueElement.innerHTML = values.join(' - ')
+    const setSliderValues = values => {
+      slider.set(values)
+      valueElement.innerHTML = values.join(' - ')
+    }
+
+    const minPrice = parseFloat(urlParams.get('min_price')) || 0
+    const maxPrice = parseFloat(urlParams.get('max_price')) || 100
+    setSliderValues([minPrice, maxPrice])
+
+    slider.on('set', values => {
+      const newUrlParams = new URLSearchParams(urlParams)
+      newUrlParams.set('min_price', values[0])
+      newUrlParams.set('max_price', values[1])
+
+      const newUrl = window.location.pathname + '?' + newUrlParams.toString()
+      history.pushState({}, '', newUrl)
+      location.reload()
     })
   }
 }
