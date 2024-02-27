@@ -3,4 +3,4 @@
 use App\Controllers\ProductController;
 use Core\Route;
 
-Route::load(ProductController::class, 'archive', 'woocommerce/archive');
+Route::load(ProductController::class, 'archive', 'woocommerce/shop');

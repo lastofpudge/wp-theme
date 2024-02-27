@@ -26,6 +26,7 @@ class AdminOptions
             'script',
             'style'
         ]);
+
         remove_theme_support('block-templates');
         remove_theme_support('core-block-patterns');
 
