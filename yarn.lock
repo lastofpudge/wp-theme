@@ -2941,9 +2941,9 @@ get-stream@^6.0.0:
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
 
 git-commit-msg-linter@^5.0.0:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/git-commit-msg-linter/-/git-commit-msg-linter-5.0.6.tgz#cb055c0c340d5e3e0acf8d8ff979a29c2cf039a6"
-  integrity sha512-Lp8JpY9JWHkBriZ37ln83DGK0iYQRx9dTJ4ut83XF+kBAc+kDtRU9GL5b8Cd9oujr5F3NYG+LWwZc3tYXZRK+w==
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/git-commit-msg-linter/-/git-commit-msg-linter-5.0.7.tgz#d12453b25e3dd4eb1af647168fc06de3a8e98922"
+  integrity sha512-9bciWCVSpI2Yqpy6WYTEy/AeEA87OurCFPH/QROKh8NMOfZFg3BtHgomfHjvDBPoHJxtfhZmToHSHx/4sSwquA==
   dependencies:
     chalk "^2.4.2"
     commit-msg-linter "^1.0.0"
