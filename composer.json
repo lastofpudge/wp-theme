@@ -25,7 +25,7 @@
     "timber"
   ],
   "require": {
-    "php": "7.4|8.*",
+    "php": "8.*",
     "htmlburger/carbon-fields": "^3.6",
     "timber/timber": "^2.0.0",
     "twig/twig": "^v3.8.0",
