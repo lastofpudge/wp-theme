@@ -1,37 +1,29 @@
 <header>
-    <div class="container mt-4">
+    <div class="container">
         <div class="row">
-            <div class="col-9">
+            <div class="col-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <ul class="nav navbar-nav">
+                    <ul class="navbar-nav mr-auto">
                         {% for item in left_menu.get_items %}
-                            <li class="nav-item mx-2 nav-item{{ item.classes|join(' ') }} {{ item.current
+                            <li class="mx-2 nav-item{{ item.classes|join(' ') }} {{ item.current
                             ? 'active'
-                            : '' }} {% if item.children %} dropdown {% endif %}">
-                                <a class="nav-link" href="{{ item.link }}">
+                            : '' }}">
+                                <a class="nav-main-link" href="{{ item.link }}">
                                     {{ item.title }}
                                 </a>
                                 {% if item.children %}
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-inner">
-                                            <ul class="list-unstyled">
-                                                {% for child in item.children %}
-                                                    <li class="nav-drop-item">
-                                                        <a class="nav-link"
-                                                           href="{{ child.link }}">{{ child.title }}</a>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <ul class="nav-drop">
+                                        {% for child in item.children %}
+                                            <li class="nav-drop-item">
+                                                <a href="{{ child.link }}">{{ child.title }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                                 {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
                 </nav>
-            </div>
-            <div class="col-3">
-                {% include 'woocommerce/components/cartSmall.twig' %}
             </div>
         </div>
     </div>
