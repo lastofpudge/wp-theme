@@ -9,6 +9,7 @@
   "devDependencies": {
     "git-commit-msg-linter": "^5.0.0",
     "laravel-mix": "^6.0.6",
+    "path": "^0.12.7",
     "prettier": "^3.2.5",
     "prettier-plugin-twig-melody": "^0.4.6",
     "sass": "^1.70.0",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "axios": "^1.6.7",
+    "nouislider": "^15.7.1",
     "sweetalert2": "^11.6.15"
   }
 }

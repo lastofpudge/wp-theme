@@ -26,6 +26,7 @@ class AdminOptions
             'script',
             'style'
         ]);
+
         remove_theme_support('block-templates');
         remove_theme_support('core-block-patterns');
 
@@ -33,6 +34,8 @@ class AdminOptions
         add_theme_support('post-thumbnails');
         add_theme_support('custom-logo');
         add_theme_support('responsive-embeds');
+
+        add_theme_support('woocommerce');
     }
 
     public function manageAdminAccess(): void
