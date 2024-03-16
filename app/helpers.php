@@ -76,9 +76,8 @@ if (!function_exists('add_ajax_action')) {
 if (!function_exists('dd')) {
     /**
      * Debug function to dump and die. Outputs the given variable and stops execution.
-     * @param mixed $result The variable to be dumped.
      */
-    function dd(mixed $result): void
+    function dd($result): void
     {
         echo '<pre>';
         print_r($result);
@@ -111,5 +110,37 @@ if (!function_exists('crb_get_i18n_theme_option')) {
     {
         $suffix = crb_get_i18n_suffix();
         return carbon_get_theme_option($option_name . $suffix);
+    }
+}
+
+if (!function_exists('get_cart_data')) {
+    function get_cart_data(): array
+    {
+        $cart = WC()->cart->get_cart();
+        $cart_data = [];
+
+        foreach ($cart as $cart_item_key => $cart_item) {
+            $_product = $cart_item['data'];
+            $sale_price = null;
+
+            if (!empty($_product->get_sale_price())) {
+                $sale_price = wc_price($_product->get_sale_price());
+            }
+
+            $item_data = [
+                'id' => $cart_item['product_id'],
+                'name' => $_product->get_name(),
+                'link' => get_permalink($cart_item['product_id']),
+                'thumbnail' => $_product->get_image(),
+                'quantity' => $cart_item['quantity'],
+                'cart_item_key' => $cart_item_key,
+                'regular_price' => wc_price($_product->get_regular_price()),
+                'sale_price' => $sale_price,
+            ];
+
+            $cart_data[] = $item_data;
+        }
+
+        return $cart_data;
     }
 }

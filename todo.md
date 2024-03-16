@@ -25,8 +25,8 @@
   
 - [ ] cart
     - [ ] apply coupon
-    - [ ] quantity change
-
+    - [x] quantity change
+      - [ ] fix bug in variable product?
 - [ ] checkout
     - [ ] delivery
     - [ ] shipping + shipping change

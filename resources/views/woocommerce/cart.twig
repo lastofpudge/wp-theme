@@ -49,8 +49,11 @@
 
                                                 <div class="quantity">
                                                     <div class="d-flex" style="max-width: 50px">
-                                                        <button type="button" data-key="{{ cart_item_key }}"
-                                                                class="js-decrement">
+                                                        <button type="button"
+                                                                data-key="{{ cart_item_key }}"
+                                                                data-quantity="{{ cart_item.quantity }}"
+                                                                data-action="decrement"
+                                                                class="js-change-cart-quantity">
                                                             －
                                                         </button>
 
@@ -62,8 +65,11 @@
                                                             'product_name': product_name
                                                         }, _product, false) }}
 
-                                                        <button type="button" data-key="{{ cart_item_key }}"
-                                                                class="js-increment">
+                                                        <button type="button"
+                                                                data-key="{{ cart_item_key }}"
+                                                                data-quantity="{{ cart_item.quantity }}"
+                                                                data-action="increment"
+                                                                class="js-change-cart-quantity">
                                                             ＋
                                                         </button>
                                                     </div>
