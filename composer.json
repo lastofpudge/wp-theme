@@ -1,7 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "version": "2.0.20",
+  "version": "2.0.21",
   "description": "Wordpress starter theme with Timber/Twig",
   "license": "GPL-3.0-or-later",
   "authors": [
@@ -42,9 +42,9 @@
       "bootstrap/app.php",
       "app/helpers.php",
       "app/Handlers/ajax.php",
-      "app/CarbonFields/OptionFields.php",
-      "app/CarbonFields/PostFields.php",
-      "app/CarbonFields/Blocks.php",
+      "app/CustomFields/OptionFields.php",
+      "app/CustomFields/PostFields.php",
+      "app/CustomFields/Blocks.php",
       "routes/api.php"
     ]
   },
