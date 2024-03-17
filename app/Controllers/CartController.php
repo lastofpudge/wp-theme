@@ -50,7 +50,6 @@ class CartController extends Controller
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
         }
-
     }
 
     public static function updateCartQuantity($key, $oldQuantity): void
@@ -83,7 +82,6 @@ class CartController extends Controller
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
         }
-
     }
 
     public static function applyCoupon($couponCode): void
@@ -111,5 +109,4 @@ class CartController extends Controller
             ]);
         }
     }
-
 }
