@@ -101,6 +101,34 @@
                                 </tbody>
                                 <tfoot id="checkout-total">
                                 <tr>
+                                    <td colspan="5">
+                                        <div class="d-flex align-items-center">
+                                            <label>
+                                                <input type="text" name="coupon" class="js-coupon">
+                                            </label>
+                                            <div class="px-2">
+                                                <button class="btn btn-warning js-apply-coupon">Apply coupon
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {% if cart.get_applied_coupons %}
+                                            <p>Active coupons:</p>
+                                            <ul>
+                                                {% for coupon in cart.get_applied_coupons %}
+                                                    <li><span>{{ coupon }}</span>
+                                                        <button class="btn btn-danger js-remove-coupon"
+                                                                data-coupon="{{ coupon }}"
+                                                        ><i
+                                                                    class="fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td colspan="4" class="text-end"><strong>Sub-Total</strong></td>
                                     <td class="text-end">
                                         <span class="js-sub-total">{{ cart.subtotal }}</span>

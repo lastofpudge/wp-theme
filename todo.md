@@ -24,9 +24,10 @@
     - [ ] sale banner
   
 - [ ] cart
-    - [ ] apply coupon
+    - [x] apply coupon
     - [x] quantity change
       - [ ] fix bug in variable product?
+
 - [ ] checkout
     - [ ] delivery
     - [ ] shipping + shipping change
