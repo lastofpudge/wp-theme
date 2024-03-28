@@ -22,6 +22,7 @@
 - [ ] shop
     - [ ] filters
     - [ ] sale banner
+    - [ ] check "Premmerce Product Filter for WooCommerce"
   
 - [ ] cart
     - [x] apply coupon
