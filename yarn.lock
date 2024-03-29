@@ -5127,9 +5127,9 @@ svgo@^2.7.0:
     stable "^0.1.8"
 
 sweetalert2@^11.6.15:
-  version "11.10.6"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.10.6.tgz#77c55271f786e62ea6710b84893a98c27319b3c9"
-  integrity sha512-CINZPLZXZRSZqSOE7H7j1F7X8e8O1kLOiXPmtJn1DYxvXsKBr3d16d90+IcwTTs7dJww20h8r8QIxIwsLGX+6A==
+  version "11.10.7"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.10.7.tgz#db2b8ce486f590404c761e051c7e40c80d648fae"
+  integrity sha512-5Jlzrmaitay6KzU+2+LhYu9q+L4v/dZ8oZyEDH14ep0C/QilCnFLHmqAyD/Lhq/lm5DiwsOs6Tr58iv8k3wyGg==
 
 tapable@^2.1.1, tapable@^2.2.0:
   version "2.2.1"
