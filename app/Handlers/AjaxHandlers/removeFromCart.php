@@ -7,6 +7,6 @@ if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
 }
 
 
-$key = isset($_POST['couponCode']) ? sanitize_text_field(wp_unslash($_POST['couponCode'])) : '';
+$key = isset($_POST['key']) ? sanitize_text_field(wp_unslash($_POST['key'])) : '';
 
 CartController::removeFromCart($key);
