@@ -4,11 +4,15 @@ if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
     wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
 }
 
-$email = sanitize_text_field($_POST['email'] ?? '');
-$password = sanitize_text_field($_POST['password'] ?? '');
+$email = sanitize_email($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
 if (empty($email) || empty($password)) {
     wp_send_json(['type' => 'error', 'message' => 'Please fill in all required fields']);
+}
+
+if (!is_email($email)) {
+    wp_send_json(['type' => 'error', 'message' => 'Please enter a valid email address']);
 }
 
 $credentials = [

@@ -1,4 +1,4 @@
-@import "sweetalert2/src/sweetalert2.scss";
+@use 'sweetalert2/src/sweetalert2.scss';
 
 .preloader-main {
   position: absolute;
@@ -12,15 +12,15 @@
 }
 
 .js-preloading.js-preloader-main {
-  background: rgba(255, 255, 255, 0.78) url(../images/preloader.svg) no-repeat 50% 50%;
+  background: rgb(255 255 255 / 78%) url('../images/preloader.svg') no-repeat 50% 50%;
   position: fixed;
   z-index: 300;
   pointer-events: all;
   opacity: 1;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (width >= 1024px) {
   .js-preloading.js-preloader-main {
-    background: rgba(255, 255, 255, 0.78) url(../images/preloader.svg) 50%/7% no-repeat;
+    background: rgb(255 255 255 / 78%) url('../images/preloader.svg') 50% / 7% no-repeat;
   }
 }

@@ -1,0 +1,20 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "rules": {
+    "selector-max-id": 1,
+    "scss/at-rule-no-unknown": null,
+    "scss/load-no-partial-leading-underscore": null,
+    "scss/load-partial-extension": null,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["composes"]
+      }
+    ]
+  },
+  "ignoreFiles": [
+    "resources/assets/dist/**/*",
+    "vendor/**/*",
+    "node_modules/**/*"
+  ]
+}

@@ -41,7 +41,6 @@ class AdminOptions
             show_admin_bar(false);
         }
 
-        // disallow default users access to admin panel
         if (!current_user_can('administrator') && is_admin() & !wp_doing_ajax()) {
             wp_redirect(home_url());
         }

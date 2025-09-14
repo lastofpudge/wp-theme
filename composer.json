@@ -25,10 +25,10 @@
     "timber"
   ],
   "require": {
-    "php": "8.*",
-    "htmlburger/carbon-fields": "^3.6",
-    "timber/timber": "^2.0.0",
-    "twig/twig": "^v3.8.0",
+    "php": "^8.1",
+    "htmlburger/carbon-fields": "^3.6.4",
+    "timber/timber": "^2.1.0",
+    "twig/twig": "^3.8.0",
     "wp-theme/core": "^1.0.4",
     "wpackagist-plugin/all-in-one-wp-migration": "*",
     "wpackagist-plugin/wordpress-seo": "*"
@@ -51,14 +51,17 @@
   "config": {
     "sort-packages": true,
     "optimize-autoloader": true,
+    "classmap-authoritative": true,
+    "preferred-install": "dist",
     "platform-check": false,
     "allow-plugins": {
       "composer/installers": true
     }
   },
   "scripts": {
-    "pint": [
-      "pint --preset psr12"
+    "pint": "pint --preset psr12",
+    "test": [
+      "@pint"
     ]
   },
   "extra": {
@@ -70,6 +73,6 @@
     }
   },
   "require-dev": {
-    "laravel/pint": "^1.13"
+    "laravel/pint": "^1.14"
   }
 }

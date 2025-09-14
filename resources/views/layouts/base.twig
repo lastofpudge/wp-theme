@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html {{ site.language_attributes }} dir="ltr">
+<html {{ site.language_attributes|raw }} dir="ltr">
 <head>
     {% include 'components/head.twig' %}
 </head>
-<body class="{{ body_class }}">
+<body class="{{ body_class|e('html_attr') }}">
 <div class="preloader-main js-preloader-main"></div>
 {% include 'components/header.twig' %}
 
