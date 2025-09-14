@@ -38,7 +38,7 @@ export default defineConfig({
   ],
   build: {
     outDir: 'resources/assets/dist',
-    emptyOutDir: true,
+    emptyOutDir: false,
     rollupOptions: {
       input: {
         app: resolve(__dirname, 'resources/assets/src/scripts/app.js'),
@@ -46,7 +46,7 @@ export default defineConfig({
       },
       output: {
         entryFileNames: 'js/[name].min.js',
-        assetFileNames: (assetInfo) => {
+        assetFileNames: assetInfo => {
           if (assetInfo.names?.[0]?.endsWith('.css')) {
             return 'css/bundle.min.css'
           }
@@ -69,9 +69,7 @@ export default defineConfig({
       }
     },
     postcss: {
-      plugins: [
-        autoprefixer
-      ]
+      plugins: [autoprefixer]
     }
   }
 })
