@@ -15,7 +15,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.17",
     "eslint": "^9.0.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.0.0",
     "git-commit-msg-linter": "^5.0.8",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
