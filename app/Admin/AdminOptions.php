@@ -49,7 +49,7 @@ class AdminOptions
     public function registerMenus(): void
     {
         register_nav_menus([
-            'left_menu' => 'Left menu',
+            'main_menu' => 'Main menu',
         ]);
     }
 
@@ -73,7 +73,7 @@ class AdminOptions
 
     public function registerContext($context): array
     {
-        $context['left_menu'] = Timber::get_menu('left_menu');
+        $context['main_menu'] = Timber::get_menu('main_menu');
 
         return $context;
     }

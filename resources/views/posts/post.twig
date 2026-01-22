@@ -2,7 +2,9 @@
 
 {% block content %}
     <div class="post-wrap" id="post-{{ post.ID }}">
-        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', true ) }}
+        {% if fn('function_exists', 'yoast_breadcrumb') %}
+            {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', true ) }}
+        {% endif %}
 
         <h1>
             {{ post.title }}

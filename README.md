@@ -1,31 +1,46 @@
-# Timber-based WordPress Starter Theme 🌲
-
-![StyleCI](https://github.styleci.io/repos/79059090/shield)
+# Timber-based WordPress Starter Theme
 
 ## Requirements
 
-- PHP 7.4 or higher. ⚙️
+- PHP 8.2 or higher
+- Node.js 18+
+- Composer
 
 ## Features
 
-- Timber@2 with Twig template engine.
-- Custom controllers support.
-- Seamless integration for custom fields and posts.
-- Integrated Ajax mail and actions for dynamic user interactions.
-- Composer support. 🎼
-- Works with Laravel Mix for JS and SCSS processing.
-- Supports custom helper functions for extended flexibility.
-- [Carbon Fields](https://github.com/htmlburger/carbon-fields) for developer-friendly custom fields.
-- Easy deployment on hosting platforms with [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/) plugin. 🚀
+- Timber 2.x with Twig template engine
+- Vite 6 for fast JS/SCSS builds
+- Lightning CSS for autoprefixing and minification
+- Custom controllers support
+- Custom fields with Carbon Fields
+- ESLint, Stylelint, Prettier for code quality
 
-## Want to know more?
-[Timber](https://github.com/timber/timber)
+## Installation
 
-For woocommerce please [check](https://github.com/lastofpudge/wp-theme/tree/feature/woocommerce-integration)
+```bash
+composer install
+npm install
+npm run build
+```
 
-## How to Use
+## Development
 
-1. Run `composer install` in the project folder to install dependencies.
-2. Use `yarn` and `npm run watch` to work with CSS/JS for a smooth development experience.
+```bash
+npm run dev    # Watch mode
+npm run build  # Production build
+npm run lint   # Run linters
+npm run fix    # Fix linting issues
+```
 
-Feel free to explore, customize, and enhance the theme according to your project requirements.
+## PHP Tools
+
+```bash
+composer pint   # Code style fixer
+composer test   # Run all checks
+```
+
+## Links
+
+- [Timber](https://github.com/timber/timber)
+- [Carbon Fields](https://github.com/htmlburger/carbon-fields)
+- [Vite](https://vite.dev/)

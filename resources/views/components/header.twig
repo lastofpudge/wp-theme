@@ -3,26 +3,24 @@
         <div class="row">
             <div class="col-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <ul class="navbar-nav mr-auto">
-                        {% for item in left_menu.get_items %}
-                            <li class="mx-2 nav-item{{ item.classes|join(' ') }} {{ item.current
-                            ? 'active'
-                            : '' }}">
-                                <a class="nav-main-link" href="{{ item.link }}">
-                                    {{ item.title }}
-                                </a>
-                                {% if item.children %}
-                                    <ul class="nav-drop">
-                                        {% for child in item.children %}
-                                            <li class="nav-drop-item">
-                                                <a href="{{ child.link }}">{{ child.title }}</a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    {% if main_menu %}
+                        <ul class="navbar-nav me-auto">
+                            {% for item in main_menu.get_items %}
+                                <li class="mx-2 nav-item {{ item.classes|join(' ') }}{{ item.current ? ' active' }}">
+                                    <a class="nav-main-link" href="{{ item.link }}">{{ item.title }}</a>
+                                    {% if item.children %}
+                                        <ul class="nav-drop">
+                                            {% for child in item.children %}
+                                                <li class="nav-drop-item">
+                                                    <a href="{{ child.link }}">{{ child.title }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </nav>
             </div>
         </div>

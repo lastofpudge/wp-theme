@@ -1,11 +1,14 @@
 Timber-based WordPress starter theme
 
-- using Timber 2 with twig template engine
-- support custom controllers
-- easy custom fields/posts integration
-- integrated ajax handlers
-- support composer package manager
+- Timber 2.x with Twig template engine
+- Vite 6 for JS/SCSS builds
+- Lightning CSS for fast CSS processing
+- Custom controllers support
+- Easy custom fields/posts integration
+- Integrated ajax handlers
+- Composer and npm support
 
-How to use
-- use `composer install` in the project folder
-- `yarn` && `npm run watch` to work with css/js
+How to use:
+- composer install
+- npm install
+- npm run build (production) or npm run dev (watch mode)

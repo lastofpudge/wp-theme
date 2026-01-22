@@ -12,7 +12,7 @@
 }
 
 .js-preloading.js-preloader-main {
-  background: rgb(255 255 255 / 78%) url('../preloader.svg') no-repeat 50% 50%;
+  background: rgb(255 255 255 / 78%) url('../images/preloader.svg') no-repeat 50% 50%;
   position: fixed;
   z-index: 300;
   pointer-events: all;
@@ -21,6 +21,6 @@
 
 @media screen and (width >= 1024px) {
   .js-preloading.js-preloader-main {
-    background: rgb(255 255 255 / 78%) url('../preloader.svg') 50% / 7% no-repeat;
+    background: rgb(255 255 255 / 78%) url('../images/preloader.svg') 50% / 7% no-repeat;
   }
 }

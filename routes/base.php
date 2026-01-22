@@ -24,3 +24,8 @@ if (is_page()) {
 if (is_404()) {
     Route::view('pages/404');
 }
+
+if (is_author()) {
+    wp_redirect(home_url(), 301);
+    exit;
+}

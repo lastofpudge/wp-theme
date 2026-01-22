@@ -5,7 +5,9 @@
         {{ term.description }}
     </p>
 
-    {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+    {% if fn('function_exists', 'yoast_breadcrumb') %}
+        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+    {% endif %}
 
     {% for post in posts %}
         <div class="category-post" style="padding:15px;">

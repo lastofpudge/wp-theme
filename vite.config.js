@@ -1,16 +1,19 @@
 import { defineConfig } from 'vite'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import autoprefixer from 'autoprefixer'
 import { copyFileSync, existsSync, mkdirSync } from 'fs'
-import pkg from 'glob'
-const { glob } = pkg
+import { globSync } from 'glob'
+import liveReload from 'vite-plugin-live-reload'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   publicDir: false,
   plugins: [
+    liveReload([
+      'resources/views/**/*.twig',
+      'app/**/*.php'
+    ]),
     {
       name: 'copy-images',
       writeBundle() {
@@ -21,7 +24,7 @@ export default defineConfig({
           mkdirSync(destDir, { recursive: true })
         }
 
-        const files = glob.sync(`${srcDir}/**/*`, { nodir: true })
+        const files = globSync(`${srcDir}/**/*`, { nodir: true })
         files.forEach(file => {
           const relativePath = file.replace(srcDir + '/', '')
           const destFile = `${destDir}/${relativePath}`
@@ -39,6 +42,7 @@ export default defineConfig({
   build: {
     outDir: 'resources/assets/dist',
     emptyOutDir: false,
+    cssMinify: 'lightningcss',
     rollupOptions: {
       input: {
         app: resolve(__dirname, 'resources/assets/src/scripts/app.js'),
@@ -63,13 +67,18 @@ export default defineConfig({
   },
 
   css: {
+    transformer: 'lightningcss',
+    lightningcss: {
+      targets: {
+        chrome: 100,
+        firefox: 100,
+        safari: 15
+      }
+    },
     preprocessorOptions: {
       scss: {
         api: 'modern-compiler'
       }
-    },
-    postcss: {
-      plugins: [autoprefixer]
     }
   }
 })
