@@ -5,9 +5,8 @@ use Carbon_Fields\Field;
 
 wp_register_style(
     'crb-my-shiny-gutenberg-block-stylesheet',
-    get_stylesheet_directory_uri() . '../app/CustomFields/Blocks/example.css'
+    get_stylesheet_directory_uri().'../app/CustomFields/Blocks/example.css'
 );
-
 
 Block::make(__('My Gutenberg Block'))
     ->add_fields([
@@ -18,5 +17,5 @@ Block::make(__('My Gutenberg Block'))
     ->set_description(__('Description for the block'))
     ->set_editor_style('crb-my-shiny-gutenberg-block-stylesheet')
     ->set_render_callback(function ($fields, $attributes, $inner_blocks) {
-        include(__DIR__ . '/example.view.php');
+        include __DIR__.'/example.view.php';
     });

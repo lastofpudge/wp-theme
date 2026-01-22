@@ -20,15 +20,15 @@ if (!is_email($mail)) {
 }
 
 $isMailSent = send_email('test', [
-    'subject' => 'test form',
+    'subject'   => 'test form',
     'site_name' => get_bloginfo('name'),
-    'name' => $name,
-    'mail' => $mail,
+    'name'      => $name,
+    'mail'      => $mail,
 ]);
 
 if ($isMailSent) {
     wp_send_json([
-        'type' => 'success',
+        'type'    => 'success',
         'message' => 'Your request has been successfully sent, thank you!',
     ]);
 } else {
