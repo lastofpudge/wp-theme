@@ -35,9 +35,9 @@ class PageController extends Controller
         }
 
         $this->data['posts'] = Timber::get_posts([
-            'post_type' => 'post',
+            'post_type'      => 'post',
             'posts_per_page' => 10,
-            'paged' => $paged,
+            'paged'          => $paged,
         ]);
 
         $this->data['categories'] = Timber::get_terms('category');
