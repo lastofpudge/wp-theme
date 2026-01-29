@@ -16,21 +16,21 @@ if (!is_email($email)) {
 }
 
 $credentials = [
-    'user_login' => $email,
+    'user_login'    => $email,
     'user_password' => $password,
-    'remember' => true,
+    'remember'      => true,
 ];
 
 $user = wp_signon($credentials, false);
 
 if (is_wp_error($user)) {
     wp_send_json([
-        'type' => 'error',
+        'type'    => 'error',
         'message' => json_decode($user->get_error_message()),
     ]);
 }
 
 wp_send_json([
-    'type' => 'success',
+    'type'    => 'success',
     'message' => 'Your successfully enter',
 ]);
