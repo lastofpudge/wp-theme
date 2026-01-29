@@ -24,7 +24,7 @@ class AdminOptions
             'gallery',
             'search-form',
             'script',
-            'style'
+            'style',
         ]);
         remove_theme_support('block-templates');
         remove_theme_support('core-block-patterns');
@@ -67,7 +67,7 @@ class AdminOptions
 
         wp_localize_script('app', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('ajax-nonce'),
+            'nonce'    => wp_create_nonce('ajax-nonce'),
         ]);
     }
 
