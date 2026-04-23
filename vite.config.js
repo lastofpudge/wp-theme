@@ -60,9 +60,6 @@ export default defineConfig({
           return 'assets/[name][extname]'
         }
       }
-    },
-    watch: {
-      include: 'resources/assets/src/**'
     }
   },
 

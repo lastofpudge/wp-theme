@@ -1,5 +1,4 @@
 import Toast from './libs/Toast'
-import axios from 'axios'
 
 export function initLoginForm() {
   const loginForm = document.querySelector('.js-login-form')
@@ -16,11 +15,18 @@ export function initLoginForm() {
     preloader.classList.add('js-preloading')
 
     try {
-      const { data: response } = await axios.post(data.ajax_url, formData, {
-        params: { action: 'login' }
+      const response = await fetch(data.ajax_url, {
+        method: 'POST',
+        body: formData
       })
 
-      if (response.type === 'success') {
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`)
+      }
+
+      const result = await response.json()
+
+      if (result.type === 'success') {
         location.reload()
       } else {
         Toast.fire({ icon: 'error', iconColor: 'red', title: 'Error login' })
