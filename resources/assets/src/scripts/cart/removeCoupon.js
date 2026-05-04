@@ -1,9 +1,7 @@
-import axios from 'axios'
-import Toast from '@/libs/Toast'
+import Toast from '../libs/Toast'
 
 export function initRemoveCoupon() {
   const preloader = document.querySelector('.js-preloader-main')
-
   const couponButtons = document.querySelectorAll('.js-remove-coupon')
 
   if (couponButtons) {
@@ -19,11 +17,11 @@ export function initRemoveCoupon() {
         formData.append('couponCode', couponCode)
 
         try {
-          const { data: result } = await axios.post(data.ajax_url, formData, {
-            params: { action: 'removeCoupon' }
-          })
+          const response = await fetch(data.ajax_url, { method: 'POST', body: formData })
 
-          preloader.classList.remove('js-preloading')
+          if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
+
+          const result = await response.json()
 
           if (result.response) {
             Toast.fire({ icon: 'success', iconColor: '#007cba', title: 'Success' })
@@ -31,9 +29,10 @@ export function initRemoveCoupon() {
             Toast.fire({ icon: 'error', iconColor: 'red', title: 'Error' })
           }
         } catch (error) {
-          console.log(error)
-          preloader.classList.remove('js-preloading')
+          console.error(error)
         }
+
+        preloader.classList.remove('js-preloading')
       })
     })
   }

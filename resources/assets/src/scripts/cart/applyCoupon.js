@@ -1,9 +1,7 @@
-import axios from 'axios'
-import Toast from '@/libs/Toast'
+import Toast from '../libs/Toast'
 
 export function initApplyCoupon() {
   const preloader = document.querySelector('.js-preloader-main')
-
   const couponButton = document.querySelector('.js-apply-coupon')
 
   couponButton.addEventListener('click', async event => {
@@ -17,11 +15,11 @@ export function initApplyCoupon() {
     formData.append('couponCode', couponCode)
 
     try {
-      const { data: result } = await axios.post(data.ajax_url, formData, {
-        params: { action: 'applyCoupon' }
-      })
+      const response = await fetch(data.ajax_url, { method: 'POST', body: formData })
 
-      preloader.classList.remove('js-preloading')
+      if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
+
+      const result = await response.json()
 
       if (result.response) {
         Toast.fire({ icon: 'success', iconColor: '#007cba', title: 'Success' })
@@ -29,8 +27,9 @@ export function initApplyCoupon() {
         Toast.fire({ icon: 'error', iconColor: 'red', title: 'Error' })
       }
     } catch (error) {
-      console.log(error)
-      preloader.classList.remove('js-preloading')
+      console.error(error)
     }
+
+    preloader.classList.remove('js-preloading')
   })
 }

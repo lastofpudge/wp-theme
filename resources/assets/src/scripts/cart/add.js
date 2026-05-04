@@ -1,6 +1,5 @@
-import axios from 'axios'
-import Toast from '@/libs/Toast'
-import modalCartProduct from '@/cart/modalCartProduct.data'
+import Toast from '../libs/Toast'
+import modalCartProduct from './modalCartProduct.data'
 
 export function addToCart() {
   const preloader = document.querySelector('.js-preloader-main')
@@ -26,44 +25,35 @@ export function addToCart() {
       }
 
       try {
-        const { data: response } = await axios.post(data.ajax_url, formData, {
-          params: { action: 'addToCart' }
-        })
+        const response = await fetch(data.ajax_url, { method: 'POST', body: formData })
 
-        if (response.type === 'success') {
-          // totals
-          totals.forEach(totalElement => {
-            totalElement.innerHTML = response.total
-          })
+        if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 
-          // sub-totals
-          subTotals.forEach(subTotalElement => {
-            subTotalElement.innerHTML = response.subTotal
-          })
+        const result = await response.json()
 
-          cartCount.innerHTML = response.count
+        if (result.type === 'success') {
+          totals.forEach(el => { el.innerHTML = result.total })
+          subTotals.forEach(el => { el.innerHTML = result.subTotal })
+          cartCount.innerHTML = result.count
 
-          // cart items
-          if (response.cart) {
+          if (result.cart) {
             cartList.innerHTML = ''
-            response.cart.forEach(product => {
-              const newProduct = modalCartProduct(product)
-              cartList.innerHTML += newProduct
+            result.cart.forEach(product => {
+              cartList.innerHTML += modalCartProduct(product)
             })
           }
 
-          Toast.fire({ icon: 'success', iconColor: '#007cba', title: response.message })
+          Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
         }
 
-        if (response.type === 'error') {
-          Toast.fire({ icon: 'error', iconColor: 'red', title: response.message })
+        if (result.type === 'error') {
+          Toast.fire({ icon: 'error', iconColor: 'red', title: result.message })
         }
-
-        preloader.classList.remove('js-preloading')
       } catch (error) {
-        preloader.classList.remove('js-preloading')
         console.error(error)
       }
+
+      preloader.classList.remove('js-preloading')
     })
   })
 }

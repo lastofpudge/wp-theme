@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 export function removeFromCart() {
   const preloader = document.querySelector('.js-preloader-main')
   const cartContainer = document.querySelector('body')
@@ -20,32 +18,25 @@ export function removeFromCart() {
       formData.append('key', target.dataset.key)
 
       try {
-        const { data: response } = await axios.post(data.ajax_url, formData, {
-          params: { action: 'removeFromCart' }
-        })
+        const response = await fetch(data.ajax_url, { method: 'POST', body: formData })
 
-        if (response.type === 'success') {
+        if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
+
+        const result = await response.json()
+
+        if (result.type === 'success') {
           const cartItems = cartContainer.querySelectorAll(`[data-key="${target.dataset.key}"]`)
+          cartItems.forEach(cartItem => { cartItem.remove() })
 
-          cartItems.forEach(cartItem => {
-            cartItem.remove()
-          })
-
-          totals.forEach(totalElement => {
-            totalElement.innerHTML = response.total
-          })
-
-          subTotals.forEach(subTotalElement => {
-            subTotalElement.innerHTML = response.subTotal
-          })
-
-          cartCount.innerHTML = response.count
+          totals.forEach(el => { el.innerHTML = result.total })
+          subTotals.forEach(el => { el.innerHTML = result.subTotal })
+          cartCount.innerHTML = result.count
         }
-        preloader.classList.remove('js-preloading')
       } catch (error) {
         console.error(error)
-        preloader.classList.remove('js-preloading')
       }
+
+      preloader.classList.remove('js-preloading')
     }
   })
 }

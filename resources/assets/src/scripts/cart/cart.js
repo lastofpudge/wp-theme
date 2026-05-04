@@ -1,9 +1,9 @@
-import { removeFromCart } from '@/cart/remove'
-import { addToCart } from '@/cart/add'
-import { changeVariations } from '@/cart/variations'
-import { initQuantity } from '@/cart/quantity'
-import { initApplyCoupon } from '@/cart/applyCoupon'
-import { initRemoveCoupon } from '@/cart/removeCoupon'
+import { removeFromCart } from './remove'
+import { addToCart } from './add'
+import { changeVariations } from './variations'
+import { initQuantity } from './quantity'
+import { initApplyCoupon } from './applyCoupon'
+import { initRemoveCoupon } from './removeCoupon'
 
 export function initCart() {
   removeFromCart()
