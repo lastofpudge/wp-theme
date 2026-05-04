@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Shop breadcrumb
+ * Shop breadcrumb.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/global/breadcrumb.php.
  *
@@ -11,11 +12,11 @@
  * the readme will list any important changes.
  *
  * @see         https://woo.com/document/template-structure/
- * @package     WooCommerce\Templates
+ *
  * @version     2.3.0
+ *
  * @see         woocommerce_breadcrumb()
  */
-
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -27,7 +28,7 @@ if (!empty($breadcrumb)) {
         echo $before;
 
         if (!empty($crumb[1]) && sizeof($breadcrumb) !== $key + 1) {
-            echo '<a href="' . esc_url($crumb[1]) . '">' . esc_html($crumb[0]) . '</a>';
+            echo '<a href="'.esc_url($crumb[1]).'">'.esc_html($crumb[0]).'</a>';
         } else {
             echo esc_html($crumb[0]);
         }
