@@ -26,8 +26,7 @@
 
                 {% if posts.pagination.next.link %}
                     <li class="next-link">
-                        <a rel="next" class="{{ pagination.next.link|length ? '' : 'invisible' }}"
-                           href="{{ pagination.next.link }}">
+                        <a rel="next" href="{{ posts.pagination.next.link }}">
                             <span>Next</span>
                         </a>
                     </li>

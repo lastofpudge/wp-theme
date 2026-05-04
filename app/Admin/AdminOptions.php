@@ -24,9 +24,8 @@ class AdminOptions
             'gallery',
             'search-form',
             'script',
-            'style'
+            'style',
         ]);
-
         remove_theme_support('block-templates');
         remove_theme_support('core-block-patterns');
 
@@ -34,8 +33,6 @@ class AdminOptions
         add_theme_support('post-thumbnails');
         add_theme_support('custom-logo');
         add_theme_support('responsive-embeds');
-
-        add_theme_support('woocommerce');
     }
 
     public function manageAdminAccess(): void
@@ -44,7 +41,6 @@ class AdminOptions
             show_admin_bar(false);
         }
 
-        // disallow default users access to admin panel
         if (!current_user_can('administrator') && is_admin() & !wp_doing_ajax()) {
             wp_redirect(home_url());
         }
@@ -53,7 +49,7 @@ class AdminOptions
     public function registerMenus(): void
     {
         register_nav_menus([
-            'left_menu' => 'Left menu',
+            'main_menu' => 'Main menu',
         ]);
     }
 
@@ -71,13 +67,13 @@ class AdminOptions
 
         wp_localize_script('app', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('ajax-nonce'),
+            'nonce'    => wp_create_nonce('ajax-nonce'),
         ]);
     }
 
     public function registerContext($context): array
     {
-        $context['left_menu'] = Timber::get_menu('left_menu');
+        $context['main_menu'] = Timber::get_menu('main_menu');
 
         return $context;
     }

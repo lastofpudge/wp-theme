@@ -1,5 +1,5 @@
 <section class="comment-box">
-  <!-- comments -->
+  {# comments #}
   <div class="comments">
     {% if post.comments %}
       <h3>
@@ -15,7 +15,7 @@
     <p>
       comments for this post are closed </p>
   {% else %}
-    <!-- comment form -->
+    {# comment form #}
     {% include 'components/comments/comment-form.twig' %}
   {% endif %}
 </section>

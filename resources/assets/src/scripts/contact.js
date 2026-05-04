@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Toast from './libs/Toast'
 
 export function initContactForm() {
@@ -16,14 +15,21 @@ export function initContactForm() {
     preloader.classList.add('js-preloading')
 
     try {
-      const { data: response } = await axios.post(data.ajax_url, formData, {
-        params: { action: 'contact' }
+      const response = await fetch(data.ajax_url, {
+        method: 'POST',
+        body: formData
       })
 
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`)
+      }
+
+      const result = await response.json()
+
       const toastConfig = {
-        icon: response.type,
-        iconColor: response.type === 'success' ? '#007cba' : 'red',
-        title: response.message
+        icon: result.type,
+        iconColor: result.type === 'success' ? '#007cba' : 'red',
+        title: result.message
       }
 
       Toast.fire(toastConfig)

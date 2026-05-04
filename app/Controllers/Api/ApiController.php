@@ -7,7 +7,7 @@ class ApiController
     public function index(): array
     {
         return [
-            'title' => 'title'
+            'title' => 'title',
         ];
     }
 }

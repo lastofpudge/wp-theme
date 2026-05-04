@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <div class="col-12">
-            <a class="logo-link" href="{{ site.url }}" rel="home">{{ site.name }}"</a>
+            <a class="logo-link" href="{{ site.url|e('html_attr') }}" rel="home">{{ site.name|e }}</a>
         </div>
         <div class="col-12">
             <h2>
@@ -12,13 +12,17 @@
             <form method="POST"
                   class="contact-form js-contact-form" accept-charset="utf-8" autocomplete="on">
                 <div class="form-group">
-                    <label><input name="name" placeholder="Name"></label>
+                    <label for="contact-name">Name *
+                        <input id="contact-name" name="name" type="text" placeholder="Name" required maxlength="100">
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label><input name="mail" type="email" placeholder="Email"></label>
+                    <label for="contact-email">Email *
+                        <input id="contact-email" name="mail" type="email" placeholder="Email" required maxlength="255">
+                    </label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
 
@@ -26,23 +30,29 @@
                 Login form </h2>
             <form method="POST" class="contact-form js-login-form" accept-charset="utf-8" autocomplete="on">
                 <div class="form-group">
-                    <label><input name="email" placeholder="Email"></label>
+                    <label for="login-email">Email *
+                        <input id="login-email" name="email" type="email" placeholder="Email" required maxlength="255" autocomplete="username">
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label><input name="password" type="password" placeholder="Password"></label>
+                    <label for="login-password">Password *
+                        <input id="login-password" name="password" type="password" placeholder="Password" required minlength="8" autocomplete="current-password">
+                    </label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">submit</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
             <h2>
                 Search form </h2>
-            <form method="get" accept-charset="utf-8" role="search" action="{{ site.url }}">
+            <form method="get" accept-charset="utf-8" role="search" action="{{ site.url|e('html_attr') }}">
                 <div class="form-group">
-                    <label><input name="s" required></label>
+                    <label for="search-query">Search *
+                        <input id="search-query" name="s" type="search" placeholder="Search..." required maxlength="100" autocomplete="off">
+                    </label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">submit</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>
 

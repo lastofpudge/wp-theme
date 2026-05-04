@@ -5,8 +5,8 @@
         {{ comment.comment_content|wpautop }}
     </div>
     <section class="comment-box">
-        <!-- child comments -->
-        {% if post.comments %}
+        {# child comments #}
+        {% if comment.children %}
             <h4>
                 replies </h4>
             <div class="comments comments-child">
