@@ -52,13 +52,13 @@ class CartController extends Controller
         }
     }
 
-    public static function updateCartQuantity($key, $oldQuantity): void
+    public static function updateCartQuantity($key, $oldQuantity, string $type = 'increment'): void
     {
         try {
             $cart = WC()->cart;
             $cart_item_key = $cart->find_product_in_cart($key);
             if ($cart_item_key) {
-                if ($_POST['type'] === 'decrement' && $oldQuantity > 1) {
+                if ($type === 'decrement' && $oldQuantity > 1) {
                     $newQuantity = $oldQuantity - 1;
                 } else {
                     $newQuantity = $oldQuantity + 1;
@@ -86,12 +86,12 @@ class CartController extends Controller
 
     public static function applyCoupon($couponCode): void
     {
-        if (!WC()->cart->has_discount($couponCode)) {
-            $response = WC()->cart->apply_coupon($couponCode);
-            wp_send_json([
-                'response' => $response,
-            ]);
+        if (WC()->cart->has_discount($couponCode)) {
+            wp_send_json(['response' => false, 'message' => 'already_applied']);
         }
+
+        $response = WC()->cart->apply_coupon($couponCode);
+        wp_send_json(['response' => $response]);
     }
 
     public static function removeCoupon($couponCode): void

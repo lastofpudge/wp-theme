@@ -21,6 +21,12 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
+
+                    {% if cart %}
+                        <div class="navbar-nav ms-auto">
+                            {% include 'woocommerce/components/cartSmall.twig' %}
+                        </div>
+                    {% endif %}
                 </nav>
             </div>
         </div>

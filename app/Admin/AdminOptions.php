@@ -17,6 +17,11 @@ class AdminOptions
 
     public function index(): void
     {
+        add_theme_support('woocommerce');
+        add_theme_support('wc-product-gallery-zoom');
+        add_theme_support('wc-product-gallery-lightbox');
+        add_theme_support('wc-product-gallery-slider');
+
         add_theme_support('html5', [
             'caption',
             'comment-form',
@@ -74,6 +79,13 @@ class AdminOptions
     public function registerContext($context): array
     {
         $context['main_menu'] = Timber::get_menu('main_menu');
+
+        if (function_exists('WC') && WC()->cart) {
+            $context['cart']            = WC()->cart;
+            $context['currency_symbol'] = get_woocommerce_currency_symbol();
+            $context['cart_link']       = wc_get_cart_url();
+            $context['checkout_link']   = wc_get_checkout_url();
+        }
 
         return $context;
     }

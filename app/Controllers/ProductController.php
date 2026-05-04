@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Timber\PostQuery;
 use Timber\Timber;
 
 class ProductController extends Controller
@@ -41,13 +42,15 @@ class ProductController extends Controller
 
     public function archive(): array
     {
+        $this->data['posts'] = Timber::get_posts();
+
         $this->data['attributes'] = array_map(fn ($taxonomy) => [
             'label' => $taxonomy->attribute_label,
-            'name' => $taxonomy->attribute_name,
+            'name'  => $taxonomy->attribute_name,
             'terms' => get_terms([
-                    'taxonomy' => 'pa_' . $taxonomy->attribute_name,
-                    'hide_empty' => false,
-                ]) ?? [],
+                'taxonomy'   => 'pa_' . $taxonomy->attribute_name,
+                'hide_empty' => false,
+            ]) ?? [],
         ], wc_get_attribute_taxonomies());
 
         return $this->data;
@@ -56,6 +59,20 @@ class ProductController extends Controller
     public function cart(): array
     {
         $this->data['coupons_enabled'] = wc_coupons_enabled();
+
+        return $this->data;
+    }
+
+    public function checkout(): array
+    {
+        $this->data['post'] = Timber::get_post();
+
+        return $this->data;
+    }
+
+    public function account(): array
+    {
+        $this->data['post'] = Timber::get_post();
 
         return $this->data;
     }
