@@ -143,14 +143,14 @@ if (!function_exists('get_cart_data')) {
             }
 
             $item_data = [
-                'id' => $cart_item['product_id'],
-                'name' => $_product->get_name(),
-                'link' => get_permalink($cart_item['product_id']),
-                'thumbnail' => $_product->get_image(),
-                'quantity' => $cart_item['quantity'],
+                'id'            => $cart_item['product_id'],
+                'name'          => $_product->get_name(),
+                'link'          => get_permalink($cart_item['product_id']),
+                'thumbnail'     => $_product->get_image(),
+                'quantity'      => $cart_item['quantity'],
                 'cart_item_key' => $cart_item_key,
                 'regular_price' => wc_price($_product->get_regular_price()),
-                'sale_price' => $sale_price,
+                'sale_price'    => $sale_price,
             ];
 
             $cart_data[] = $item_data;

@@ -18,12 +18,12 @@ class CartController extends Controller
         }
 
         wp_send_json([
-            'type' => 'success',
-            'message' => 'Product added to the cart.',
-            'cart' => get_cart_data(),
-            'total' => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
+            'type'     => 'success',
+            'message'  => 'Product added to the cart.',
+            'cart'     => get_cart_data(),
+            'total'    => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
             'subTotal' => WC()->cart->get_subtotal(),
-            'count' => WC()->cart->get_cart_contents_count(),
+            'count'    => WC()->cart->get_cart_contents_count(),
         ]);
     }
 
@@ -38,11 +38,11 @@ class CartController extends Controller
                 $cartItemCount = WC()->cart->get_cart_contents_count();
 
                 wp_send_json([
-                    'type' => 'success',
-                    'message' => 'Product removed from the cart.',
-                    'total' => number_format($total, 2, '.', ''), // Format total amount
+                    'type'     => 'success',
+                    'message'  => 'Product removed from the cart.',
+                    'total'    => number_format($total, 2, '.', ''), // Format total amount
                     'subTotal' => $subTotal,
-                    'count' => $cartItemCount
+                    'count'    => $cartItemCount,
                 ]);
             } else {
                 wp_send_json(['type' => 'error', 'message' => 'removal_failed']);
@@ -67,13 +67,13 @@ class CartController extends Controller
 
                 if ($response) {
                     wp_send_json([
-                        'type' => 'success',
+                        'type'        => 'success',
                         'newQuantity' => $newQuantity,
-                        'cart' => get_cart_data(),
-                        'total' => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
-                        'subTotal' => WC()->cart->get_subtotal(),
-                        'count' => WC()->cart->get_cart_contents_count(),
-                        'message' => 'Quantity updated'
+                        'cart'        => get_cart_data(),
+                        'total'       => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
+                        'subTotal'    => WC()->cart->get_subtotal(),
+                        'count'       => WC()->cart->get_cart_contents_count(),
+                        'message'     => 'Quantity updated',
                     ]);
                 }
             } else {

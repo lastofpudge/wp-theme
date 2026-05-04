@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Email Downloads.
  *
@@ -11,27 +12,26 @@
  * the readme will list any important changes.
  *
  * @see https://woo.com/document/template-structure/
- * @package WooCommerce\Templates
+ *
  * @version 3.4.0
  */
-
 defined('ABSPATH') || exit;
 
-echo esc_html(wc_strtoupper(esc_html__('Downloads', 'woocommerce'))) . "\n\n";
+echo esc_html(wc_strtoupper(esc_html__('Downloads', 'woocommerce')))."\n\n";
 
 foreach ($downloads as $download) {
     foreach ($columns as $column_id => $column_name) {
-        echo wp_kses_post($column_name) . ': ';
+        echo wp_kses_post($column_name).': ';
 
-        if (has_action('woocommerce_email_downloads_column_' . $column_id)) {
-            do_action('woocommerce_email_downloads_column_' . $column_id, $download, $plain_text);
+        if (has_action('woocommerce_email_downloads_column_'.$column_id)) {
+            do_action('woocommerce_email_downloads_column_'.$column_id, $download, $plain_text);
         } else {
             switch ($column_id) {
                 case 'download-product':
                     echo esc_html($download['product_name']);
                     break;
                 case 'download-file':
-                    echo esc_html($download['download_name']) . ' - ' . esc_url($download['download_url']);
+                    echo esc_html($download['download_name']).' - '.esc_url($download['download_url']);
                     break;
                 case 'download-expires':
                     if (!empty($download['access_expires'])) {
