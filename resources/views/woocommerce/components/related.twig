@@ -1,0 +1,12 @@
+{% if related_products %}
+    <section class="related-products mt-5">
+        <h2 class="h4 mb-4">{{ fn('__', 'Related products', 'woocommerce') }}</h2>
+        <div class="row row-cols-2 row-cols-md-3 g-3">
+            {% for post in related_products %}
+                <div class="col">
+                    {% include 'woocommerce/components/product-card.twig' %}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
