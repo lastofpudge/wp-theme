@@ -4,6 +4,8 @@ export function initApplyCoupon() {
   const preloader = document.querySelector('.js-preloader-main')
   const couponButton = document.querySelector('.js-apply-coupon')
 
+  if (!couponButton) return
+
   couponButton.addEventListener('click', async event => {
     preloader.classList.add('js-preloading')
 

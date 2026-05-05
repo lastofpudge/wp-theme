@@ -82,6 +82,13 @@ class AdminOptions
     public function registerContext($context): array
     {
         $context['main_menu'] = Timber::get_menu('main_menu');
+        $context['site_url']  = home_url('/');
+        $context['site_name'] = get_bloginfo('name');
+        $context['logo']      = get_custom_logo();
+
+        if (function_exists('pll_the_languages')) {
+            $context['languages'] = pll_the_languages(['raw' => 1, 'echo' => 0]);
+        }
 
         if (function_exists('WC') && WC()->cart) {
             $context['cart']            = WC()->cart;

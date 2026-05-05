@@ -3,6 +3,14 @@
         <div class="row">
             <div class="col-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="{{ site_url }}">
+                        {% if logo %}
+                            {{ logo | raw }}
+                        {% else %}
+                            {{ site_name }}
+                        {% endif %}
+                    </a>
+
                     {% if main_menu %}
                         <ul class="navbar-nav me-auto">
                             {% for item in main_menu.get_items %}
@@ -20,6 +28,17 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                    {% endif %}
+
+                    {% if languages %}
+                        <select class="form-select form-select-sm me-3 w-auto"
+                                onchange="window.location.href=this.value">
+                            {% for lang in languages %}
+                                <option value="{{ lang.url }}" {% if lang.current_lang %}selected{% endif %}>
+                                    {{ lang.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
                     {% endif %}
 
                     <div class="navbar-nav ms-auto align-items-center gap-3">
