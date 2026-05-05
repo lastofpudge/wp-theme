@@ -8,9 +8,10 @@
 {% include 'components/header.twig' %}
 
 <div class="wrapper">
+    {% include 'woocommerce/components/notices.twig' %}
     {% block content %}
     {% endblock %}
-</div>2
+</div>
 
 {% block modals %}
     {% include 'components/modals.twig' %}

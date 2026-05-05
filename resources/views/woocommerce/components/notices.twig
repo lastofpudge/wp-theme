@@ -1,0 +1,5 @@
+{% if fn('function_exists', 'wc_print_notices') %}
+    <div class="woocommerce-notices-wrapper">
+        {{ function('woocommerce_output_all_notices') }}
+    </div>
+{% endif %}
