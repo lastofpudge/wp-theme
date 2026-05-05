@@ -22,7 +22,7 @@ class PageController extends Controller
             return $this->data;
         }
 
-        // Лидеры продаж
+        // Bestsellers
         $this->data['bestsellers'] = Timber::get_posts([
             'post_type'      => 'product',
             'posts_per_page' => 8,
@@ -35,7 +35,7 @@ class PageController extends Controller
             ]],
         ]);
 
-        // Новинки
+        // New arrivals
         $this->data['new_arrivals'] = Timber::get_posts([
             'post_type'      => 'product',
             'posts_per_page' => 8,
@@ -43,7 +43,7 @@ class PageController extends Controller
             'order'          => 'DESC',
         ]);
 
-        // Товары со скидкой
+        // On sale
         $on_sale_ids = wc_get_product_ids_on_sale();
         $this->data['on_sale'] = !empty($on_sale_ids) ? Timber::get_posts([
             'post_type'      => 'product',
@@ -52,7 +52,7 @@ class PageController extends Controller
             'orderby'        => 'rand',
         ]) : [];
 
-        // Рекомендуемые (Featured — отмечается в WC admin)
+        // Featured — marked via checkbox in WC admin product edit
         $this->data['featured'] = Timber::get_posts([
             'post_type'      => 'product',
             'posts_per_page' => 8,
@@ -63,7 +63,7 @@ class PageController extends Controller
             ]],
         ]);
 
-        // Высокий рейтинг
+        // Top rated
         $this->data['top_rated'] = Timber::get_posts([
             'post_type'      => 'product',
             'posts_per_page' => 8,
