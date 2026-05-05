@@ -1,0 +1,52 @@
+<div class="woocommerce-order">
+    {% if failed %}
+        <p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed">
+            {{ fn('__', 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce') }}
+        </p>
+        <p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed-actions">
+            <a href="{{ order.get_checkout_payment_url() }}" class="button pay">
+                {{ fn('__', 'Pay', 'woocommerce') }}
+            </a>
+            {% if fn('is_user_logged_in') %}
+                <a href="{{ wc_page_url('myaccount') }}" class="button">
+                    {{ fn('__', 'My account', 'woocommerce') }}
+                </a>
+            {% endif %}
+        </p>
+    {% elseif order %}
+        <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received">
+            {{ fn('__', 'Thank you. Your order has been received.', 'woocommerce') }}
+        </p>
+
+        <ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details">
+            <li class="woocommerce-order-overview__order order">
+                {{ fn('__', 'Order number:', 'woocommerce') }}
+                <strong>{{ order.get_order_number() }}</strong>
+            </li>
+            <li class="woocommerce-order-overview__date date">
+                {{ fn('__', 'Date:', 'woocommerce') }}
+                <strong>{{ fn('wc_format_datetime', order.get_date_created())|raw }}</strong>
+            </li>
+            {% if fn('is_user_logged_in') and order.get_billing_email() %}
+                <li class="woocommerce-order-overview__email email">
+                    {{ fn('__', 'Email:', 'woocommerce') }}
+                    <strong>{{ order.get_billing_email() }}</strong>
+                </li>
+            {% endif %}
+            <li class="woocommerce-order-overview__total total">
+                {{ fn('__', 'Total:', 'woocommerce') }}
+                <strong>{{ order.get_formatted_order_total()|raw }}</strong>
+            </li>
+            {% if order.get_payment_method_title() %}
+                <li class="woocommerce-order-overview__payment-method method">
+                    {{ fn('__', 'Payment method:', 'woocommerce') }}
+                    <strong>{{ order.get_payment_method_title() }}</strong>
+                </li>
+            {% endif %}
+        </ul>
+    {% else %}
+        <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received">
+            {{ fn('__', 'Thank you for your order.', 'woocommerce') }}
+        </p>
+    {% endif %}
+</div>
