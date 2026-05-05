@@ -84,10 +84,10 @@ class AdminOptions
         $context['main_menu'] = Timber::get_menu('main_menu');
 
         if (function_exists('WC') && WC()->cart) {
-            $context['cart']            = WC()->cart;
+            $context['cart'] = WC()->cart;
             $context['currency_symbol'] = get_woocommerce_currency_symbol();
-            $context['cart_link']       = wc_get_cart_url();
-            $context['checkout_link']   = wc_get_checkout_url();
+            $context['cart_link'] = wc_get_cart_url();
+            $context['checkout_link'] = wc_get_checkout_url();
         }
 
         return $context;
