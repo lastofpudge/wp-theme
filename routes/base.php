@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\AccountController;
 use App\Controllers\CategoryController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
@@ -11,11 +12,11 @@ if (function_exists('is_cart') && is_cart()) {
 }
 
 if (function_exists('is_checkout') && is_checkout()) {
-    Route::load(ProductController::class, 'checkout', 'woocommerce/checkout');
+    Route::load(AccountController::class, 'checkout', 'woocommerce/checkout');
 }
 
 if (function_exists('is_account_page') && is_account_page()) {
-    Route::load(ProductController::class, 'account', 'woocommerce/account');
+    Route::load(AccountController::class, 'account', 'woocommerce/account');
 }
 
 if (is_category() || is_tag() || is_search()) {
