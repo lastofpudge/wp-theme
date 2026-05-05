@@ -1,64 +1,107 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-    <div class="container">
-        <div class="col-12">
-            <a class="logo-link" href="{{ site.url|e('html_attr') }}" rel="home">{{ site.name|e }}</a>
+
+    {# ==============================
+       HERO — заменить на свой баннер
+       ============================== #}
+    <section class="hero">
+        <div class="container py-5">
+            <h1>{{ site.name }}</h1>
+            <a href="{{ wc_page_url('shop') }}" class="btn btn-primary">
+                {{ fn('__', 'Shop now', 'woocommerce') }}
+            </a>
         </div>
-        <div class="col-12">
-            <h2>
-                Contact form </h2>
+    </section>
 
-            <form method="POST"
-                  class="contact-form js-contact-form" accept-charset="utf-8" autocomplete="on">
-                <div class="form-group">
-                    <label for="contact-name">Name *
-                        <input id="contact-name" name="name" type="text" placeholder="Name" required maxlength="100">
-                    </label>
+    {# ==============================
+       ЛИДЕРЫ ПРОДАЖ
+       ============================== #}
+    {% if bestsellers %}
+        <section class="section-bestsellers py-5">
+            <div class="container">
+                <h2 class="section-title mb-4">{{ fn('__', 'Bestsellers', 'woocommerce') }}</h2>
+                <div class="row row-cols-2 row-cols-md-4 g-3">
+                    {% for post in bestsellers %}
+                        <div class="col">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
+                    {% endfor %}
                 </div>
-                <div class="form-group">
-                    <label for="contact-email">Email *
-                        <input id="contact-email" name="mail" type="email" placeholder="Email" required maxlength="255">
-                    </label>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
+            </div>
+        </section>
+    {% endif %}
 
-            <h2>
-                Login form </h2>
-            <form method="POST" class="contact-form js-login-form" accept-charset="utf-8" autocomplete="on">
-                <div class="form-group">
-                    <label for="login-email">Email *
-                        <input id="login-email" name="email" type="email" placeholder="Email" required maxlength="255" autocomplete="username">
-                    </label>
+    {# ==============================
+       НОВИНКИ
+       ============================== #}
+    {% if new_arrivals %}
+        <section class="section-new-arrivals py-5 bg-light">
+            <div class="container">
+                <h2 class="section-title mb-4">{{ fn('__', 'New arrivals', 'woocommerce') }}</h2>
+                <div class="row row-cols-2 row-cols-md-4 g-3">
+                    {% for post in new_arrivals %}
+                        <div class="col">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
+                    {% endfor %}
                 </div>
-                <div class="form-group">
-                    <label for="login-password">Password *
-                        <input id="login-password" name="password" type="password" placeholder="Password" required minlength="8" autocomplete="current-password">
-                    </label>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </div>
-            </form>
-            <h2>
-                Search form </h2>
-            <form method="get" accept-charset="utf-8" role="search" action="{{ site.url|e('html_attr') }}">
-                <div class="form-group">
-                    <label for="search-query">Search *
-                        <input id="search-query" name="s" type="search" placeholder="Search..." required maxlength="100" autocomplete="off">
-                    </label>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
-            </form>
+            </div>
+        </section>
+    {% endif %}
 
-            {% if user %}
-                <a href="{{ fn('wp_logout_url', "/" ) }}">Log out</a>
-            {% endif %}
-        </div>
-    </div>
+    {# ==============================
+       СКИДКИ
+       ============================== #}
+    {% if on_sale %}
+        <section class="section-on-sale py-5">
+            <div class="container">
+                <h2 class="section-title mb-4">{{ fn('__', 'On sale', 'woocommerce') }}</h2>
+                <div class="row row-cols-2 row-cols-md-4 g-3">
+                    {% for post in on_sale %}
+                        <div class="col">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    {# ==============================
+       РЕКОМЕНДУЕМЫЕ
+       ============================== #}
+    {% if featured %}
+        <section class="section-featured py-5 bg-light">
+            <div class="container">
+                <h2 class="section-title mb-4">{{ fn('__', 'Featured products', 'woocommerce') }}</h2>
+                <div class="row row-cols-2 row-cols-md-4 g-3">
+                    {% for post in featured %}
+                        <div class="col">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    {# ==============================
+       ВЫСОКИЙ РЕЙТИНГ
+       ============================== #}
+    {% if top_rated %}
+        <section class="section-top-rated py-5">
+            <div class="container">
+                <h2 class="section-title mb-4">{{ fn('__', 'Top rated', 'woocommerce') }}</h2>
+                <div class="row row-cols-2 row-cols-md-4 g-3">
+                    {% for post in top_rated %}
+                        <div class="col">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
 {% endblock %}
