@@ -1,24 +1,73 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <p>
-                    {{ post.title }}
-                </p>
-                <p>
-                    {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
-                </p>
+    <div class="container py-5">
+
+        <h1 class="mb-4">{{ post.title }}</h1>
+
+        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false)|raw }}
+
+        {% if cart and not cart.is_empty() %}
+            <div class="row g-5">
+
+                {# Order summary #}
+                <div class="col-md-5 order-md-2">
+                    <div class="checkout-summary p-4 border rounded bg-light sticky-top" style="top: 1rem;">
+                        <h2 class="h5 mb-3">{{ fn('__', 'Order summary', 'woocommerce') }}</h2>
+
+                        <ul class="list-unstyled mb-3">
+                            {% for key, item in cart.get_cart() %}
+                                {% set product = fn('wc_get_product', item.product_id) %}
+                                {% if product %}
+                                    <li class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <span class="fw-medium">{{ product.get_name() }}</span>
+                                            <small class="text-muted d-block">× {{ item.quantity }}</small>
+                                        </div>
+                                        <span class="ms-3 text-nowrap">
+                                            {{ item.line_total|wc_price }}
+                                        </span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+
+                        <hr>
+
+                        {% if cart.get_coupon_discount_total() > 0 %}
+                            <div class="d-flex justify-content-between mb-1 text-success">
+                                <span>{{ fn('__', 'Discount', 'woocommerce') }}</span>
+                                <span>-{{ cart.get_coupon_discount_total()|wc_price }}</span>
+                            </div>
+                        {% endif %}
+
+                        {% if cart.needs_shipping() %}
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>{{ fn('__', 'Shipping', 'woocommerce') }}</span>
+                                <span>{{ cart.get_cart_shipping_total()|raw }}</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between fw-bold fs-5 mt-2">
+                            <span>{{ fn('__', 'Total', 'woocommerce') }}</span>
+                            <span>{{ cart.get_total()|raw }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {# Checkout form — WC injects all payment gateway fields here #}
+                <div class="col-md-7 order-md-1">
+                    {{ post.content }}
+                </div>
+
             </div>
-
-            <div class="col-12">
-                {{ post.content }}
-            </div>
-
-        </div>
-
+        {% else %}
+            {# Empty cart fallback #}
+            <p>{{ fn('__', 'Your cart is empty.', 'woocommerce') }}</p>
+            <a href="{{ wc_page_url('shop') }}" class="btn btn-primary">
+                {{ fn('__', 'Return to shop', 'woocommerce') }}
+            </a>
+        {% endif %}
 
     </div>
-
 {% endblock %}
