@@ -19,12 +19,31 @@
                     <div class="summary entry-summary">
                         <h1 class="product_title entry-title">{{ product._name }}</h1>
 
+                        {% if product.get_short_description() %}
+                            <div class="product-short-description mb-3">
+                                {{ product.get_short_description()|raw }}
+                            </div>
+                        {% endif %}
+
                         <div class="price">
                             {% if product._sale_price is not empty %}
                                 <s>{{ fn('wc_price', product._regular_price) }}</s>
                                 {{ fn('wc_price', product._sale_price) }}
                             {% else %}
                                 {{ fn('wc_price', product._regular_price) }}
+                            {% endif %}
+                        </div>
+
+                        <div class="stock-status mb-2">
+                            {% if product.is_in_stock() %}
+                                <span class="badge bg-success">{{ fn('__', 'In stock', 'woocommerce') }}</span>
+                                {% if product.get_stock_quantity() %}
+                                    <small class="text-muted ms-1">
+                                        ({{ product.get_stock_quantity() }} {{ fn('__', 'left', 'woocommerce') }})
+                                    </small>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge bg-danger">{{ fn('__', 'Out of stock', 'woocommerce') }}</span>
                             {% endif %}
                         </div>
 
@@ -118,6 +137,21 @@
                 </div>
             </div>
 
+            {# Tabs: Description, Additional info, Reviews #}
+            <div class="row">
+                <div class="col-12 mt-5">
+                    {{ function('woocommerce_output_product_data_tabs') }}
+                </div>
+            </div>
+
+            {# Upsells #}
+            <div class="row">
+                <div class="col-12">
+                    {{ function('woocommerce_upsell_display') }}
+                </div>
+            </div>
+
+            {# Related products #}
             <div class="row">
                 <div class="col-12">
                     {% include 'woocommerce/components/related.twig' %}

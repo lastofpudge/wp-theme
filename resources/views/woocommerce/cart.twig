@@ -161,4 +161,11 @@
             </div>
         </div>
     {% endif %}
+    {# Cross-sells #}
+    <section class="cross-sells py-5">
+        <div class="container">
+            {{ function('woocommerce_cross_sell_display') }}
+        </div>
+    </section>
+
 {% endblock %}

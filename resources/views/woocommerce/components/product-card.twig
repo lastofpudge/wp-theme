@@ -1,7 +1,12 @@
 {% set wc = wc_product(post.ID) %}
 <div class="card product-card h-100">
-    <a href="{{ post.link }}" class="product-card__image d-block overflow-hidden">
+    <a href="{{ post.link }}" class="product-card__image d-block overflow-hidden position-relative">
         {{ post.thumbnail({ 'size': 'woocommerce_thumbnail' })|raw }}
+        {% if wc and wc.is_on_sale() %}
+            <span class="product-card__badge badge bg-danger position-absolute top-0 start-0 m-2">
+                {{ fn('__', 'Sale', 'woocommerce') }}
+            </span>
+        {% endif %}
     </a>
 
     <div class="card-body d-flex flex-column">
@@ -10,9 +15,12 @@
         </h3>
 
         {% if wc %}
-            <div class="product-card__price mb-3">
+            <div class="product-card__price mb-2">
                 {{ wc.get_price_html()|raw }}
             </div>
+            {% if not wc.is_in_stock() %}
+                <span class="badge bg-secondary mb-2">{{ fn('__', 'Out of stock', 'woocommerce') }}</span>
+            {% endif %}
         {% endif %}
 
         <div class="mt-auto">
