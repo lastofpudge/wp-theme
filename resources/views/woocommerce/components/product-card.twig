@@ -1,0 +1,34 @@
+{% set wc = wc_product(post.ID) %}
+<div class="card product-card h-100">
+    <a href="{{ post.link }}" class="product-card__image d-block overflow-hidden">
+        {{ post.thumbnail({ 'size': 'woocommerce_thumbnail' })|raw }}
+    </a>
+
+    <div class="card-body d-flex flex-column">
+        <h3 class="product-card__title h6 mb-2">
+            <a href="{{ post.link }}" class="text-decoration-none text-dark">{{ post.title }}</a>
+        </h3>
+
+        {% if wc %}
+            <div class="product-card__price mb-3">
+                {{ wc.get_price_html()|raw }}
+            </div>
+        {% endif %}
+
+        <div class="mt-auto">
+            {% if wc and wc.is_type('variable') %}
+                <a href="{{ post.link }}" class="btn btn-outline-primary w-100">
+                    {{ fn('__', 'Select options', 'woocommerce') }}
+                </a>
+            {% else %}
+                <button type="button"
+                        class="btn btn-primary w-100 js-add-to-cart"
+                        data-product="{{ post.ID }}"
+                        data-quantity="1"
+                        data-nonce="{{ fn('wp_create_nonce', 'ajax-nonce') }}">
+                    {{ fn('__', 'Add to cart', 'woocommerce') }}
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</div>

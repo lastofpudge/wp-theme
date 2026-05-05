@@ -41,43 +41,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    {% if posts %}
-                        {% for post in posts %}
-                            <div class="col-4 mb-3">
-                                <h2>
-                                    <a href="{{ post.link }}">{{ post.title }}</a>
-                                </h2>
-
-                                <div>
-                                    {% if post.thumbnail %}
-                                        <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}"
-                                             alt="{{ post.title }}" />
-                                    {% else %}
-                                        <img src="{{ theme.path }}/resources/assets/dist/images/placeholders/no-image-default.png"
-                                             alt="" />
-                                    {% endif %}
-
-                                    {% if post.is_type('variable') %}
-                                        <p>This is a variable product.</p>
-                                    {% else %}
-                                        <p>This is not a variable product.</p>
-                                    {% endif %}
-
-                                    <div class="mt-2">
-                                        <button class="btn btn-primary js-add-to-cart" data-quantity="1"
-                                                data-product_id="{{ post.id }}"
-                                                {% if post.is_type('variable') %} disabled {% endif %}
-                                        >
-                                            Add to
-                                            Cart
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                    {% for post in posts %}
+                        <div class="col-4 mb-3">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
                     {% else %}
-                        <p>Nothing found</p>
-                    {% endif %}
+                        <p class="col">{{ fn('__', 'No products found.', 'woocommerce') }}</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
