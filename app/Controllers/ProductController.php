@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use Timber\PostQuery;
 use Timber\Timber;
 
 class ProductController extends Controller
@@ -48,7 +47,7 @@ class ProductController extends Controller
             'label' => $taxonomy->attribute_label,
             'name'  => $taxonomy->attribute_name,
             'terms' => get_terms([
-                'taxonomy'   => 'pa_' . $taxonomy->attribute_name,
+                'taxonomy'   => 'pa_'.$taxonomy->attribute_name,
                 'hide_empty' => false,
             ]) ?? [],
         ], wc_get_attribute_taxonomies());
@@ -62,5 +61,4 @@ class ProductController extends Controller
 
         return $this->data;
     }
-
 }
