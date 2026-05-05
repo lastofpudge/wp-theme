@@ -2,7 +2,7 @@
 
 {% block content %}
     {% do action('woocommerce_before_single_product') %}
-    <div class="post-wrap" id="post-{{ product.id }}">
+    <div class="post-wrap" id="post-{{ product.get_id() }}">
         <div class="container">
             <div class="row">
                 <div class="col-12 mb-3">
@@ -17,7 +17,7 @@
                 <div class="col-6">
 
                     <div class="summary entry-summary">
-                        <h1 class="product_title entry-title">{{ product._name }}</h1>
+                        <h1 class="product_title entry-title">{{ product.get_name() }}</h1>
 
                         {% if product.get_short_description() %}
                             <div class="product-short-description mb-3">
@@ -26,12 +26,7 @@
                         {% endif %}
 
                         <div class="price">
-                            {% if product._sale_price is not empty %}
-                                <s>{{ fn('wc_price', product._regular_price) }}</s>
-                                {{ fn('wc_price', product._sale_price) }}
-                            {% else %}
-                                {{ fn('wc_price', product._regular_price) }}
-                            {% endif %}
+                            {{ product.get_price_html() | raw }}
                         </div>
 
                         <div class="stock-status mb-2">
@@ -48,7 +43,7 @@
                         </div>
 
                         <div class="sku">
-                            sku: <span>{{ product._sku }}</span>
+                            sku: <span>{{ product.get_sku() }}</span>
                         </div>
 
                         {% if categories %}
@@ -108,15 +103,15 @@
                                         type="number"
                                         name="quantity"
                                         min="1"
-                                        {% if product.stock_quantity %}
-                                            max="{{ product.stock_quantity }}"
+                                        {% if product.get_stock_quantity() %}
+                                            max="{{ product.get_stock_quantity() }}"
                                         {% endif %}
                                         value="1">
                             </label>
                         </div>
 
                         <div class="mt-2">
-                            <button class="js-add-to-cart" data-quantity="1" data-product_id="{{ product.id }}"
+                            <button class="js-add-to-cart" data-quantity="1" data-product_id="{{ product.get_id() }}"
                                     {% if product.is_type('variable') %} disabled {% endif %}
                             >
                                 Add to

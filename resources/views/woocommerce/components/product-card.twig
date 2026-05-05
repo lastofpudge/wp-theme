@@ -1,7 +1,7 @@
 {% set wc = wc_product(post.ID) %}
 <div class="card product-card h-100">
     <a href="{{ post.link }}" class="product-card__image d-block overflow-hidden position-relative">
-        {{ post.thumbnail({ 'size': 'woocommerce_thumbnail' })|raw }}
+        {{ wc ? wc.get_image('woocommerce_thumbnail') | raw : fn('woocommerce_placeholder_img', 'woocommerce_thumbnail') | raw }}
         {% if wc and wc.is_on_sale() %}
             <span class="product-card__badge badge bg-danger position-absolute top-0 start-0 m-2">
                 {{ fn('__', 'Sale', 'woocommerce') }}

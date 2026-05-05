@@ -22,11 +22,20 @@
                         </ul>
                     {% endif %}
 
-                    {% if cart %}
-                        <div class="navbar-nav ms-auto">
+                    <div class="navbar-nav ms-auto align-items-center gap-3">
+                        <a class="nav-link" href="{{ cart_link }}">
+                            <i class="fa-solid fa-cart-shopping"></i> Cart
+                            {% if cart and cart.get_cart_contents_count() > 0 %}
+                                <span class="badge bg-danger">{{ cart.get_cart_contents_count() }}</span>
+                            {% endif %}
+                        </a>
+                        <a class="nav-link" href="{{ checkout_link }}">
+                            <i class="fa-solid fa-credit-card"></i> Checkout
+                        </a>
+                        {% if cart %}
                             {% include 'woocommerce/components/cartSmall.twig' %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </nav>
             </div>
         </div>
