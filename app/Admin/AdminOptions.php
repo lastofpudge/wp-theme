@@ -2,12 +2,15 @@
 
 namespace App\Admin;
 
+use App\Extensions\TimberTwigExtensions;
 use Timber\Timber;
 
 class AdminOptions
 {
     public function __construct()
     {
+        new TimberTwigExtensions();
+
         $this->index();
         $this->manageAdminAccess();
         add_action('init', [$this, 'registerMenus']);
