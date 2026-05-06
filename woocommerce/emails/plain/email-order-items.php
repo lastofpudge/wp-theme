@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Email Order Items (plain)
+ * Email Order Items (plain).
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/email-order-items.php.
  *
@@ -11,32 +12,31 @@
  * the readme will list any important changes.
  *
  * @see         https://woo.com/document/template-structure/
- * @package     WooCommerce\Templates\Emails\Plain
+ *
  * @version     5.2.0
  */
-
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-foreach ($items as $item_id => $item) :
+foreach ($items as $item_id => $item) {
     if (apply_filters('woocommerce_order_item_visible', true, $item)) {
-        $product       = $item->get_product();
-        $sku           = '';
+        $product = $item->get_product();
+        $sku = '';
         $purchase_note = '';
 
         if (is_object($product)) {
-            $sku           = $product->get_sku();
+            $sku = $product->get_sku();
             $purchase_note = $product->get_purchase_note();
         }
 
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
         echo wp_kses_post(apply_filters('woocommerce_order_item_name', $item->get_name(), $item, false));
         if ($show_sku && $sku) {
-            echo ' (#' . $sku . ')';
+            echo ' (#'.$sku.')';
         }
-        echo ' X ' . apply_filters('woocommerce_email_order_item_quantity', $item->get_quantity(), $item);
-        echo ' = ' . $order->get_formatted_line_subtotal($item) . "\n";
+        echo ' X '.apply_filters('woocommerce_email_order_item_quantity', $item->get_quantity(), $item);
+        echo ' = '.$order->get_formatted_line_subtotal($item)."\n";
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
         // allow other plugins to add additional product information here.
@@ -45,13 +45,13 @@ foreach ($items as $item_id => $item) :
         echo strip_tags(
             wc_display_item_meta(
                 $item,
-                array(
+                [
                     'before'    => "\n- ",
                     'separator' => "\n- ",
                     'after'     => '',
                     'echo'      => false,
                     'autop'     => false,
-                )
+                ]
             )
         );
 
@@ -60,7 +60,7 @@ foreach ($items as $item_id => $item) :
     }
     // Note.
     if ($show_purchase_note && $purchase_note) {
-        echo "\n" . do_shortcode(wp_kses_post($purchase_note));
+        echo "\n".do_shortcode(wp_kses_post($purchase_note));
     }
     echo "\n\n";
-endforeach;
+}
