@@ -1,8 +1,8 @@
 <?php
+
 /**
- * Polylang Pro
+ * Polylang Pro.
  *
- * @package           Polylang-Pro
  * @author            WP SYNTEX
  * @license           GPL-3.0-or-later
  *
@@ -38,38 +38,38 @@
 
 use WP_Syntex\Polylang_Pro\Options\Registry as Options_Registry;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Don't access directly.
+if (!defined('ABSPATH')) {
+    exit; // Don't access directly.
 }
 
-define( 'POLYLANG_PRO', true );
-define( 'POLYLANG_PRO_FILE', __FILE__ );
-define( 'POLYLANG_PRO_DIR', __DIR__ );
+define('POLYLANG_PRO', true);
+define('POLYLANG_PRO_FILE', __FILE__);
+define('POLYLANG_PRO_DIR', __DIR__);
 
-if ( ! defined( 'POLYLANG_ROOT_FILE' ) ) {
-	define( 'POLYLANG_ROOT_FILE', __FILE__ );
+if (!defined('POLYLANG_ROOT_FILE')) {
+    define('POLYLANG_ROOT_FILE', __FILE__);
 }
 
-if ( defined( 'POLYLANG_BASENAME' ) ) {
-	// The user is attempting to activate a second plugin instance, typically Polylang and Polylang Pro.
-	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+if (defined('POLYLANG_BASENAME')) {
+    // The user is attempting to activate a second plugin instance, typically Polylang and Polylang Pro.
+    require_once ABSPATH.'wp-admin/includes/plugin.php';
 
-	deactivate_plugins( POLYLANG_BASENAME, false, is_network_admin() ); // Deactivate the other plugin.
+    deactivate_plugins(POLYLANG_BASENAME, false, is_network_admin()); // Deactivate the other plugin.
 
-	// Add the deactivated plugin to the list of recent activated plugins.
-	if ( ! is_network_admin() ) {
-		update_option( 'recently_activated', array( POLYLANG_BASENAME => time() ) + (array) get_option( 'recently_activated' ) );
-	} else {
-		update_site_option( 'recently_activated', array( POLYLANG_BASENAME => time() ) + (array) get_site_option( 'recently_activated' ) );
-	}
+    // Add the deactivated plugin to the list of recent activated plugins.
+    if (!is_network_admin()) {
+        update_option('recently_activated', [POLYLANG_BASENAME => time()] + (array) get_option('recently_activated'));
+    } else {
+        update_site_option('recently_activated', [POLYLANG_BASENAME => time()] + (array) get_site_option('recently_activated'));
+    }
 } else {
-	define( 'POLYLANG_BASENAME', plugin_basename( __FILE__ ) ); // Plugin name as known by WP.
+    define('POLYLANG_BASENAME', plugin_basename(__FILE__)); // Plugin name as known by WP.
 }
 
-require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/vendor/wpsyntex/polylang/polylang.php';
+require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/vendor/wpsyntex/polylang/polylang.php';
 
-if ( empty( $_GET['deactivate-polylang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-	add_action( 'pll_init_options_for_blog', array( Options_Registry::class, 'register' ), 15 ); // After Polylang.
-	add_action( 'pll_pre_init', array( new PLL_Pro(), 'init' ), 0 );
+if (empty($_GET['deactivate-polylang'])) { // phpcs:ignore WordPress.Security.NonceVerification
+    add_action('pll_init_options_for_blog', [Options_Registry::class, 'register'], 15); // After Polylang.
+    add_action('pll_pre_init', [new PLL_Pro(), 'init'], 0);
 }

@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Description: Keeps WooCommerce product prices identical across Polylang translations without Polylang for WooCommerce.
  */
-
 defined('ABSPATH') || exit;
 
 final class SyncWCPricesPolylang
@@ -28,22 +28,22 @@ final class SyncWCPricesPolylang
             $update ||
             wp_is_post_autosave($postId) ||
             wp_is_post_revision($postId) ||
-            ! current_user_can('edit_post', $postId) ||
-            ! self::canSync()
+            !current_user_can('edit_post', $postId) ||
+            !self::canSync()
         ) {
             return;
         }
 
         $sourceProductId = isset($_GET['from_post']) ? absint($_GET['from_post']) : 0;
 
-        if (! $sourceProductId || $sourceProductId === $postId) {
+        if (!$sourceProductId || $sourceProductId === $postId) {
             return;
         }
 
         $sourceProduct = wc_get_product($sourceProductId);
         $targetProduct = wc_get_product($postId);
 
-        if (! $sourceProduct || ! $targetProduct) {
+        if (!$sourceProduct || !$targetProduct) {
             return;
         }
 
@@ -63,12 +63,13 @@ final class SyncWCPricesPolylang
 
     public static function syncProductPrices(int $productId, WC_Product $product): void
     {
-        if (self::$syncing || ! self::canSync()) {
+        if (self::$syncing || !self::canSync()) {
             return;
         }
 
         if ($product->is_type('variable')) {
             self::syncVariableProductPrices($productId);
+
             return;
         }
 
@@ -77,13 +78,13 @@ final class SyncWCPricesPolylang
 
     public static function syncVariationPrices(int $variationId, int $loop): void
     {
-        if (self::$syncing || ! self::canSync()) {
+        if (self::$syncing || !self::canSync()) {
             return;
         }
 
         $variation = wc_get_product($variationId);
 
-        if (! $variation || ! $variation->is_type('variation')) {
+        if (!$variation || !$variation->is_type('variation')) {
             return;
         }
 
@@ -114,7 +115,7 @@ final class SyncWCPricesPolylang
 
             $translatedProduct = wc_get_product($translatedProductId);
 
-            if (! $translatedProduct || $translatedProduct->is_type('variable')) {
+            if (!$translatedProduct || $translatedProduct->is_type('variable')) {
                 continue;
             }
 
@@ -133,7 +134,7 @@ final class SyncWCPricesPolylang
     {
         $product = wc_get_product($productId);
 
-        if (! $product || ! $product->is_type('variable')) {
+        if (!$product || !$product->is_type('variable')) {
             return;
         }
 
@@ -142,7 +143,7 @@ final class SyncWCPricesPolylang
         foreach ($sourceVariationIds as $sourceVariationId) {
             $sourceVariation = wc_get_product($sourceVariationId);
 
-            if (! $sourceVariation) {
+            if (!$sourceVariation) {
                 continue;
             }
 
@@ -174,7 +175,7 @@ final class SyncWCPricesPolylang
 
             $translatedVariation = wc_get_product($translatedVariationId);
 
-            if (! $translatedVariation || ! $translatedVariation->is_type('variation')) {
+            if (!$translatedVariation || !$translatedVariation->is_type('variation')) {
                 continue;
             }
 
@@ -195,7 +196,7 @@ final class SyncWCPricesPolylang
     {
         $sourceParentId = $variation->get_parent_id();
 
-        if (! $sourceParentId) {
+        if (!$sourceParentId) {
             return;
         }
 
@@ -228,7 +229,7 @@ final class SyncWCPricesPolylang
 
             $translatedVariation = wc_get_product((int) $translatedSiblingIds[$variationIndex]);
 
-            if (! $translatedVariation || ! $translatedVariation->is_type('variation')) {
+            if (!$translatedVariation || !$translatedVariation->is_type('variation')) {
                 continue;
             }
 
@@ -258,10 +259,10 @@ final class SyncWCPricesPolylang
             $targetVariation = wc_get_product((int) $targetVariationIds[$index]);
 
             if (
-                ! $sourceVariation ||
-                ! $targetVariation ||
-                ! $sourceVariation->is_type('variation') ||
-                ! $targetVariation->is_type('variation')
+                !$sourceVariation ||
+                !$targetVariation ||
+                !$sourceVariation->is_type('variation') ||
+                !$targetVariation->is_type('variation')
             ) {
                 continue;
             }
@@ -285,7 +286,7 @@ final class SyncWCPricesPolylang
         foreach ($translations as $translatedProductId) {
             $translatedProductId = (int) $translatedProductId;
 
-            if (! $translatedProductId) {
+            if (!$translatedProductId) {
                 continue;
             }
 

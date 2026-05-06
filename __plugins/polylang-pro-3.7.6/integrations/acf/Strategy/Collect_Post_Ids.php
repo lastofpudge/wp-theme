@@ -1,7 +1,4 @@
 <?php
-/**
- * @package Polylang-Pro
- */
 
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
@@ -12,32 +9,34 @@ namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
  *
  * @since 3.7
  */
-class Collect_Post_Ids extends Abstract_Collect_Ids {
+class Collect_Post_Ids extends Abstract_Collect_Ids
+{
+    /**
+     * Collects the post IDs of a field.
+     *
+     * @since 3.7
+     *
+     * @param mixed $value Custom field value of the source object.
+     * @param array $field Custom field definition.
+     *
+     * @return int|int[]|scalar|scalar[] Custom field value.
+     */
+    protected function get_ids_from_field($value, array $field)
+    {
+        switch ($field['type']) {
+            case 'image':
+            case 'file':
+                if (PLL()->options['media_support'] && is_numeric($value)) {
+                    return $value;
+                }
+                break;
+            case 'gallery':
+                if (PLL()->options['media_support'] && is_array($value)) {
+                    return $value;
+                }
+                break;
+        }
 
-	/**
-	 * Collects the post IDs of a field.
-	 *
-	 * @since 3.7
-	 *
-	 * @param mixed $value Custom field value of the source object.
-	 * @param array $field Custom field definition.
-	 * @return int|int[]|scalar|scalar[] Custom field value.
-	 */
-	protected function get_ids_from_field( $value, array $field ) {
-		switch ( $field['type'] ) {
-			case 'image':
-			case 'file':
-				if ( PLL()->options['media_support'] && is_numeric( $value ) ) {
-					return $value;
-				}
-				break;
-			case 'gallery':
-				if ( PLL()->options['media_support'] && is_array( $value ) ) {
-					return $value;
-				}
-				break;
-		}
-
-		return array();
-	}
+        return [];
+    }
 }

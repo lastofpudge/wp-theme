@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Show a brands description when on a taxonomy page
+ * Show a brands description when on a taxonomy page.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/brands/widgets/brand-description.php.
  *
@@ -11,17 +12,17 @@
  * the readme will list any important changes.
  *
  * @see     https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
+ *
  * @version 9.4.0
  */
 
-declare( strict_types = 1);
+declare(strict_types=1);
 
 global $woocommerce;
 
-if ( $thumbnail ) {
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo wc_get_brand_thumbnail_image( $brand );
+if ($thumbnail) {
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo wc_get_brand_thumbnail_image($brand);
 }
 
-echo wp_kses_post( wpautop( wptexturize( term_description() ) ) );
+echo wp_kses_post(wpautop(wptexturize(term_description())));
