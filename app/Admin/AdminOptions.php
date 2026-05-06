@@ -14,6 +14,8 @@ class AdminOptions
         $this->index();
         $this->manageAdminAccess();
         add_action('init', [$this, 'registerMenus']);
+        add_action('wp', [$this, 'maybeEnableCheckout']);
+        add_action('pre_get_posts', [$this, 'filterByPrice']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
         add_filter('timber/context', [$this, 'registerContext']);
     }
@@ -49,8 +51,9 @@ class AdminOptions
             show_admin_bar(false);
         }
 
-        if (!current_user_can('administrator') && is_admin() & !wp_doing_ajax()) {
-            wp_redirect(home_url());
+        if (!current_user_can('administrator') && is_admin() && !wp_doing_ajax()) {
+            wp_safe_redirect(home_url());
+            exit;
         }
     }
 
@@ -76,7 +79,59 @@ class AdminOptions
         wp_localize_script('app', 'data', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('ajax-nonce'),
+            'price_slider' => [
+                'currency_symbol' => html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8'),
+                'currency_format' => html_entity_decode(get_woocommerce_price_format(), ENT_QUOTES, 'UTF-8'),
+                'currency_format_num_decimals' => wc_get_price_decimals(),
+                'currency_format_decimal_sep' => wc_get_price_decimal_separator(),
+                'currency_format_thousand_sep' => wc_get_price_thousand_separator(),
+            ],
         ]);
+    }
+
+    public function filterByPrice(\WP_Query $query): void
+    {
+        if (is_admin() || !$query->is_main_query()) {
+            return;
+        }
+
+        if (
+            !$query->is_post_type_archive('product')
+            && !$query->is_tax(['product_cat', 'product_tag'])
+        ) {
+            return;
+        }
+
+        $min = get_requested_price('min_price');
+        $max = get_requested_price('max_price');
+
+        if ($min === null && $max === null) {
+            return;
+        }
+
+        if ($min !== null && $max !== null && $min > $max) {
+            [$min, $max] = [$max, $min];
+        }
+
+        $meta_query = (array) $query->get('meta_query');
+
+        if ($min !== null) {
+            $meta_query[] = ['key' => '_price', 'value' => $min, 'compare' => '>=', 'type' => 'DECIMAL'];
+        }
+        if ($max !== null) {
+            $meta_query[] = ['key' => '_price', 'value' => $max, 'compare' => '<=', 'type' => 'DECIMAL'];
+        }
+
+        $query->set('meta_query', $meta_query);
+    }
+
+    public function maybeEnableCheckout(): void
+    {
+        $checkoutPageId = get_localized_wc_page_id('checkout');
+
+        if ($checkoutPageId > 0 && is_page($checkoutPageId)) {
+            add_filter('woocommerce_is_checkout', '__return_true');
+        }
     }
 
     public function registerContext($context): array
@@ -93,8 +148,9 @@ class AdminOptions
         if (function_exists('WC') && WC()->cart) {
             $context['cart']            = WC()->cart;
             $context['currency_symbol'] = get_woocommerce_currency_symbol();
-            $context['cart_link']       = wc_get_cart_url();
-            $context['checkout_link']   = wc_get_checkout_url();
+            $context['cart_link']       = get_localized_wc_page_url('cart');
+            $context['checkout_link']   = get_localized_wc_page_url('checkout');
+            $context['account_link']    = get_localized_wc_page_url('myaccount');
         }
 
         return $context;

@@ -4,10 +4,17 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
+                <h1>
+                    {% if fn('is_tax', ['product_cat', 'product_tag']) %}
+                        {{ fn('single_term_title', '', false) }}
+                    {% else %}
+                        {{ fn('get_the_title', fn('get_localized_wc_page_id', 'shop')) }}
+                    {% endif %}
+                </h1>
                 <p>
-                </p>
-                <p>
-                    {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+                    {% if fn('function_exists', 'yoast_breadcrumb') %}
+                        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+                    {% endif %}
                 </p>
             </div>
         </div>
@@ -20,8 +27,7 @@
                             <h3>{{ attribute.label }}</h3>
                             <ul>
                                 {% for term in attribute.terms %}
-                                    <li><a href="?filter_{{ attribute.name }}={{ term.name }}">{{ term.name }}
-                                            ({{ term.count }})</a>
+                                    <li><a href="{{ term.filter_url }}">{{ term.name }}&nbsp;({{ term.count }})</a>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -29,8 +35,14 @@
                     {% endfor %}
                 {% endif %}
 
-                <div id="rangeSlider"></div>
-                <div id="slider-non-linear-step-value"></div>
+                <div class="mb-1 small">{{ fn('__', 'Price', 'woocommerce') }}:</div>
+                <div id="rangeSlider"
+                     data-min="0"
+                     data-max="1000000"
+                     data-from="{{ price_min }}"
+                     data-to="{{ price_max }}">
+                </div>
+                <div id="slider-non-linear-step-value" class="small mt-1"></div>
 
             </div>
 

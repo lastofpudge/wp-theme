@@ -1,15 +1,17 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-    {% if fn('function_exists', 'yoast_breadcrumb') %}
-        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
-    {% endif %}
+    <div class="container">
+        {% if fn('function_exists', 'yoast_breadcrumb') %}
+            {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+        {% endif %}
 
-    <div class="post-wrap" id="post-{{ post.ID }}">
-        <h1>
-            {{ post.title }}
-        </h1>
+        <div class="post-wrap" id="post-{{ post.ID }}">
+            <h1>
+                {{ post.title }}
+            </h1>
 
-        {{ post.content }}
+            {{ post.content }}
+        </div>
     </div>
 {% endblock %}

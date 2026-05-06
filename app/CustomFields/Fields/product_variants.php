@@ -2,4 +2,4 @@
 
 use Core\CustomWooVariants;
 
-CustomWooVariants::create('Name', 'name', 'text', []);
+// CustomWooVariants::create('Name', 'name', 'text', []);

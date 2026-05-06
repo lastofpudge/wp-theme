@@ -1,44 +1,73 @@
 import noUiSlider from 'nouislider'
 
 export function initRangeSlider() {
-  const nonLinearStepSlider = document.getElementById('rangeSlider')
+  const el = document.getElementById('rangeSlider')
+  if (!el) return
 
-  if (nonLinearStepSlider) {
-    const nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value')
+  const rawMin = parseFloat(el.dataset.min)
+  const rawMax = parseFloat(el.dataset.max)
+  const valueEl = document.getElementById('slider-non-linear-step-value')
 
-    const slider = noUiSlider.create(nonLinearStepSlider, {
-      start: [0, 100],
-      connect: true,
-      range: {
-        min: 0,
-        max: 100
-      }
-    })
+  if (!valueEl || Number.isNaN(rawMin) || Number.isNaN(rawMax)) return
 
-    nonLinearStepSlider.noUiSlider.on('update', function (values) {
-      nonLinearStepSliderValueElement.innerHTML = values.join(' - ')
-    })
+  const absMin = Math.min(rawMin, rawMax)
+  const absMax = Math.max(rawMin, rawMax)
+  const requestedFrom = parseFloat(el.dataset.from)
+  const requestedTo = parseFloat(el.dataset.to)
+  const fromVal = Number.isNaN(requestedFrom) ? absMin : requestedFrom
+  const toVal = Number.isNaN(requestedTo) ? absMax : requestedTo
+  const startMin = Math.min(Math.max(fromVal, absMin), absMax)
+  const startMax = Math.max(Math.min(toVal, absMax), startMin)
 
-    const valueElement = document.getElementById('slider-non-linear-step-value')
-    const urlParams = new URLSearchParams(window.location.search)
+  const formatPrice = value => {
+    const settings = data?.price_slider || {}
+    const decimals = Number(settings.currency_format_num_decimals ?? 0)
+    const decimalSeparator = settings.currency_format_decimal_sep ?? '.'
+    const thousandSeparator = settings.currency_format_thousand_sep ?? ','
+    const currencyFormat = settings.currency_format ?? '%1$s%2$s'
+    const currencySymbol = settings.currency_symbol ?? ''
+    const fixedValue = Number(value).toFixed(decimals)
+    const [integerPart, fractionPart] = fixedValue.split('.')
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator)
+    const formattedAmount = fractionPart
+      ? `${formattedInteger}${decimalSeparator}${fractionPart}`
+      : formattedInteger
 
-    const setSliderValues = values => {
-      slider.set(values)
-      valueElement.innerHTML = values.join(' - ')
-    }
-
-    const minPrice = parseFloat(urlParams.get('min_price')) || 0
-    const maxPrice = parseFloat(urlParams.get('max_price')) || 100
-    setSliderValues([minPrice, maxPrice])
-
-    slider.on('set', values => {
-      const newUrlParams = new URLSearchParams(urlParams)
-      newUrlParams.set('min_price', values[0])
-      newUrlParams.set('max_price', values[1])
-
-      const newUrl = window.location.pathname + '?' + newUrlParams.toString()
-      history.pushState({}, '', newUrl)
-      location.reload()
-    })
+    return currencyFormat
+      .replace('%1$s', currencySymbol)
+      .replace('%2$s', formattedAmount)
   }
+
+  if (absMin === absMax) {
+    el.hidden = true
+    valueEl.textContent = formatPrice(absMin)
+    return
+  }
+
+  el.hidden = false
+
+  const slider = noUiSlider.create(el, {
+    start: [startMin, startMax],
+    connect: true,
+    step: 1,
+    range: { min: absMin, max: absMax },
+    format: {
+      to: v => Math.round(v),
+      from: v => parseFloat(v),
+    },
+  })
+
+  slider.on('update', values => {
+    valueEl.textContent = `${formatPrice(values[0])} - ${formatPrice(values[1])}`
+  })
+
+  slider.on('set', values => {
+    const urlParams = new URLSearchParams(window.location.search)
+    urlParams.set('min_price', values[0])
+    urlParams.set('max_price', values[1])
+    urlParams.delete('paged')
+    urlParams.delete('page')
+    urlParams.delete('product-page')
+    window.location.href = window.location.pathname + '?' + urlParams.toString()
+  })
 }

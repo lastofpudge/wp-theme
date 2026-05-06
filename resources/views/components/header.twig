@@ -42,6 +42,9 @@
                     {% endif %}
 
                     <div class="navbar-nav ms-auto align-items-center gap-3">
+                        <a class="nav-link" href="{{ account_link }}">
+                           Account
+                        </a>
                         <a class="nav-link" href="{{ cart_link }}">
                             <i class="fa-solid fa-cart-shopping"></i> Cart
                             {% if cart and cart.get_cart_contents_count() > 0 %}

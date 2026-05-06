@@ -9,9 +9,9 @@
  * @version 8.7.0
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Variables used in this file.
@@ -25,35 +25,35 @@ defined('ABSPATH') || exit;
 <div class="customer-history order-attribution-metabox">
 	<h4>
 		<?php
-        esc_html_e('Total orders', 'woocommerce');
-echo wp_kses_post(
-    wc_help_tip(
-        __('Total number of non-cancelled, non-failed orders for this customer, including the current one.', 'woocommerce')
-    )
-);
-?>
+		esc_html_e( 'Total orders', 'woocommerce' );
+		echo wp_kses_post(
+			wc_help_tip(
+				__( 'Total number of non-cancelled, non-failed orders for this customer, including the current one.', 'woocommerce' )
+			)
+		);
+		?>
 	</h4>
 
 	<span class="order-attribution-total-orders">
-		<?php echo esc_html($orders_count); ?>
+		<?php echo esc_html( $orders_count ); ?>
 	</span>
 
 	<h4>
 		<?php
-esc_html_e('Total revenue', 'woocommerce');
-echo wp_kses_post(
-    wc_help_tip(
-        __("This is the Customer Lifetime Value, or the total amount you have earned from this customer's orders.", 'woocommerce')
-    )
-);
-?>
+		esc_html_e( 'Total revenue', 'woocommerce' );
+		echo wp_kses_post(
+			wc_help_tip(
+				__( "This is the Customer Lifetime Value, or the total amount you have earned from this customer's orders.", 'woocommerce' )
+			)
+		);
+		?>
 	</h4>
 	<span class="order-attribution-total-spend">
-		<?php echo wp_kses_post(wc_price($total_spend)); ?>
+		<?php echo wp_kses_post( wc_price( $total_spend ) ); ?>
 	</span>
 
-	<h4><?php esc_html_e('Average order value', 'woocommerce'); ?></h4>
+	<h4><?php esc_html_e( 'Average order value', 'woocommerce' ); ?></h4>
 	<span class="order-attribution-average-order-value">
-		<?php echo wp_kses_post(wc_price($avg_order_value)); ?>
+		<?php echo wp_kses_post( wc_price( $avg_order_value ) ); ?>
 	</span>
 </div>

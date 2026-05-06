@@ -7,7 +7,7 @@ export function initApplyCoupon() {
   if (!couponButton) return
 
   couponButton.addEventListener('click', async event => {
-    preloader.classList.add('js-preloading')
+    preloader?.classList.add('js-preloading')
 
     const couponCode = document.querySelector('.js-coupon').value
 
@@ -24,14 +24,17 @@ export function initApplyCoupon() {
       const result = await response.json()
 
       if (result.response) {
-        Toast.fire({ icon: 'success', iconColor: '#007cba', title: 'Success' })
+        document.querySelectorAll('.js-total').forEach(el => { el.textContent = result.total })
+        document.querySelectorAll('.js-sub-total').forEach(el => { el.textContent = result.subTotal })
+        document.querySelector('.js-coupon').value = ''
+        Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message || 'Success' })
       } else {
-        Toast.fire({ icon: 'error', iconColor: 'red', title: 'Error' })
+        Toast.fire({ icon: 'error', iconColor: 'red', title: result.message || 'Error' })
       }
     } catch (error) {
       console.error(error)
     }
 
-    preloader.classList.remove('js-preloading')
+    preloader?.classList.remove('js-preloading')
   })
 }

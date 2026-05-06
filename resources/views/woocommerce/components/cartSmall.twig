@@ -1,10 +1,10 @@
-<div class="dropdown d-grid">
-    <button type="button" data-bs-toggle="dropdown" class="btn btn-lg btn-inverse btn-block dropdown-toggle"
-            aria-expanded="true"><i class="fa-solid fa-cart-shopping"></i> <span
-                class='js-cart-total'>{{ cart.get_cart_contents_count }}</span> item(s) - <span
-                class="js-total">{{ cart.total }}</span> {{ currency_symbol }}
+<div class="dropdown d-grid js-mini-cart-dropdown">
+    <button type="button" data-bs-toggle="dropdown" class="btn btn-lg btn-inverse btn-block dropdown-toggle js-mini-cart-toggle"
+            aria-expanded="false"><i class="fa-solid fa-cart-shopping"></i> <span
+                class='js-cart-total'>{{ cart.get_cart_contents_count() }}</span> {{ fn('_n', 'item', 'items', cart.get_cart_contents_count(), 'woocommerce') }} - <span
+                class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
     </button>
-    <ul class="dropdown-menu dropdown-menu-end p-2"
+    <ul class="dropdown-menu dropdown-menu-end p-2 js-mini-cart-menu mini-cart-dropdown-menu"
         style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 42px, 0px);"
         data-popper-placement="bottom-end">
         <li>
@@ -28,25 +28,17 @@
                                     <a href="{{ fn('get_permalink', product_id) }}">{{ product_name }}</a>
                                 </td>
 
-                                {% if cart_item['data']._sale_price is not empty %}
-                                    <td>x{{ cart_item['quantity'] }}</td>
-                                    <td class="text-end">
-                                        <s>{{ fn('wc_price', cart_item['data']._regular_price) }}</s>
-                                        {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
-                                    </td>
-                                {% else %}
-                                    <td>x{{ cart_item['quantity'] }}</td>
-                                    <td class="text-end">
-                                        {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
-                                    </td>
-                                {% endif %}
+                                <td>×{{ cart_item['quantity'] }}</td>
+                                <td class="text-end">
+                                    {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) | raw }}
+                                </td>
 
                                 <td class="text-end">
                                     <button type="button"
                                             data-key="{{ cart_item_key }}"
                                             title="Remove"
                                             class="btn btn-danger js-remove-from-cart">
-                                        <i class="fa-solid fa-circle-xmark"></i>
+                                        <i class="fa-solid fa-circle-xmark">x</i>
                                     </button>
                                 </td>
                             </tr>
@@ -60,14 +52,14 @@
                 <table class="table table-sm table-bordered mb-2">
                     <tbody>
                     <tr>
-                        <td class="text-end"><strong>Sub-Total</strong></td>
+                        <td class="text-end"><strong>{{ fn('__', 'Subtotal', 'woocommerce') }}</strong></td>
                         <td class="text-end"><span
-                                    class="js-sub-total">{{ cart.subtotal }}</span> {{ currency_symbol }}
+                                    class="js-sub-total">{{ cart.get_subtotal() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-end"><strong>Total</strong></td>
-                        <td class="text-end"><span class="js-total">{{ cart.total }}</span> {{ currency_symbol }}
+                        <td class="text-end"><strong>{{ fn('__', 'Total', 'woocommerce') }}</strong></td>
+                        <td class="text-end"><span class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
                         </td>
                     </tr>
                     </tbody>
@@ -76,12 +68,12 @@
                     <a href="{{ cart_link }}">
                         <strong>
                             <i class="fa-solid fa-cart-shopping"></i>
-                            View Cart
+                            {{ fn('__', 'View cart', 'woocommerce') }}
                         </strong>
                     </a>&nbsp;
                     <a href="{{ checkout_link }}">
                         <strong>
-                            <i class="fa-solid fa-share"></i> Checkout</strong>
+                            <i class="fa-solid fa-share"></i> {{ fn('__', 'Checkout', 'woocommerce') }}</strong>
                     </a>
                 </p>
             </div>

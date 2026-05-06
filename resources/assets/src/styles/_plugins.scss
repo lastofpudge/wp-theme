@@ -1,4 +1,37 @@
 @use 'sweetalert2/src/sweetalert2.scss';
+@import 'nouislider/dist/nouislider.css';
+
+#rangeSlider {
+  margin: 0.75rem 0 0.5rem;
+  border: 0;
+  box-shadow: none;
+  background: #dee2e6;
+  height: 0.5rem;
+}
+
+#rangeSlider .noUi-connect {
+  background: #212529;
+}
+
+#rangeSlider.noUi-horizontal .noUi-handle {
+  width: 1.125rem;
+  height: 1.125rem;
+  top: -0.35rem;
+  right: -0.5625rem;
+}
+
+#rangeSlider .noUi-handle {
+  border: 2px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px #212529;
+  background: #212529;
+  cursor: pointer;
+}
+
+#rangeSlider .noUi-handle::before,
+#rangeSlider .noUi-handle::after {
+  display: none;
+}
 
 .preloader-main {
   position: absolute;

@@ -12,15 +12,15 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://woo.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates\Emails\Plain
  * @version 3.4.0
  */
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
-echo esc_html(wc_strtoupper(esc_html__('Customer details', 'woocommerce'))) . "\n\n";
+echo esc_html( wc_strtoupper( esc_html__( 'Customer details', 'woocommerce' ) ) ) . "\n\n";
 
-foreach ($fields as $field) {
-    echo wp_kses_post($field['label']) . ': ' . wp_kses_post($field['value']) . "\n";
+foreach ( $fields as $field ) {
+	echo wp_kses_post( $field['label'] ) . ': ' . wp_kses_post( $field['value'] ) . "\n";
 }

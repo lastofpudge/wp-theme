@@ -10,34 +10,46 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see https://woo.com/document/template-structure/
+ * @see https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates\Emails\Plain
- * @version 3.7.0
+ * @version 9.8.0
  */
 
-defined('ABSPATH') || exit;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
+
+defined( 'ABSPATH' ) || exit;
+
+$email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
-echo esc_html(wp_strip_all_tags($email_heading));
+echo esc_html( wp_strip_all_tags( $email_heading ) );
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer username */
-echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($user_login)) . "\n\n";
+echo sprintf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $user_login ) ) . "\n\n";
 /* translators: %s: Store name */
-echo sprintf(esc_html__('Someone has requested a new password for the following account on %s:', 'woocommerce'), esc_html(wp_specialchars_decode(get_option('blogname'), ENT_QUOTES))) . "\n\n";
+echo sprintf( esc_html__( 'Someone has requested a new password for the following account on %s:', 'woocommerce' ), esc_html( $blogname ) ) . "\n\n";
+if ( $email_improvements_enabled ) {
+	echo "----------------------------------------\n\n";
+}
 /* translators: %s: Customer username */
-echo sprintf(esc_html__('Username: %s', 'woocommerce'), esc_html($user_login)) . "\n\n";
-echo esc_html__('If you didn\'t make this request, just ignore this email. If you\'d like to proceed:', 'woocommerce') . "\n\n";
-echo esc_url(add_query_arg(array( 'key' => $reset_key, 'id' => $user_id ), wc_get_endpoint_url('lost-password', '', wc_get_page_permalink('myaccount')))) . "\n\n"; // phpcs:ignore
+echo sprintf( esc_html__( 'Username: %s', 'woocommerce' ), esc_html( $user_login ) ) . "\n\n";
+if ( $email_improvements_enabled ) {
+	echo "----------------------------------------\n\n";
+	echo esc_html__( 'If you didn’t make this request, just ignore this email. If you’d like to proceed, reset your password via the link below:', 'woocommerce' ) . "\n\n";
+} else {
+	echo esc_html__( 'If you didn\'t make this request, just ignore this email. If you\'d like to proceed:', 'woocommerce' ) . "\n\n";
+}
+echo esc_url( add_query_arg( array( 'key' => $reset_key, 'id' => $user_id, 'login' => rawurlencode( $user_login ) ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) ) ) . "\n\n"; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 
 echo "\n\n----------------------------------------\n\n";
 
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ($additional_content) {
-    echo esc_html(wp_strip_all_tags(wptexturize($additional_content)));
-    echo "\n\n----------------------------------------\n\n";
+if ( $additional_content ) {
+	echo esc_html( wp_strip_all_tags( wptexturize( $additional_content ) ) );
+	echo "\n\n----------------------------------------\n\n";
 }
 
-echo wp_kses_post(apply_filters('woocommerce_email_footer_text', get_option('woocommerce_email_footer_text')));
+echo wp_kses_post( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) );

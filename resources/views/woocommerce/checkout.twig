@@ -1,73 +1,426 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-    <div class="container py-5">
+<div class="container py-5">
 
-        <h1 class="mb-4">{{ post.title }}</h1>
+    <h1 class="mb-4">{{ post.title }}</h1>
 
-        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false)|raw }}
+    {% if is_order_received and order_id %}
+        <div class="container py-5">
+            <p>
+                Order ID: <strong>{{ order_id }}</strong>
+            </p>
 
+            {% if order %}
+                <p>
+                    Total: <strong>{{ order.get_formatted_order_total()|raw }}</strong>
+                </p>
+            {% endif %}
+        </div>
+
+    {% else %}
         {% if cart and not cart.is_empty() %}
-            <div class="row g-5">
 
-                {# Order summary #}
-                <div class="col-md-5 order-md-2">
-                    <div class="checkout-summary p-4 border rounded bg-light sticky-top" style="top: 1rem;">
-                        <h2 class="h5 mb-3">{{ fn('__', 'Order summary', 'woocommerce') }}</h2>
+            <form id="checkout-form"
+                  name="checkout"
+                  method="post"
+                  action="{{ checkout_url }}"
+                  class="checkout woocommerce-checkout row g-5"
+                  enctype="multipart/form-data">
 
-                        <ul class="list-unstyled mb-3">
-                            {% for key, item in cart.get_cart() %}
-                                {% set product = fn('wc_get_product', item.product_id) %}
-                                {% if product %}
-                                    <li class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <span class="fw-medium">{{ product.get_name() }}</span>
-                                            <small class="text-muted d-block">× {{ item.quantity }}</small>
-                                        </div>
-                                        <span class="ms-3 text-nowrap">
-                                            {{ item.line_total|wc_price }}
-                                        </span>
-                                    </li>
+                <div class="col-lg-7">
+
+                    {# Billing #}
+                    <div class="mb-5">
+                        <h2 class="h5 mb-3">{{ fn('__', 'Billing details', 'woocommerce') }}</h2>
+
+                        <div class="row g-3">
+                            {% for key, field in fields.billing %}
+                                {% set col = 'col-12' %}
+
+                                {% if field.class is defined %}
+                                    {% if 'form-row-first' in field.class or 'form-row-last' in field.class %}
+                                        {% set col = 'col-md-6' %}
+                                    {% endif %}
                                 {% endif %}
+
+                                <div class="{{ col }}">
+                                    {% if field.type == 'country' or field.type == 'state' %}
+                                        {{ fn('woocommerce_form_field', key, field, checkout.get_value(key))|raw }}
+
+                                    {% else %}
+                                        {% if field.type != 'checkbox' %}
+                                            <label for="{{ key }}" class="form-label">
+                                                {{ field.label }}
+                                                {% if field.required %}
+                                                    <span class="text-danger">*</span>
+                                                {% endif %}
+                                            </label>
+                                        {% endif %}
+
+                                        {% if field.type == 'select' %}
+                                            <select id="{{ key }}"
+                                                    name="{{ key }}"
+                                                    class="form-select"
+                                                    {% if field.required %}required{% endif %}>
+                                                {% for val, label in field.options %}
+                                                    <option value="{{ val }}"
+                                                        {% if checkout.get_value(key) == val %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                        {% elseif field.type == 'textarea' %}
+                                            <textarea id="{{ key }}"
+                                                      name="{{ key }}"
+                                                      class="form-control"
+                                                      rows="3"
+                                                      {% if field.required %}required{% endif %}>{{ checkout.get_value(key) }}</textarea>
+
+                                        {% elseif field.type == 'checkbox' %}
+                                            <div class="form-check">
+                                                <input type="checkbox"
+                                                       id="{{ key }}"
+                                                       name="{{ key }}"
+                                                       value="1"
+                                                       class="form-check-input"
+                                                       {% if checkout.get_value(key) %}checked{% endif %}>
+
+                                                <label class="form-check-label" for="{{ key }}">
+                                                    {{ field.label }}
+                                                    {% if field.required %}
+                                                        <span class="text-danger">*</span>
+                                                    {% endif %}
+                                                </label>
+                                            </div>
+
+                                        {% else %}
+                                            <input type="{{ field.type|default('text') }}"
+                                                   id="{{ key }}"
+                                                   name="{{ key }}"
+                                                   class="form-control"
+                                                   value="{{ checkout.get_value(key) }}"
+                                                   placeholder="{{ field.placeholder|default('') }}"
+                                                   {% if field.required %}required{% endif %}>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
                             {% endfor %}
-                        </ul>
-
-                        <hr>
-
-                        {% if cart.get_coupon_discount_total() > 0 %}
-                            <div class="d-flex justify-content-between mb-1 text-success">
-                                <span>{{ fn('__', 'Discount', 'woocommerce') }}</span>
-                                <span>-{{ cart.get_coupon_discount_total()|wc_price }}</span>
-                            </div>
-                        {% endif %}
-
-                        {% if cart.needs_shipping() %}
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>{{ fn('__', 'Shipping', 'woocommerce') }}</span>
-                                <span>{{ cart.get_cart_shipping_total()|raw }}</span>
-                            </div>
-                        {% endif %}
-
-                        <div class="d-flex justify-content-between fw-bold fs-5 mt-2">
-                            <span>{{ fn('__', 'Total', 'woocommerce') }}</span>
-                            <span>{{ cart.get_total()|raw }}</span>
                         </div>
+                    </div>
+
+                    {# Shipping address toggle #}
+                    {% if fields.shipping %}
+                        <div class="mb-5">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="ship-to-different"
+                                       name="ship_to_different_address"
+                                       value="1">
+
+                                <label class="form-check-label fw-medium" for="ship-to-different">
+                                    {{ fn('__', 'Ship to a different address?', 'woocommerce') }}
+                                </label>
+                            </div>
+
+                            <div id="shipping-fields" class="row g-3" style="display:none">
+                                <h2 class="h5 mb-2 col-12">
+                                    {{ fn('__', 'Shipping address', 'woocommerce') }}
+                                </h2>
+
+                                {% for key, field in fields.shipping %}
+                                    <div class="col-12">
+                                        {% if field.type == 'country' or field.type == 'state' %}
+                                            {{ fn('woocommerce_form_field', key, field, checkout.get_value(key))|raw }}
+
+                                        {% else %}
+                                            {% if field.type != 'checkbox' %}
+                                                <label for="{{ key }}" class="form-label">
+                                                    {{ field.label }}
+                                                    {% if field.required %}
+                                                        <span class="text-danger">*</span>
+                                                    {% endif %}
+                                                </label>
+                                            {% endif %}
+
+                                            {% if field.type == 'select' %}
+                                                <select id="{{ key }}"
+                                                        name="{{ key }}"
+                                                        class="form-select"
+                                                        {% if field.required %}required{% endif %}>
+                                                    {% for val, label in field.options %}
+                                                        <option value="{{ val }}"
+                                                            {% if checkout.get_value(key) == val %}selected{% endif %}>
+                                                            {{ label }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+
+                                            {% elseif field.type == 'textarea' %}
+                                                <textarea id="{{ key }}"
+                                                          name="{{ key }}"
+                                                          class="form-control"
+                                                          rows="3"
+                                                          {% if field.required %}required{% endif %}>{{ checkout.get_value(key) }}</textarea>
+
+                                            {% elseif field.type == 'checkbox' %}
+                                                <div class="form-check">
+                                                    <input type="checkbox"
+                                                           id="{{ key }}"
+                                                           name="{{ key }}"
+                                                           value="1"
+                                                           class="form-check-input"
+                                                           {% if checkout.get_value(key) %}checked{% endif %}>
+
+                                                    <label class="form-check-label" for="{{ key }}">
+                                                        {{ field.label }}
+                                                        {% if field.required %}
+                                                            <span class="text-danger">*</span>
+                                                        {% endif %}
+                                                    </label>
+                                                </div>
+
+                                            {% else %}
+                                                <input type="{{ field.type|default('text') }}"
+                                                       id="{{ key }}"
+                                                       name="{{ key }}"
+                                                       class="form-control"
+                                                       value="{{ checkout.get_value(key) }}"
+                                                       placeholder="{{ field.placeholder|default('') }}"
+                                                       {% if field.required %}required{% endif %}>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {# Order notes #}
+                    {% if fields.order %}
+                        <div class="mb-5">
+                            <h2 class="h5 mb-3">
+                                {{ fn('__', 'Additional information', 'woocommerce') }}
+                            </h2>
+
+                            {% for key, field in fields.order %}
+                                <div class="mb-3">
+                                    <label for="{{ key }}" class="form-label">
+                                        {{ field.label }}
+                                    </label>
+
+                                    <textarea id="{{ key }}"
+                                              name="{{ key }}"
+                                              class="form-control"
+                                              rows="4"
+                                              placeholder="{{ field.placeholder|default('') }}">{{ checkout.get_value(key) }}</textarea>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {# Payment methods #}
+                    <div id="payment" class="woocommerce-checkout-payment mb-4">
+                        <h2 class="h5 mb-3">{{ fn('__', 'Payment', 'woocommerce') }}</h2>
+
+                        {% if payment_gateways %}
+                            <div class="list-group wc_payment_methods payment_methods methods">
+                                {% for id, gateway in payment_gateways %}
+                                    <label class="list-group-item list-group-item-action wc_payment_method payment_method_{{ id }}">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="radio"
+                                                   name="payment_method"
+                                                   value="{{ id }}"
+                                                   class="form-check-input mt-0 input-radio js-payment-method"
+                                                   id="payment_method_{{ id }}"
+                                                   {% if loop.first %}checked="checked"{% endif %}>
+
+                                            <span class="fw-medium">{{ gateway.title }}</span>
+
+                                            {% if gateway.icon %}
+                                                <span class="ms-auto">{{ gateway.icon|raw }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                        {% if gateway.fields_html %}
+                                            <div class="payment_box payment_method_{{ id }} payment-box mt-2 ps-4"
+                                                 {% if not loop.first %}style="display:none"{% endif %}>
+                                                {{ gateway.fields_html|raw }}
+                                            </div>
+                                        {% endif %}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-danger">
+                                {{ fn('__', 'No payment methods available.', 'woocommerce') }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                {# Right column: order summary #}
+                <div class="col-lg-5">
+                    <div id="order_review"
+                         class="woocommerce-checkout-review-order border rounded p-4 bg-light sticky-top"
+                         style="top:1rem">
+
+                        <h2 class="h5 mb-3">{{ fn('__', 'Your order', 'woocommerce') }}</h2>
+
+                        <table class="shop_table woocommerce-checkout-review-order-table table table-sm mb-3">
+                            <thead>
+                                <tr class="border-bottom">
+                                    <th>{{ fn('__', 'Product', 'woocommerce') }}</th>
+                                    <th class="text-end">{{ fn('__', 'Subtotal', 'woocommerce') }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for key, item in cart.get_cart() %}
+                                    {% set p = fn('wc_get_product', item.product_id) %}
+
+                                    {% if p %}
+                                        <tr class="cart_item">
+                                            <td class="product-name">
+                                                {{ p.get_name() }}
+                                                <span class="text-muted">× {{ item.quantity }}</span>
+                                            </td>
+
+                                            <td class="product-total text-end">
+                                                {{ item.line_total|wc_price }}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+
+                            <tfoot>
+                                {% if cart.get_coupon_discount_total() > 0 %}
+                                    <tr class="cart-discount text-success">
+                                        <td>{{ fn('__', 'Discount', 'woocommerce') }}</td>
+                                        <td class="text-end">
+                                            -{{ cart.get_coupon_discount_total()|wc_price }}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+
+                                {% if cart.needs_shipping() %}
+                                    <tr class="woocommerce-shipping-totals shipping">
+                                        <td>{{ fn('__', 'Shipping', 'woocommerce') }}</td>
+                                        <td class="text-end">
+                                            {{ shipping_methods_html|raw }}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+
+                                <tr class="order-total fw-bold border-top">
+                                    <td>{{ fn('__', 'Total', 'woocommerce') }}</td>
+                                    <td class="text-end fs-5">
+                                        {{ cart.get_total()|raw }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <input type="hidden"
+                               name="woocommerce-process-checkout-nonce"
+                               value="{{ checkout_nonce }}">
+
+                        <input type="hidden"
+                               name="_wp_http_referer"
+                               value="{{ http_referer }}">
+
+                        <button type="submit"
+                                id="place_order"
+                                name="woocommerce_checkout_place_order"
+                                class="btn btn-primary w-100 btn-lg">
+                            {{ fn('__', 'Place order', 'woocommerce') }}
+                        </button>
                     </div>
                 </div>
 
-                {# Checkout form — WC injects all payment gateway fields here #}
-                <div class="col-md-7 order-md-1">
-                    {{ post.content }}
-                </div>
+            </form>
 
-            </div>
         {% else %}
-            {# Empty cart fallback #}
             <p>{{ fn('__', 'Your cart is empty.', 'woocommerce') }}</p>
-            <a href="{{ wc_page_url('shop') }}" class="btn btn-primary">
+
+            <a href="{{ fn('wc_get_page_permalink', 'shop') }}" class="btn btn-primary">
                 {{ fn('__', 'Return to shop', 'woocommerce') }}
             </a>
         {% endif %}
+    {% endif %}
 
-    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const shipToggle = document.getElementById('ship-to-different')
+    const shipFields = document.getElementById('shipping-fields')
+
+    function updateCheckout() {
+        if (window.jQuery) {
+            setTimeout(function () {
+                jQuery(document.body).trigger('update_checkout')
+            }, 100)
+        }
+    }
+
+    if (shipToggle && shipFields) {
+        shipToggle.addEventListener('change', function () {
+            shipFields.style.display = this.checked ? '' : 'none'
+            updateCheckout()
+        })
+    }
+
+    document.querySelectorAll('.js-payment-method').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            document.querySelectorAll('.payment-box').forEach(function (el) {
+                el.style.display = 'none'
+            })
+
+            const box = this.closest('.list-group-item').querySelector('.payment-box')
+
+            if (box) {
+                box.style.display = ''
+            }
+
+            updateCheckout()
+        })
+    })
+
+    document.addEventListener('change', function (e) {
+        const target = e.target
+
+        if (
+            target.name &&
+            (
+                target.name.startsWith('shipping_method') ||
+                target.name.startsWith('billing_') ||
+                target.name.startsWith('shipping_')
+            )
+        ) {
+            updateCheckout()
+        }
+    })
+
+    document.addEventListener('input', function (e) {
+        const target = e.target
+
+        if (
+            target.name &&
+            (
+                target.name === 'billing_postcode' ||
+                target.name === 'shipping_postcode' ||
+                target.name === 'billing_city' ||
+                target.name === 'shipping_city'
+            )
+        ) {
+            updateCheckout()
+        }
+    })
+})
+</script>
 {% endblock %}

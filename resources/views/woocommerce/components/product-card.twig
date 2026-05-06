@@ -31,9 +31,8 @@
             {% else %}
                 <button type="button"
                         class="btn btn-primary w-100 js-add-to-cart"
-                        data-product="{{ post.ID }}"
-                        data-quantity="1"
-                        data-nonce="{{ fn('wp_create_nonce', 'ajax-nonce') }}">
+                        data-product_id="{{ post.ID }}"
+                        data-quantity="1">
                     {{ fn('__', 'Add to cart', 'woocommerce') }}
                 </button>
             {% endif %}

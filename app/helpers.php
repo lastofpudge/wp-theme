@@ -159,3 +159,66 @@ if (!function_exists('get_cart_data')) {
         return $cart_data;
     }
 }
+
+if (!function_exists('get_requested_price')) {
+    function get_requested_price(string $key): ?float
+    {
+        if (!isset($_GET[$key])) {
+            return null;
+        }
+
+        $value = trim((string) wp_unslash($_GET[$key]));
+
+        if ($value === '') {
+            return null;
+        }
+
+        return (float) $value;
+    }
+}
+
+if (!function_exists('get_localized_wc_page_id')) {
+    function get_localized_wc_page_id(string $page): int
+    {
+        if (!function_exists('wc_get_page_id')) {
+            return 0;
+        }
+
+        $pageId = (int) wc_get_page_id($page);
+
+        if ($pageId <= 0) {
+            return 0;
+        }
+
+        if (function_exists('pll_get_post')) {
+            $translatedPageId = (int) pll_get_post($pageId);
+
+            if ($translatedPageId > 0) {
+                return $translatedPageId;
+            }
+        }
+
+        return $pageId;
+    }
+}
+
+if (!function_exists('get_localized_wc_page_url')) {
+    function get_localized_wc_page_url(string $page): string
+    {
+        $pageId = get_localized_wc_page_id($page);
+
+        if ($pageId > 0) {
+            $permalink = get_permalink($pageId);
+
+            if ($permalink) {
+                return $permalink;
+            }
+        }
+
+        return match ($page) {
+            'cart' => function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/'),
+            'checkout' => function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/'),
+            default => home_url('/'),
+        };
+    }
+}

@@ -13,7 +13,7 @@ export function iniCartQuantity() {
   if (changeButtons) {
     changeButtons.forEach(button => {
       button.addEventListener('click', async event => {
-        preloader.classList.add('js-preloading')
+        preloader?.classList.add('js-preloading')
 
         const key = button.dataset.key
         const oldQuantity = parseInt(button.dataset.quantity)
@@ -43,9 +43,11 @@ export function iniCartQuantity() {
 
             totals.forEach(el => { el.innerHTML = result.total })
             subTotals.forEach(el => { el.innerHTML = result.subTotal })
-            cartCount.innerHTML = result.count
+            if (cartCount) {
+              cartCount.innerHTML = result.count
+            }
 
-            if (result.cart) {
+            if (result.cart && cartList) {
               cartList.innerHTML = ''
               result.cart.forEach(product => {
                 cartList.innerHTML += modalCartProduct(product)
@@ -56,7 +58,7 @@ export function iniCartQuantity() {
           console.error(error)
         }
 
-        preloader.classList.remove('js-preloading')
+        preloader?.classList.remove('js-preloading')
       })
     })
   }
