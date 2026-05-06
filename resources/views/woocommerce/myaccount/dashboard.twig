@@ -1,0 +1,8 @@
+<div class="woocommerce-MyAccount-dashboard">
+    <p>
+        {{ fn('__', 'Hello', 'woocommerce') }} <strong>{{ user_name }}</strong>
+        (<a href="{{ logout_url }}">{{ fn('__', 'Log out', 'woocommerce') }}</a>)
+    </p>
+
+    <p>{{ description_html | raw }}</p>
+</div>

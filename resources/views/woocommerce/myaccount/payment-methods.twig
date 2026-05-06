@@ -1,0 +1,39 @@
+{% if has_methods %}
+
+    <table class="woocommerce-MyAccount-paymentMethods shop_table shop_table_responsive account-payment-methods-table">
+        <thead>
+            <tr>
+                {% for column_id, column_name in columns %}
+                    <th class="woocommerce-PaymentMethod woocommerce-PaymentMethod--{{ column_id }} payment-method-{{ column_id }}">
+                        <span class="nobr">{{ column_name }}</span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in method_rows %}
+                <tr class="payment-method{{ row.is_default ? ' default-payment-method' : '' }}">
+                    {% for column_id, cell in row.cells %}
+                        <td class="woocommerce-PaymentMethod woocommerce-PaymentMethod--{{ column_id }} payment-method-{{ column_id }}"
+                            data-title="{{ cell.name }}">
+                            {{ cell.content | raw }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+
+    <div class="woocommerce-notice woocommerce-notice--info woocommerce-info">
+        {{ fn('__', 'No saved methods found.', 'woocommerce') }}
+    </div>
+
+{% endif %}
+
+{% if can_add_method %}
+    <a class="button" href="{{ add_method_url }}">
+        {{ fn('__', 'Add payment method', 'woocommerce') }}
+    </a>
+{% endif %}

@@ -1,0 +1,56 @@
+{% if has_orders %}
+
+    <table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table">
+        <thead>
+            <tr>
+                {% for column_id, column_name in columns %}
+                    <th scope="col" class="woocommerce-orders-table__header woocommerce-orders-table__header-{{ column_id }}">
+                        <span class="nobr">{{ column_name }}</span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in order_rows %}
+                <tr class="woocommerce-orders-table__row woocommerce-orders-table__row--status-{{ row.status }} order">
+                    {% for column_id, cell in row.cells %}
+                        {% if cell.is_header %}
+                            <th class="woocommerce-orders-table__cell woocommerce-orders-table__cell-{{ column_id }}"
+                                data-title="{{ cell.name }}" scope="row">
+                                {{ cell.content | raw }}
+                            </th>
+                        {% else %}
+                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-{{ column_id }}"
+                                data-title="{{ cell.name }}">
+                                {{ cell.content | raw }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if max_pages > 1 %}
+        <div class="woocommerce-pagination woocommerce-pagination--without-numbers woocommerce-Pagination">
+            {% if current_page > 1 %}
+                <a class="woocommerce-button woocommerce-button--previous woocommerce-Button woocommerce-Button--previous button{{ btn_class }}"
+                   href="{{ prev_url }}">{{ fn('__', 'Previous', 'woocommerce') }}</a>
+            {% endif %}
+            {% if current_page < max_pages %}
+                <a class="woocommerce-button woocommerce-button--next woocommerce-Button woocommerce-Button--next button{{ btn_class }}"
+                   href="{{ next_url }}">{{ fn('__', 'Next', 'woocommerce') }}</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% else %}
+
+    <div class="woocommerce-notice woocommerce-notice--info woocommerce-info">
+        {{ fn('__', 'No order has been made yet.', 'woocommerce') }}
+        <a class="woocommerce-Button wc-forward button{{ btn_class }}" href="{{ shop_url }}">
+            {{ fn('__', 'Browse products', 'woocommerce') }}
+        </a>
+    </div>
+
+{% endif %}

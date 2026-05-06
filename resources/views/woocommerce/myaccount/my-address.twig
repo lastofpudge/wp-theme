@@ -1,0 +1,32 @@
+<p>{{ description | raw }}</p>
+
+{% if multi_address %}
+    <div class="u-columns woocommerce-Addresses col2-set addresses">
+{% endif %}
+
+{% for address in addresses %}
+    <div class="u-column{{ loop.index == 1 ? '1' : '2' }} col-{{ loop.index == 1 ? '1' : '2' }} woocommerce-Address">
+        <header class="woocommerce-Address-title title">
+            <h2>{{ address.title }}</h2>
+            <a href="{{ address.edit_url }}" class="edit">
+                {% if address.address %}
+                    {{ fn('sprintf', fn('__', 'Edit %s', 'woocommerce'), address.title) }}
+                {% else %}
+                    {{ fn('sprintf', fn('__', 'Add %s', 'woocommerce'), address.title) }}
+                {% endif %}
+            </a>
+        </header>
+        <address>
+            {% if address.address %}
+                {{ address.address | raw }}
+            {% else %}
+                {{ fn('__', 'You have not set up this type of address yet.', 'woocommerce') }}
+            {% endif %}
+            {{ address.after_html | raw }}
+        </address>
+    </div>
+{% endfor %}
+
+{% if multi_address %}
+    </div>
+{% endif %}

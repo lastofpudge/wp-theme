@@ -1,0 +1,11 @@
+<nav class="woocommerce-MyAccount-navigation" aria-label="{{ fn('__', 'Account pages', 'woocommerce') }}">
+    <ul>
+        {% for item in nav_items %}
+            <li class="{{ item.classes }}">
+                <a href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}>
+                    {{ item.label }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

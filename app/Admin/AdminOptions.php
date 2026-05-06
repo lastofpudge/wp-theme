@@ -18,6 +18,9 @@ class AdminOptions
         add_action('pre_get_posts', [$this, 'filterByPrice']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
         add_filter('timber/context', [$this, 'registerContext']);
+        add_filter('woocommerce_get_myaccount_page_id', 'pll_translate_post_id');
+        add_filter('woocommerce_get_cart_page_id', 'pll_translate_post_id');
+        add_filter('woocommerce_get_checkout_page_id', 'pll_translate_post_id');
     }
 
     public function index(): void
@@ -127,7 +130,7 @@ class AdminOptions
 
     public function maybeEnableCheckout(): void
     {
-        $checkoutPageId = get_localized_wc_page_id('checkout');
+        $checkoutPageId = wc_get_page_id('checkout');
 
         if ($checkoutPageId > 0 && is_page($checkoutPageId)) {
             add_filter('woocommerce_is_checkout', '__return_true');
@@ -148,9 +151,9 @@ class AdminOptions
         if (function_exists('WC') && WC()->cart) {
             $context['cart']            = WC()->cart;
             $context['currency_symbol'] = get_woocommerce_currency_symbol();
-            $context['cart_link']       = get_localized_wc_page_url('cart');
-            $context['checkout_link']   = get_localized_wc_page_url('checkout');
-            $context['account_link']    = get_localized_wc_page_url('myaccount');
+            $context['cart_link']       = wc_get_page_permalink('cart');
+            $context['checkout_link']   = wc_get_page_permalink('checkout');
+            $context['account_link']    = wc_get_page_permalink('myaccount');
         }
 
         return $context;
