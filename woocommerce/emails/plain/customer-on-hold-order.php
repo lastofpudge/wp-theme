@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Customer on-hold order email
+ * Customer on-hold order email.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-on-hold-order.php.
  *
@@ -11,10 +12,9 @@
  * the readme will list any important changes.
  *
  * @see https://woo.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 7.3.0
  */
-
 defined('ABSPATH') || exit;
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
@@ -22,8 +22,8 @@ echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name())) . "\n\n";
-echo esc_html__('Thanks for your order. It’s on-hold until we confirm that payment has been received.', 'woocommerce') . "\n\n";
+echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name()))."\n\n";
+echo esc_html__('Thanks for your order. It’s on-hold until we confirm that payment has been received.', 'woocommerce')."\n\n";
 
 /*
  * @hooked WC_Emails::order_details() Shows the order details table.

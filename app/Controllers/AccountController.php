@@ -20,12 +20,14 @@ class AccountController extends Controller
     {
         $this->data['post'] = Timber::get_post();
         $this->data['cart'] = WC()->cart;
+
         return $this->data;
     }
 
     public function account(): array
     {
         $this->data['post'] = Timber::get_post();
+
         return $this->data;
     }
 }
