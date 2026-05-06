@@ -33,10 +33,11 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
      * @return mixed Untouched custom field value.
      */
     protected function apply(Abstract_Object $object, $value, array $field, array $args = []) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {$this->linked_ids = array_merge(
-        $this->linked_ids,
-        $this->sanitize_ids($this->get_ids_from_field($value, $field))
-    );
+    {
+        $this->linked_ids = array_merge(
+            $this->linked_ids,
+            $this->sanitize_ids($this->get_ids_from_field($value, $field))
+        );
 
         return $value;
     }
