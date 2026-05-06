@@ -27,6 +27,7 @@
     "vite-plugin-live-reload": "^3.0.3"
   },
   "dependencies": {
+    "nouislider": "^15.8.1",
     "sweetalert2": "^11.14.0"
   }
 }
