@@ -1,11 +1,11 @@
 <?php
 
-if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'ajax-nonce')) {
     wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
 }
 
-$email = sanitize_email($_POST['email'] ?? '');
-$password = $_POST['password'] ?? '';
+$email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+$password = wp_unslash($_POST['password'] ?? '');
 
 if (empty($email) || empty($password)) {
     wp_send_json(['type' => 'error', 'message' => 'Please fill in all required fields']);
@@ -26,11 +26,11 @@ $user = wp_signon($credentials, false);
 if (is_wp_error($user)) {
     wp_send_json([
         'type'    => 'error',
-        'message' => json_decode($user->get_error_message()),
+        'message' => wp_strip_all_tags($user->get_error_message()),
     ]);
 }
 
 wp_send_json([
     'type'    => 'success',
-    'message' => 'Your successfully enter',
+    'message' => __('You have successfully logged in.', 'woocommerce'),
 ]);

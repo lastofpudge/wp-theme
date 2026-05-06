@@ -20,7 +20,7 @@ if (function_exists('is_cart') && is_cart()) {
 }
 
 if (function_exists('is_checkout') && is_checkout()) {
-    Route::load(AccountController::class, 'checkout', 'woocommerce/checkout');
+    Route::load(ProductController::class, 'checkout', 'woocommerce/checkout');
 }
 
 if (function_exists('is_account_page') && is_account_page()) {
@@ -39,8 +39,8 @@ if (is_single()) {
     Route::load(PostController::class, 'index', 'posts/post');
 }
 
-if (is_page()) {
-    Route::load(PageController::class, 'index', 'pages/page');
+if (is_page() && !is_cart() && !is_checkout() && !is_account_page()) {
+    Route::load(PageController::class, 'page', 'pages/page');
 }
 
 if (is_404()) {

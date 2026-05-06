@@ -57,7 +57,7 @@
                                                             －
                                                         </button>
 
-                                                        {{ function('woocommerce_quantity_input', {
+                                                        {{ fn('woocommerce_quantity_input', {
                                                             'input_name': "cart[#{cart_item_key}][qty]",
                                                             'input_value': cart_item.quantity,
                                                             'max_value': max_quantity,
@@ -83,16 +83,16 @@
                                             </td>
                                             <td class="text-end">
                                                 Unit
-                                                Price: {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key) }}
+                                                Price: {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key)|raw }}
                                                 <br>
                                                 {% set sub_total = cart.get_product_subtotal(_product, cart_item.quantity) %}
-                                                Total: {{ fn('apply_filters', 'woocommerce_cart_item_subtotal', sub_total, cart_item, cart_item_key) }}
+                                                Total: {{ fn('apply_filters', 'woocommerce_cart_item_subtotal', sub_total, cart_item, cart_item_key)|raw }}
                                             </td>
                                             <td class="text-center">
                                                 <button class="btn btn-danger js-remove-from-cart"
                                                         data-key="{{ cart_item_key }}"
                                                         type="button">
-                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                    <i class="fa-solid fa-circle-xmark">x</i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -107,20 +107,21 @@
                                                 <input type="text" name="coupon" class="js-coupon">
                                             </label>
                                             <div class="px-2">
-                                                <button class="btn btn-warning js-apply-coupon">Apply coupon
+                                                <button class="btn btn-warning js-apply-coupon">
+                                                    {{ fn('__', 'Apply coupon', 'woocommerce') }}
                                                 </button>
                                             </div>
                                         </div>
 
-                                        {% if cart.get_applied_coupons %}
-                                            <p>Active coupons:</p>
+                                        {% if cart.get_applied_coupons() %}
+                                            <p>{{ fn('__', 'Active coupons:', 'woocommerce') }}</p>
                                             <ul>
-                                                {% for coupon in cart.get_applied_coupons %}
+                                                {% for coupon in cart.get_applied_coupons() %}
                                                     <li><span>{{ coupon }}</span>
                                                         <button class="btn btn-danger js-remove-coupon"
                                                                 data-coupon="{{ coupon }}"
                                                         ><i
-                                                                    class="fa-solid fa-circle-xmark"></i>
+                                                                    class="fa-solid fa-circle-xmark">x</i>
                                                         </button>
                                                     </li>
                                                 {% endfor %}
@@ -129,16 +130,16 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="text-end"><strong>Sub-Total</strong></td>
+                                    <td colspan="4" class="text-end"><strong>{{ fn('__', 'Subtotal', 'woocommerce') }}</strong></td>
                                     <td class="text-end">
-                                        <span class="js-sub-total">{{ cart.subtotal }}</span>
+                                        <span class="js-sub-total">{{ cart.get_subtotal() | number_format(2, '.', '') }}</span>
                                         <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="text-end"><strong>Total</strong></td>
+                                    <td colspan="4" class="text-end"><strong>{{ fn('__', 'Total', 'woocommerce') }}</strong></td>
                                     <td class="text-end">
-                                        <span class="js-total">{{ cart.total }}</span>
+                                        <span class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span>
                                         <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
                                     </td>
                                 </tr>
@@ -146,7 +147,7 @@
                             </table>
 
                             <div class="col text-end">
-                                <a class="btn btn-primary" href="{{ checkout_link }}">Continue</a>
+                                <a class="btn btn-primary" href="{{ checkout_link }}">{{ fn('__', 'Proceed to checkout', 'woocommerce') }}</a>
                             </div>
                         </div>
                     </div>
@@ -157,7 +158,10 @@
     {% else %}
         <div class="container">
             <div class="py-2">
-                <h1>Cart is empty</h1>
+                <h1>{{ fn('__', 'Your cart is currently empty.', 'woocommerce') }}</h1>
+                <a href="{{ fn('wc_get_page_permalink', 'shop') }}" class="btn btn-primary">
+                    {{ fn('__', 'Return to shop', 'woocommerce') }}
+                </a>
             </div>
         </div>
     {% endif %}

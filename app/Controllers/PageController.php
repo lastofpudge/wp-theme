@@ -52,7 +52,7 @@ class PageController extends Controller
             'orderby'        => 'rand',
         ]) : [];
 
-        // Featured — marked via checkbox in WC admin product edit
+        // Featured
         $this->data['featured'] = Timber::get_posts([
             'post_type'      => 'product',
             'posts_per_page' => 8,
@@ -81,7 +81,19 @@ class PageController extends Controller
         return $this->data;
     }
 
+    public function page(): array
+    {
+        $this->data['post'] = Timber::get_post();
+
+        return $this->data;
+    }
+
     public function about(): array
+    {
+        return $this->data;
+    }
+
+    public function account(): array
     {
         return $this->data;
     }

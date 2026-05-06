@@ -13,13 +13,14 @@ export function addToCart() {
 
   addButtons.forEach(addButton => {
     addButton.addEventListener('click', async event => {
-      preloader.classList.add('js-preloading')
+      preloader?.classList.add('js-preloading')
 
       const formData = new FormData()
       formData.append('action', 'addToCart')
       formData.append('nonce', data.nonce)
       formData.append('product_id', addButton.dataset.product_id)
-      formData.append('quantity', addButton.dataset.quantity)
+      const qtyInput = document.querySelector('.js-product-qty')
+      formData.append('quantity', qtyInput ? qtyInput.value : addButton.dataset.quantity)
       if (addButton.dataset.variation) {
         formData.append('variation', addButton.dataset.variation)
       }
@@ -34,9 +35,11 @@ export function addToCart() {
         if (result.type === 'success') {
           totals.forEach(el => { el.innerHTML = result.total })
           subTotals.forEach(el => { el.innerHTML = result.subTotal })
-          cartCount.innerHTML = result.count
+          if (cartCount) {
+            cartCount.innerHTML = result.count
+          }
 
-          if (result.cart) {
+          if (result.cart && cartList) {
             cartList.innerHTML = ''
             result.cart.forEach(product => {
               cartList.innerHTML += modalCartProduct(product)
@@ -53,7 +56,7 @@ export function addToCart() {
         console.error(error)
       }
 
-      preloader.classList.remove('js-preloading')
+      preloader?.classList.remove('js-preloading')
     })
   })
 }

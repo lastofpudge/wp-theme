@@ -7,10 +7,10 @@ export function removeFromCart() {
   const cartCount = document.querySelector('.js-cart-total')
 
   cartContainer.addEventListener('click', async event => {
-    const target = event.target
+    const target = event.target.closest('.js-remove-from-cart')
 
-    if (target.classList.contains('js-remove-from-cart')) {
-      preloader.classList.add('js-preloading')
+    if (target) {
+      preloader?.classList.add('js-preloading')
 
       const formData = new FormData()
       formData.append('action', 'removeFromCart')
@@ -30,13 +30,19 @@ export function removeFromCart() {
 
           totals.forEach(el => { el.innerHTML = result.total })
           subTotals.forEach(el => { el.innerHTML = result.subTotal })
-          cartCount.innerHTML = result.count
+          if (cartCount) {
+            cartCount.innerHTML = result.count
+          }
+
+          if (result.count === 0) {
+            window.location.reload()
+          }
         }
       } catch (error) {
         console.error(error)
       }
 
-      preloader.classList.remove('js-preloading')
+      preloader?.classList.remove('js-preloading')
     }
   })
 }

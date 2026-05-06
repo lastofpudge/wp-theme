@@ -6,7 +6,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 mb-3">
-                    {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+                    {% if fn('function_exists', 'yoast_breadcrumb') %}
+                        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+                    {% endif %}
                 </div>
             </div>
             <div class="row">
@@ -42,9 +44,11 @@
                             {% endif %}
                         </div>
 
+                        {% if product.get_sku() %}
                         <div class="sku">
                             sku: <span>{{ product.get_sku() }}</span>
                         </div>
+                        {% endif %}
 
                         {% if categories %}
                             <div class="categories">
@@ -77,7 +81,7 @@
                                             {% else %}
                                                 <td>N/A</td>
                                             {% endif %}
-                                            <td>{{ variation.price_html }}</td>
+                                            <td>{{ variation.price_html|raw }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
