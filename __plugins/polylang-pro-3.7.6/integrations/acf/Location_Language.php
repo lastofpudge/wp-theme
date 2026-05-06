@@ -38,7 +38,8 @@ class Location_Language extends ACF_Location
      * @return bool
      */
     public function match($rule, $screen, $field_group) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {$language = pll_current_language();
+    {
+        $language = pll_current_language();
 
         return empty($language) || $this->compare_to_rule($language, $rule);
     }
@@ -53,7 +54,8 @@ class Location_Language extends ACF_Location
      * @return array
      */
     public function get_values($rule) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {return array_combine(pll_languages_list(), pll_languages_list(['fields' => 'name']));
+    {
+        return array_combine(pll_languages_list(), pll_languages_list(['fields' => 'name']));
     }
 
     /**
