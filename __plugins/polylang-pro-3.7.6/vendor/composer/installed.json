@@ -1,0 +1,61 @@
+{
+    "packages": [
+        {
+            "name": "wpsyntex/polylang",
+            "version": "3.7.x-dev",
+            "version_normalized": "3.7.9999999.9999999-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/polylang/polylang.git",
+                "reference": "e53db6a716d3f64e9cb1ee113f9c61e7924f86a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/polylang/polylang/zipball/e53db6a716d3f64e9cb1ee113f9c61e7924f86a0",
+                "reference": "e53db6a716d3f64e9cb1ee113f9c61e7924f86a0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "automattic/vipwpcs": "*",
+                "behat/behat": "^3.7|^3.8",
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "phpcompatibility/phpcompatibility-wp": "*",
+                "rector/rector": "^1.1",
+                "wp-coding-standards/wpcs": "*",
+                "wpsyntex/polylang-phpstan": "^1.2",
+                "wpsyntex/wp-phpunit": "dev-master",
+                "yoast/wp-test-utils": "^1.0.0"
+            },
+            "time": "2026-01-06T07:42:56+00:00",
+            "type": "wordpress-plugin",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "admin/",
+                    "frontend/",
+                    "include/",
+                    "integrations/",
+                    "install/",
+                    "modules/",
+                    "settings/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Making WordPress multilingual.",
+            "homepage": "https://polylang.pro",
+            "support": {
+                "issues": "https://github.com/polylang/polylang/issues",
+                "source": "https://github.com/polylang/polylang/tree/3.7.x"
+            },
+            "install-path": "../wpsyntex/polylang"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
+}
