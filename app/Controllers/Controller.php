@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use WC_Geolocation;
 
 class Controller

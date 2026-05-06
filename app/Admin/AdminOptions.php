@@ -80,13 +80,13 @@ class AdminOptions
         );
 
         wp_localize_script('app', 'data', [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ajax-nonce'),
+            'ajax_url'     => admin_url('admin-ajax.php'),
+            'nonce'        => wp_create_nonce('ajax-nonce'),
             'price_slider' => [
-                'currency_symbol' => html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8'),
-                'currency_format' => html_entity_decode(get_woocommerce_price_format(), ENT_QUOTES, 'UTF-8'),
+                'currency_symbol'              => html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8'),
+                'currency_format'              => html_entity_decode(get_woocommerce_price_format(), ENT_QUOTES, 'UTF-8'),
                 'currency_format_num_decimals' => wc_get_price_decimals(),
-                'currency_format_decimal_sep' => wc_get_price_decimal_separator(),
+                'currency_format_decimal_sep'  => wc_get_price_decimal_separator(),
                 'currency_format_thousand_sep' => wc_get_price_thousand_separator(),
             ],
         ]);
@@ -140,20 +140,20 @@ class AdminOptions
     public function registerContext($context): array
     {
         $context['main_menu'] = Timber::get_menu('main_menu');
-        $context['site_url']  = home_url('/');
+        $context['site_url'] = home_url('/');
         $context['site_name'] = get_bloginfo('name');
-        $context['logo']      = get_custom_logo();
+        $context['logo'] = get_custom_logo();
 
         if (function_exists('pll_the_languages')) {
             $context['languages'] = pll_the_languages(['raw' => 1, 'echo' => 0]);
         }
 
         if (function_exists('WC') && WC()->cart) {
-            $context['cart']            = WC()->cart;
+            $context['cart'] = WC()->cart;
             $context['currency_symbol'] = get_woocommerce_currency_symbol();
-            $context['cart_link']       = wc_get_page_permalink('cart');
-            $context['checkout_link']   = wc_get_page_permalink('checkout');
-            $context['account_link']    = wc_get_page_permalink('myaccount');
+            $context['cart_link'] = wc_get_page_permalink('cart');
+            $context['checkout_link'] = wc_get_page_permalink('checkout');
+            $context['account_link'] = wc_get_page_permalink('myaccount');
         }
 
         return $context;
