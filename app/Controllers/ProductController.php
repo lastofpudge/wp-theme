@@ -64,7 +64,7 @@ class ProductController extends Controller
 
         foreach (wc_get_attribute_taxonomies() as $taxonomy) {
             $attributeName = $taxonomy->attribute_name;
-            $attributeTaxonomy = 'pa_' . $attributeName;
+            $attributeTaxonomy = 'pa_'.$attributeName;
             $productIds = $this->getArchiveProductIds([$attributeTaxonomy], true);
             $terms = $this->getAttributeTermsForProducts($attributeTaxonomy, $productIds);
 
@@ -78,8 +78,8 @@ class ProductController extends Controller
                 $queryArgs['paged'],
                 $queryArgs['page'],
                 $queryArgs['product-page'],
-                $queryArgs['filter_' . $attributeName],
-                $queryArgs['query_type_' . $attributeName]
+                $queryArgs['filter_'.$attributeName],
+                $queryArgs['query_type_'.$attributeName]
             );
 
             $attributes[] = [
@@ -88,7 +88,7 @@ class ProductController extends Controller
                     $term->filter_url = add_query_arg(
                         array_merge(
                             $queryArgs,
-                            ['filter_' . $attributeName => $term->slug]
+                            ['filter_'.$attributeName => $term->slug]
                         ),
                         $this->getCurrentArchiveUrl()
                     );
@@ -134,7 +134,7 @@ class ProductController extends Controller
 
             foreach ($excludedTaxonomies as $taxonomy) {
                 if (str_starts_with($taxonomy, 'pa_')) {
-                    unset($queryArgs['filter_' . substr($taxonomy, 3)], $queryArgs['query_type_' . substr($taxonomy, 3)]);
+                    unset($queryArgs['filter_'.substr($taxonomy, 3)], $queryArgs['query_type_'.substr($taxonomy, 3)]);
                 }
             }
         }
@@ -325,5 +325,4 @@ class ProductController extends Controller
 
         return $this->data;
     }
-
 }

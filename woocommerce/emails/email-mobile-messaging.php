@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Email mobile messaging
+ * Email mobile messaging.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/email-mobile-messaging.php.
  *
@@ -11,10 +12,10 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails
+ *
  * @version 7.0
  */
 
 use Automattic\WooCommerce\Internal\Orders\MobileMessagingHandler;
 
-echo wp_kses_post( MobileMessagingHandler::prepare_mobile_message( $order, $blog_id, $now, $domain ) );
+echo wp_kses_post(MobileMessagingHandler::prepare_mobile_message($order, $blog_id, $now, $domain));
