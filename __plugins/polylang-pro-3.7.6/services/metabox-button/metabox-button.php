@@ -96,7 +96,8 @@ abstract class PLL_Metabox_Button
      * @return bool Whether the new button state is accepted or not.
      */
     protected function toggle_option($post_type, $active) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {return true;
+    {
+        return true;
     }
 
     /**

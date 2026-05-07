@@ -150,7 +150,8 @@ class AdminOptions
             return;
         }
 
-        if ($min !== null && $max !== null && $min > $max) {[$min, $max] = [$max, $min];
+        if ($min !== null && $max !== null && $min > $max) {
+            [$min, $max] = [$max, $min];
         }
 
         $meta = (array) $query->get('meta_query');

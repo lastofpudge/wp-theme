@@ -21,6 +21,7 @@ class Copy_All extends Copy
      * @return true
      */
     protected function can_execute_recursive(array $field): bool // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {return true;
+    {
+        return true;
     }
 }
