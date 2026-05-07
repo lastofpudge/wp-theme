@@ -14,9 +14,7 @@
  * @version 3.5.5
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 global $product;
 

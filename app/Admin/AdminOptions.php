@@ -14,9 +14,13 @@ class AdminOptions
         $this->index();
         $this->manageAdminAccess();
         add_action('init', [$this, 'registerMenus']);
-        add_action('wp', [$this, 'maybeEnableCheckout']);
         add_action('pre_get_posts', [$this, 'filterByPrice']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
+        add_action('wp_enqueue_scripts', [$this, 'dequeueAssets'], 99);
+        add_action('wp_print_scripts', [$this, 'dequeueAssets'], 1);
+        add_action('wp_print_styles', [$this, 'dequeueAssets'], 1);
+        add_action('enqueue_block_assets', [$this, 'dequeueWooCommerceBlockAssets']);
+        add_filter('woocommerce_enqueue_styles', [$this, 'filterWooCommerceStyles']);
         add_filter('timber/context', [$this, 'registerContext']);
         add_filter('woocommerce_get_myaccount_page_id', 'pll_translate_post_id');
         add_filter('woocommerce_get_cart_page_id', 'pll_translate_post_id');
@@ -26,22 +30,9 @@ class AdminOptions
     public function index(): void
     {
         add_theme_support('woocommerce');
-        add_theme_support('wc-product-gallery-zoom');
-        add_theme_support('wc-product-gallery-lightbox');
-        add_theme_support('wc-product-gallery-slider');
-
-        add_theme_support('html5', [
-            'caption',
-            'comment-form',
-            'comment-list',
-            'gallery',
-            'search-form',
-            'script',
-            'style',
-        ]);
+        add_theme_support('html5', ['caption', 'comment-form', 'comment-list', 'gallery', 'search-form', 'script', 'style']);
         remove_theme_support('block-templates');
         remove_theme_support('core-block-patterns');
-
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
         add_theme_support('custom-logo');
@@ -62,9 +53,7 @@ class AdminOptions
 
     public function registerMenus(): void
     {
-        register_nav_menus([
-            'main_menu' => 'Main menu',
-        ]);
+        register_nav_menus(['main_menu' => 'Main menu']);
     }
 
     public function registerScripts(): void
@@ -72,69 +61,91 @@ class AdminOptions
         wp_enqueue_style('app_css', get_theme_file_uri('/resources/style.css'));
         wp_enqueue_style('app_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'));
 
-        wp_enqueue_script(
-            'app',
-            get_theme_file_uri('/resources/assets/dist/js/app.min.js'),
-            [],
-            filemtime(get_theme_file_path('/resources/assets/dist/js/app.min.js'))
-        );
+        wp_enqueue_script('app', get_theme_file_uri('/resources/assets/dist/js/app.min.js'), [],
+            filemtime(get_theme_file_path('/resources/assets/dist/js/app.min.js')));
 
         wp_localize_script('app', 'data', [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('ajax-nonce'),
+            'ajax_url'     => admin_url('admin-ajax.php'),
+            'nonce'        => wp_create_nonce('ajax-nonce'),
             'price_slider' => [
-                'currency_symbol' => html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8'),
-                'currency_format' => html_entity_decode(get_woocommerce_price_format(), ENT_QUOTES, 'UTF-8'),
+                'currency_symbol'              => html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8'),
+                'currency_format'              => html_entity_decode(get_woocommerce_price_format(), ENT_QUOTES, 'UTF-8'),
                 'currency_format_num_decimals' => wc_get_price_decimals(),
-                'currency_format_decimal_sep' => wc_get_price_decimal_separator(),
+                'currency_format_decimal_sep'  => wc_get_price_decimal_separator(),
                 'currency_format_thousand_sep' => wc_get_price_thousand_separator(),
             ],
         ]);
     }
 
-    public function filterByPrice(\WP_Query $query): void
+    public function dequeueAssets(): void
     {
-        if (is_admin() || !$query->is_main_query()) {
+        if (is_admin()) {
             return;
         }
 
-        if (
-            !$query->is_post_type_archive('product')
-            && !$query->is_tax(['product_cat', 'product_tag'])
-        ) {
+        global $wp_scripts;
+
+        // Remove jquery-migrate globally
+        if (isset($wp_scripts->registered['jquery'])) {
+            $wp_scripts->registered['jquery']->deps = ['jquery-core'];
+        }
+        wp_dequeue_script('jquery-migrate');
+        wp_deregister_script('jquery-migrate');
+
+        // Theme uses vanilla JS — jQuery only needed on WC pages for WC scripts
+        if (!is_woocommerce() && !is_cart() && !is_checkout() && !is_account_page()) {
+            wp_dequeue_script('payu-gateway');
+            wp_dequeue_script('jquery');
+            wp_dequeue_script('jquery-core');
+            wp_deregister_script('jquery');
+            wp_deregister_script('jquery-core');
+        }
+
+        if (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
             return;
         }
+
+        foreach (['wc-blocks-style', 'wc-blocks-vendors-style', 'wc-blocks', 'payu-gateway'] as $style) {
+            wp_dequeue_style($style);
+        }
+
+        foreach ($wp_scripts->queue as $handle) {
+            if (str_contains((string) ($wp_scripts->registered[$handle]->src ?? ''), 'plugins/woocommerce')) {
+                wp_dequeue_script($handle);
+            }
+        }
+    }
+
+    public function dequeueWooCommerceBlockAssets(): void
+    {
+        if (is_admin() || is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
+            return;
+        }
+
+        wp_deregister_style('wc-blocks-style');
+        wp_dequeue_style('wc-blocks-style');
+    }
+
+    public function filterWooCommerceStyles(array $styles): array
+    {
+        return (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) ? $styles : [];
+    }
+
+    public function filterByPrice(\WP_Query $query): void
+    {
+        if (is_admin() || !$query->is_main_query()) return;
+        if (!$query->is_post_type_archive('product') && !$query->is_tax(['product_cat', 'product_tag'])) return;
 
         $min = get_requested_price('min_price');
         $max = get_requested_price('max_price');
+        if ($min === null && $max === null) return;
 
-        if ($min === null && $max === null) {
-            return;
-        }
+        if ($min !== null && $max !== null && $min > $max) [$min, $max] = [$max, $min];
 
-        if ($min !== null && $max !== null && $min > $max) {
-            [$min, $max] = [$max, $min];
-        }
-
-        $meta_query = (array) $query->get('meta_query');
-
-        if ($min !== null) {
-            $meta_query[] = ['key' => '_price', 'value' => $min, 'compare' => '>=', 'type' => 'DECIMAL'];
-        }
-        if ($max !== null) {
-            $meta_query[] = ['key' => '_price', 'value' => $max, 'compare' => '<=', 'type' => 'DECIMAL'];
-        }
-
-        $query->set('meta_query', $meta_query);
-    }
-
-    public function maybeEnableCheckout(): void
-    {
-        $checkoutPageId = wc_get_page_id('checkout');
-
-        if ($checkoutPageId > 0 && is_page($checkoutPageId)) {
-            add_filter('woocommerce_is_checkout', '__return_true');
-        }
+        $meta = (array) $query->get('meta_query');
+        if ($min !== null) $meta[] = ['key' => '_price', 'value' => $min, 'compare' => '>=', 'type' => 'DECIMAL'];
+        if ($max !== null) $meta[] = ['key' => '_price', 'value' => $max, 'compare' => '<=', 'type' => 'DECIMAL'];
+        $query->set('meta_query', $meta);
     }
 
     public function registerContext($context): array

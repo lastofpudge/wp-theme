@@ -15,9 +15,7 @@
  * @version     9.7.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 $id_suffix = wp_unique_id();
 

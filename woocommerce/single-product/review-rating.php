@@ -15,9 +15,7 @@
  * @version 3.6.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined('ABSPATH') || exit;
 
 global $comment;
 $rating = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );

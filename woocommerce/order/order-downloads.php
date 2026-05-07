@@ -15,9 +15,7 @@
  * @version 3.3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 ?>
 <section class="woocommerce-order-downloads">
 	<?php if ( isset( $show_title ) ) : ?>

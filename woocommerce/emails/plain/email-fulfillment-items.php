@@ -15,9 +15,7 @@
  * @version     10.1.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined('ABSPATH') || exit;
 
 foreach ( $items as $item_id => $item ) :
 	/**

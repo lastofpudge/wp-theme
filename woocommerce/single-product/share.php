@@ -17,9 +17,7 @@
  * @version 3.5.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined('ABSPATH') || exit;
 
 do_action( 'woocommerce_share' ); // Sharing plugins can hook into here.
 

@@ -18,9 +18,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 ?>
 <div class="wc_bis_form<?php echo $is_visible ? '' : ' hidden'; ?>" data-bis-product-id="<?php echo absint( $product_id ); ?>">

@@ -1,0 +1,24 @@
+<form method="post" novalidate>
+
+    <h2>{{ page_title }}</h2>
+
+    <div class="woocommerce-address-fields">
+        {{ before_form | raw }}
+
+        <div class="woocommerce-address-fields__field-wrapper">
+            {{ fields_html | raw }}
+        </div>
+
+        {{ after_form | raw }}
+
+        <p>
+            <button type="submit" class="button" name="save_address"
+                    value="{{ fn('esc_attr__', 'Save address', 'woocommerce') }}">
+                {{ fn('__', 'Save address', 'woocommerce') }}
+            </button>
+            {{ nonce | raw }}
+            <input type="hidden" name="action" value="edit_address" />
+        </p>
+    </div>
+
+</form>

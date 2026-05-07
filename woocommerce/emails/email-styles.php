@@ -18,9 +18,7 @@
 use Automattic\WooCommerce\Internal\Email\EmailFont;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 $email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
 $block_email_editor_enabled = FeaturesUtil::feature_is_enabled( 'block_email_editor' );

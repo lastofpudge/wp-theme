@@ -15,9 +15,7 @@
  * @version     10.3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 if ( $related_products ) :
 	/**

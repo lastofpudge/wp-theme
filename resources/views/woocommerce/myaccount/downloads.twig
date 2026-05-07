@@ -1,0 +1,10 @@
+{% if has_downloads %}
+    {{ before | raw }}
+    {{ content | raw }}
+    {{ after | raw }}
+{% else %}
+    <div class="woocommerce-message woocommerce-message--info woocommerce-info">
+        {{ fn('__', 'No downloads available yet.', 'woocommerce') }}
+        <a class="button wc-forward" href="{{ shop_url }}">{{ fn('__', 'Browse products', 'woocommerce') }}</a>
+    </div>
+{% endif %}

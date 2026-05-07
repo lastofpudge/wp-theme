@@ -1,0 +1,23 @@
+<p>{{ status_text | raw }}</p>
+
+{% if note_rows %}
+    <h2>{{ fn('__', 'Order updates', 'woocommerce') }}</h2>
+    <ol class="woocommerce-OrderUpdates commentlist notes">
+        {% for note in note_rows %}
+            <li class="woocommerce-OrderUpdate comment note">
+                <div class="woocommerce-OrderUpdate-inner comment_container">
+                    <div class="woocommerce-OrderUpdate-text comment-text">
+                        <p class="woocommerce-OrderUpdate-meta meta">{{ note.date }}</p>
+                        <div class="woocommerce-OrderUpdate-description description">
+                            {{ note.content | raw }}
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </li>
+        {% endfor %}
+    </ol>
+{% endif %}
+
+{{ order_details | raw }}

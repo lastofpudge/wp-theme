@@ -15,9 +15,7 @@
  * @version 9.4.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 do_action( 'woocommerce_before_checkout_form', $checkout );
 

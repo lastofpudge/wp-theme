@@ -137,18 +137,79 @@
             </div>
 
             {# Tabs: Description, Additional info, Reviews #}
-            <div class="row">
-                <div class="col-12 mt-5">
-                    {{ function('woocommerce_output_product_data_tabs') }}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="woocommerce-tabs">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-description" role="tab">
+                                    {{ fn('__', 'Description', 'woocommerce') }}
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-additional" role="tab">
+                                    {{ fn('__', 'Additional information', 'woocommerce') }}
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-reviews" role="tab">
+                                    {{ fn('__', 'Reviews', 'woocommerce') }}{% if reviews_count %} ({{ reviews_count }}){% endif %}
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content pt-4">
+
+                            <div class="tab-pane fade show active" id="tab-description" role="tabpanel">
+                                {% if description %}
+                                    <div class="entry-content">{{ description | raw }}</div>
+                                {% else %}
+                                    <p class="text-muted">{{ fn('__', 'No description available.', 'woocommerce') }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="tab-pane fade" id="tab-additional" role="tabpanel">
+                                {% if product_attributes %}
+                                    <table class="woocommerce-product-attributes shop_attributes table">
+                                        <tbody>
+                                        {% for attr in product_attributes %}
+                                            <tr>
+                                                <th class="woocommerce-product-attributes-item__label fw-semibold">{{ attr.label }}</th>
+                                                <td class="woocommerce-product-attributes-item__value">{{ attr.values | join(', ') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p class="text-muted">{{ fn('__', 'No additional information available.', 'woocommerce') }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="tab-pane fade" id="tab-reviews" role="tabpanel">
+                                {{ reviews_html | raw }}
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {# Upsells #}
-            <div class="row">
+            {% if upsells %}
+            <div class="row mt-5">
                 <div class="col-12">
-                    {{ function('woocommerce_upsell_display') }}
+                    <h2 class="mb-4">{{ fn('__', 'You may also like&hellip;', 'woocommerce') | raw }}</h2>
+                    <div class="row row-cols-2 row-cols-md-4 g-4">
+                        {% for post in upsells %}
+                        <div class="col">
+                            {% include 'woocommerce/components/product-card.twig' %}
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            {% endif %}
 
             {# Related products #}
             <div class="row">

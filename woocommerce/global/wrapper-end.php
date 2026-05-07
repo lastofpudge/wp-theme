@@ -15,9 +15,7 @@
  * @version     3.3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
+defined('ABSPATH') || exit;
 
 $template = wc_get_theme_slug_for_templates();
 

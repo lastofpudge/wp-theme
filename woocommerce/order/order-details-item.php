@@ -15,9 +15,7 @@
  * @version 5.2.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 	return;

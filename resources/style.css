@@ -11,3 +11,7 @@
 .aligncenter {
   text-align: center;
 }
+
+.cart-qty-wrapper input {
+  width: 37px;
+}

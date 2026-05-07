@@ -11,9 +11,7 @@
  * @version 9.1.0-beta.1
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 ?>
 <!-- wp:woocommerce/product-section {"title":"<?php esc_attr_e( 'Basic details', 'woocommerce' ); ?>"} -->

@@ -15,8 +15,6 @@
  * @version     7.3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined('ABSPATH') || exit;
 
 wc_get_template( 'archive-product.php' );

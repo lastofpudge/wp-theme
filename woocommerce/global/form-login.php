@@ -15,9 +15,7 @@
  * @version     9.2.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined('ABSPATH') || exit;
 
 if ( is_user_logged_in() ) {
 	return;

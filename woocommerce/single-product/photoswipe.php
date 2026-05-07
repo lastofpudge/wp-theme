@@ -15,9 +15,7 @@
  * @version 10.2.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined('ABSPATH') || exit;
 ?>
 
 <div id="photoswipe-fullscreen-dialog" class="pswp" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true" aria-label="<?php esc_attr_e( 'Full screen image', 'woocommerce' ); ?>">

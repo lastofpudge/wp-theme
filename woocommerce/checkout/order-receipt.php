@@ -15,9 +15,7 @@
  * @version 3.2.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 ?>
 
 <ul class="order_details">

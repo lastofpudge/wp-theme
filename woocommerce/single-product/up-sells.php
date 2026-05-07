@@ -15,9 +15,7 @@
  * @version     9.6.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 if ( $upsells ) : ?>
 

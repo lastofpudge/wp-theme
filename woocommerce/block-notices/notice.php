@@ -15,9 +15,7 @@
  * @version 10.4.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 if ( ! $notices ) {
 	return;

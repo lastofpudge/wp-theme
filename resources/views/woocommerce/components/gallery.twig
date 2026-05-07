@@ -1,3 +1,38 @@
-<div class="position-relative">
-    {% do action('woocommerce_before_single_product_summary') %}
+{% if gallery %}
+<div class="woocommerce-product-gallery js-product-gallery">
+
+    <div class="product-gallery__main mb-2">
+        <img class="js-gallery-main img-fluid w-100"
+             src="{{ gallery[0].full }}"
+             alt="{{ gallery[0].alt }}" />
+    </div>
+
+    {% if gallery|length > 1 %}
+    <div class="product-gallery__thumbs d-flex gap-2 flex-wrap">
+        {% for image in gallery %}
+            <img class="js-gallery-thumb product-gallery__thumb{% if loop.first %} active{% endif %}"
+                 src="{{ image.thumb }}"
+                 data-full="{{ image.full }}"
+                 alt="{{ image.alt }}"
+                 style="width:80px;height:80px;object-fit:cover;cursor:pointer;opacity:{% if loop.first %}1{% else %}.5{% endif %};" />
+        {% endfor %}
+    </div>
+    {% endif %}
+
 </div>
+
+<script>
+(function () {
+    var gallery = document.querySelector('.js-product-gallery');
+    if (!gallery) return;
+    var main = gallery.querySelector('.js-gallery-main');
+    gallery.querySelectorAll('.js-gallery-thumb').forEach(function (thumb) {
+        thumb.addEventListener('click', function () {
+            main.src = this.dataset.full;
+            gallery.querySelectorAll('.js-gallery-thumb').forEach(function (t) { t.style.opacity = '.5'; });
+            this.style.opacity = '1';
+        });
+    });
+})();
+</script>
+{% endif %}

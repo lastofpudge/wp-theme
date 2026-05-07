@@ -1,0 +1,60 @@
+<div class="woocommerce-order">
+
+    {% if failed %}
+
+        <p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed">
+            {{ fn('__', 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce') }}
+        </p>
+
+        <p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed-actions">
+            <a href="{{ payment_url }}" class="button pay">{{ fn('__', 'Pay', 'woocommerce') }}</a>
+            {% if is_user_logged_in %}
+                <a href="{{ myaccount_url }}" class="button">{{ fn('__', 'My account', 'woocommerce') }}</a>
+            {% endif %}
+        </p>
+
+    {% else %}
+
+        {{ order_received | raw }}
+
+        {% if order_number %}
+            <ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details">
+
+                <li class="woocommerce-order-overview__order order">
+                    {{ fn('__', 'Order number:', 'woocommerce') }}
+                    <strong>{{ order_number }}</strong>
+                </li>
+
+                <li class="woocommerce-order-overview__date date">
+                    {{ fn('__', 'Date:', 'woocommerce') }}
+                    <strong>{{ order_date | raw }}</strong>
+                </li>
+
+                {% if order_email %}
+                    <li class="woocommerce-order-overview__email email">
+                        {{ fn('__', 'Email:', 'woocommerce') }}
+                        <strong>{{ order_email }}</strong>
+                    </li>
+                {% endif %}
+
+                <li class="woocommerce-order-overview__total total">
+                    {{ fn('__', 'Total:', 'woocommerce') }}
+                    <strong>{{ order_total | raw }}</strong>
+                </li>
+
+                {% if payment_method %}
+                    <li class="woocommerce-order-overview__payment-method method">
+                        {{ fn('__', 'Payment method:', 'woocommerce') }}
+                        <strong>{{ payment_method | raw }}</strong>
+                    </li>
+                {% endif %}
+
+            </ul>
+        {% endif %}
+
+        {{ payment_content | raw }}
+        {{ thankyou_content | raw }}
+
+    {% endif %}
+
+</div>

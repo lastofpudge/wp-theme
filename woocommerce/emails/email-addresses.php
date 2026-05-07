@@ -17,9 +17,7 @@
 
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 $address  = $order->get_formatted_billing_address();
 $shipping = $order->get_formatted_shipping_address();

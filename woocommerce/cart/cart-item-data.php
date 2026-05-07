@@ -14,9 +14,7 @@
  * @package     WooCommerce\Templates
  * @version     2.4.0
  */
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 ?>
 <dl class="variation">
 	<?php foreach ( $item_data as $data ) : ?>

@@ -15,9 +15,7 @@
  * @version 4.7.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 ?>
 <li <?php wc_product_cat_class( '', $category ); ?>>
 	<?php

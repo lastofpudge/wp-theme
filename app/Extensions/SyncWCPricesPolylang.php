@@ -324,4 +324,8 @@ final class SyncWCPricesPolylang
     }
 }
 
-SyncWCPricesPolylang::init();
+add_action('plugins_loaded', static function () {
+    if (function_exists('pll_get_post_translations')) {
+        SyncWCPricesPolylang::init();
+    }
+});
