@@ -6,22 +6,8 @@ use Timber\Timber;
 
 class PageController extends Controller
 {
-    /** @var array */
-    private array $data;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data = Timber::context();
-    }
-
     public function index(): array
     {
-        if (!function_exists('wc_get_product_ids_on_sale')) {
-            return $this->data;
-        }
-
         // Bestsellers
         $this->data['bestsellers'] = Timber::get_posts([
             'post_type'      => 'product',
@@ -117,3 +103,4 @@ class PageController extends Controller
         return $this->data;
     }
 }
+

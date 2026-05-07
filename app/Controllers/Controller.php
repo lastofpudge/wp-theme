@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Controllers;
-use WC_Geolocation;
+
+use Timber\Timber;
 
 class Controller
 {
+    protected array $data;
+
     public function __construct()
     {
-    //    $location = WC_Geolocation::geolocate_ip();
+        $this->data = Timber::context();
     }
 }

@@ -10,6 +10,11 @@ class HiddenData
         $this->removeHeadActions();
         $this->removeTheGeneratorTag();
         add_action('wp_enqueue_scripts', [$this, 'removeStyles']);
+        add_action('wp_enqueue_scripts', [$this, 'dequeueAssets'], 99);
+        add_action('wp_print_scripts', [$this, 'dequeueAssets'], 1);
+        add_action('wp_print_styles', [$this, 'dequeueAssets'], 1);
+        add_action('enqueue_block_assets', [$this, 'dequeueWooCommerceBlockAssets']);
+        add_filter('woocommerce_enqueue_styles', [$this, 'filterWooCommerceStyles']);
     }
 
     public function removeEmojiActions(): void
@@ -42,5 +47,57 @@ class HiddenData
         wp_dequeue_style('global-styles');
         wp_dequeue_style('wp-block-library');
         wp_dequeue_style('wp-block-library-theme');
+    }
+
+    public function dequeueAssets(): void
+    {
+        if (is_admin()) {
+            return;
+        }
+
+        global $wp_scripts;
+
+        if (isset($wp_scripts->registered['jquery'])) {
+            $wp_scripts->registered['jquery']->deps = ['jquery-core'];
+        }
+        wp_dequeue_script('jquery-migrate');
+        wp_deregister_script('jquery-migrate');
+
+        if (!is_woocommerce() && !is_cart() && !is_checkout() && !is_account_page()) {
+            wp_dequeue_script('payu-gateway');
+            wp_dequeue_script('jquery');
+            wp_dequeue_script('jquery-core');
+            wp_deregister_script('jquery');
+            wp_deregister_script('jquery-core');
+        }
+
+        if (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
+            return;
+        }
+
+        foreach (['wc-blocks-style', 'wc-blocks-vendors-style', 'wc-blocks', 'payu-gateway'] as $style) {
+            wp_dequeue_style($style);
+        }
+
+        foreach ($wp_scripts->queue as $handle) {
+            if (str_contains((string) ($wp_scripts->registered[$handle]->src ?? ''), 'plugins/woocommerce')) {
+                wp_dequeue_script($handle);
+            }
+        }
+    }
+
+    public function dequeueWooCommerceBlockAssets(): void
+    {
+        if (is_admin() || is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
+            return;
+        }
+
+        wp_deregister_style('wc-blocks-style');
+        wp_dequeue_style('wc-blocks-style');
+    }
+
+    public function filterWooCommerceStyles(array $styles): array
+    {
+        return (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) ? $styles : [];
     }
 }

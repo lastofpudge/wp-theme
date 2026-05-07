@@ -6,15 +6,28 @@ use Exception;
 
 class CartController extends Controller
 {
-    private static function getSubtotalAmount(): float
+    private static function notice(string $type, string $fallback): string
+    {
+        $notices = wc_get_notices($type);
+        $message = !empty($notices)
+            ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
+            : $fallback;
+        wc_clear_notices();
+        return $message;
+    }
+
+    private static function total(): string
+    {
+        return number_format(WC()->cart->get_cart_contents_total(), 2, '.', '');
+    }
+
+    private static function subtotal(): string
     {
         $cart = WC()->cart;
-
-        if (method_exists($cart, 'get_subtotal')) {
-            return (float) $cart->get_subtotal();
-        }
-
-        return (float) $cart->get_cart_contents_total();
+        $amount = method_exists($cart, 'get_subtotal')
+            ? (float) $cart->get_subtotal()
+            : (float) $cart->get_cart_contents_total();
+        return number_format($amount, 2, '.', '');
     }
 
     public static function addToCart($product_id, $variation_id = 0): void
@@ -24,29 +37,18 @@ class CartController extends Controller
         try {
             $result = WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
             if (!$result) {
-                $notices = wc_get_notices('error');
-                $message = !empty($notices)
-                    ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
-                    : __('Could not add product to cart.', 'woocommerce');
-                wc_clear_notices();
-                wp_send_json(['type' => 'error', 'message' => $message]);
+                wp_send_json(['type' => 'error', 'message' => self::notice('error', __('Could not add product to cart.', 'woocommerce'))]);
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
         }
 
-        $message = wp_strip_all_tags(wc_add_to_cart_message(
-            [$product_id => $quantity],
-            false,
-            true
-        ));
-
         wp_send_json([
             'type'     => 'success',
-            'message'  => $message,
+            'message'  => wp_strip_all_tags(wc_add_to_cart_message([$product_id => $quantity], false, true)),
             'cart'     => get_cart_data(),
-            'total'    => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
-            'subTotal' => number_format(self::getSubtotalAmount(), 2, '.', ''),
+            'total'    => self::total(),
+            'subTotal' => self::subtotal(),
             'count'    => WC()->cart->get_cart_contents_count(),
         ]);
     }
@@ -54,29 +56,16 @@ class CartController extends Controller
     public static function removeFromCart($key): void
     {
         try {
-            $response = WC()->cart->remove_cart_item($key);
-
-            if ($response) {
-                $removeNotices = wc_get_notices('success');
-                $removeMessage = !empty($removeNotices)
-                    ? wp_strip_all_tags(implode(' ', array_column($removeNotices, 'notice')))
-                    : __('Product removed from the cart.', 'woocommerce');
-                wc_clear_notices();
-
+            if (WC()->cart->remove_cart_item($key)) {
                 wp_send_json([
                     'type'     => 'success',
-                    'message'  => $removeMessage,
-                    'total'    => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
-                    'subTotal' => number_format(self::getSubtotalAmount(), 2, '.', ''),
+                    'message'  => self::notice('success', __('Product removed from the cart.', 'woocommerce')),
+                    'total'    => self::total(),
+                    'subTotal' => self::subtotal(),
                     'count'    => WC()->cart->get_cart_contents_count(),
                 ]);
             } else {
-                $notices = wc_get_notices('error');
-                $message = !empty($notices)
-                    ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
-                    : __('Could not remove product from cart.', 'woocommerce');
-                wc_clear_notices();
-                wp_send_json(['type' => 'error', 'message' => $message]);
+                wp_send_json(['type' => 'error', 'message' => self::notice('error', __('Could not remove product from cart.', 'woocommerce'))]);
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
@@ -88,34 +77,25 @@ class CartController extends Controller
         try {
             $cart = WC()->cart;
             $cart_item_key = $cart->find_product_in_cart($key);
-            if ($cart_item_key) {
-                if ($type === 'decrement') {
-                    $newQuantity = max(1, $oldQuantity - 1);
-                } else {
-                    $newQuantity = $oldQuantity + 1;
-                }
-                $response = $cart->set_quantity($cart_item_key, $newQuantity);
 
-                if ($response) {
-                    wp_send_json([
-                        'type'        => 'success',
-                        'newQuantity' => $newQuantity,
-                        'cart'        => get_cart_data(),
-                        'total'       => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
-                        'subTotal'    => number_format(self::getSubtotalAmount(), 2, '.', ''),
-                        'count'       => WC()->cart->get_cart_contents_count(),
-                        'message'     => __('Quantity updated.', 'woocommerce'),
-                    ]);
-                } else {
-                    $notices = wc_get_notices('error');
-                    $message = !empty($notices)
-                        ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
-                        : __('Could not update quantity.', 'woocommerce');
-                    wc_clear_notices();
-                    wp_send_json(['type' => 'error', 'message' => $message]);
-                }
-            } else {
+            if (!$cart_item_key) {
                 wp_send_json(['type' => 'error', 'message' => __('Cart item not found.', 'woocommerce')]);
+            }
+
+            $newQuantity = $type === 'decrement' ? max(1, $oldQuantity - 1) : $oldQuantity + 1;
+
+            if ($cart->set_quantity($cart_item_key, $newQuantity)) {
+                wp_send_json([
+                    'type'        => 'success',
+                    'newQuantity' => $newQuantity,
+                    'cart'        => get_cart_data(),
+                    'total'       => self::total(),
+                    'subTotal'    => self::subtotal(),
+                    'count'       => WC()->cart->get_cart_contents_count(),
+                    'message'     => __('Quantity updated.', 'woocommerce'),
+                ]);
+            } else {
+                wp_send_json(['type' => 'error', 'message' => self::notice('error', __('Could not update quantity.', 'woocommerce'))]);
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
@@ -128,29 +108,17 @@ class CartController extends Controller
             wp_send_json(['response' => false, 'message' => __('Coupon is already applied.', 'woocommerce')]);
         }
 
-        $response = WC()->cart->apply_coupon($couponCode);
-
-        if (!$response) {
-            $notices = wc_get_notices('error');
-            $message = !empty($notices)
-                ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
-                : __('Invalid coupon.', 'woocommerce');
-            wc_clear_notices();
-            wp_send_json(['response' => false, 'message' => $message]);
+        if (!WC()->cart->apply_coupon($couponCode)) {
+            wp_send_json(['response' => false, 'message' => self::notice('error', __('Invalid coupon.', 'woocommerce'))]);
         }
 
         WC()->cart->calculate_totals();
-        $notices = wc_get_notices('success');
-        $message = !empty($notices)
-            ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
-            : __('Coupon applied successfully.', 'woocommerce');
-        wc_clear_notices();
 
         wp_send_json([
             'response' => true,
-            'message'  => $message,
-            'total'    => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
-            'subTotal' => number_format(self::getSubtotalAmount(), 2, '.', ''),
+            'message'  => self::notice('success', __('Coupon applied successfully.', 'woocommerce')),
+            'total'    => self::total(),
+            'subTotal' => self::subtotal(),
         ]);
     }
 
@@ -166,8 +134,8 @@ class CartController extends Controller
         wp_send_json([
             'response' => $response,
             'message'  => $response ? __('Coupon removed.', 'woocommerce') : __('Could not remove coupon.', 'woocommerce'),
-            'total'    => number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''),
-            'subTotal' => number_format(self::getSubtotalAmount(), 2, '.', ''),
+            'total'    => self::total(),
+            'subTotal' => self::subtotal(),
         ]);
     }
 }

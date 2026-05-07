@@ -6,16 +6,6 @@ use Timber\Timber;
 
 class ProductController extends Controller
 {
-    /** @var array */
-    protected array $data;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data = Timber::context();
-    }
-
     public function index(): array
     {
         $id      = get_the_ID();
@@ -378,3 +368,4 @@ class ProductController extends Controller
     }
 
 }
+
