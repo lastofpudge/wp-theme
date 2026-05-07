@@ -13,6 +13,7 @@ class CartController extends Controller
             ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
             : $fallback;
         wc_clear_notices();
+
         return $message;
     }
 
@@ -27,6 +28,7 @@ class CartController extends Controller
         $amount = method_exists($cart, 'get_subtotal')
             ? (float) $cart->get_subtotal()
             : (float) $cart->get_cart_contents_total();
+
         return number_format($amount, 2, '.', '');
     }
 

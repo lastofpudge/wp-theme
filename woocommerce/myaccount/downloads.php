@@ -1,15 +1,16 @@
 <?php
+
 defined('ABSPATH') || exit;
 
-$downloads     = WC()->customer->get_downloadable_products();
+$downloads = WC()->customer->get_downloadable_products();
 $has_downloads = (bool) $downloads;
 
 do_action('woocommerce_before_account_downloads', $has_downloads);
 
 if ($has_downloads) {
-    $before  = capture_action('woocommerce_before_available_downloads');
+    $before = capture_action('woocommerce_before_available_downloads');
     $content = capture_action('woocommerce_available_downloads', $downloads);
-    $after   = capture_action('woocommerce_after_available_downloads');
+    $after = capture_action('woocommerce_after_available_downloads');
 } else {
     $before = $content = $after = '';
 }

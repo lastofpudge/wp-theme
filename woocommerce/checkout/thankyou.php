@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 if ($order) {
@@ -12,9 +13,9 @@ if ($order) {
             'is_user_logged_in' => is_user_logged_in(),
         ]);
     } else {
-        $order_received    = capture_action('woocommerce_thankyou_order_received_text');
-        $payment_content   = capture_action('woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id());
-        $thankyou_content  = capture_action('woocommerce_thankyou', $order->get_id());
+        $order_received = capture_action('woocommerce_thankyou_order_received_text');
+        $payment_content = capture_action('woocommerce_thankyou_'.$order->get_payment_method(), $order->get_id());
+        $thankyou_content = capture_action('woocommerce_thankyou', $order->get_id());
 
         \Timber\Timber::render('views/woocommerce/checkout/thankyou.twig', [
             'failed'           => false,

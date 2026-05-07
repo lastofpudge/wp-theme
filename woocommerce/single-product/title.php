@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Single Product title
+ * Single Product title.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/single-product/title.php.
  *
@@ -11,10 +12,9 @@
  * the readme will list any important changes.
  *
  * @see        https://woocommerce.com/document/template-structure/
- * @package    WooCommerce\Templates
+ *
  * @version    1.6.4
  */
-
 defined('ABSPATH') || exit;
 
-the_title( '<h1 class="product_title entry-title">', '</h1>' );
+the_title('<h1 class="product_title entry-title">', '</h1>');

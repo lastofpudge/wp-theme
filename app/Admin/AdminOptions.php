@@ -56,8 +56,12 @@ class AdminOptions
         wp_enqueue_style('app_css', get_theme_file_uri('/resources/style.css'));
         wp_enqueue_style('app_bundle_css', get_theme_file_uri('/resources/assets/dist/css/bundle.min.css'));
 
-        wp_enqueue_script('app', get_theme_file_uri('/resources/assets/dist/js/app.min.js'), [],
-            filemtime(get_theme_file_path('/resources/assets/dist/js/app.min.js')));
+        wp_enqueue_script(
+            'app',
+            get_theme_file_uri('/resources/assets/dist/js/app.min.js'),
+            [],
+            filemtime(get_theme_file_path('/resources/assets/dist/js/app.min.js'))
+        );
 
         wp_localize_script('app', 'data', [
             'ajax_url'     => admin_url('admin-ajax.php'),
@@ -74,38 +78,49 @@ class AdminOptions
 
     public function filterByPrice(\WP_Query $query): void
     {
-        if (is_admin() || !$query->is_main_query()) return;
-        if (!$query->is_post_type_archive('product') && !$query->is_tax(['product_cat', 'product_tag'])) return;
+        if (is_admin() || !$query->is_main_query()) {
+            return;
+        }
+        if (!$query->is_post_type_archive('product') && !$query->is_tax(['product_cat', 'product_tag'])) {
+            return;
+        }
 
         $min = get_requested_price('min_price');
         $max = get_requested_price('max_price');
-        if ($min === null && $max === null) return;
+        if ($min === null && $max === null) {
+            return;
+        }
 
-        if ($min !== null && $max !== null && $min > $max) [$min, $max] = [$max, $min];
+        if ($min !== null && $max !== null && $min > $max) {[$min, $max] = [$max, $min];
+        }
 
         $meta = (array) $query->get('meta_query');
-        if ($min !== null) $meta[] = ['key' => '_price', 'value' => $min, 'compare' => '>=', 'type' => 'DECIMAL'];
-        if ($max !== null) $meta[] = ['key' => '_price', 'value' => $max, 'compare' => '<=', 'type' => 'DECIMAL'];
+        if ($min !== null) {
+            $meta[] = ['key' => '_price', 'value' => $min, 'compare' => '>=', 'type' => 'DECIMAL'];
+        }
+        if ($max !== null) {
+            $meta[] = ['key' => '_price', 'value' => $max, 'compare' => '<=', 'type' => 'DECIMAL'];
+        }
         $query->set('meta_query', $meta);
     }
 
     public function registerContext($context): array
     {
         $context['main_menu'] = Timber::get_menu('main_menu');
-        $context['site_url']  = home_url('/');
+        $context['site_url'] = home_url('/');
         $context['site_name'] = get_bloginfo('name');
-        $context['logo']      = get_custom_logo();
+        $context['logo'] = get_custom_logo();
 
         if (function_exists('pll_the_languages')) {
             $context['languages'] = pll_the_languages(['raw' => 1, 'echo' => 0]);
         }
 
         if (function_exists('WC') && WC()->cart) {
-            $context['cart']            = WC()->cart;
+            $context['cart'] = WC()->cart;
             $context['currency_symbol'] = get_woocommerce_currency_symbol();
-            $context['cart_link']       = wc_get_page_permalink('cart');
-            $context['checkout_link']   = wc_get_page_permalink('checkout');
-            $context['account_link']    = wc_get_page_permalink('myaccount');
+            $context['cart_link'] = wc_get_page_permalink('cart');
+            $context['checkout_link'] = wc_get_page_permalink('checkout');
+            $context['account_link'] = wc_get_page_permalink('myaccount');
         }
 
         return $context;

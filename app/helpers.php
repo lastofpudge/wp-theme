@@ -143,14 +143,14 @@ if (!function_exists('get_cart_data')) {
             }
 
             $item_data = [
-                'id' => $cart_item['product_id'],
-                'name' => $_product->get_name(),
-                'link' => get_permalink($cart_item['product_id']),
-                'thumbnail' => $_product->get_image(),
-                'quantity' => $cart_item['quantity'],
+                'id'            => $cart_item['product_id'],
+                'name'          => $_product->get_name(),
+                'link'          => get_permalink($cart_item['product_id']),
+                'thumbnail'     => $_product->get_image(),
+                'quantity'      => $cart_item['quantity'],
                 'cart_item_key' => $cart_item_key,
                 'regular_price' => wc_price($_product->get_regular_price()),
-                'sale_price' => $sale_price,
+                'sale_price'    => $sale_price,
             ];
 
             $cart_data[] = $item_data;
@@ -182,8 +182,10 @@ if (!function_exists('pll_translate_post_id')) {
     {
         if (function_exists('pll_get_post') && $id > 0) {
             $translated = (int) pll_get_post($id);
+
             return $translated > 0 ? $translated : $id;
         }
+
         return $id;
     }
 }
@@ -193,6 +195,7 @@ if (!function_exists('capture_action')) {
     {
         ob_start();
         do_action($hook, ...$args);
+
         return (string) ob_get_clean();
     }
 }
@@ -204,6 +207,7 @@ if (!function_exists('get_localized_wc_page_id')) {
             return 0;
         }
         $pageId = (int) wc_get_page_id($page);
+
         return $pageId > 0 ? pll_translate_post_id($pageId) : 0;
     }
 }
@@ -218,6 +222,7 @@ if (!function_exists('get_localized_wc_page_url')) {
                 return $permalink;
             }
         }
+
         return match ($page) {
             'cart'     => function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/'),
             'checkout' => function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/'),
