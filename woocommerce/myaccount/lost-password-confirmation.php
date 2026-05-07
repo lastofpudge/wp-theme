@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 wc_print_notice(esc_html__('Password reset email has been sent.', 'woocommerce'));

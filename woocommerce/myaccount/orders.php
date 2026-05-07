@@ -1,26 +1,27 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 do_action('woocommerce_before_account_orders', $has_orders);
 
-$columns     = wc_get_account_orders_columns();
-$order_rows  = [];
+$columns = wc_get_account_orders_columns();
+$order_rows = [];
 
 if ($has_orders) {
     foreach ($customer_orders->orders as $customer_order) {
-        $order      = wc_get_order($customer_order);
+        $order = wc_get_order($customer_order);
         $item_count = $order->get_item_count() - $order->get_item_count_refunded();
-        $cells      = [];
+        $cells = [];
 
         foreach ($columns as $column_id => $column_name) {
-            if (has_action('woocommerce_my_account_my_orders_column_' . $column_id)) {
-                $content = capture_action('woocommerce_my_account_my_orders_column_' . $column_id, $order);
+            if (has_action('woocommerce_my_account_my_orders_column_'.$column_id)) {
+                $content = capture_action('woocommerce_my_account_my_orders_column_'.$column_id, $order);
             } elseif ('order-number' === $column_id) {
                 $content = sprintf(
                     '<a href="%s" aria-label="%s">%s</a>',
                     esc_url($order->get_view_order_url()),
                     esc_attr(sprintf(__('View order number %s', 'woocommerce'), $order->get_order_number())),
-                    esc_html(_x('#', 'hash before order number', 'woocommerce') . $order->get_order_number())
+                    esc_html(_x('#', 'hash before order number', 'woocommerce').$order->get_order_number())
                 );
             } elseif ('order-date' === $column_id) {
                 $content = sprintf(

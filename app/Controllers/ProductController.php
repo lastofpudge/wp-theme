@@ -18,15 +18,15 @@ class ProductController extends Controller
 
     public function index(): array
     {
-        $id      = get_the_ID();
+        $id = get_the_ID();
         $product = wc_get_product($id);
 
-        $this->data['product']    = $product;
-        $this->data['post']       = Timber::get_post();
+        $this->data['product'] = $product;
+        $this->data['post'] = Timber::get_post();
         $this->data['categories'] = get_the_terms($id, 'product_cat');
 
         $related_limit = wc_get_loop_prop('columns');
-        $related_ids   = wc_get_related_products($id, $related_limit);
+        $related_ids = wc_get_related_products($id, $related_limit);
         $this->data['related_products'] = Timber::get_posts($related_ids);
 
         // Gallery
@@ -52,7 +52,7 @@ class ProductController extends Controller
                 continue;
             }
             if ($attribute->is_taxonomy()) {
-                $terms  = wp_get_post_terms($id, $attribute->get_name());
+                $terms = wp_get_post_terms($id, $attribute->get_name());
                 $values = is_wp_error($terms) ? [] : array_column($terms, 'name');
             } else {
                 $values = $attribute->get_options();
@@ -65,7 +65,7 @@ class ProductController extends Controller
         $this->data['product_attributes'] = $product_attributes;
 
         // Tabs: reviews
-        $this->data['reviews_open']  = comments_open($id);
+        $this->data['reviews_open'] = comments_open($id);
         $this->data['reviews_count'] = (int) $product->get_review_count();
         ob_start();
         comments_template();
@@ -115,7 +115,7 @@ class ProductController extends Controller
 
         foreach (wc_get_attribute_taxonomies() as $taxonomy) {
             $attributeName = $taxonomy->attribute_name;
-            $attributeTaxonomy = 'pa_' . $attributeName;
+            $attributeTaxonomy = 'pa_'.$attributeName;
             $productIds = $this->getArchiveProductIds([$attributeTaxonomy], true);
             $terms = $this->getAttributeTermsForProducts($attributeTaxonomy, $productIds);
 
@@ -129,8 +129,8 @@ class ProductController extends Controller
                 $queryArgs['paged'],
                 $queryArgs['page'],
                 $queryArgs['product-page'],
-                $queryArgs['filter_' . $attributeName],
-                $queryArgs['query_type_' . $attributeName]
+                $queryArgs['filter_'.$attributeName],
+                $queryArgs['query_type_'.$attributeName]
             );
 
             $attributes[] = [
@@ -139,7 +139,7 @@ class ProductController extends Controller
                     $term->filter_url = add_query_arg(
                         array_merge(
                             $queryArgs,
-                            ['filter_' . $attributeName => $term->slug]
+                            ['filter_'.$attributeName => $term->slug]
                         ),
                         $this->getCurrentArchiveUrl()
                     );
@@ -185,7 +185,7 @@ class ProductController extends Controller
 
             foreach ($excludedTaxonomies as $taxonomy) {
                 if (str_starts_with($taxonomy, 'pa_')) {
-                    unset($queryArgs['filter_' . substr($taxonomy, 3)], $queryArgs['query_type_' . substr($taxonomy, 3)]);
+                    unset($queryArgs['filter_'.substr($taxonomy, 3)], $queryArgs['query_type_'.substr($taxonomy, 3)]);
                 }
             }
         }
@@ -376,5 +376,4 @@ class ProductController extends Controller
 
         return $this->data;
     }
-
 }
