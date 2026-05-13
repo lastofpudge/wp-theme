@@ -60,6 +60,8 @@ class AdminOptions
             return;
         }
 
+        $query->set('lang', ''); // show products from all Polylang languages on shop pages
+
         $min = get_requested_price('min_price');
         $max = get_requested_price('max_price');
 

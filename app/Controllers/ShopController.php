@@ -75,6 +75,7 @@ class ShopController extends Controller
 
             $attributes[] = [
                 'label'     => $taxonomy->attribute_label,
+                'param'     => 'filter_' . $attributeName,
                 'reset_url' => $resetUrl,
                 'terms'     => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter, $resetUrl) {
                     $isActive   = $currentFilter !== '' && $currentFilter === $term->slug;
@@ -142,7 +143,8 @@ class ShopController extends Controller
             $queryArgs['paged'],
             $queryArgs['page'],
             $queryArgs['posts_per_page'],
-            $queryArgs['posts_per_archive_page']
+            $queryArgs['posts_per_archive_page'],
+            $queryArgs['lang'] // count terms across all languages
         );
 
         $productsQuery = new \WP_Query($queryArgs);
