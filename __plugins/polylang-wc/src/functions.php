@@ -62,6 +62,7 @@ if (!function_exists('PLLWC')) {
      * @return Polylang_Woocommerce
      */
     function PLLWC() // PHPCS:ignore WordPress.NamingConventions.ValidFunctionName
-    {return Polylang_Woocommerce::instance();
+    {
+        return Polylang_Woocommerce::instance();
     }
 }

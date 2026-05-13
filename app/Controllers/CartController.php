@@ -47,7 +47,6 @@ class CartController
             'subTotal' => $this->subtotal(),
             'count'    => WC()->cart->get_cart_contents_count(),
         ]);
-
     }
 
     public function removeFromCart(string $key): void
@@ -132,7 +131,6 @@ class CartController
             'total'    => $this->total(),
             'subTotal' => $this->subtotal(),
         ]);
-
     }
 
     public function removeCoupon(string $couponCode): void
@@ -151,6 +149,5 @@ class CartController
             'total'    => $this->total(),
             'subTotal' => $this->subtotal(),
         ]);
-
     }
 }
