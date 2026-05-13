@@ -5,14 +5,15 @@ use App\Controllers\CategoryController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
 use App\Controllers\ProductController;
+use App\Controllers\ShopController;
 use Core\Route;
 
 if (function_exists('is_product_category') && is_product_category()) {
-    Route::load(ProductController::class, 'archive', 'woocommerce/shop');
+    Route::load(ShopController::class, 'archive', 'woocommerce/shop');
 }
 
 if (function_exists('is_product_tag') && is_product_tag()) {
-    Route::load(ProductController::class, 'archive', 'woocommerce/shop');
+    Route::load(ShopController::class, 'archive', 'woocommerce/shop');
 }
 
 if (function_exists('is_cart') && is_cart()) {

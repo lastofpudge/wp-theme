@@ -6,7 +6,7 @@
  * @version 8.6.0
  */
 
-use App\Controllers\ProductController;
+use App\Controllers\ShopController;
 use Core\Route;
 
-Route::load(ProductController::class, 'archive', 'woocommerce/shop');
+Route::load(ShopController::class, 'archive', 'woocommerce/shop');
