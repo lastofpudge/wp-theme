@@ -49,7 +49,10 @@ class ShopController extends Controller
                 continue;
             }
 
-            $queryArgs = $_GET;
+            $queryArgs = array_map(
+                fn ($v) => is_array($v) ? array_map('sanitize_text_field', $v) : sanitize_text_field((string) $v),
+                $_GET
+            );
 
             unset(
                 $queryArgs['paged'],
