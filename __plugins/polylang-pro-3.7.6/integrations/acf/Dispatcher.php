@@ -1,24 +1,20 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF;
 
-use WP_Post;
-use WP_Term;
-use Translations;
-use PLL_Language;
 use PLL_Export_Data;
+use PLL_Language;
+use Translations;
+use WP_Post;
+use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Abstract_Object;
+use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Blocks;
+use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Media;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Post;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Term;
-use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Media;
-use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Blocks;
-use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Copy;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Collect_Post_Ids;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Collect_Term_Ids;
-use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Abstract_Object;
+use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Copy;
+use WP_Term;
 
 /**
  * This class is part of the ACF compatibility.
@@ -43,26 +39,26 @@ class Dispatcher
          * Removes ACF fields from synchronized metas by Polylang, this way ACF integration manage itself the synchronization.
          * Applied after `PLL_Sync_Post_Model::copy_post_metas/copy_taxonomies` for it to be effective.
          */
-        add_filter('pll_copy_post_metas', array( Post::class, 'remove_acf_metas_from_pll_sync' ), 10, 4);
-        add_filter('pll_copy_term_metas', array( Term::class, 'remove_acf_metas_from_pll_sync' ), 10, 4);
+        add_filter('pll_copy_post_metas', [Post::class, 'remove_acf_metas_from_pll_sync'], 10, 4);
+        add_filter('pll_copy_term_metas', [Term::class, 'remove_acf_metas_from_pll_sync'], 10, 4);
 
-        add_action('pll_post_synchronized', array( static::class, 'on_post_synchronized' ), 10, 4);
+        add_action('pll_post_synchronized', [static::class, 'on_post_synchronized'], 10, 4);
 
-        add_action('pll_duplicate_term', array( static::class, 'on_duplicate_term' ), 10, 3);
+        add_action('pll_duplicate_term', [static::class, 'on_duplicate_term'], 10, 3);
 
-        add_filter('acf/update_value', array( static::class, 'update' ), 5, 3);
-        add_filter('acf/pre_render_field', array( static::class, 'render_field' ), 10, 2);
+        add_filter('acf/update_value', [static::class, 'update'], 5, 3);
+        add_filter('acf/pre_render_field', [static::class, 'render_field'], 10, 2);
 
-        add_action('pll_after_post_translation', array( static::class, 'translate' ), 10, 4);
-        add_action('pll_after_term_translation', array( static::class, 'translate' ), 10, 4);
-        add_action('pll_after_post_export', array( static::class, 'export' ), 10, 3);
-        add_action('pll_after_term_export', array( static::class, 'export' ), 10, 3);
+        add_action('pll_after_post_translation', [static::class, 'translate'], 10, 4);
+        add_action('pll_after_term_translation', [static::class, 'translate'], 10, 4);
+        add_action('pll_after_post_export', [static::class, 'export'], 10, 3);
+        add_action('pll_after_term_export', [static::class, 'export'], 10, 3);
 
-        add_filter('pll_collect_post_ids', array( static::class, 'collect_post_ids' ), 10, 2);
-        add_filter('pll_collect_term_ids', array( static::class, 'collect_term_ids' ), 10, 2);
+        add_filter('pll_collect_post_ids', [static::class, 'collect_post_ids'], 10, 2);
+        add_filter('pll_collect_term_ids', [static::class, 'collect_term_ids'], 10, 2);
 
         if (PLL()->options['media_support']) {
-            add_action('pll_translate_media', array( static::class, 'copy_media_fields' ), 10, 3);
+            add_action('pll_translate_media', [static::class, 'copy_media_fields'], 10, 3);
         }
     }
 
@@ -75,15 +71,15 @@ class Dispatcher
      */
     public static function on_blocks_registered(): void
     {
-        if (! function_exists('acf_get_block_types') || empty(acf_get_block_types())) {
+        if (!function_exists('acf_get_block_types') || empty(acf_get_block_types())) {
             return;
         }
 
-        add_filter('pll_collect_post_ids', array( static::class, 'collect_post_ids_in_blocks' ), 10, 2);
-        add_filter('pll_collect_term_ids', array( static::class, 'collect_term_ids_in_blocks' ), 10, 2);
-        add_filter('pll_translate_blocks_with_context', array( static::class, 'copy_blocks' ), 10, 3);
-        add_filter('pll_filter_translated_post', array( static::class, 'translate_blocks' ), 10, 4);
-        add_action('pll_after_post_export', array( static::class, 'export_blocks' ), 10, 2);
+        add_filter('pll_collect_post_ids', [static::class, 'collect_post_ids_in_blocks'], 10, 2);
+        add_filter('pll_collect_term_ids', [static::class, 'collect_term_ids_in_blocks'], 10, 2);
+        add_filter('pll_translate_blocks_with_context', [static::class, 'copy_blocks'], 10, 3);
+        add_filter('pll_filter_translated_post', [static::class, 'translate_blocks'], 10, 4);
+        add_action('pll_after_post_export', [static::class, 'export_blocks'], 10, 2);
     }
 
     /**
@@ -93,11 +89,13 @@ class Dispatcher
      *
      * @param array      $field  Custom field definition.
      * @param int|string $acf_id ACF post ID.
+     *
      * @return mixed Modified custom field.
      */
     public static function render_field($field, $acf_id)
     {
         $object = static::get_by_acf_id($acf_id);
+
         return empty($object) ? $field : $object->render_field($field);
     }
 
@@ -109,11 +107,13 @@ class Dispatcher
      * @param mixed      $value  Custom field value.
      * @param int|string $acf_id ACF post ID.
      * @param array      $field  Custom field definition.
+     *
      * @return mixed Modified custom field value.
      */
     public static function update($value, $acf_id, $field)
     {
         $object = static::get_by_acf_id($acf_id);
+
         return empty($object) ? $value : $object->update($value, $field);
     }
 
@@ -126,7 +126,8 @@ class Dispatcher
      * @param int    $post_id    ID of the source post.
      * @param int    $tr_post_id ID of the target post.
      * @param string $lang       Language of the target post.
-     * @param string $sync      `sync` if doing synchro, `copy` otherwise.
+     * @param string $sync       `sync` if doing synchro, `copy` otherwise.
+     *
      * @return void
      *
      * @phpstan-param 'sync'|'copy' $sync
@@ -144,12 +145,13 @@ class Dispatcher
      * @param PLL_Export_Data $export The export object.
      * @param object          $from   The object to export.
      * @param object|null     $to     The translated object if it exists, `null` otherwise.
+     *
      * @return void
      */
     public static function export($export, $from, $to)
     {
         $object = self::get_by_object($from);
-        if (! empty($object) && $export instanceof PLL_Export_Data) {
+        if (!empty($object) && $export instanceof PLL_Export_Data) {
             $object->export($export, $to);
         }
     }
@@ -161,13 +163,14 @@ class Dispatcher
      *
      * @param int[]   $linked_ids Object IDs linked to a post.
      * @param WP_Post $post       The post we get other post from.
+     *
      * @return int[]
      */
     public static function collect_post_ids($linked_ids, $post)
     {
         $object = self::get_by_object($post);
 
-        if (! empty($object)) {
+        if (!empty($object)) {
             return array_merge((array) $linked_ids, (new Collect_Post_Ids())->get($object));
         }
 
@@ -181,6 +184,7 @@ class Dispatcher
      *
      * @param int[]   $linked_ids Object IDs linked to a post.
      * @param WP_Post $post       The post we get other post from.
+     *
      * @return int[]
      */
     public static function collect_post_ids_in_blocks($linked_ids, $post)
@@ -199,19 +203,19 @@ class Dispatcher
      *
      * @param int[]   $linked_ids Object IDs linked to a post.
      * @param WP_Post $post       The post we get other term from.
+     *
      * @return int[]
      */
     public static function collect_term_ids($linked_ids, $post)
     {
         $object = self::get_by_object($post);
 
-        if (! empty($object)) {
+        if (!empty($object)) {
             return array_merge((array) $linked_ids, (new Collect_Term_Ids())->get($object));
         }
 
         return $linked_ids;
     }
-
 
     /**
      * Collects term IDs from fields in ACF blocks.
@@ -220,6 +224,7 @@ class Dispatcher
      *
      * @param int[]   $linked_ids Object IDs linked to a post.
      * @param WP_Post $post       The post we get other term from.
+     *
      * @return int[]
      */
     public static function collect_term_ids_in_blocks($linked_ids, $post)
@@ -240,6 +245,7 @@ class Dispatcher
      * @param object       $to           Translated object to translate the custom fields from.
      * @param PLL_Language $target_lang  Target language object.
      * @param Translations $translations A set of translations to search the custom fields translations in.
+     *
      * @return void
      */
     public static function translate($from, $to, $target_lang, $translations)
@@ -248,14 +254,13 @@ class Dispatcher
          * Remove filter for `Dispatcher::render_field` to avoid running `Strategy\Copy` on the same object.
          * For instance, when translating fields with DeepL, we don't want to override the translated values with the original ones with `Strategy\Copy`.
          */
-        remove_filter('acf/pre_render_field', array( self::class, 'render_field' ));
+        remove_filter('acf/pre_render_field', [self::class, 'render_field']);
 
         $object = self::get_by_object($from);
-        if (! empty($object) && $target_lang instanceof PLL_Language && $translations instanceof Translations) {
+        if (!empty($object) && $target_lang instanceof PLL_Language && $translations instanceof Translations) {
             $object->translate($to, $target_lang, $translations);
         }
     }
-
 
     /**
      * Adds the language of the current object to the arguments that will be used for the query in the `relationship` ACF field.
@@ -265,6 +270,7 @@ class Dispatcher
      * @param array      $args   Arguments to retrieve posts.
      * @param array      $field  The current field.
      * @param int|string $acf_id ACF post ID.
+     *
      * @return array The arguments to retrieve posts with the current object language.
      */
     public static function add_language_to_query($args, $field, $acf_id)
@@ -296,6 +302,7 @@ class Dispatcher
      * @param int          $from_id         The source media ID.
      * @param int          $to_id           The target media ID.
      * @param PLL_Language $target_language The target language.
+     *
      * @return void
      */
     public static function copy_media_fields($from_id, $to_id, $target_language)
@@ -311,6 +318,7 @@ class Dispatcher
      * @param int    $from Term ID of the source term.
      * @param int    $to   Term ID of the new term translation.
      * @param string $lang Language code of the new translation.
+     *
      * @return void
      */
     public static function on_duplicate_term($from, $to, $lang)
@@ -320,7 +328,7 @@ class Dispatcher
             (new Term($from))->apply_to_all_fields(
                 new Copy(),
                 $to,
-                array( 'target_language' => $lang )
+                ['target_language' => $lang]
             );
         }
     }
@@ -333,13 +341,15 @@ class Dispatcher
      * @param array        $blocks      The blocks.
      * @param PLL_Language $target_lang The target language.
      * @param WP_Post|null $source_post The source post, `null` if not available.
+     *
      * @return array The blocks.
      */
     public static function copy_blocks($blocks, $target_lang, $source_post)
     {
-        if (! is_array($blocks) || ! $target_lang instanceof PLL_Language || ! $source_post instanceof WP_Post) {
+        if (!is_array($blocks) || !$target_lang instanceof PLL_Language || !$source_post instanceof WP_Post) {
             return $blocks;
         }
+
         return (new Blocks())->copy($blocks, $target_lang, $source_post);
     }
 
@@ -348,15 +358,16 @@ class Dispatcher
      *
      * @since 3.7
      *
-     * @param WP_Post      $to              Translated post where to translate the custom fields included in blocks.
-     * @param WP_Post      $from            Source post where to get the custom fields included in blocks.
-     * @param PLL_Language $target_lang     The target language.
-     * @param Translations $translations    A set of translations where to search translations of the custom fields translations included in blocks.
+     * @param WP_Post      $to           Translated post where to translate the custom fields included in blocks.
+     * @param WP_Post      $from         Source post where to get the custom fields included in blocks.
+     * @param PLL_Language $target_lang  The target language.
+     * @param Translations $translations A set of translations where to search translations of the custom fields translations included in blocks.
+     *
      * @return WP_Post The translated post.
      */
     public static function translate_blocks($to, $from, $target_lang, $translations)
     {
-        if (! $to instanceof WP_Post) {
+        if (!$to instanceof WP_Post) {
             return $to;
         }
 
@@ -370,6 +381,7 @@ class Dispatcher
      *
      * @param PLL_Export_Data $export The export data.
      * @param WP_Post         $from   The source post.
+     *
      * @return void
      */
     public static function export_blocks($export, $from)
@@ -383,12 +395,13 @@ class Dispatcher
      * @since 3.7
      *
      * @param int|string $acf_id ACF post ID.
+     *
      * @return Abstract_Object|null.
      */
     protected static function get_by_acf_id($acf_id): ?Abstract_Object
     {
         $decoded = acf_decode_post_id($acf_id);
-        $id      = (int) $decoded['id'];
+        $id = (int) $decoded['id'];
 
         switch ($decoded['type']) {
             case 'post':
@@ -406,7 +419,7 @@ class Dispatcher
                 }
 
                 // No nonce to check.
-                if (0 === $id && ! empty($_GET['new_lang']) && ! empty($_GET['taxonomy']) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                if (0 === $id && !empty($_GET['new_lang']) && !empty($_GET['taxonomy']) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                     && pll_is_translated_taxonomy(sanitize_key($_GET['taxonomy']))) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                     // This is a term creation with `term_0`, see `acf_form_taxonomy::add_term()`.
                     return new Term($id);
@@ -423,6 +436,7 @@ class Dispatcher
      * @since 3.7
      *
      * @param object $object The object.
+     *
      * @return Abstract_Object|null.
      */
     protected static function get_by_object($object): ?Abstract_Object

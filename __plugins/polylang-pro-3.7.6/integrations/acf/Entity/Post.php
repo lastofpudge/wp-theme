@@ -1,15 +1,11 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Entity;
 
-use WP_Post;
 use PLL_Admin_Links;
-use PLL_Sync_Post_Model;
 use PLL_Language;
+use PLL_Sync_Post_Model;
+use WP_Post;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Copy;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Copy_All;
 
@@ -34,6 +30,7 @@ class Post extends Abstract_Object
      * @since 3.7
      *
      * @param WP_Post $object The object.
+     *
      * @return int
      */
     protected function get_object_id($object): int
@@ -47,6 +44,7 @@ class Post extends Abstract_Object
      * @since 3.7
      *
      * @param int $id Post ID.
+     *
      * @return int ACF post ID.
      */
     protected static function acf_id($id)
@@ -63,7 +61,7 @@ class Post extends Abstract_Object
      */
     protected function get_from_id_in_request(): int
     {
-        if (! PLL()->links instanceof PLL_Admin_Links) {
+        if (!PLL()->links instanceof PLL_Admin_Links) {
             return 0;
         }
 
@@ -71,7 +69,7 @@ class Post extends Abstract_Object
             (string) get_post_type($this->get_id())
         );
 
-        return ! empty($data['from_post']) ? $data['from_post']->ID : 0;
+        return !empty($data['from_post']) ? $data['from_post']->ID : 0;
     }
 
     /**
@@ -80,6 +78,7 @@ class Post extends Abstract_Object
      * @since 3.7
      *
      * @return string
+     *
      * @phpstan-return non-falsy-string
      */
     public function get_type(): string
@@ -95,7 +94,8 @@ class Post extends Abstract_Object
      *
      * @param int    $tr_post_id ID of the target post.
      * @param string $lang       Language of the target post.
-     * @param string $sync      `sync` if doing synchro, `copy` otherwise.
+     * @param string $sync       `sync` if doing synchro, `copy` otherwise.
+     *
      * @return void
      *
      * @phpstan-param 'sync'|'copy' $sync
@@ -110,20 +110,21 @@ class Post extends Abstract_Object
         $this->maybe_reset_fields_store($lang);
 
         if (PLL_Sync_Post_Model::COPY === $sync) {
-            $this->apply_to_all_fields(new Copy(), $tr_post_id, array( 'target_language' => $lang ));
+            $this->apply_to_all_fields(new Copy(), $tr_post_id, ['target_language' => $lang]);
+
             return;
         }
 
         // Sync all custom fields between synchronized posts.
         $post_id = $this->get_id();
         foreach (pll_get_post_translations($post_id) as $tr_lang => $tr_id) {
-            if ($tr_id === $post_id || ! PLL()->sync_post_model->are_synchronized($post_id, $tr_id)) {
+            if ($tr_id === $post_id || !PLL()->sync_post_model->are_synchronized($post_id, $tr_id)) {
                 continue;
             }
             /** @var PLL_Language */
             $tr_lang = PLL()->model->get_language($tr_lang);
 
-            $this->apply_to_all_fields(new Copy_All(), $tr_id, array( 'target_language' => $tr_lang ));
+            $this->apply_to_all_fields(new Copy_All(), $tr_id, ['target_language' => $tr_lang]);
         }
     }
 
@@ -134,6 +135,7 @@ class Post extends Abstract_Object
      * @since 3.7
      *
      * @param PLL_Language $lang Language of the target post.
+     *
      * @return void
      */
     protected function maybe_reset_fields_store(PLL_Language $lang)

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF;
 
 use ACF_Location;
@@ -25,8 +21,8 @@ class Location_Language extends ACF_Location
      */
     public function initialize()
     {
-        $this->name     = 'language';
-        $this->label    = __('Language', 'polylang-pro');
+        $this->name = 'language';
+        $this->label = __('Language', 'polylang-pro');
         $this->category = $this->label; // Create a new category with the same name.
     }
 
@@ -38,10 +34,13 @@ class Location_Language extends ACF_Location
      * @param array $rule        The location rule.
      * @param array $screen      The screen args.
      * @param array $field_group The field group settings.
-     * @return  bool
+     *
+     * @return bool
      */
     public function match($rule, $screen, $field_group) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {$language = pll_current_language();
+    {
+        $language = pll_current_language();
+
         return empty($language) || $this->compare_to_rule($language, $rule);
     }
 
@@ -51,10 +50,12 @@ class Location_Language extends ACF_Location
      * @since 3.7
      *
      * @param array $rule A location rule.
+     *
      * @return array
      */
     public function get_values($rule) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {return array_combine(pll_languages_list(), pll_languages_list(array( 'fields' => 'name' )));
+    {
+        return array_combine(pll_languages_list(), pll_languages_list(['fields' => 'name']));
     }
 
     /**
@@ -63,6 +64,7 @@ class Location_Language extends ACF_Location
      * @since 3.7.1
      *
      * @param array $field_group Field group definition.
+     *
      * @return bool True if the field group has a language location rule, false otherwise.
      */
     public static function has_language_location_rule(array $field_group): bool
@@ -100,20 +102,22 @@ class Location_Language extends ACF_Location
         if (0 === $field['ID']) {
             // New field.
             $field_group = acf_get_field_group(0);
-            return ! empty($field_group) ? $field_group : array();
+
+            return !empty($field_group) ? $field_group : [];
         }
 
         if (empty($field['parent'])) {
-            return array();
+            return [];
         }
 
         $field_group = acf_get_field_group($field['parent']);
-        if (! empty($field_group)) {
+        if (!empty($field_group)) {
             return $field_group;
         }
 
         // If not a field group, get parent field and continue.
         $parent_field = acf_get_field($field['parent']);
-        return $parent_field ? self::get_field_group_from_field($parent_field) : array();
+
+        return $parent_field ? self::get_field_group_from_field($parent_field) : [];
     }
 }

@@ -15,15 +15,15 @@ class ShopController extends Controller
 
     public function archive(): array
     {
-        $this->data['posts']      = Timber::get_posts();
+        $this->data['posts'] = Timber::get_posts();
         $this->data['attributes'] = $this->getArchiveAttributes();
 
         $requestedMin = get_requested_price('min_price');
         $requestedMax = get_requested_price('max_price');
-        $priceAbsMin  = 0.0;
-        $priceAbsMax  = 1000000.0;
-        $priceMin     = $requestedMin ?? $priceAbsMin;
-        $priceMax     = $requestedMax ?? $priceAbsMax;
+        $priceAbsMin = 0.0;
+        $priceAbsMax = 1000000.0;
+        $priceMin = $requestedMin ?? $priceAbsMin;
+        $priceMax = $requestedMax ?? $priceAbsMax;
 
         if ($priceMin > $priceMax) {
             [$priceMin, $priceMax] = [$priceMax, $priceMin];
@@ -32,12 +32,12 @@ class ShopController extends Controller
         $this->data['price_min'] = max($priceAbsMin, min($priceMin, $priceAbsMax));
         $this->data['price_max'] = max($this->data['price_min'], min($priceMax, $priceAbsMax));
 
-        $activeFilterKeys                 = array_filter(
+        $activeFilterKeys = array_filter(
             array_keys($_GET),
             fn ($k) => str_starts_with($k, 'filter_') || str_starts_with($k, 'query_type_')
         );
         $this->data['has_active_filters'] = !empty($activeFilterKeys) || $requestedMin !== null || $requestedMax !== null;
-        $this->data['reset_url']          = $this->getCurrentArchiveUrl();
+        $this->data['reset_url'] = $this->getCurrentArchiveUrl();
 
         return $this->data;
     }
@@ -47,10 +47,10 @@ class ShopController extends Controller
         $attributes = [];
 
         foreach (wc_get_attribute_taxonomies() as $taxonomy) {
-            $attributeName     = $taxonomy->attribute_name;
-            $attributeTaxonomy = 'pa_' . $attributeName;
-            $productIds        = $this->getArchiveProductIds([$attributeTaxonomy], true);
-            $terms             = $this->getAttributeTermsForProducts($attributeTaxonomy, $productIds);
+            $attributeName = $taxonomy->attribute_name;
+            $attributeTaxonomy = 'pa_'.$attributeName;
+            $productIds = $this->getArchiveProductIds([$attributeTaxonomy], true);
+            $terms = $this->getAttributeTermsForProducts($attributeTaxonomy, $productIds);
 
             if ($terms === []) {
                 continue;
@@ -61,28 +61,28 @@ class ShopController extends Controller
                 $_GET
             );
 
-            $currentFilter = $queryArgs['filter_' . $attributeName] ?? '';
+            $currentFilter = $queryArgs['filter_'.$attributeName] ?? '';
 
             unset(
                 $queryArgs['paged'],
                 $queryArgs['page'],
                 $queryArgs['product-page'],
-                $queryArgs['filter_' . $attributeName],
-                $queryArgs['query_type_' . $attributeName]
+                $queryArgs['filter_'.$attributeName],
+                $queryArgs['query_type_'.$attributeName]
             );
 
             $resetUrl = add_query_arg($queryArgs, $this->getCurrentArchiveUrl());
 
             $attributes[] = [
                 'label'     => $taxonomy->attribute_label,
-                'param'     => 'filter_' . $attributeName,
+                'param'     => 'filter_'.$attributeName,
                 'reset_url' => $resetUrl,
                 'terms'     => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter, $resetUrl) {
-                    $isActive   = $currentFilter !== '' && $currentFilter === $term->slug;
-                    $filterUrl  = $isActive
+                    $isActive = $currentFilter !== '' && $currentFilter === $term->slug;
+                    $filterUrl = $isActive
                         ? $resetUrl
                         : add_query_arg(
-                            array_merge($queryArgs, ['filter_' . $attributeName => $term->slug]),
+                            array_merge($queryArgs, ['filter_'.$attributeName => $term->slug]),
                             $this->getCurrentArchiveUrl()
                         );
 
@@ -108,12 +108,12 @@ class ShopController extends Controller
             return [];
         }
 
-        $queryArgs                           = $wp_query->query_vars;
-        $queryArgs['fields']                 = 'ids';
-        $queryArgs['nopaging']               = true;
-        $queryArgs['no_found_rows']          = true;
-        $queryArgs['cache_results']          = false;
-        $queryArgs['suppress_filters']       = false;
+        $queryArgs = $wp_query->query_vars;
+        $queryArgs['fields'] = 'ids';
+        $queryArgs['nopaging'] = true;
+        $queryArgs['no_found_rows'] = true;
+        $queryArgs['cache_results'] = false;
+        $queryArgs['suppress_filters'] = false;
         $queryArgs['update_post_meta_cache'] = false;
         $queryArgs['update_post_term_cache'] = false;
 
@@ -133,7 +133,7 @@ class ShopController extends Controller
 
             foreach ($excludedTaxonomies as $taxonomy) {
                 if (str_starts_with($taxonomy, 'pa_')) {
-                    unset($queryArgs['filter_' . substr($taxonomy, 3)], $queryArgs['query_type_' . substr($taxonomy, 3)]);
+                    unset($queryArgs['filter_'.substr($taxonomy, 3)], $queryArgs['query_type_'.substr($taxonomy, 3)]);
                 }
             }
         }
@@ -216,16 +216,16 @@ class ShopController extends Controller
             return [];
         }
 
-        $groupedTerms   = [];
+        $groupedTerms = [];
         $termProductMap = [];
 
         foreach ($terms as $term) {
-            $termId   = (int) $term->term_id;
+            $termId = (int) $term->term_id;
             $objectId = (int) $term->object_id;
 
             if (!isset($groupedTerms[$termId])) {
-                $term->count             = 0;
-                $groupedTerms[$termId]   = $term;
+                $term->count = 0;
+                $groupedTerms[$termId] = $term;
                 $termProductMap[$termId] = [];
             }
 
@@ -243,7 +243,7 @@ class ShopController extends Controller
     private function getCurrentArchiveUrl(): string
     {
         $requestUri = (string) wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
-        $path       = strtok($requestUri, '?');
+        $path = strtok($requestUri, '?');
 
         return home_url($path ?: '/');
     }
