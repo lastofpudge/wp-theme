@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: Keeps WooCommerce product prices identical across Polylang translations without Polylang for WooCommerce.
  */
@@ -323,9 +324,3 @@ final class SyncWCPricesPolylang
             && class_exists('WC_Product_Variable');
     }
 }
-
-add_action('plugins_loaded', static function () {
-    if (function_exists('pll_get_post_translations')) {
-        SyncWCPricesPolylang::init();
-    }
-});

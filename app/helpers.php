@@ -53,6 +53,15 @@ if (!function_exists('send_email')) {
     }
 }
 
+if (!function_exists('verify_ajax_nonce')) {
+    function verify_ajax_nonce(): void
+    {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'ajax-nonce')) {
+            wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
+        }
+    }
+}
+
 if (!function_exists('add_ajax_action')) {
     /**
      * Registers an AJAX action with WordPress.
