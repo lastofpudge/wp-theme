@@ -4,6 +4,12 @@
  * Description: Keeps WooCommerce product prices identical across Polylang translations without Polylang for WooCommerce.
  */
 
+namespace App\Extensions;
+
+use WC_Product;
+use WC_Product_Variable;
+use WP_Post;
+
 defined('ABSPATH') || exit;
 
 final class SyncWCPricesPolylang
