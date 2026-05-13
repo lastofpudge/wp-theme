@@ -17,7 +17,7 @@
 
 use Automattic\WooCommerce\Internal\EmailEditor\BlockEmailRenderer;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen -- removed to prevent empty new lines.
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd -- removed to prevent empty new lines.
@@ -26,25 +26,25 @@ defined( 'ABSPATH' ) || exit;
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php
 /* translators: %s: order number */
-printf( esc_html__( 'Details for order #%s,', 'woocommerce' ), '<!--[woocommerce/order-number]-->' );
+printf(esc_html__('Details for order #%s,', 'woocommerce'), '<!--[woocommerce/order-number]-->');
 ?></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
 <p><?php
-	/* translators: %s: Customer first name */
-	printf( esc_html__( 'Hi %s,', 'woocommerce' ), '<!--[woocommerce/customer-first-name]-->' );
+    /* translators: %s: Customer first name */
+    printf(esc_html__('Hi %s,', 'woocommerce'), '<!--[woocommerce/customer-first-name]-->');
 ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:woocommerce/email-content {"lock":{"move":false,"remove":true}} -->
-<div class="wp-block-woocommerce-email-content"> <?php echo esc_html( BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER ); ?> </div>
+<div class="wp-block-woocommerce-email-content"> <?php echo esc_html(BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER); ?> </div>
 <!-- /wp:woocommerce/email-content -->
 
 <!-- wp:paragraph {"align":"center"} -->
 <p class="has-text-align-center"><?php
 /* translators: %s: Store admin email */
-	printf( esc_html__( 'Thanks again! If you need any help with your order, please contact us at %s.', 'woocommerce' ), '<!--[woocommerce/store-email]-->' );
+    printf(esc_html__('Thanks again! If you need any help with your order, please contact us at %s.', 'woocommerce'), '<!--[woocommerce/store-email]-->');
 ?></p>
 <!-- /wp:paragraph -->
 

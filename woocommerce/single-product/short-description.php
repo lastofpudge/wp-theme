@@ -19,13 +19,13 @@ defined('ABSPATH') || exit;
 
 global $post;
 
-$short_description = apply_filters( 'woocommerce_short_description', $post->post_excerpt );
+$short_description = apply_filters('woocommerce_short_description', $post->post_excerpt);
 
-if ( ! $short_description ) {
-	return;
+if (! $short_description) {
+    return;
 }
 
 ?>
 <div class="woocommerce-product-details__short-description">
-	<?php echo $short_description; // WPCS: XSS ok. ?>
+	<?php echo $short_description; // WPCS: XSS ok.?>
 </div>

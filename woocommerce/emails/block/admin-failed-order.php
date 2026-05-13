@@ -17,7 +17,7 @@
 
 use Automattic\WooCommerce\Internal\EmailEditor\BlockEmailRenderer;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen -- removed to prevent empty new lines.
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd -- removed to prevent empty new lines.
@@ -26,24 +26,24 @@ defined( 'ABSPATH' ) || exit;
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php
 /* translators: %s: order number */
-printf( esc_html__( 'Order failed: #%s,', 'woocommerce' ), '<!--[woocommerce/order-number]-->' );
+printf(esc_html__('Order failed: #%s,', 'woocommerce'), '<!--[woocommerce/order-number]-->');
 ?></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
 <p><?php
-	/* translators: %1$s: Order number. %2$s: Customer full name. */
-	$text = __( 'Unfortunately, the payment for order #%1$s from %2$s has failed. The order was as follows:', 'woocommerce' );
-	printf( esc_html( $text ), '<!--[woocommerce/order-number]-->', '<!--[woocommerce/customer-full-name]-->' );
+    /* translators: %1$s: Order number. %2$s: Customer full name. */
+    $text = __('Unfortunately, the payment for order #%1$s from %2$s has failed. The order was as follows:', 'woocommerce');
+printf(esc_html($text), '<!--[woocommerce/order-number]-->', '<!--[woocommerce/customer-full-name]-->');
 ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:woocommerce/email-content {"lock":{"move":false,"remove":true}} -->
-<div class="wp-block-woocommerce-email-content"> <?php echo esc_html( BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER ); ?> </div>
+<div class="wp-block-woocommerce-email-content"> <?php echo esc_html(BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER); ?> </div>
 <!-- /wp:woocommerce/email-content -->
 
 <!-- wp:paragraph {"align":"center"} -->
 <p class="has-text-align-center"><?php
-echo wp_kses_post( __( 'We hope they’ll be back soon! Read more about <a href="https://woocommerce.com/document/managing-orders/">troubleshooting failed payments</a>.', 'woocommerce' ) );
+echo wp_kses_post(__('We hope they’ll be back soon! Read more about <a href="https://woocommerce.com/document/managing-orders/">troubleshooting failed payments</a>.', 'woocommerce'));
 ?></p>
 <!-- /wp:paragraph -->

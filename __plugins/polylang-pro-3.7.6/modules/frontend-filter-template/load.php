@@ -1,12 +1,13 @@
 <?php
+
 /**
  * @package Polylang-Pro
  */
 
-defined( 'ABSPATH' ) || exit; // @phpstan-ignore-line
+defined('ABSPATH') || exit; // @phpstan-ignore-line
 
-if ( ! $polylang instanceof PLL_Frontend ) {
-	return;
+if (! $polylang instanceof PLL_Frontend) {
+    return;
 }
 
 /**
@@ -17,7 +18,7 @@ if ( ! $polylang instanceof PLL_Frontend ) {
  * @param bool $filter_templates Whether or not Polylang should filter templates.
  *                               Defaults to true when the current theme is a block theme, false otherwise.
  */
-$filter_templates = apply_filters( 'pll_filtered_templates', wp_is_block_theme() );
-if ( $filter_templates ) {
-	$polylang->filtered_templates = ( new PLL_Filter_Templates( $polylang ) )->init();
+$filter_templates = apply_filters('pll_filtered_templates', wp_is_block_theme());
+if ($filter_templates) {
+    $polylang->filtered_templates = (new PLL_Filter_Templates($polylang))->init();
 }

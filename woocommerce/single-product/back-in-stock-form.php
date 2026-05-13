@@ -21,23 +21,23 @@
 defined('ABSPATH') || exit;
 
 ?>
-<div class="wc_bis_form<?php echo $is_visible ? '' : ' hidden'; ?>" data-bis-product-id="<?php echo absint( $product_id ); ?>">
+<div class="wc_bis_form<?php echo $is_visible ? '' : ' hidden'; ?>" data-bis-product-id="<?php echo absint($product_id); ?>">
 
-	<h3 id="wc_bis_form_heading_<?php echo absint( $product_id ); ?>">
-		<?php echo wp_kses_post( __( 'Want to be notified when this product is back in stock?', 'woocommerce' ) ); ?>
+	<h3 id="wc_bis_form_heading_<?php echo absint($product_id); ?>">
+		<?php echo wp_kses_post(__('Want to be notified when this product is back in stock?', 'woocommerce')); ?>
 	</h3>
 
-	<form method="post" novalidate aria-labelledby="wc_bis_form_heading_<?php echo absint( $product_id ); ?>">
+	<form method="post" novalidate aria-labelledby="wc_bis_form_heading_<?php echo absint($product_id); ?>">
 		<div class="wc_bis_form__form-row">
-			<?php if ( $show_email_field ) : ?>
+			<?php if ($show_email_field) : ?>
 
-				<label for="wc_bis_email_<?php echo absint( $product_id ); ?>" class="screen-reader-text"><?php echo esc_html_x( 'Email address to be notified when this product is back in stock', 'back in stock form', 'woocommerce' ); ?></label>
+				<label for="wc_bis_email_<?php echo absint($product_id); ?>" class="screen-reader-text"><?php echo esc_html_x('Email address to be notified when this product is back in stock', 'back in stock form', 'woocommerce'); ?></label>
 				<input
 					type="email"
 					name="wc_bis_email"
 					class="wc_bis_form__input"
-					placeholder="<?php echo esc_attr_x( 'Enter your e-mail', 'back in stock form', 'woocommerce' ); ?>"
-					id="wc_bis_email_<?php echo absint( $product_id ); ?>"
+					placeholder="<?php echo esc_attr_x('Enter your e-mail', 'back in stock form', 'woocommerce'); ?>"
+					id="wc_bis_email_<?php echo absint($product_id); ?>"
 					required
 					aria-required="true"
 				/>
@@ -47,28 +47,28 @@ defined('ABSPATH') || exit;
 			<button
 				type="submit"
 				name="wc_bis_register"
-				class="<?php echo esc_attr( $button_class ); ?>"
+				class="<?php echo esc_attr($button_class); ?>"
 			>
-				<?php echo esc_html( __( 'Notify me', 'woocommerce' ) ); ?>
+				<?php echo esc_html(__('Notify me', 'woocommerce')); ?>
 			</button>
 		</div>
 
-		<?php if ( $show_checkbox ) : ?>
+		<?php if ($show_checkbox) : ?>
 
-			<label for="wc_bis_opt_in_<?php echo absint( $product_id ); ?>" class="wc_bis_form__checkbox">
+			<label for="wc_bis_opt_in_<?php echo absint($product_id); ?>" class="wc_bis_form__checkbox">
 				<input
 					type="checkbox"
 					name="wc_bis_opt_in"
-					id="wc_bis_opt_in_<?php echo absint( $product_id ); ?>"
+					id="wc_bis_opt_in_<?php echo absint($product_id); ?>"
 				/>
-				<?php echo wp_kses_post( wc_replace_policy_page_link_placeholders( wc_get_privacy_policy_text( 'registration' ) ) ); ?>
+				<?php echo wp_kses_post(wc_replace_policy_page_link_placeholders(wc_get_privacy_policy_text('registration'))); ?>
 			</label>
 
 		<?php endif; ?>
 
-		<?php wp_nonce_field( 'wc_bis_signup', 'wc_bis_nonce' ); ?>
+		<?php wp_nonce_field('wc_bis_signup', 'wc_bis_nonce'); ?>
 
-		<input type="hidden" name="wc_bis_product_id" value="<?php echo absint( $product_id ); ?>" />
+		<input type="hidden" name="wc_bis_product_id" value="<?php echo absint($product_id); ?>" />
 	</form>
 
 </div>

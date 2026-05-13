@@ -15,7 +15,7 @@
  * @version 10.4.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 $email = $email ?? null;
 
@@ -44,31 +44,31 @@ $email = $email ?? null;
 													<tr>
 														<td colspan="2" valign="middle" id="credit">
 															<?php
-															$email_footer_text = get_option( 'woocommerce_email_footer_text' );
-															/**
-															 * This filter is documented in templates/emails/email-styles.php
-															 *
-															 * @since 9.6.0
-															 */
-															if ( apply_filters( 'woocommerce_is_email_preview', false ) ) {
-																$text_transient    = get_transient( 'woocommerce_email_footer_text' );
-																$email_footer_text = false !== $text_transient ? $text_transient : $email_footer_text;
-															}
-															echo wp_kses_post(
-																wpautop(
-																	wptexturize(
-																		/**
-																		 * Provides control over the email footer text used for most order emails.
-																		 *
-																		 * @since 4.0.0
-																		 *
-																		 * @param string $email_footer_text
-																		 */
-																		apply_filters( 'woocommerce_email_footer_text', $email_footer_text, $email )
-																	)
-																)
-															);
-															?>
+                                                            $email_footer_text = get_option('woocommerce_email_footer_text');
+/**
+ * This filter is documented in templates/emails/email-styles.php
+ *
+ * @since 9.6.0
+ */
+if (apply_filters('woocommerce_is_email_preview', false)) {
+    $text_transient    = get_transient('woocommerce_email_footer_text');
+    $email_footer_text = false !== $text_transient ? $text_transient : $email_footer_text;
+}
+echo wp_kses_post(
+    wpautop(
+        wptexturize(
+            /**
+             * Provides control over the email footer text used for most order emails.
+             *
+             * @since 4.0.0
+             *
+             * @param string $email_footer_text
+             */
+            apply_filters('woocommerce_email_footer_text', $email_footer_text, $email)
+        )
+    )
+);
+?>
 														</td>
 													</tr>
 												</table>

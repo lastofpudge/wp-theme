@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customer fulfillment updated email (plain text)
  *
@@ -15,15 +16,15 @@
  * @version 10.1.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
-echo esc_html( wp_strip_all_tags( $email_heading ) );
+echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo esc_html__( 'Some details of your shipment have recently been updated. This may include tracking information, item contents, or delivery status.', 'woocommerce' ) . "\n\n";
-echo esc_html__( 'Here’s the latest info we have:', 'woocommerce' ) . "\n\n";
+echo esc_html__('Some details of your shipment have recently been updated. This may include tracking information, item contents, or delivery status.', 'woocommerce') . "\n\n";
+echo esc_html__('Here’s the latest info we have:', 'woocommerce') . "\n\n";
 
 /**
  * Display fulfillment details.
@@ -34,7 +35,7 @@ echo esc_html__( 'Here’s the latest info we have:', 'woocommerce' ) . "\n\n";
  *
  * @since 10.1.0
  */
-do_action( 'woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_to_admin, $plain_text, $email);
 
 echo "\n----------------------------------------\n\n";
 
@@ -45,7 +46,7 @@ echo "\n----------------------------------------\n\n";
  *
  * @since 10.1.0
  */
-do_action( 'woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_admin, $plain_text, $email);
 
 /**
  * Display customer details and email address.
@@ -55,16 +56,16 @@ do_action( 'woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_
  *
  * @since 2.5.0
  */
-do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email);
 
 echo "\n\n----------------------------------------\n\n";
 
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo esc_html( wp_strip_all_tags( wptexturize( $additional_content ) ) );
-	echo "\n\n----------------------------------------\n\n";
+if ($additional_content) {
+    echo esc_html(wp_strip_all_tags(wptexturize($additional_content)));
+    echo "\n\n----------------------------------------\n\n";
 }
 
 /**
@@ -72,4 +73,4 @@ if ( $additional_content ) {
  *
  * @since 2.5.0
  */
-echo wp_kses_post( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) );
+echo wp_kses_post(apply_filters('woocommerce_email_footer_text', get_option('woocommerce_email_footer_text')));

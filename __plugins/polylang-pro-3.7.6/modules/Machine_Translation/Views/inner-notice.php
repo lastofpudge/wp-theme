@@ -9,15 +9,15 @@
  * }
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 $tags = array(
-	'br'   => array(),
-	'code' => array(),
+    'br'   => array(),
+    'code' => array(),
 );
 
-$atts['type'] = ! empty( $atts['type'] ) && in_array( $atts['type'], array( 'success', 'warning', 'info' ), true ) ? $atts['type'] : 'error';
+$atts['type'] = ! empty($atts['type']) && in_array($atts['type'], array( 'success', 'warning', 'info' ), true) ? $atts['type'] : 'error';
 ?>
-<div class="pll-<?php echo esc_attr( $atts['slug'] ); ?>-notice pll-inner-notice notice-<?php echo esc_attr( $atts['type'] ); ?>">
-	<p><strong><?php echo wp_kses( $atts['message'], $tags ); ?></strong></p>
+<div class="pll-<?php echo esc_attr($atts['slug']); ?>-notice pll-inner-notice notice-<?php echo esc_attr($atts['type']); ?>">
+	<p><strong><?php echo wp_kses($atts['message'], $tags); ?></strong></p>
 </div>

@@ -103,4 +103,3 @@ class PageController extends Controller
         return $this->data;
     }
 }
-

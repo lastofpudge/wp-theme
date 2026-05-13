@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Single Product title
  *
@@ -17,4 +18,4 @@
 
 defined('ABSPATH') || exit;
 
-the_title( '<h1 class="product_title entry-title">', '</h1>' );
+the_title('<h1 class="product_title entry-title">', '</h1>');

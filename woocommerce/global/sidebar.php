@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Sidebar
  *
@@ -17,6 +18,6 @@
 
 defined('ABSPATH') || exit;
 
-get_sidebar( 'shop' );
+get_sidebar('shop');
 
 /* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */

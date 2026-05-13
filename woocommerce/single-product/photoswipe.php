@@ -18,7 +18,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div id="photoswipe-fullscreen-dialog" class="pswp" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true" aria-label="<?php esc_attr_e( 'Full screen image', 'woocommerce' ); ?>">
+<div id="photoswipe-fullscreen-dialog" class="pswp" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true" aria-label="<?php esc_attr_e('Full screen image', 'woocommerce'); ?>">
 	<div class="pswp__bg"></div>
 	<div class="pswp__scroll-wrap">
 		<div class="pswp__container">
@@ -29,10 +29,10 @@ defined('ABSPATH') || exit;
 		<div class="pswp__ui pswp__ui--hidden">
 			<div class="pswp__top-bar">
 				<div class="pswp__counter"></div>
-				<button class="pswp__button pswp__button--zoom" aria-label="<?php esc_attr_e( 'Zoom in/out', 'woocommerce' ); ?>"></button>
-				<button class="pswp__button pswp__button--fs" aria-label="<?php esc_attr_e( 'Toggle fullscreen', 'woocommerce' ); ?>"></button>
-				<button class="pswp__button pswp__button--share" aria-label="<?php esc_attr_e( 'Share', 'woocommerce' ); ?>"></button>
-				<button class="pswp__button pswp__button--close" aria-label="<?php esc_attr_e( 'Close (Esc)', 'woocommerce' ); ?>"></button>
+				<button class="pswp__button pswp__button--zoom" aria-label="<?php esc_attr_e('Zoom in/out', 'woocommerce'); ?>"></button>
+				<button class="pswp__button pswp__button--fs" aria-label="<?php esc_attr_e('Toggle fullscreen', 'woocommerce'); ?>"></button>
+				<button class="pswp__button pswp__button--share" aria-label="<?php esc_attr_e('Share', 'woocommerce'); ?>"></button>
+				<button class="pswp__button pswp__button--close" aria-label="<?php esc_attr_e('Close (Esc)', 'woocommerce'); ?>"></button>
 				<div class="pswp__preloader">
 					<div class="pswp__preloader__icn">
 						<div class="pswp__preloader__cut">
@@ -44,8 +44,8 @@ defined('ABSPATH') || exit;
 			<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
 				<div class="pswp__share-tooltip"></div>
 			</div>
-			<button class="pswp__button pswp__button--arrow--left" aria-label="<?php esc_attr_e( 'Previous (arrow left)', 'woocommerce' ); ?>"></button>
-			<button class="pswp__button pswp__button--arrow--right" aria-label="<?php esc_attr_e( 'Next (arrow right)', 'woocommerce' ); ?>"></button>
+			<button class="pswp__button pswp__button--arrow--left" aria-label="<?php esc_attr_e('Previous (arrow left)', 'woocommerce'); ?>"></button>
+			<button class="pswp__button pswp__button--arrow--right" aria-label="<?php esc_attr_e('Next (arrow right)', 'woocommerce'); ?>"></button>
 			<div class="pswp__caption">
 				<div class="pswp__caption__center"></div>
 			</div>

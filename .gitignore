@@ -4,3 +4,6 @@
 .env
 composer.lock
 npm-debug.log
+CLAUDE.md
+docs
+.claude/

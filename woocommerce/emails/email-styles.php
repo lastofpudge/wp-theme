@@ -20,19 +20,19 @@ use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
 defined('ABSPATH') || exit;
 
-$email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
-$block_email_editor_enabled = FeaturesUtil::feature_is_enabled( 'block_email_editor' );
+$email_improvements_enabled = FeaturesUtil::feature_is_enabled('email_improvements');
+$block_email_editor_enabled = FeaturesUtil::feature_is_enabled('block_email_editor');
 
 // Load colors.
-$bg               = get_option( 'woocommerce_email_background_color' );
-$body             = get_option( 'woocommerce_email_body_background_color' );
-$base             = get_option( 'woocommerce_email_base_color' );
-$text             = get_option( 'woocommerce_email_text_color' );
-$footer_text      = get_option( 'woocommerce_email_footer_text_color' );
-$header_alignment = get_option( 'woocommerce_email_header_alignment', $email_improvements_enabled ? 'left' : false );
-$logo_image_width = get_option( 'woocommerce_email_header_image_width', '120' );
+$bg               = get_option('woocommerce_email_background_color');
+$body             = get_option('woocommerce_email_body_background_color');
+$base             = get_option('woocommerce_email_base_color');
+$text             = get_option('woocommerce_email_text_color');
+$footer_text      = get_option('woocommerce_email_footer_text_color');
+$header_alignment = get_option('woocommerce_email_header_alignment', $email_improvements_enabled ? 'left' : false);
+$logo_image_width = get_option('woocommerce_email_header_image_width', '120');
 $default_font     = 'Helvetica';
-$font_family      = $email_improvements_enabled ? get_option( 'woocommerce_email_font_family', $default_font ) : $default_font;
+$font_family      = $email_improvements_enabled ? get_option('woocommerce_email_font_family', $default_font) : $default_font;
 
 /**
  * Check if we are in preview mode (WooCommerce > Settings > Emails).
@@ -40,69 +40,69 @@ $font_family      = $email_improvements_enabled ? get_option( 'woocommerce_email
  * @since 9.6.0
  * @param bool $is_email_preview Whether the email is being previewed.
  */
-$is_email_preview = apply_filters( 'woocommerce_is_email_preview', false );
+$is_email_preview = apply_filters('woocommerce_is_email_preview', false);
 
-if ( $is_email_preview ) {
-	$bg_transient               = get_transient( 'woocommerce_email_background_color' );
-	$body_transient             = get_transient( 'woocommerce_email_body_background_color' );
-	$base_transient             = get_transient( 'woocommerce_email_base_color' );
-	$text_transient             = get_transient( 'woocommerce_email_text_color' );
-	$footer_text_transient      = get_transient( 'woocommerce_email_footer_text_color' );
-	$header_alignment_transient = get_transient( 'woocommerce_email_header_alignment' );
-	$logo_image_width_transient = get_transient( 'woocommerce_email_header_image_width' );
-	$font_family_transient      = get_transient( 'woocommerce_email_font_family' );
+if ($is_email_preview) {
+    $bg_transient               = get_transient('woocommerce_email_background_color');
+    $body_transient             = get_transient('woocommerce_email_body_background_color');
+    $base_transient             = get_transient('woocommerce_email_base_color');
+    $text_transient             = get_transient('woocommerce_email_text_color');
+    $footer_text_transient      = get_transient('woocommerce_email_footer_text_color');
+    $header_alignment_transient = get_transient('woocommerce_email_header_alignment');
+    $logo_image_width_transient = get_transient('woocommerce_email_header_image_width');
+    $font_family_transient      = get_transient('woocommerce_email_font_family');
 
-	$bg               = $bg_transient ? $bg_transient : $bg;
-	$body             = $body_transient ? $body_transient : $body;
-	$base             = $base_transient ? $base_transient : $base;
-	$text             = $text_transient ? $text_transient : $text;
-	$footer_text      = $footer_text_transient ? $footer_text_transient : $footer_text;
-	$header_alignment = $header_alignment_transient ? $header_alignment_transient : $header_alignment;
-	$logo_image_width = $logo_image_width_transient ? $logo_image_width_transient : $logo_image_width;
-	$font_family      = $font_family_transient ? $font_family_transient : $font_family;
+    $bg               = $bg_transient ? $bg_transient : $bg;
+    $body             = $body_transient ? $body_transient : $body;
+    $base             = $base_transient ? $base_transient : $base;
+    $text             = $text_transient ? $text_transient : $text;
+    $footer_text      = $footer_text_transient ? $footer_text_transient : $footer_text;
+    $header_alignment = $header_alignment_transient ? $header_alignment_transient : $header_alignment;
+    $logo_image_width = $logo_image_width_transient ? $logo_image_width_transient : $logo_image_width;
+    $font_family      = $font_family_transient ? $font_family_transient : $font_family;
 }
 
 // Only use safe fonts. They won't be escaped to preserve single quotes.
 $safe_font_family = EmailFont::$font[ $font_family ] ?? EmailFont::$font[ $default_font ];
 
-$base_text = wc_light_or_dark( $base, '#202020', '#ffffff' );
+$base_text = wc_light_or_dark($base, '#202020', '#ffffff');
 
 // Pick a contrasting color for links.
-$link_color = wc_hex_is_light( $base ) ? $base : $base_text;
+$link_color = wc_hex_is_light($base) ? $base : $base_text;
 
-if ( wc_hex_is_light( $body ) ) {
-	$link_color = wc_hex_is_light( $base ) ? $base_text : $base;
+if (wc_hex_is_light($body)) {
+    $link_color = wc_hex_is_light($base) ? $base_text : $base;
 }
 
 // If email improvements are enabled, always use the base color for links.
-if ( $email_improvements_enabled ) {
-	$link_color = $base;
+if ($email_improvements_enabled) {
+    $link_color = $base;
 }
 
-$border_color    = wc_light_or_dark( $body, 'rgba(0, 0, 0, .2)', 'rgba(255, 255, 255, .2)' );
-$bg_darker_10    = wc_hex_darker( $bg, 10 );
-$body_darker_10  = wc_hex_darker( $body, 10 );
-$base_lighter_20 = wc_hex_lighter( $base, 20 );
-$base_lighter_40 = wc_hex_lighter( $base, 40 );
-$text_lighter_20 = wc_hex_lighter( $text, 20 );
-$text_lighter_40 = wc_hex_lighter( $text, 40 );
+$border_color    = wc_light_or_dark($body, 'rgba(0, 0, 0, .2)', 'rgba(255, 255, 255, .2)');
+$bg_darker_10    = wc_hex_darker($bg, 10);
+$body_darker_10  = wc_hex_darker($body, 10);
+$base_lighter_20 = wc_hex_lighter($base, 20);
+$base_lighter_40 = wc_hex_lighter($base, 40);
+$text_lighter_20 = wc_hex_lighter($text, 20);
+$text_lighter_40 = wc_hex_lighter($text, 40);
 
 // !important; is a gmail hack to prevent styles being stripped if it doesn't like something.
 // body{padding: 0;} ensures proper scale/positioning of the email in the iOS native email app.
 ?>
 body {
-	background-color: <?php echo esc_attr( $bg ); ?>;
+	background-color: <?php echo esc_attr($bg); ?>;
 	padding: 0;
 	text-align: center;
 }
 
 #outer_wrapper {
-	background-color: <?php echo esc_attr( $bg ); ?>;
+	background-color: <?php echo esc_attr($bg); ?>;
 }
 
-<?php if ( $email_improvements_enabled ) : ?>
+<?php if ($email_improvements_enabled) : ?>
 #inner_wrapper {
-	background-color: <?php echo esc_attr( $body ); ?>;
+	background-color: <?php echo esc_attr($body); ?>;
 	border-radius: 8px;
 }
 <?php endif; ?>
@@ -117,29 +117,29 @@ body {
 
 #template_container {
 	box-shadow: <?php echo $email_improvements_enabled ? 'none' : '0 1px 4px rgba(0, 0, 0, 0.1) !important'; ?>;
-	background-color: <?php echo esc_attr( $body ); ?>;
-	border: <?php echo $email_improvements_enabled ? '0' : '1px solid ' . esc_attr( $bg_darker_10 ); ?>;
+	background-color: <?php echo esc_attr($body); ?>;
+	border: <?php echo $email_improvements_enabled ? '0' : '1px solid ' . esc_attr($bg_darker_10); ?>;
 	border-radius: 3px !important;
 }
 
 #template_header {
-	background-color: <?php echo esc_attr( $email_improvements_enabled ? $body : $base ); ?>;
+	background-color: <?php echo esc_attr($email_improvements_enabled ? $body : $base); ?>;
 	border-radius: 3px 3px 0 0 !important;
-	color: <?php echo esc_attr( $email_improvements_enabled ? $text : $base_text ); ?>;
+	color: <?php echo esc_attr($email_improvements_enabled ? $text : $base_text); ?>;
 	border-bottom: 0;
 	font-weight: bold;
 	line-height: 100%;
 	vertical-align: middle;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 }
 
 #template_header h1,
 #template_header h1 a {
-	color: <?php echo esc_attr( $email_improvements_enabled ? $text : $base_text ); ?>;
+	color: <?php echo esc_attr($email_improvements_enabled ? $text : $base_text); ?>;
 	background-color: inherit;
 }
 
-<?php if ( $email_improvements_enabled ) : ?>
+<?php if ($email_improvements_enabled) : ?>
 .hr {
 	border-bottom: 1px solid #1e1e1e;
 	opacity: 0.2;
@@ -160,16 +160,16 @@ body {
 
 #template_header_image p {
 	margin-bottom: 0;
-	text-align: <?php echo esc_attr( $header_alignment ); ?>;
+	text-align: <?php echo esc_attr($header_alignment); ?>;
 }
 
 #template_header_image img {
-	width: <?php echo esc_attr( $logo_image_width ); ?>px;
+	width: <?php echo esc_attr($logo_image_width); ?>px;
 }
 
 .email-logo-text {
-	color: <?php echo esc_attr( $link_color ); ?>;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	color: <?php echo esc_attr($link_color); ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	font-size: 18px;
 }
 
@@ -178,14 +178,14 @@ body {
 }
 
 .email-order-item-meta {
-	color: <?php echo esc_attr( $footer_text ); ?>;
+	color: <?php echo esc_attr($footer_text); ?>;
 	font-size: 14px;
 	line-height: 140%;
 }
 
 #body_content table td td.email-additional-content {
-	color: <?php echo esc_attr( $text ); ?>;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	color: <?php echo esc_attr($text); ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	padding: 32px 0 0;
 }
 
@@ -212,11 +212,11 @@ body {
 
 #template_footer #credit {
 	border: 0;
-	<?php if ( $email_improvements_enabled ) : ?>
-		border-top: 1px solid <?php echo esc_attr( $border_color ); ?>;
+	<?php if ($email_improvements_enabled) : ?>
+		border-top: 1px solid <?php echo esc_attr($border_color); ?>;
 	<?php endif; ?>
-	color: <?php echo esc_attr( $footer_text ); ?>;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	color: <?php echo esc_attr($footer_text); ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	font-size: 12px;
 	line-height: <?php echo $email_improvements_enabled ? '140%' : '150%'; ?>;
 	text-align: center;
@@ -228,7 +228,7 @@ body {
 }
 
 #body_content {
-	background-color: <?php echo esc_attr( $body ); ?>;
+	background-color: <?php echo esc_attr($body); ?>;
 }
 
 #body_content table td {
@@ -259,7 +259,7 @@ body {
 }
 
 #body_content .email-order-details tbody tr:last-child td {
-	border-bottom: 1px solid <?php echo esc_attr( $border_color ); ?>;
+	border-bottom: 1px solid <?php echo esc_attr($border_color); ?>;
 	padding-bottom: 24px;
 }
 
@@ -296,12 +296,12 @@ body {
 
 #body_content .email-order-details .order-totals-last td,
 #body_content .email-order-details .order-totals-last th {
-	border-bottom: 1px solid <?php echo esc_attr( $border_color ); ?>;
+	border-bottom: 1px solid <?php echo esc_attr($border_color); ?>;
 	padding-bottom: 24px;
 }
 
 #body_content .email-order-details .order-customer-note td {
-	border-bottom: 1px solid <?php echo esc_attr( $border_color ); ?>;
+	border-bottom: 1px solid <?php echo esc_attr($border_color); ?>;
 	padding-bottom: 24px;
 	padding-top: 24px;
 }
@@ -334,34 +334,34 @@ body {
 }
 
 #body_content_inner {
-	color: <?php echo esc_attr( $text_lighter_20 ); ?>;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	color: <?php echo esc_attr($text_lighter_20); ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	font-size: <?php echo $email_improvements_enabled ? '16px' : '14px'; ?>;
 	line-height: 150%;
 	text-align: <?php echo is_rtl() ? 'right' : 'left'; ?>;
 }
 
 .td {
-	color: <?php echo esc_attr( $text_lighter_20 ); ?>;
-	border: <?php echo $email_improvements_enabled ? '0' : '1px solid ' . esc_attr( $body_darker_10 ); ?>;
+	color: <?php echo esc_attr($text_lighter_20); ?>;
+	border: <?php echo $email_improvements_enabled ? '0' : '1px solid ' . esc_attr($body_darker_10); ?>;
 	vertical-align: middle;
 }
 
 .address {
-	<?php if ( $email_improvements_enabled ) { ?>
-		color: <?php echo esc_attr( $text ); ?>;
+	<?php if ($email_improvements_enabled) { ?>
+		color: <?php echo esc_attr($text); ?>;
 		font-style: normal;
 		line-height: 120%;
 		padding: 8px 0;
 	<?php } else { ?>
 		padding: 12px;
-		color: <?php echo esc_attr( $text_lighter_20 ); ?>;
-		border: 1px solid <?php echo esc_attr( $body_darker_10 ); ?>;
+		color: <?php echo esc_attr($text_lighter_20); ?>;
+		border: 1px solid <?php echo esc_attr($body_darker_10); ?>;
 	<?php } ?>
 	word-break: break-all;
 }
 
-<?php if ( $email_improvements_enabled ) : ?>
+<?php if ($email_improvements_enabled) : ?>
 #addresses td + td {
 	padding-<?php echo is_rtl() ? 'right' : 'left'; ?>: 10px !important;
 }
@@ -369,8 +369,8 @@ body {
 
 .additional-fields {
 	padding: 12px 12px 0;
-	color: <?php echo esc_attr( $text_lighter_20 ); ?>;
-	border: 1px solid <?php echo esc_attr( $body_darker_10 ); ?>;
+	color: <?php echo esc_attr($text_lighter_20); ?>;
+	border: 1px solid <?php echo esc_attr($body_darker_10); ?>;
 	list-style: none outside;
 }
 
@@ -381,12 +381,12 @@ body {
 .text,
 .address-title,
 .order-item-data {
-	color: <?php echo esc_attr( $text ); ?>;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	color: <?php echo esc_attr($text); ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 }
 
 .link {
-	color: <?php echo esc_attr( $link_color ); ?>;
+	color: <?php echo esc_attr($link_color); ?>;
 }
 
 #header_wrapper {
@@ -394,37 +394,37 @@ body {
 	display: block;
 }
 
-<?php if ( $header_alignment ) : ?>
+<?php if ($header_alignment) : ?>
 #header_wrapper h1 {
-	text-align: <?php echo esc_attr( $header_alignment ); ?>;
+	text-align: <?php echo esc_attr($header_alignment); ?>;
 }
 <?php endif; ?>
 
 #template_footer #credit,
 #template_footer #credit a {
-	color: <?php echo esc_attr( $footer_text ); ?>;
+	color: <?php echo esc_attr($footer_text); ?>;
 }
 
 h1 {
-	color: <?php echo esc_attr( $email_improvements_enabled ? $text : $base ); ?>;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	color: <?php echo esc_attr($email_improvements_enabled ? $text : $base); ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	font-size: <?php echo $email_improvements_enabled ? '32px' : '30px'; ?>;
 	font-weight: <?php echo $email_improvements_enabled ? 700 : 300; ?>;
-	<?php if ( $email_improvements_enabled ) : ?>
+	<?php if ($email_improvements_enabled) : ?>
 		letter-spacing: -1px;
 	<?php endif; ?>
 	line-height: <?php echo $email_improvements_enabled ? '120%' : '150%'; ?>;
 	margin: 0;
 	text-align: <?php echo is_rtl() ? 'right' : 'left'; ?>;
-	<?php if ( ! $email_improvements_enabled ) : ?>
-		text-shadow: 0 1px 0 <?php echo esc_attr( $base_lighter_20 ); ?>;
+	<?php if (! $email_improvements_enabled) : ?>
+		text-shadow: 0 1px 0 <?php echo esc_attr($base_lighter_20); ?>;
 	<?php endif; ?>
 }
 
 h2 {
-	color: <?php echo esc_attr( $email_improvements_enabled ? $text : $base ); ?>;
+	color: <?php echo esc_attr($email_improvements_enabled ? $text : $base); ?>;
 	display: block;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	font-size: <?php echo $email_improvements_enabled ? '20px' : '18px'; ?>;
 	font-weight: bold;
 	line-height: <?php echo $email_improvements_enabled ? '160%' : '130%'; ?>;
@@ -433,9 +433,9 @@ h2 {
 }
 
 h3 {
-	color: <?php echo esc_attr( $email_improvements_enabled ? $text : $base ); ?>;
+	color: <?php echo esc_attr($email_improvements_enabled ? $text : $base); ?>;
 	display: block;
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 	font-size: 16px;
 	font-weight: bold;
 	line-height: <?php echo $email_improvements_enabled ? '160%' : '130%'; ?>;
@@ -444,7 +444,7 @@ h3 {
 }
 
 a {
-	color: <?php echo esc_attr( $link_color ); ?>;
+	color: <?php echo esc_attr($link_color); ?>;
 	font-weight: normal;
 	text-decoration: underline;
 }
@@ -464,7 +464,7 @@ img {
 }
 
 h2.email-order-detail-heading span {
-	color: <?php echo esc_attr( $footer_text ); ?>;
+	color: <?php echo esc_attr($footer_text); ?>;
 	display: block;
 	font-size: 14px;
 	font-weight: normal;
@@ -475,7 +475,7 @@ h2.email-order-detail-heading span a {
 }
 
 .font-family {
-	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	font-family: <?php echo $safe_font_family; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?>;
 }
 
 .text-align-left {
@@ -491,7 +491,7 @@ h2.email-order-detail-heading span a {
  * Gmail clients and can help us achieve better consistency there.
  */
 @media screen and (max-width: 600px) {
-	<?php if ( $email_improvements_enabled ) : ?>
+	<?php if ($email_improvements_enabled) : ?>
 		#template_header_image {
 			padding: 16px 10px 0 !important;
 		}

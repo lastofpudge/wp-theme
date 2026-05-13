@@ -15,7 +15,7 @@
  * @version 10.5.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * For this template, the following variables are available
@@ -28,24 +28,24 @@ defined( 'ABSPATH' ) || exit;
 
 <li>
 	<?php
-	// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-	?>
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+?>
 
-	<?php echo get_avatar( $comment->comment_author_email, '32' ); ?>
+	<?php echo get_avatar($comment->comment_author_email, '32'); ?>
 
-	<?php echo wc_get_rating_html( (int) get_comment_meta( $comment->comment_ID, 'rating', true ) ); ?>
+	<?php echo wc_get_rating_html((int) get_comment_meta($comment->comment_ID, 'rating', true)); ?>
 
 	<h4 class="meta">
-		<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><?php echo wp_kses_post( $product->get_name() ); ?></a>
+		<a href="<?php echo esc_url(get_comment_link($comment->comment_ID)); ?>"><?php echo wp_kses_post($product->get_name()); ?></a>
 		<?php
-		/* translators: %s: review author */
-		printf( esc_html__( 'reviewed by %s', 'woocommerce' ), esc_html( get_comment_author( $comment->comment_ID ) ) );
-		?>
+    /* translators: %s: review author */
+    printf(esc_html__('reviewed by %s', 'woocommerce'), esc_html(get_comment_author($comment->comment_ID)));
+?>
 	</h4>
 
-	<blockquote><?php echo wp_kses_data( $comment->comment_content ); ?></blockquote>
+	<blockquote><?php echo wp_kses_data($comment->comment_content); ?></blockquote>
 
 	<?php
-	// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-	?>
+    // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+?>
 </li>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * General block content for fulfillment emails
  *
@@ -11,13 +12,13 @@
  * @version 10.5.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen -- removed to prevent empty new lines.
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd -- removed to prevent empty new lines.
 
-if ( ! isset( $order, $fulfillment ) ) {
-	return;
+if (! isset($order, $fulfillment)) {
+    return;
 }
 
 /**
@@ -32,7 +33,7 @@ if ( ! isset( $order, $fulfillment ) ) {
  *
  * @hooked WC_Emails::fulfillment_details() Shows the fulfillment details.
  */
-do_action( 'woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_to_admin, $plain_text, $email);
 
 /**
  * Hook for the woocommerce_email_fulfillment_meta.
@@ -46,7 +47,7 @@ do_action( 'woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_
  *
  * @hooked WC_Emails::order_meta() Shows fulfillment meta data.
  */
-do_action( 'woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_admin, $plain_text, $email);
 
 /**
  * Hook for woocommerce_email_customer_details.
@@ -60,4 +61,4 @@ do_action( 'woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_
  * @hooked WC_Emails::customer_details() Shows customer details
  * @hooked WC_Emails::email_address() Shows email address
  */
-do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email);

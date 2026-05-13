@@ -15,41 +15,41 @@
  * @version 9.4.0
  */
 
-declare( strict_types = 1);
+declare(strict_types=1);
 ?>
 <ul class="brand-thumbnails-description">
 
 	<?php
-	foreach ( $brands as $index => $brand ) :
+    foreach ($brands as $index => $brand) :
 
-		/**
-		 * Filter the brand's thumbnail size.
-		 *
-		 * @since 9.4.0
-		 * @param string $size Defaults to 'shop_catalog'
-		 */
-		$thumbnail = wc_get_brand_thumbnail_url( $brand->term_id, apply_filters( 'woocommerce_brand_thumbnail_size', 'shop_catalog' ) );
+        /**
+         * Filter the brand's thumbnail size.
+         *
+         * @since 9.4.0
+         * @param string $size Defaults to 'shop_catalog'
+         */
+        $thumbnail = wc_get_brand_thumbnail_url($brand->term_id, apply_filters('woocommerce_brand_thumbnail_size', 'shop_catalog'));
 
-		if ( ! $thumbnail ) {
-			$thumbnail = wc_placeholder_img_src();
-		}
+        if (! $thumbnail) {
+            $thumbnail = wc_placeholder_img_src();
+        }
 
-		$class = '';
+        $class = '';
 
-		if ( 0 === $index || 0 === $index % $columns ) {
-			$class = 'first';
-		} elseif ( 0 === ( $index + 1 ) % $columns ) {
-			$class = 'last';
-		}
+        if (0 === $index || 0 === $index % $columns) {
+            $class = 'first';
+        } elseif (0 === ($index + 1) % $columns) {
+            $class = 'last';
+        }
 
-		$width = floor( ( ( 100 - ( ( $columns - 1 ) * 2 ) ) / $columns ) * 100 ) / 100;
-		?>
-		<li class="<?php echo esc_attr( $class ); ?>" style="width: <?php echo esc_attr( $width ); ?>%;">
-			<a href="<?php echo esc_url( get_term_link( $brand->slug, 'product_brand' ) ); ?>" title="<?php echo esc_attr( $brand->name ); ?>" class="term-thumbnail">
-				<img src="<?php echo esc_url( $thumbnail ); ?>" alt="<?php echo esc_attr( $brand->name ); ?>" />
+        $width = floor(((100 - (($columns - 1) * 2)) / $columns) * 100) / 100;
+        ?>
+		<li class="<?php echo esc_attr($class); ?>" style="width: <?php echo esc_attr($width); ?>%;">
+			<a href="<?php echo esc_url(get_term_link($brand->slug, 'product_brand')); ?>" title="<?php echo esc_attr($brand->name); ?>" class="term-thumbnail">
+				<img src="<?php echo esc_url($thumbnail); ?>" alt="<?php echo esc_attr($brand->name); ?>" />
 			</a>
-			<div id="term-<?php echo esc_attr( $brand->term_id ); ?>" class="term-description">
-				<?php echo wp_kses_post( wpautop( wptexturize( $brand->description ) ) ); ?>
+			<div id="term-<?php echo esc_attr($brand->term_id); ?>" class="term-description">
+				<?php echo wp_kses_post(wpautop(wptexturize($brand->description))); ?>
 			</div>
 		</li>
 

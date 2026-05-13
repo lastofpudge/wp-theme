@@ -1,0 +1,97 @@
+{
+    "packages": [
+        {
+            "name": "wpsyntex/updater",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:polylang/updater.git",
+                "reference": "3f876872a3c9c28ed2b579f08214b5fbbd02cd88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/polylang/updater/zipball/3f876872a3c9c28ed2b579f08214b5fbbd02cd88",
+                "reference": "3f876872a3c9c28ed2b579f08214b5fbbd02cd88",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "automattic/vipwpcs": "*",
+                "composer/composer": "*",
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "phpcompatibility/phpcompatibility-wp": "*",
+                "rector/rector": "^1.1",
+                "wp-coding-standards/wpcs": "*",
+                "wpsyntex/polylang-phpstan": "^1.2",
+                "wpsyntex/polylang-stubs": "dev-master",
+                "wpsyntex/wp-phpunit": "dev-master",
+                "yoast/wp-test-utils": "^1.0.0"
+            },
+            "time": "2026-01-09T15:31:32+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "WP_Syntex\\Lib\\": "lib/"
+                }
+            },
+            "autoload-dev": {
+                "classmap": [
+                    "tests/phpunit"
+                ],
+                "psr-4": {
+                    "UPDATER_NAMESPACE\\": "src/"
+                }
+            },
+            "scripts": {
+                "install-suite": [
+                    "bash vendor/wpsyntex/wp-phpunit/bin/install-wp-suite.sh"
+                ],
+                "install-suite-with-db": [
+                    "bash vendor/wpsyntex/wp-phpunit/bin/install-wp-suite.sh latest true"
+                ],
+                "install-tests": [
+                    "@install-suite"
+                ],
+                "install-tests-with-db": [
+                    "@install-suite-with-db"
+                ],
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "cs": [
+                    "vendor/bin/phpcs"
+                ],
+                "stan": [
+                    "vendor/bin/phpstan analyze --memory-limit=512M"
+                ],
+                "rector-dry": [
+                    "vendor/bin/rector process --dry-run"
+                ],
+                "lint": [
+                    "@cs",
+                    "@stan",
+                    "@rector-dry"
+                ],
+                "rector": [
+                    "vendor/bin/rector process"
+                ]
+            },
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Library to manage licenses and update plugins and translations",
+            "homepage": "https://polylang.pro",
+            "support": {
+                "source": "https://github.com/polylang/updater/tree/main"
+            },
+            "install-path": "../wpsyntex/updater"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
+}

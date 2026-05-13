@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 do_action('woocommerce_before_edit_account_address_form');

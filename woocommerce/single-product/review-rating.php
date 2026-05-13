@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template to display the reviewers star rating in reviews
  *
@@ -18,8 +19,8 @@
 defined('ABSPATH') || exit;
 
 global $comment;
-$rating = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );
+$rating = intval(get_comment_meta($comment->comment_ID, 'rating', true));
 
-if ( $rating && wc_review_ratings_enabled() ) {
-	echo wc_get_rating_html( $rating ); // WPCS: XSS ok.
+if ($rating && wc_review_ratings_enabled()) {
+    echo wc_get_rating_html($rating); // WPCS: XSS ok.
 }

@@ -15,7 +15,7 @@
  * @version 10.4.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * Hook for the woocommerce_email_header.
@@ -26,11 +26,11 @@ defined( 'ABSPATH' ) || exit;
  *
  * @hooked WC_Emails::email_header() Output the email header
  */
-do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+do_action('woocommerce_email_header', $email_heading, $email); ?>
 
 <div class="email-introduction">
-	<p><?php echo esc_html__( 'Some details of your shipment have recently been updated. This may include tracking information, item contents, or delivery status.', 'woocommerce' ); ?></p>
-	<p><?php echo esc_html__( 'Here’s the latest info we have:', 'woocommerce' ); ?></p>
+	<p><?php echo esc_html__('Some details of your shipment have recently been updated. This may include tracking information, item contents, or delivery status.', 'woocommerce'); ?></p>
+	<p><?php echo esc_html__('Here’s the latest info we have:', 'woocommerce'); ?></p>
 </div>
 
 <?php
@@ -47,7 +47,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
  *
  * @hooked WC_Emails::fulfillment_details() Shows the fulfillment details.
  */
-do_action( 'woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_to_admin, $plain_text, $email);
 
 /**
  * Hook for the woocommerce_email_fulfillment_meta.
@@ -61,7 +61,7 @@ do_action( 'woocommerce_email_fulfillment_details', $order, $fulfillment, $sent_
  *
  * @hooked WC_Emails::order_meta() Shows fulfillment meta data.
  */
-do_action( 'woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_admin, $plain_text, $email);
 
 /**
  * Hook for woocommerce_email_customer_details.
@@ -75,15 +75,15 @@ do_action( 'woocommerce_email_fulfillment_meta', $order, $fulfillment, $sent_to_
  * @hooked WC_Emails::customer_details() Shows customer details
  * @hooked WC_Emails::email_address() Shows email address
  */
-do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email);
 
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo '<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation"><tr><td class="email-additional-content">';
-	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
-	echo '</td></tr></table>';
+if ($additional_content) {
+    echo '<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation"><tr><td class="email-additional-content">';
+    echo wp_kses_post(wpautop(wptexturize($additional_content)));
+    echo '</td></tr></table>';
 }
 
 /**
@@ -94,4 +94,4 @@ if ( $additional_content ) {
  *
  * @hooked WC_Emails::email_footer() Output the email footer
  */
-do_action( 'woocommerce_email_footer', $email );
+do_action('woocommerce_email_footer', $email);

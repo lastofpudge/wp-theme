@@ -17,31 +17,31 @@
 
 use Automattic\WooCommerce\Internal\EmailEditor\BlockEmailRenderer;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen -- removed to prevent empty new lines.
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd -- removed to prevent empty new lines.
 ?>
 
 <!-- wp:heading -->
-<h2 class="wp-block-heading"><?php echo esc_html__( 'Payment gateway enabled', 'woocommerce' ); ?></h2>
+<h2 class="wp-block-heading"><?php echo esc_html__('Payment gateway enabled', 'woocommerce'); ?></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p><?php echo esc_html__( 'Hello,', 'woocommerce' ); ?></p>
+<p><?php echo esc_html__('Hello,', 'woocommerce'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
 <p><?php
-	/* translators: %s: Site title */
-	printf( esc_html__( 'A payment gateway was just enabled on %s.', 'woocommerce' ), '<!--[woocommerce/site-title]-->' );
+    /* translators: %s: Site title */
+    printf(esc_html__('A payment gateway was just enabled on %s.', 'woocommerce'), '<!--[woocommerce/site-title]-->');
 ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:woocommerce/email-content {"lock":{"move":false,"remove":true}} -->
-<div class="wp-block-woocommerce-email-content"> <?php echo esc_html( BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER ); ?> </div>
+<div class="wp-block-woocommerce-email-content"> <?php echo esc_html(BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER); ?> </div>
 <!-- /wp:woocommerce/email-content -->
 
 <!-- wp:paragraph {"align":"center"} -->
-<p class="has-text-align-center"> <?php echo esc_html__( 'If this was intentional, you can safely ignore and delete this email.', 'woocommerce' ); ?> </p>
+<p class="has-text-align-center"> <?php echo esc_html__('If this was intentional, you can safely ignore and delete this email.', 'woocommerce'); ?> </p>
 <!-- /wp:paragraph -->

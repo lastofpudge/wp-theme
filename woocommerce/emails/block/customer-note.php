@@ -17,46 +17,46 @@
 
 use Automattic\WooCommerce\Internal\EmailEditor\BlockEmailRenderer;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen -- removed to prevent empty new lines.
 // phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd -- removed to prevent empty new lines.
 ?>
 
 <!-- wp:heading -->
-<h2 class="wp-block-heading"> <?php echo esc_html__( 'A note has been added to your order', 'woocommerce' ); ?> </h2>
+<h2 class="wp-block-heading"> <?php echo esc_html__('A note has been added to your order', 'woocommerce'); ?> </h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
 <p><?php
-	/* translators: %s: Customer first name */
-	printf( esc_html__( 'Hi %s,', 'woocommerce' ), '<!--[woocommerce/customer-first-name]-->' );
+    /* translators: %s: Customer first name */
+    printf(esc_html__('Hi %s,', 'woocommerce'), '<!--[woocommerce/customer-first-name]-->');
 ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p> <?php echo esc_html__( 'The following note has been added to your order:', 'woocommerce' ); ?> </p>
+<p> <?php echo esc_html__('The following note has been added to your order:', 'woocommerce'); ?> </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:quote {"lock":{"move":false,"remove":true}} -->
 <blockquote class="wp-block-quote">
 <!-- wp:paragraph {"lock":{"move":false,"remove":true}} -->
-<p> <?php echo '<!--[woocommerce/admin-order-note]-->&nbsp;'; // The non-breaking space is used to prevent the comment from being removed by the email editor. ?>  </p>
+<p> <?php echo '<!--[woocommerce/admin-order-note]-->&nbsp;'; // The non-breaking space is used to prevent the comment from being removed by the email editor.?>  </p>
 <!-- /wp:paragraph -->
 </blockquote>
 <!-- /wp:quote -->
 
 <!-- wp:paragraph -->
-<p> <?php echo esc_html__( 'As a reminder, here are your order details:', 'woocommerce' ); ?> </p>
+<p> <?php echo esc_html__('As a reminder, here are your order details:', 'woocommerce'); ?> </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:woocommerce/email-content {"lock":{"move":false,"remove":true}} -->
-<div class="wp-block-woocommerce-email-content"> <?php echo esc_html( BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER ); ?> </div>
+<div class="wp-block-woocommerce-email-content"> <?php echo esc_html(BlockEmailRenderer::WOO_EMAIL_CONTENT_PLACEHOLDER); ?> </div>
 <!-- /wp:woocommerce/email-content -->
 
 <!-- wp:paragraph {"align":"center"} -->
 <p class="has-text-align-center"><?php
 /* translators: %s: Store admin email */
-printf( esc_html__( 'Thanks again! If you need any help with your order, please contact us at %s.', 'woocommerce' ), '<!--[woocommerce/store-email]-->' );
+printf(esc_html__('Thanks again! If you need any help with your order, please contact us at %s.', 'woocommerce'), '<!--[woocommerce/store-email]-->');
 ?></p>
 <!-- /wp:paragraph -->

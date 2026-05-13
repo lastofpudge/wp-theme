@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 $saved_methods = wc_get_customer_saved_methods_list(get_current_user_id());

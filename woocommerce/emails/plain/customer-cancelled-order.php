@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customer cancelled order email (plain text)
  *
@@ -17,21 +18,21 @@
 
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-$email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
+$email_improvements_enabled = FeaturesUtil::feature_is_enabled('email_improvements');
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
-echo esc_html( wp_strip_all_tags( $email_heading ) );
+echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %1$s: Order number */
-$text = __( 'We’re sorry to let you know that your order #%1$s has been cancelled.', 'woocommerce' );
-if ( $email_improvements_enabled ) {
-	/* translators: %1$s: Order number */
-	$text = __( 'We’re getting in touch to let you know that your order #%1$s has been cancelled.', 'woocommerce' );
+$text = __('We’re sorry to let you know that your order #%1$s has been cancelled.', 'woocommerce');
+if ($email_improvements_enabled) {
+    /* translators: %1$s: Order number */
+    $text = __('We’re getting in touch to let you know that your order #%1$s has been cancelled.', 'woocommerce');
 }
-echo sprintf( esc_html( $text ), esc_html( $order->get_order_number() ) ) . "\n\n";
+echo sprintf(esc_html($text), esc_html($order->get_order_number())) . "\n\n";
 
 /**
  * Hook: woocommerce_email_order_details.
@@ -41,7 +42,7 @@ echo sprintf( esc_html( $text ), esc_html( $order->get_order_number() ) ) . "\n\
  * @hooked WC_Structured_Data::output_structured_data() Outputs structured data.
  * @since 2.5.0
  */
-do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email);
 
 echo "\n----------------------------------------\n\n";
 
@@ -51,7 +52,7 @@ echo "\n----------------------------------------\n\n";
  * @hooked WC_Emails::order_meta() Shows order meta data.
  * @since 2.5.0
  */
-do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email);
 
 /**
  * Hook: woocommerce_email_customer_details.
@@ -60,16 +61,16 @@ do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, 
  * @hooked WC_Emails::email_address() Shows email address
  * @since 2.5.0
  */
-do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+do_action('woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email);
 
 echo "\n\n----------------------------------------\n\n";
 
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo esc_html( wp_strip_all_tags( wptexturize( $additional_content ) ) );
-	echo "\n\n----------------------------------------\n\n";
+if ($additional_content) {
+    echo esc_html(wp_strip_all_tags(wptexturize($additional_content)));
+    echo "\n\n----------------------------------------\n\n";
 }
 
 /**
@@ -78,4 +79,4 @@ if ( $additional_content ) {
  * @hooked WC_Emails::email_footer() Output the email footer
  * @since 2.5.0
  */
-do_action( 'woocommerce_email_footer', $email );
+do_action('woocommerce_email_footer', $email);

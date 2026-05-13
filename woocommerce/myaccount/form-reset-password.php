@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || exit;
 
 do_action('woocommerce_before_reset_password_form');

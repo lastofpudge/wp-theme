@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Show a brands description when on a taxonomy page
  *
@@ -15,13 +16,13 @@
  * @version 9.4.0
  */
 
-declare( strict_types = 1);
+declare(strict_types=1);
 
 global $woocommerce;
 
-if ( $thumbnail ) {
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo wc_get_brand_thumbnail_image( $brand );
+if ($thumbnail) {
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo wc_get_brand_thumbnail_image($brand);
 }
 
-echo wp_kses_post( wpautop( wptexturize( term_description() ) ) );
+echo wp_kses_post(wpautop(wptexturize(term_description())));

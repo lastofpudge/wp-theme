@@ -45,7 +45,6 @@
       "app/CustomFields/OptionFields.php",
       "app/CustomFields/PostFields.php",
       "app/CustomFields/Blocks.php",
-      "app/Extensions/SyncWCPricesPolylang.php",
       "routes/api.php"
     ]
   },
