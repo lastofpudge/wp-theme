@@ -29,11 +29,23 @@
 
                 {% if attributes %}
                     {% for attribute in attributes %}
+                        {% set has_active = attribute.terms|filter(t => t.is_active)|length > 0 %}
                         <div class="attribute-filter mb-3">
                             <h6 class="fw-semibold mb-2">{{ attribute.label }}</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       name="attr-{{ loop.index }}"
+                                       id="filter-{{ loop.index }}-all"
+                                       {% if not has_active %}checked{% endif %}
+                                       onchange="window.location='{{ attribute.reset_url }}'">
+                                <label class="form-check-label text-muted" for="filter-{{ loop.index }}-all">
+                                    {{ fn('__', 'All', 'woocommerce') }}
+                                </label>
+                            </div>
                             {% for term in attribute.terms %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
+                                    <input class="form-check-input" type="radio"
+                                           name="attr-{{ loop.index }}"
                                            id="filter-{{ term.slug }}"
                                            {% if term.is_active %}checked{% endif %}
                                            onchange="window.location='{{ term.filter_url }}'">

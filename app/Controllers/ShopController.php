@@ -72,8 +72,9 @@ class ShopController extends Controller
             );
 
             $attributes[] = [
-                'label' => $taxonomy->attribute_label,
-                'terms' => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter) {
+                'label'     => $taxonomy->attribute_label,
+                'reset_url' => add_query_arg($queryArgs, $this->getCurrentArchiveUrl()),
+                'terms'     => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter) {
                     $isActive = $currentFilter !== '' && $currentFilter === $term->slug;
 
                     $term->is_active  = $isActive;
