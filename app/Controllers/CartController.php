@@ -23,17 +23,17 @@ class CartController
         return number_format($amount, 2, '.', '');
     }
 
-    public function addToCart(int $product_id, int $variation_id = 0): void
+    public function addToCart(int $product_id, int $variation_id = 0, int $quantity = 1): void
     {
-        $quantity = isset($_POST['quantity']) ? max(1, absint(wp_unslash($_POST['quantity']))) : 1;
-
         try {
             $result = WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
             if (!$result) {
                 wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not add product to cart.', 'woocommerce'))]);
+                return;
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
+            return;
         }
 
         wp_send_json([
@@ -44,6 +44,7 @@ class CartController
             'subTotal' => $this->subtotal(),
             'count'    => WC()->cart->get_cart_contents_count(),
         ]);
+        return;
     }
 
     public function removeFromCart(string $key): void
@@ -57,11 +58,14 @@ class CartController
                     'subTotal' => $this->subtotal(),
                     'count'    => WC()->cart->get_cart_contents_count(),
                 ]);
+                return;
             } else {
                 wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not remove product from cart.', 'woocommerce'))]);
+                return;
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
+            return;
         }
     }
 
@@ -69,15 +73,15 @@ class CartController
     {
         try {
             $cart = WC()->cart;
-            $cart_item_key = $cart->find_product_in_cart($key);
 
-            if (!$cart_item_key) {
+            if (!array_key_exists($key, $cart->get_cart())) {
                 wp_send_json(['type' => 'error', 'message' => __('Cart item not found.', 'woocommerce')]);
+                return;
             }
 
             $newQuantity = $type === 'decrement' ? max(1, $oldQuantity - 1) : $oldQuantity + 1;
 
-            if ($cart->set_quantity($cart_item_key, $newQuantity)) {
+            if ($cart->set_quantity($key, $newQuantity)) {
                 wp_send_json([
                     'type'        => 'success',
                     'newQuantity' => $newQuantity,
@@ -87,11 +91,14 @@ class CartController
                     'count'       => WC()->cart->get_cart_contents_count(),
                     'message'     => __('Quantity updated.', 'woocommerce'),
                 ]);
+                return;
             } else {
                 wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not update quantity.', 'woocommerce'))]);
+                return;
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
+            return;
         }
     }
 
@@ -99,13 +106,13 @@ class CartController
     {
         if (WC()->cart->has_discount($couponCode)) {
             wp_send_json(['response' => false, 'message' => __('Coupon is already applied.', 'woocommerce')]);
+            return;
         }
 
         if (!WC()->cart->apply_coupon($couponCode)) {
             wp_send_json(['response' => false, 'message' => $this->getNotice('error', __('Invalid coupon.', 'woocommerce'))]);
+            return;
         }
-
-        WC()->cart->calculate_totals();
 
         wp_send_json([
             'response' => true,
@@ -113,16 +120,17 @@ class CartController
             'total'    => $this->total(),
             'subTotal' => $this->subtotal(),
         ]);
+        return;
     }
 
     public function removeCoupon(string $couponCode): void
     {
         if (!WC()->cart->has_discount($couponCode)) {
             wp_send_json(['response' => false, 'message' => __('Coupon not applied.', 'woocommerce')]);
+            return;
         }
 
         $response = WC()->cart->remove_coupon($couponCode);
-        WC()->cart->calculate_totals();
 
         wp_send_json([
             'response' => $response,
@@ -130,5 +138,6 @@ class CartController
             'total'    => $this->total(),
             'subTotal' => $this->subtotal(),
         ]);
+        return;
     }
 }

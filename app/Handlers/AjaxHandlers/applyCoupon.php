@@ -8,4 +8,8 @@ if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($
 
 $couponCode = isset($_POST['couponCode']) ? sanitize_text_field(wp_unslash($_POST['couponCode'])) : '';
 
+if ($couponCode === '') {
+    wp_send_json(['type' => 'error', 'message' => __('Please enter a coupon code.', 'woocommerce')]);
+}
+
 (new CartController())->applyCoupon($couponCode);
