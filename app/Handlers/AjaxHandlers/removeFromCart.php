@@ -12,4 +12,4 @@ if ($key === '') {
     wp_send_json(['type' => 'error', 'message' => __('Cart item not found.', 'woocommerce')]);
 }
 
-CartController::removeFromCart($key);
+(new CartController())->removeFromCart($key);

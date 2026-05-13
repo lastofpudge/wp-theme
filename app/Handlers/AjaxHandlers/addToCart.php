@@ -13,4 +13,4 @@ if ($product_id <= 0) {
     wp_send_json(['type' => 'error', 'message' => __('Invalid product.', 'woocommerce')]);
 }
 
-CartController::addToCart($product_id, $variation_id);
+(new CartController())->addToCart($product_id, $variation_id);

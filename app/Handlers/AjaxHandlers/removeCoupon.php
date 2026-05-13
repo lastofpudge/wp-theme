@@ -8,4 +8,4 @@ if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($
 
 $couponCode = isset($_POST['couponCode']) ? sanitize_text_field(wp_unslash($_POST['couponCode'])) : '';
 
-CartController::removeCoupon($couponCode);
+(new CartController())->removeCoupon($couponCode);

@@ -14,4 +14,4 @@ if (empty($key) || $oldQuantity <= 0) {
     wp_send_json(['type' => 'error', 'message' => 'invalid_data']);
 }
 
-CartController::updateCartQuantity($key, $oldQuantity, $type);
+(new CartController())->updateCartQuantity($key, $oldQuantity, $type);

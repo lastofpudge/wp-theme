@@ -2,26 +2,19 @@
 
 namespace App\Controllers;
 
+use App\Traits\HandlesWcNotices;
 use Exception;
 
-class CartController extends Controller
+class CartController
 {
-    private static function notice(string $type, string $fallback): string
-    {
-        $notices = wc_get_notices($type);
-        $message = !empty($notices)
-            ? wp_strip_all_tags(implode(' ', array_column($notices, 'notice')))
-            : $fallback;
-        wc_clear_notices();
-        return $message;
-    }
+    use HandlesWcNotices;
 
-    private static function total(): string
+    private function total(): string
     {
         return number_format(WC()->cart->get_cart_contents_total(), 2, '.', '');
     }
 
-    private static function subtotal(): string
+    private function subtotal(): string
     {
         $cart = WC()->cart;
         $amount = method_exists($cart, 'get_subtotal')
@@ -30,14 +23,14 @@ class CartController extends Controller
         return number_format($amount, 2, '.', '');
     }
 
-    public static function addToCart($product_id, $variation_id = 0): void
+    public function addToCart(int $product_id, int $variation_id = 0): void
     {
         $quantity = isset($_POST['quantity']) ? max(1, absint(wp_unslash($_POST['quantity']))) : 1;
 
         try {
             $result = WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
             if (!$result) {
-                wp_send_json(['type' => 'error', 'message' => self::notice('error', __('Could not add product to cart.', 'woocommerce'))]);
+                wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not add product to cart.', 'woocommerce'))]);
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
@@ -47,32 +40,32 @@ class CartController extends Controller
             'type'     => 'success',
             'message'  => wp_strip_all_tags(wc_add_to_cart_message([$product_id => $quantity], false, true)),
             'cart'     => get_cart_data(),
-            'total'    => self::total(),
-            'subTotal' => self::subtotal(),
+            'total'    => $this->total(),
+            'subTotal' => $this->subtotal(),
             'count'    => WC()->cart->get_cart_contents_count(),
         ]);
     }
 
-    public static function removeFromCart($key): void
+    public function removeFromCart(string $key): void
     {
         try {
             if (WC()->cart->remove_cart_item($key)) {
                 wp_send_json([
                     'type'     => 'success',
-                    'message'  => self::notice('success', __('Product removed from the cart.', 'woocommerce')),
-                    'total'    => self::total(),
-                    'subTotal' => self::subtotal(),
+                    'message'  => $this->getNotice('success', __('Product removed from the cart.', 'woocommerce')),
+                    'total'    => $this->total(),
+                    'subTotal' => $this->subtotal(),
                     'count'    => WC()->cart->get_cart_contents_count(),
                 ]);
             } else {
-                wp_send_json(['type' => 'error', 'message' => self::notice('error', __('Could not remove product from cart.', 'woocommerce'))]);
+                wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not remove product from cart.', 'woocommerce'))]);
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
-    public static function updateCartQuantity($key, $oldQuantity, string $type = 'increment'): void
+    public function updateCartQuantity(string $key, int $oldQuantity, string $type = 'increment'): void
     {
         try {
             $cart = WC()->cart;
@@ -89,40 +82,40 @@ class CartController extends Controller
                     'type'        => 'success',
                     'newQuantity' => $newQuantity,
                     'cart'        => get_cart_data(),
-                    'total'       => self::total(),
-                    'subTotal'    => self::subtotal(),
+                    'total'       => $this->total(),
+                    'subTotal'    => $this->subtotal(),
                     'count'       => WC()->cart->get_cart_contents_count(),
                     'message'     => __('Quantity updated.', 'woocommerce'),
                 ]);
             } else {
-                wp_send_json(['type' => 'error', 'message' => self::notice('error', __('Could not update quantity.', 'woocommerce'))]);
+                wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not update quantity.', 'woocommerce'))]);
             }
         } catch (Exception $e) {
             wp_send_json(['type' => 'error', 'message' => $e->getMessage()]);
         }
     }
 
-    public static function applyCoupon($couponCode): void
+    public function applyCoupon(string $couponCode): void
     {
         if (WC()->cart->has_discount($couponCode)) {
             wp_send_json(['response' => false, 'message' => __('Coupon is already applied.', 'woocommerce')]);
         }
 
         if (!WC()->cart->apply_coupon($couponCode)) {
-            wp_send_json(['response' => false, 'message' => self::notice('error', __('Invalid coupon.', 'woocommerce'))]);
+            wp_send_json(['response' => false, 'message' => $this->getNotice('error', __('Invalid coupon.', 'woocommerce'))]);
         }
 
         WC()->cart->calculate_totals();
 
         wp_send_json([
             'response' => true,
-            'message'  => self::notice('success', __('Coupon applied successfully.', 'woocommerce')),
-            'total'    => self::total(),
-            'subTotal' => self::subtotal(),
+            'message'  => $this->getNotice('success', __('Coupon applied successfully.', 'woocommerce')),
+            'total'    => $this->total(),
+            'subTotal' => $this->subtotal(),
         ]);
     }
 
-    public static function removeCoupon($couponCode): void
+    public function removeCoupon(string $couponCode): void
     {
         if (!WC()->cart->has_discount($couponCode)) {
             wp_send_json(['response' => false, 'message' => __('Coupon not applied.', 'woocommerce')]);
@@ -134,8 +127,8 @@ class CartController extends Controller
         wp_send_json([
             'response' => $response,
             'message'  => $response ? __('Coupon removed.', 'woocommerce') : __('Could not remove coupon.', 'woocommerce'),
-            'total'    => self::total(),
-            'subTotal' => self::subtotal(),
+            'total'    => $this->total(),
+            'subTotal' => $this->subtotal(),
         ]);
     }
 }
