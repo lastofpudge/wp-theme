@@ -29,18 +29,19 @@
 
                 {% if attributes %}
                     {% for attribute in attributes %}
-                        <div class="attribute-filter">
-                            <h3>{{ attribute.label }}</h3>
-                            <ul>
-                                {% for term in attribute.terms %}
-                                    <li>
-                                        <a href="{{ term.filter_url }}" class="filter-term{% if term.is_active %} filter-term--active{% endif %}">
-                                            <span class="filter-term__checkbox"></span>
-                                            {{ term.name }}&nbsp;({{ term.count }})
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                        <div class="attribute-filter mb-3">
+                            <h6 class="fw-semibold mb-2">{{ attribute.label }}</h6>
+                            {% for term in attribute.terms %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="filter-{{ term.slug }}"
+                                           {% if term.is_active %}checked{% endif %}
+                                           onchange="window.location='{{ term.filter_url }}'">
+                                    <label class="form-check-label" for="filter-{{ term.slug }}">
+                                        {{ term.name }}&nbsp;<span class="text-muted">({{ term.count }})</span>
+                                    </label>
+                                </div>
+                            {% endfor %}
                         </div>
                     {% endfor %}
                 {% endif %}
