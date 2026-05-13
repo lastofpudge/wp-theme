@@ -32,6 +32,13 @@ class ShopController extends Controller
         $this->data['price_min'] = max($priceAbsMin, min($priceMin, $priceAbsMax));
         $this->data['price_max'] = max($this->data['price_min'], min($priceMax, $priceAbsMax));
 
+        $activeFilterKeys                 = array_filter(
+            array_keys($_GET),
+            fn ($k) => str_starts_with($k, 'filter_') || str_starts_with($k, 'query_type_')
+        );
+        $this->data['has_active_filters'] = !empty($activeFilterKeys) || $requestedMin !== null || $requestedMax !== null;
+        $this->data['reset_url']          = $this->getCurrentArchiveUrl();
+
         return $this->data;
     }
 
@@ -54,6 +61,8 @@ class ShopController extends Controller
                 $_GET
             );
 
+            $currentFilter = $queryArgs['filter_' . $attributeName] ?? '';
+
             unset(
                 $queryArgs['paged'],
                 $queryArgs['page'],
@@ -64,11 +73,16 @@ class ShopController extends Controller
 
             $attributes[] = [
                 'label' => $taxonomy->attribute_label,
-                'terms' => array_map(function ($term) use ($attributeName, $queryArgs) {
-                    $term->filter_url = add_query_arg(
-                        array_merge($queryArgs, ['filter_' . $attributeName => $term->slug]),
-                        $this->getCurrentArchiveUrl()
-                    );
+                'terms' => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter) {
+                    $isActive = $currentFilter !== '' && $currentFilter === $term->slug;
+
+                    $term->is_active  = $isActive;
+                    $term->filter_url = $isActive
+                        ? add_query_arg($queryArgs, $this->getCurrentArchiveUrl())
+                        : add_query_arg(
+                            array_merge($queryArgs, ['filter_' . $attributeName => $term->slug]),
+                            $this->getCurrentArchiveUrl()
+                        );
 
                     return $term;
                 }, $terms),

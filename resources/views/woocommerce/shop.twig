@@ -21,13 +21,23 @@
 
         <div class="row">
             <div class="col-2">
+                {% if has_active_filters %}
+                    <a href="{{ reset_url }}" class="filter-reset">
+                        &times; {{ fn('__', 'Reset filters', 'woocommerce') }}
+                    </a>
+                {% endif %}
+
                 {% if attributes %}
                     {% for attribute in attributes %}
                         <div class="attribute-filter">
                             <h3>{{ attribute.label }}</h3>
                             <ul>
                                 {% for term in attribute.terms %}
-                                    <li><a href="{{ term.filter_url }}">{{ term.name }}&nbsp;({{ term.count }})</a>
+                                    <li>
+                                        <a href="{{ term.filter_url }}" class="filter-term{% if term.is_active %} filter-term--active{% endif %}">
+                                            <span class="filter-term__checkbox"></span>
+                                            {{ term.name }}&nbsp;({{ term.count }})
+                                        </a>
                                     </li>
                                 {% endfor %}
                             </ul>
