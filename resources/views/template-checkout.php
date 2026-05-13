@@ -4,7 +4,7 @@
  * Template Name: Checkout page
  */
 
-use App\Controllers\ProductController;
+use App\Controllers\CheckoutController;
 use Core\Route;
 
-Route::load(ProductController::class, 'checkout', 'woocommerce/checkout');
+Route::load(CheckoutController::class, 'checkout', 'woocommerce/checkout');

@@ -4,7 +4,7 @@ use App\Controllers\AccountController;
 use App\Controllers\CategoryController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
-use App\Controllers\ProductController;
+use App\Controllers\CheckoutController;
 use App\Controllers\ShopController;
 use Core\Route;
 
@@ -17,11 +17,11 @@ if (function_exists('is_product_tag') && is_product_tag()) {
 }
 
 if (function_exists('is_cart') && is_cart()) {
-    Route::load(ProductController::class, 'cart', 'woocommerce/cart');
+    Route::load(CheckoutController::class, 'cart', 'woocommerce/cart');
 }
 
 if (function_exists('is_checkout') && is_checkout()) {
-    Route::load(ProductController::class, 'checkout', 'woocommerce/checkout');
+    Route::load(CheckoutController::class, 'checkout', 'woocommerce/checkout');
 }
 
 if (function_exists('is_account_page') && is_account_page()) {

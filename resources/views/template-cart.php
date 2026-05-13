@@ -4,7 +4,7 @@
  * Template Name: Cart page
  */
 
-use App\Controllers\ProductController;
+use App\Controllers\CheckoutController;
 use Core\Route;
 
-Route::load(ProductController::class, 'checkout', 'woocommerce/cart');
+Route::load(CheckoutController::class, 'cart', 'woocommerce/cart');
