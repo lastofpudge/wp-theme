@@ -186,51 +186,11 @@ if (!function_exists('get_requested_price')) {
     }
 }
 
-if (!function_exists('pll_translate_post_id')) {
-    function pll_translate_post_id(int $id): int
-    {
-        if (function_exists('pll_get_post') && $id > 0) {
-            $translated = (int) pll_get_post($id);
-            return $translated > 0 ? $translated : $id;
-        }
-        return $id;
-    }
-}
-
 if (!function_exists('capture_action')) {
     function capture_action(string $hook, mixed ...$args): string
     {
         ob_start();
         do_action($hook, ...$args);
         return (string) ob_get_clean();
-    }
-}
-
-if (!function_exists('get_localized_wc_page_id')) {
-    function get_localized_wc_page_id(string $page): int
-    {
-        if (!function_exists('wc_get_page_id')) {
-            return 0;
-        }
-        $pageId = (int) wc_get_page_id($page);
-        return $pageId > 0 ? pll_translate_post_id($pageId) : 0;
-    }
-}
-
-if (!function_exists('get_localized_wc_page_url')) {
-    function get_localized_wc_page_url(string $page): string
-    {
-        $pageId = get_localized_wc_page_id($page);
-        if ($pageId > 0) {
-            $permalink = get_permalink($pageId);
-            if ($permalink) {
-                return $permalink;
-            }
-        }
-        return match ($page) {
-            'cart'     => function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/'),
-            'checkout' => function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/'),
-            default    => home_url('/'),
-        };
     }
 }

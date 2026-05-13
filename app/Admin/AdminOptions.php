@@ -16,9 +16,6 @@ class AdminOptions
         $this->manageAdminAccess();
         add_action('init', [$this, 'registerMenus']);
         add_action('pre_get_posts', [$this, 'filterByPrice']);
-        add_filter('woocommerce_get_myaccount_page_id', 'pll_translate_post_id');
-        add_filter('woocommerce_get_cart_page_id', 'pll_translate_post_id');
-        add_filter('woocommerce_get_checkout_page_id', 'pll_translate_post_id');
     }
 
     public function index(): void

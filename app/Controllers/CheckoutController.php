@@ -44,7 +44,7 @@ class CheckoutController extends Controller
 
         $this->data['checkout']       = $checkout;
         $this->data['fields']         = $checkout->get_checkout_fields();
-        $this->data['checkout_url']   = get_localized_wc_page_url('checkout');
+        $this->data['checkout_url']   = wc_get_checkout_url();
         $this->data['checkout_nonce'] = wp_create_nonce('woocommerce-process_checkout');
         $this->data['http_referer']   = esc_attr(wp_unslash($_SERVER['REQUEST_URI'] ?? '/'));
 

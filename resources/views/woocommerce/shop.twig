@@ -8,7 +8,7 @@
                     {% if fn('is_tax', ['product_cat', 'product_tag']) %}
                         {{ fn('single_term_title', '', false) }}
                     {% else %}
-                        {{ fn('get_the_title', fn('get_localized_wc_page_id', 'shop')) }}
+                        {{ fn('get_the_title', fn('wc_get_page_id', 'shop')) }}
                     {% endif %}
                 </h1>
                 <p>
