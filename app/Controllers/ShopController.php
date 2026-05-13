@@ -71,21 +71,27 @@ class ShopController extends Controller
                 $queryArgs['query_type_' . $attributeName]
             );
 
+            $resetUrl = add_query_arg($queryArgs, $this->getCurrentArchiveUrl());
+
             $attributes[] = [
                 'label'     => $taxonomy->attribute_label,
-                'reset_url' => add_query_arg($queryArgs, $this->getCurrentArchiveUrl()),
-                'terms'     => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter) {
-                    $isActive = $currentFilter !== '' && $currentFilter === $term->slug;
-
-                    $term->is_active  = $isActive;
-                    $term->filter_url = $isActive
-                        ? add_query_arg($queryArgs, $this->getCurrentArchiveUrl())
+                'reset_url' => $resetUrl,
+                'terms'     => array_map(function ($term) use ($attributeName, $queryArgs, $currentFilter, $resetUrl) {
+                    $isActive   = $currentFilter !== '' && $currentFilter === $term->slug;
+                    $filterUrl  = $isActive
+                        ? $resetUrl
                         : add_query_arg(
                             array_merge($queryArgs, ['filter_' . $attributeName => $term->slug]),
                             $this->getCurrentArchiveUrl()
                         );
 
-                    return $term;
+                    return [
+                        'name'       => $term->name,
+                        'slug'       => $term->slug,
+                        'count'      => $term->count,
+                        'is_active'  => $isActive,
+                        'filter_url' => $filterUrl,
+                    ];
                 }, $terms),
             ];
         }
