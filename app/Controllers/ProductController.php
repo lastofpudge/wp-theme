@@ -53,9 +53,7 @@ class ProductController extends Controller
 
         $this->data['reviews_open']  = comments_open($id);
         $this->data['reviews_count'] = (int) $product->get_review_count();
-        ob_start();
-        comments_template();
-        $this->data['reviews_html'] = ob_get_clean();
+        $this->data['reviews_html'] = capture_output('comments_template');
 
         $upsell_ids            = $product->get_upsell_ids();
         $this->data['upsells'] = !empty($upsell_ids)

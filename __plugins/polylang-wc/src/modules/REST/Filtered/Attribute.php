@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Polylang-WC
  */
@@ -13,15 +14,17 @@ use WP_Syntex\Polylang_Pro\REST\Filtered\Term;
  *
  * @since 2.2
  */
-class Attribute extends Term {
-	/**
-	 * Constructor.
-	 *
-	 * @since 2.2
-	 *
-	 * @param PLL_REST_API $rest_api  Instance of `PLL_REST_API`.
-	 */
-	public function __construct( PLL_REST_API $rest_api ) {
-		parent::__construct( $rest_api, array( 'product_attribute_term' ) );
-	}
+class Attribute extends Term
+{
+    /**
+     * Constructor.
+     *
+     * @since 2.2
+     *
+     * @param PLL_REST_API $rest_api  Instance of `PLL_REST_API`.
+     */
+    public function __construct(PLL_REST_API $rest_api)
+    {
+        parent::__construct($rest_api, array( 'product_attribute_term' ));
+    }
 }

@@ -186,11 +186,18 @@ if (!function_exists('get_requested_price')) {
     }
 }
 
+if (!function_exists('capture_output')) {
+    function capture_output(callable $fn, mixed ...$args): string
+    {
+        ob_start();
+        $fn(...$args);
+        return (string) ob_get_clean();
+    }
+}
+
 if (!function_exists('capture_action')) {
     function capture_action(string $hook, mixed ...$args): string
     {
-        ob_start();
-        do_action($hook, ...$args);
-        return (string) ob_get_clean();
+        return capture_output(fn () => do_action($hook, ...$args));
     }
 }

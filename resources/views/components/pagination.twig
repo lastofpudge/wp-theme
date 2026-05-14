@@ -1,38 +1,45 @@
-{% if posts.pagination.pages %}
-    <div class="pagination">
-        <div class="pagination-cover">
-            <ul>
-                {% if posts.pagination.prev.link %}
-                    <li>
-                        <a
-                                rel="prev"
-                                href="{{ posts.pagination.prev.link }}"
-                                class="prev {{ posts.pagination.prev.link|length ? '' : 'invisible' }}"
-                        >Previous</a>
+{% set pg = pagination is defined ? pagination : posts.pagination %}
+
+{% if pg.pages %}
+    <nav aria-label="Page navigation" class="my-4">
+        <ul class="pagination justify-content-center">
+
+            {% if pg.prev.link %}
+                <li class="page-item">
+                    <a class="page-link" rel="prev" href="{{ pg.prev.link }}">&laquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+
+            {% for page in pg.pages %}
+                {% if page.current %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page.title }}</span>
+                    </li>
+                {% elseif page.link %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ page.link }}">{{ page.title }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&hellip;</span>
                     </li>
                 {% endif %}
+            {% endfor %}
 
-                {% for page in posts.pagination.pages %}
-                    <li class="{{ page.class }}">
-                        {% if page.link %}
-                            <a href="{{ page.link }}" class="{{ page.class }}">
-                                <span>{{ page.title }}</span>
-                            </a>
-                        {% else %}
-                            <span class="{{ page.class }}">{{ page.title }}</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
+            {% if pg.next.link %}
+                <li class="page-item">
+                    <a class="page-link" rel="next" href="{{ pg.next.link }}">&raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            {% endif %}
 
-                {% if posts.pagination.next.link %}
-                    <li class="next-link">
-                        <a rel="next" href="{{ posts.pagination.next.link }}">
-                            <span>Next</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+        </ul>
+    </nav>
 {% endif %}
-

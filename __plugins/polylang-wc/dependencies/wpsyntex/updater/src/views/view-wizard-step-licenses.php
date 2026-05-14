@@ -12,26 +12,26 @@
  * }
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 ?>
 <p>
-	<?php esc_html_e( 'You are using plugins which require a license key.', 'polylang-wc' ); ?>
-	<?php echo esc_html( _n( 'Please enter your license key:', 'Please enter your license keys:', count( $atts['license_rows'] ), 'polylang-wc' ) ); ?>
+	<?php esc_html_e('You are using plugins which require a license key.', 'polylang-wc'); ?>
+	<?php echo esc_html(_n('Please enter your license key:', 'Please enter your license keys:', count($atts['license_rows']), 'polylang-wc')); ?>
 </p>
-<h2><?php esc_html_e( 'Licenses', 'polylang-wc' ); ?></h2>
+<h2><?php esc_html_e('Licenses', 'polylang-wc'); ?></h2>
 <div id="messages">
-	<?php if ( $atts['is_error'] ) : ?>
-		<p class="error"><?php esc_html_e( 'There is an error with a license key.', 'polylang-wc' ); ?></p>
+	<?php if ($atts['is_error']) : ?>
+		<p class="error"><?php esc_html_e('There is an error with a license key.', 'polylang-wc'); ?></p>
 	<?php endif; ?>
 </div>
 <div class="form-field">
 	<table id="pllu-licenses-table" class="form-table pll-table-top">
 		<tbody>
 		<?php
-		// Escaping is already done in get_form_field method.
-		echo implode( "\n", $atts['license_rows'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		?>
+        // Escaping is already done in get_form_field method.
+        echo implode("\n", $atts['license_rows']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+?>
 		</tbody>
 	</table>
 </div>

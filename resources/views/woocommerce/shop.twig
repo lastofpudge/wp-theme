@@ -27,6 +27,36 @@
                     </a>
                 {% endif %}
 
+                {% if categories %}
+                    <div class="attribute-filter mb-3">
+                        <h6 class="fw-semibold mb-2">{{ fn('__', 'Categories', 'woocommerce') }}</h6>
+                        <div class="form-check">
+                            <input class="form-check-input filter-radio" type="radio"
+                                   autocomplete="off"
+                                   name="product-cat"
+                                   id="filter-cat-all"
+                                   {% if not active_category %}checked{% endif %}
+                                   onchange="window.location='{{ categories_reset_url }}'">
+                            <label class="form-check-label text-muted" for="filter-cat-all">
+                                {{ fn('__', 'All', 'woocommerce') }}
+                            </label>
+                        </div>
+                        {% for cat in categories %}
+                            <div class="form-check">
+                                <input class="form-check-input filter-radio" type="radio"
+                                       autocomplete="off"
+                                       name="product-cat"
+                                       id="filter-cat-{{ cat.slug }}"
+                                       {% if cat.is_active %}checked{% endif %}
+                                       onchange="window.location='{{ cat.filter_url }}'">
+                                <label class="form-check-label" for="filter-cat-{{ cat.slug }}">
+                                    {{ cat.name }}&nbsp;<span class="text-muted">({{ cat.count }})</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 {% if attributes %}
                     {% for attribute in attributes %}
                         <div class="attribute-filter mb-3">
@@ -34,7 +64,7 @@
                             <div class="form-check">
                                 <input class="form-check-input filter-radio" type="radio"
                                        autocomplete="off"
-                                       name="attr-{{ loop.index }}"
+                                       name="{{ attribute.param }}"
                                        id="filter-{{ loop.index }}-all"
                                        data-param="{{ attribute.param }}"
                                        data-value=""
@@ -47,7 +77,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input filter-radio" type="radio"
                                            autocomplete="off"
-                                           name="attr-{{ loop.index }}"
+                                           name="{{ attribute.param }}"
                                            id="filter-{{ term.slug }}"
                                            data-param="{{ attribute.param }}"
                                            data-value="{{ term.slug }}"
@@ -63,6 +93,7 @@
                         (function () {
                             var params = new URLSearchParams(window.location.search);
                             document.querySelectorAll('.filter-radio').forEach(function (input) {
+                                if (!input.dataset.param) return;
                                 var val = params.get(input.dataset.param) || '';
                                 input.checked = val === input.dataset.value;
                             });

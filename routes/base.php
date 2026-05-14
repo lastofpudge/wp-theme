@@ -8,6 +8,10 @@ use App\Controllers\CheckoutController;
 use App\Controllers\ShopController;
 use Core\Route;
 
+if (function_exists('is_shop') && is_shop()) {
+    Route::load(ShopController::class, 'archive', 'woocommerce/shop');
+}
+
 if (function_exists('is_product_category') && is_product_category()) {
     Route::load(ShopController::class, 'archive', 'woocommerce/shop');
 }
