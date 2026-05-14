@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages WooCommerce specific translations on the frontend.
  *
  * @since 0.1
@@ -21,11 +17,11 @@ class PLLWC_Frontend
         if (did_action('pll_language_defined')) {
             $this->init();
         } else {
-            add_action('pll_language_defined', array( $this, 'init' ), 1);
-            add_action('woocommerce_init', array( $this, 'override_countries' ), 1);
+            add_action('pll_language_defined', [$this, 'init'], 1);
+            add_action('woocommerce_init', [$this, 'override_countries'], 1);
 
             // Set the language early if a form has been posted with a language value.
-            if (! empty($_REQUEST['lang']) && $lang = PLL()->model->get_language(sanitize_key($_REQUEST['lang']))) {  // phpcs:ignore WordPress.Security.NonceVerification
+            if (!empty($_REQUEST['lang']) && $lang = PLL()->model->get_language(sanitize_key($_REQUEST['lang']))) {  // phpcs:ignore WordPress.Security.NonceVerification
                 PLL()->curlang = $lang;
                 $GLOBALS['text_direction'] = $lang->is_rtl ? 'rtl' : 'ltr'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
                 do_action('pll_language_defined', $lang->slug, $lang);
@@ -45,56 +41,56 @@ class PLLWC_Frontend
         PLLWC_Filter_WC_Pages::init();
 
         // Filters the product search form.
-        if (is_callable(array( PLL()->filters_search, 'get_search_form' ))) {
-            add_filter('get_product_search_form', array( PLL()->filters_search, 'get_search_form' ), 99);
-            add_filter('render_block_woocommerce/product-search', array( PLL()->filters_search, 'get_search_form' ));
+        if (is_callable([PLL()->filters_search, 'get_search_form'])) {
+            add_filter('get_product_search_form', [PLL()->filters_search, 'get_search_form'], 99);
+            add_filter('render_block_woocommerce/product-search', [PLL()->filters_search, 'get_search_form']);
         }
 
-        if (! PLL()->options['force_lang']) {
-            if (! get_option('permalink_structure')) {
+        if (!PLL()->options['force_lang']) {
+            if (!get_option('permalink_structure')) {
                 // Fix product page when using plain permalinks and the language is set from the content.
-                add_filter('pll_check_canonical_url', array( $this, 'pll_check_canonical_url' ));
-                add_filter('pll_translation_url', array( $this, 'pll_translation_url' ), 10, 2);
+                add_filter('pll_check_canonical_url', [$this, 'pll_check_canonical_url']);
+                add_filter('pll_translation_url', [$this, 'pll_translation_url'], 10, 2);
             } else {
                 // Fix shop link when using pretty permalinks and the language is set from the content.
-                add_filter('post_type_archive_link', array( $this, 'post_type_archive_link' ), 99, 2); // After Polylang.
+                add_filter('post_type_archive_link', [$this, 'post_type_archive_link'], 99, 2); // After Polylang.
             }
 
             // Add the language input field to forms to detect the language before wp_loaded is fired.
-            $actions = array(
+            $actions = [
                 'woocommerce_login_form_start', // Login.
                 'woocommerce_register_form_start', // Register.
                 'woocommerce_before_cart_table', // Cart.
                 'woocommerce_before_add_to_cart_button', // Product.
                 'woocommerce_lostpassword_form', // Lost password.
-            );
+            ];
 
             foreach ($actions as $action) {
-                add_action($action, array( $this, 'language_form_field' ));
+                add_action($action, [$this, 'language_form_field']);
             }
 
-            add_filter('woocommerce_get_remove_url', array( $this, 'add_lang_query_arg' ));
+            add_filter('woocommerce_get_remove_url', [$this, 'add_lang_query_arg']);
         }
 
         // Translates home url in widgets.
-        add_filter('pll_home_url_white_list', array( $this, 'home_url_white_list' ));
+        add_filter('pll_home_url_white_list', [$this, 'home_url_white_list']);
 
         // Layered nav chosen attributes.
-        add_filter('woocommerce_product_query_tax_query', array( $this, 'product_tax_query' ));
+        add_filter('woocommerce_product_query_tax_query', [$this, 'product_tax_query']);
 
         if (PLL()->options['force_lang'] > 1) {
-            add_filter('home_url', array( $this, 'fix_widget_price_filter' ), 10, 2);
+            add_filter('home_url', [$this, 'fix_widget_price_filter'], 10, 2);
         }
 
         // Object cache compatibility.
-        add_filter('woocommerce_shortcode_products_query', array( $this, 'shortcode_products_query' )); // Since WC 3.0.2.
-        add_filter('woocommerce_get_product_subcategories_cache_key', array( $this, 'get_product_subcategories_cache_key' ));
+        add_filter('woocommerce_shortcode_products_query', [$this, 'shortcode_products_query']); // Since WC 3.0.2.
+        add_filter('woocommerce_get_product_subcategories_cache_key', [$this, 'get_product_subcategories_cache_key']);
 
         // Ajax endpoint.
-        add_filter('woocommerce_ajax_get_endpoint', array( $this, 'ajax_get_endpoint' ), 10, 2);
+        add_filter('woocommerce_ajax_get_endpoint', [$this, 'ajax_get_endpoint'], 10, 2);
 
         // Handles Coming Soon for product and taxonomy pages.
-        add_filter('woocommerce_is_extension_store_page', array( $this, 'is_store_page' ));
+        add_filter('woocommerce_is_extension_store_page', [$this, 'is_store_page']);
     }
 
     /**
@@ -110,11 +106,12 @@ class PLLWC_Frontend
     }
 
     /**
-     * Fixes the canonical redirection from the shop page to the product archive when using plain permalinks and the language is set from the content
+     * Fixes the canonical redirection from the shop page to the product archive when using plain permalinks and the language is set from the content.
      *
      * @since 0.3.2
      *
      * @param string $redirect_url Redirect url.
+     *
      * @return string|false
      */
     public function pll_check_canonical_url($redirect_url)
@@ -122,6 +119,7 @@ class PLLWC_Frontend
         if (is_post_type_archive('product')) {
             return false;
         }
+
         return $redirect_url;
     }
 
@@ -132,6 +130,7 @@ class PLLWC_Frontend
      *
      * @param string $url  Translation url.
      * @param string $lang Language code.
+     *
      * @return string
      */
     public function pll_translation_url($url, $lang)
@@ -141,7 +140,7 @@ class PLLWC_Frontend
 
             if ($lang) {
                 if (PLL()->options['hide_default'] && 'page' === get_option('show_on_front') && PLL()->options['default_lang'] === $lang->slug) {
-                    $pages = pll_languages_list(array( 'fields' => 'page_on_front' ));
+                    $pages = pll_languages_list(['fields' => 'page_on_front']);
                     if (in_array(wc_get_page_id('shop'), $pages)) {
                         return $lang->get_home_url();
                     }
@@ -152,6 +151,7 @@ class PLLWC_Frontend
                 $url = PLL()->links_model->remove_paged_from_link($url);
             }
         }
+
         return $url;
     }
 
@@ -164,6 +164,7 @@ class PLLWC_Frontend
      *
      * @param string $link      Post type archive link.
      * @param string $post_type Post type name.
+     *
      * @return string Modified link.
      */
     public function post_type_archive_link($link, $post_type)
@@ -189,6 +190,7 @@ class PLLWC_Frontend
      * @since 0.5
      *
      * @param string $url URL to modify.
+     *
      * @return string
      */
     public function add_lang_query_arg($url)
@@ -197,32 +199,33 @@ class PLLWC_Frontend
     }
 
     /**
-     * Fixes the home url in widgets
+     * Fixes the home url in widgets.
      *
      * @since 0.5
      *
      * @param string[][] $arr List of files and functions to whitelist for the home_url filter.
+     *
      * @return string[][]
      */
     public function home_url_white_list($arr)
     {
         $arr = array_merge(
             $arr,
-            array( array( 'file' => 'abstract-wc-widget.php' ) )
+            [['file' => 'abstract-wc-widget.php']]
         );
 
         // Avoid a redirect when the language is set from the content.
         if (PLL()->options['force_lang'] > 0) {
             $arr = array_merge(
                 $arr,
-                array( array( 'file' => 'class-wc-widget-product-categories.php' ) )
+                [['file' => 'class-wc-widget-product-categories.php']]
             );
         }
 
         if (PLL()->options['force_lang'] > 1) {
             $arr = array_merge(
                 $arr,
-                array( array( 'file' => 'class-wc-widget-price-filter.php' ) )
+                [['file' => 'class-wc-widget-price-filter.php']]
             );
         }
 
@@ -236,19 +239,21 @@ class PLLWC_Frontend
      * @since 0.5
      *
      * @param array $tax_query Tax query parameter in WP_Query.
+     *
      * @return array
      */
     public function product_tax_query($tax_query)
     {
         foreach ($tax_query as $k => $q) {
-            if (is_array($q) && ! empty($q['field']) && 'slug' === $q['field']) {
-                $terms = get_terms(array( 'taxonomy' => $q['taxonomy'], 'slug' => $q['terms'] ));
+            if (is_array($q) && !empty($q['field']) && 'slug' === $q['field']) {
+                $terms = get_terms(['taxonomy' => $q['taxonomy'], 'slug' => $q['terms']]);
                 if (is_array($terms)) {
-                    $tax_query[ $k ]['terms'] = wp_list_pluck($terms, 'term_taxonomy_id');
-                    $tax_query[ $k ]['field'] = 'term_taxonomy_id';
+                    $tax_query[$k]['terms'] = wp_list_pluck($terms, 'term_taxonomy_id');
+                    $tax_query[$k]['field'] = 'term_taxonomy_id';
                 }
             }
         }
+
         return $tax_query;
     }
 
@@ -259,13 +264,14 @@ class PLLWC_Frontend
      *
      * @param string $url  Form action url.
      * @param string $path Path.
+     *
      * @return string
      */
     public function fix_widget_price_filter($url, $path)
     {
         global $wp;
 
-        if (! empty($wp->request) && trailingslashit($wp->request) === $path && ! empty(PLL()->curlang)) {
+        if (!empty($wp->request) && trailingslashit($wp->request) === $path && !empty(PLL()->curlang)) {
             $url = PLL()->links_model->switch_language_in_link($url, PLL()->curlang);
         }
 
@@ -274,11 +280,12 @@ class PLLWC_Frontend
 
     /**
      * Adds the language to the shortcodes query args to get one cache key per language.
-     * Needed for WC 3.0, Requires WC 3.0.2+
+     * Needed for WC 3.0, Requires WC 3.0.2+.
      *
      * @since 0.7.4
      *
      * @param array $args WP_Query arguments.
+     *
      * @return array
      */
     public function shortcode_products_query($args)
@@ -287,12 +294,12 @@ class PLLWC_Frontend
             return $args;
         }
 
-        $args['tax_query'][] = array(
+        $args['tax_query'][] = [
             'taxonomy' => 'language',
             'field'    => 'term_taxonomy_id',
             'terms'    => PLL()->curlang->get_tax_prop('language', 'term_taxonomy_id'),
             'operator' => 'IN',
-        );
+        ];
 
         return $args;
     }
@@ -303,12 +310,14 @@ class PLLWC_Frontend
      * @since 1.2.3
      *
      * @param string $cache_key WooCommerce product subcategories cache key.
+     *
      * @return string
      */
     public function get_product_subcategories_cache_key($cache_key)
     {
         $curlang = pll_current_language();
-        return $cache_key . '-' . $curlang;
+
+        return $cache_key.'-'.$curlang;
     }
 
     /**
@@ -319,15 +328,17 @@ class PLLWC_Frontend
      *
      * @param string $url     Ajax endpoint.
      * @param string $request Ajax endpoint request.
+     *
      * @return string
      */
     public function ajax_get_endpoint($url, $request)
     {
         // Remove wc-ajax to avoid the value %%endpoint%% to be encoded by add_query_arg (used in plain permalinks).
         $url = remove_query_arg('wc-ajax', $url);
-        if (! empty(PLL()->curlang)) {
+        if (!empty(PLL()->curlang)) {
             $url = PLL()->links_model->switch_language_in_link($url, PLL()->curlang);
         }
+
         return add_query_arg('wc-ajax', $request, $url);
     }
 
@@ -337,6 +348,7 @@ class PLLWC_Frontend
      * @since 2.1
      *
      * @param bool $is_store_page Whether or not we're on a store page.
+     *
      * @return bool
      */
     public function is_store_page($is_store_page)

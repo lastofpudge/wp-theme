@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Abstract class representing exported data for a specific source/target language pair.
  *
  * @phpstan-type translationEntryRef array{object_type: non-falsy-string, field_type: non-falsy-string, object_id: int, field_id?: string, field_comment?: string, encoding?: string}
@@ -74,18 +70,20 @@ abstract class PLL_Export_Data
      *
      * @since 3.6
      *
-     * @param array  $ref    {
-     *     Array containing the content type and optionally the corresponding object ID.
+     * @param array $ref {
+     *                   Array containing the content type and optionally the corresponding object ID.
      *
-     *     @type string $object_type   Object type to be exported (e.g. `post` or `term`).
-     *     @type string $field_type    Field type to be exported (e.g. `post_content`, `post_title`...).
-     *     @type int    $object_id     A unique identifier to retrieve the corresponding object from the database.
-     *     @type string $field_id      Optional, a unique identifier to retrieve the corresponding field from the database.
-     *     @type string $field_comment Optional, a comment meant for the translators.
-     *     @type string $encoding      Optional, encoding format for the field group.
-     * }
+     * @var string $object_type   Object type to be exported (e.g. `post` or `term`).
+     * @var string $field_type    Field type to be exported (e.g. `post_content`, `post_title`...).
+     * @var int    $object_id     A unique identifier to retrieve the corresponding object from the database.
+     * @var string $field_id      Optional, a unique identifier to retrieve the corresponding field from the database.
+     * @var string $field_comment Optional, a comment meant for the translators.
+     * @var string $encoding      Optional, encoding format for the field group.
+     *             }
+     *
      * @param string $source The source to be translated.
      * @param string $target Optional, a preexisting translation, if any.
+     *
      * @return void
      *
      * @phpstan-param translationEntryRef $ref
@@ -98,17 +96,19 @@ abstract class PLL_Export_Data
      *
      * @since 3.6
      *
-     * @param array  $ref    {
-     *     Array containing the content type and optionally the corresponding object ID.
+     * @param array $ref {
+     *                   Array containing the content type and optionally the corresponding object ID.
      *
-     *     @type string $object_type   Object type to be exported (e.g. `post` or `term`).
-     *     @type string $field_type    Field type to be exported (e.g. `post_content`, `post_title`...).
-     *     @type int    $object_id     A unique identifier to retrieve the corresponding object from the database.
-     *     @type string $field_id      Optional, a unique identifier to retrieve the corresponding field from the database.
-     *     @type string $field_comment Optional, a comment meant for the translators.
-     *     @type string $encoding      Optional, encoding format for the field group.
-     * }
+     * @var string $object_type   Object type to be exported (e.g. `post` or `term`).
+     * @var string $field_type    Field type to be exported (e.g. `post_content`, `post_title`...).
+     * @var int    $object_id     A unique identifier to retrieve the corresponding object from the database.
+     * @var string $field_id      Optional, a unique identifier to retrieve the corresponding field from the database.
+     * @var string $field_comment Optional, a comment meant for the translators.
+     * @var string $encoding      Optional, encoding format for the field group.
+     *             }
+     *
      * @param string $source The source to be translated.
+     *
      * @return bool True if valid, false otherwise.
      *
      * @phpstan-param translationEntryRef $ref
@@ -118,8 +118,8 @@ abstract class PLL_Export_Data
     {
         return '' !== $source
             && isset($ref['object_id']) && is_numeric($ref['object_id']) && (int) $ref['object_id'] >= 0
-            && ! empty($ref['object_type']) && is_string($ref['object_type'])
-            && ! empty($ref['field_type']) && is_string($ref['field_type']);
+            && !empty($ref['object_type']) && is_string($ref['object_type'])
+            && !empty($ref['field_type']) && is_string($ref['field_type']);
     }
 
     /**

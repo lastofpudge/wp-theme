@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Customer processing order email
+ * Customer processing order email.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-processing-order.php.
  *
@@ -12,7 +12,7 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 9.9.0
  */
 
@@ -27,13 +27,13 @@ echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name())) . "\n\n";
+echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name()))."\n\n";
 if ($email_improvements_enabled) {
-    echo esc_html__('Just to let you know &mdash; we’ve received your order, and it is now being processed.', 'woocommerce') . "\n\n";
-    echo esc_html__('Here’s a reminder of what you’ve ordered:', 'woocommerce') . "\n\n";
+    echo esc_html__('Just to let you know &mdash; we’ve received your order, and it is now being processed.', 'woocommerce')."\n\n";
+    echo esc_html__('Here’s a reminder of what you’ve ordered:', 'woocommerce')."\n\n";
 } else {
     /* translators: %s: Order number */
-    echo sprintf(esc_html__('Just to let you know &mdash; we\'ve received your order #%s, and it is now being processed:', 'woocommerce'), esc_html($order->get_order_number())) . "\n\n";
+    echo sprintf(esc_html__('Just to let you know &mdash; we\'ve received your order #%s, and it is now being processed:', 'woocommerce'), esc_html($order->get_order_number()))."\n\n";
 }
 
 /*

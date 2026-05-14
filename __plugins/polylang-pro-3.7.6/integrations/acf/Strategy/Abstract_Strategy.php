@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Abstract_Object;
@@ -20,7 +16,7 @@ abstract class Abstract_Strategy
     /**
      * @var bool[]
      */
-    private $can_execute = array();
+    private $can_execute = [];
 
     /**
      * Checks if the translation strategy can be applied.
@@ -28,17 +24,18 @@ abstract class Abstract_Strategy
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return bool
      */
     public function can_execute(array $field): bool
     {
         $key = $field['key'];
 
-        if (! isset($this->can_execute[ $key ])) {
-            $this->can_execute[ $key ] = $this->can_execute_recursive($field);
+        if (!isset($this->can_execute[$key])) {
+            $this->can_execute[$key] = $this->can_execute_recursive($field);
         }
 
-        return $this->can_execute[ $key ];
+        return $this->can_execute[$key];
     }
 
     /**
@@ -53,17 +50,18 @@ abstract class Abstract_Strategy
      * @param mixed           $value  Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   {
-     *     Array of arguments.
+     *                                Array of arguments.
      *
-     *     @type mixed $original_value Optional. The translated value of the field, if any.
-     * }
+     * @var mixed $original_value Optional. The translated value of the field, if any.
+     *            }
+     *
      * @return mixed Custom field value of the target object.
      */
-    public function execute(Abstract_Object $object, $value, array $field, array $args = array())
+    public function execute(Abstract_Object $object, $value, array $field, array $args = [])
     {
-        $args = wp_parse_args($args, array( 'original_value' => null ));
+        $args = wp_parse_args($args, ['original_value' => null]);
 
-        if (! $this->can_execute($field)) {
+        if (!$this->can_execute($field)) {
             return $args['original_value'];
         }
 
@@ -79,20 +77,20 @@ abstract class Abstract_Strategy
              */
             case 'flexible_content':
                 if (is_array($value)) {
-                    $args['original_value'] = is_array($args['original_value']) ? $args['original_value'] : array();
+                    $args['original_value'] = is_array($args['original_value']) ? $args['original_value'] : [];
                     $value = $this->apply_on_layouts($object, $value, $field, $args);
                 }
                 break;
             case 'repeater':
                 if (is_array($value)) {
-                    $args['original_value'] = is_array($args['original_value']) ? $args['original_value'] : array();
+                    $args['original_value'] = is_array($args['original_value']) ? $args['original_value'] : [];
                     $value = $this->apply_on_rows($object, $value, $field, $args);
                 }
                 break;
             case 'clone':
             case 'group':
                 if (is_array($value)) {
-                    $args['original_value'] = is_array($args['original_value']) ? $args['original_value'] : array();
+                    $args['original_value'] = is_array($args['original_value']) ? $args['original_value'] : [];
                     $value = $this->apply_on_group($object, $value, $field, $args);
                 }
                 break;
@@ -109,6 +107,7 @@ abstract class Abstract_Strategy
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return bool
      */
     protected function can_execute_recursive(array $field): bool
@@ -147,9 +146,10 @@ abstract class Abstract_Strategy
      * @param mixed           $value  Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   Array of arguments.
+     *
      * @return mixed Custom field value of the target object.
      */
-    abstract protected function apply(Abstract_Object $object, $value, array $field, array $args = array());
+    abstract protected function apply(Abstract_Object $object, $value, array $field, array $args = []);
 
     /**
      * Copies or synchronizes subfields in a repeater or flexible content field.
@@ -160,13 +160,14 @@ abstract class Abstract_Strategy
      * @param array           $values Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   {
-     *     Array of arguments.
+     *                                Array of arguments.
      *
-     *     @type mixed $original_value The translated value of the field, if any.
-     * }
+     * @var mixed $original_value The translated value of the field, if any.
+     *            }
+     *
      * @return array Custom field value of the target object.
      */
-    protected function apply_on_rows(Abstract_Object $object, array $values, array $field, array $args = array()): array
+    protected function apply_on_rows(Abstract_Object $object, array $values, array $field, array $args = []): array
     {
         if (empty($field['sub_fields'])) {
             return $values;
@@ -176,14 +177,13 @@ abstract class Abstract_Strategy
 
         foreach ($field['sub_fields'] as $subfield) {
             foreach ($values as $row => $subvalues) {
-                if (! is_array($subvalues)) {
+                if (!is_array($subvalues)) {
                     continue;
                 }
 
-
-                $subfield['pll_key']    = $this->get_field_key($field) . '_' . $row . '_' . $subfield['key'];  // Adds an entry in `subfield` with the full path of the field.
-                $args['original_value'] = $original_value[ $row ] ?? null;
-                $values[ $row ]         = $this->apply_on_subfield(
+                $subfield['pll_key'] = $this->get_field_key($field).'_'.$row.'_'.$subfield['key'];  // Adds an entry in `subfield` with the full path of the field.
+                $args['original_value'] = $original_value[$row] ?? null;
+                $values[$row] = $this->apply_on_subfield(
                     $object,
                     $subvalues,
                     $subfield,
@@ -204,9 +204,10 @@ abstract class Abstract_Strategy
      * @param array           $values Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   Array of arguments.
+     *
      * @return array Custom field value of the target object.
      */
-    protected function apply_on_layouts(Abstract_Object $object, array $values, array $field, array $args = array()): array
+    protected function apply_on_layouts(Abstract_Object $object, array $values, array $field, array $args = []): array
     {
         if (empty($field['layouts'])) {
             return $values;
@@ -232,13 +233,14 @@ abstract class Abstract_Strategy
      * @param array           $values Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   Array of arguments.
+     *
      * @return array Custom field value of the target object.
      */
-    protected function apply_on_group(Abstract_Object $object, array $values, array $field, array $args = array()): array
+    protected function apply_on_group(Abstract_Object $object, array $values, array $field, array $args = []): array
     {
         foreach ($field['sub_fields'] as $subfield) {
-            $subfield['pll_key'] = $this->get_field_key($subfield) . '_' . $subfield['key']; // Adds an entry in `subfield` with the full path of the field.
-            $values              = $this->apply_on_subfield(
+            $subfield['pll_key'] = $this->get_field_key($subfield).'_'.$subfield['key']; // Adds an entry in `subfield` with the full path of the field.
+            $values = $this->apply_on_subfield(
                 $object,
                 $values,
                 $subfield,
@@ -258,37 +260,39 @@ abstract class Abstract_Strategy
      * @param array           $subvalues Custom field values of the source object.
      * @param array           $subfield  Custom subfield definition.
      * @param array           $args      {
-     *     Array of arguments.
+     *                                   Array of arguments.
      *
-     *     @type mixed $original_value The translated value of the field, if any.
-     * }
+     * @var mixed $original_value The translated value of the field, if any.
+     *            }
+     *
      * @return array Custom field value of the target object.
      */
-    protected function apply_on_subfield(Abstract_Object $object, array $subvalues, array $subfield, array $args = array()): array
+    protected function apply_on_subfield(Abstract_Object $object, array $subvalues, array $subfield, array $args = []): array
     {
         if (empty($subfield['parent'])) {
             // Not a subfield.
             return $subvalues;
         }
 
-        if (! $this->can_execute($subfield)) {
-            if (isset($args['original_value'][ $subfield['key'] ])) {
+        if (!$this->can_execute($subfield)) {
+            if (isset($args['original_value'][$subfield['key']])) {
                 // If original values are hold with field key.
-                $subvalues[ $subfield['key'] ] = $args['original_value'][ $subfield['key'] ];
-            } elseif (isset($args['original_value'][ $subfield['name'] ])) {
+                $subvalues[$subfield['key']] = $args['original_value'][$subfield['key']];
+            } elseif (isset($args['original_value'][$subfield['name']])) {
                 // If original values are hold with field name.
-                $subvalues[ $subfield['name'] ] = $args['original_value'][ $subfield['name'] ];
+                $subvalues[$subfield['name']] = $args['original_value'][$subfield['name']];
             } else {
                 // Strip out the subfield if it can't be executed so the value won't be processed.
-                unset($subvalues[ $subfield['name'] ], $subvalues[ $subfield['key'] ]);
+                unset($subvalues[$subfield['name']], $subvalues[$subfield['key']]);
             }
+
             return $subvalues;
         }
 
-        if (isset($subvalues[ $subfield['name'] ])) {
+        if (isset($subvalues[$subfield['name']])) {
             // Is the group value update with field name as key?
             $selector = $subfield['name'];
-        } elseif (isset($subvalues[ $subfield['key'] ])) {
+        } elseif (isset($subvalues[$subfield['key']])) {
             // Is the group value update with field key as key?
             $selector = $subfield['key'];
         }
@@ -297,11 +301,11 @@ abstract class Abstract_Strategy
             return $subvalues;
         }
 
-        $args['original_value'] = $args['original_value'][ $selector ] ?? null;
+        $args['original_value'] = $args['original_value'][$selector] ?? null;
 
-        $subvalues[ $selector ] = $this->execute(
+        $subvalues[$selector] = $this->execute(
             $object,
-            $subvalues[ $selector ],
+            $subvalues[$selector],
             $subfield,
             $args
         );
@@ -316,6 +320,7 @@ abstract class Abstract_Strategy
      * @since 3.7
      *
      * @param array $field Field definition.
+     *
      * @return string Field key.
      */
     protected function get_field_key(array $field): string
