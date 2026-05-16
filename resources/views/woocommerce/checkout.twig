@@ -5,18 +5,8 @@
 
     <h1 class="mb-4">{{ post.title }}</h1>
 
-    {% if is_order_received and order_id %}
-        <div class="container py-5">
-            <p>
-                {{ fn('__', 'Order number:', 'woocommerce') }} <strong>{{ order_id }}</strong>
-            </p>
-
-            {% if order %}
-                <p>
-                    {{ fn('__', 'Total:', 'woocommerce') }} <strong>{{ order.get_formatted_order_total()|raw }}</strong>
-                </p>
-            {% endif %}
-        </div>
+    {% if is_order_received %}
+        {% include 'woocommerce/checkout/thankyou.twig' with thankyou only %}
 
     {% else %}
         {% if cart and not cart.is_empty() %}

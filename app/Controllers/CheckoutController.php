@@ -22,14 +22,35 @@ class CheckoutController extends Controller
 
         if ($this->data['is_order_received']) {
             $orderId = absint(get_query_var('order-received'));
+            $order   = $orderId ? wc_get_order($orderId) : null;
 
-            if ($orderId) {
-                $order = wc_get_order($orderId);
+            $this->data['order_id'] = $order ? $order->get_id() : null;
+            $this->data['order']    = $order;
 
-                if ($order) {
-                    $this->data['order_id'] = $order->get_id();
-                    $this->data['order']    = $order;
-                }
+            if ($order) {
+                do_action('woocommerce_before_thankyou', $order->get_id());
+            }
+
+            if ($order && $order->has_status('failed')) {
+                $this->data['thankyou'] = [
+                    'failed'            => true,
+                    'payment_url'       => esc_url($order->get_checkout_payment_url()),
+                    'myaccount_url'     => esc_url(wc_get_page_permalink('myaccount')),
+                    'is_user_logged_in' => is_user_logged_in(),
+                ];
+            } else {
+                $this->data['thankyou'] = [
+                    'failed'           => false,
+                    'order_received'   => capture_action('woocommerce_thankyou_order_received_text'),
+                    'order_number'     => $order ? $order->get_order_number() : '',
+                    'order_date'       => $order ? wc_format_datetime($order->get_date_created()) : '',
+                    'order_email'      => ($order && is_user_logged_in() && $order->get_user_id() === get_current_user_id())
+                                            ? $order->get_billing_email() : '',
+                    'order_total'      => $order ? $order->get_formatted_order_total() : '',
+                    'payment_method'   => $order ? wp_kses_post($order->get_payment_method_title()) : '',
+                    'payment_content'  => $order ? capture_action('woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id()) : '',
+                    'thankyou_content' => $order ? capture_action('woocommerce_thankyou', $order->get_id()) : '',
+                ];
             }
 
             return $this->data;

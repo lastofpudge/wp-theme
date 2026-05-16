@@ -17,7 +17,7 @@ const modalCartProduct = product => {
             
             <td class="text-end">
                 <button type="button" data-key="${product.cart_item_key}" title="Remove" class="btn btn-danger js-remove-from-cart">
-                    <i class="fa-solid fa-circle-xmark"></i>
+                    <i class="fa-solid fa-circle-xmark">x</i>
                 </button>
             </td>
         </tr>`

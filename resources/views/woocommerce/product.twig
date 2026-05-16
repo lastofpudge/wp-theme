@@ -27,7 +27,7 @@
                             </div>
                         {% endif %}
 
-                        <div class="price">
+                        <div class="price js-product-price">
                             {{ product.get_price_html() | raw }}
                         </div>
 
@@ -65,6 +65,12 @@
 
                         {% if product.is_type('variable') %}
                             {% if product_variations %}
+                                {% for variation in product_variations %}
+                                    <div class="d-none js-variation-price" data-id="{{ variation.variation_id }}">
+                                        {{ variation.price_html|raw }}
+                                    </div>
+                                {% endfor %}
+
                                 <label>
                                     <select name="variation" class="js-variant">
                                         <option value="#" selected disabled>{{ fn('__', 'Select an option', 'woocommerce') }}</option>

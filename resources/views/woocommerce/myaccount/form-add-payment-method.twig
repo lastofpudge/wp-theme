@@ -1,0 +1,50 @@
+{% if has_gateways %}
+
+    <form id="add_payment_method" method="post">
+        <div id="payment" class="woocommerce-Payment">
+
+            <ul class="woocommerce-PaymentMethods payment_methods methods">
+                {% for gateway in gateways %}
+                    <li class="woocommerce-PaymentMethod woocommerce-PaymentMethod--{{ gateway.id }} payment_method_{{ gateway.id }}">
+                        <input id="payment_method_{{ gateway.id }}"
+                               type="radio"
+                               class="input-radio"
+                               name="payment_method"
+                               value="{{ gateway.id }}"
+                               {% if gateway.chosen %}checked{% endif %} />
+                        <label for="payment_method_{{ gateway.id }}">
+                            {{ gateway.title }} {{ gateway.icon | raw }}
+                        </label>
+                        {% if gateway.has_fields %}
+                            <div class="woocommerce-PaymentBox woocommerce-PaymentBox--{{ gateway.id }} payment_box payment_method_{{ gateway.id }}"
+                                 style="display:none;">
+                                {{ gateway.fields_html | raw }}
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {{ form_bottom | raw }}
+
+            <div class="form-row">
+                {{ nonce_field | raw }}
+                <button type="submit"
+                        class="woocommerce-Button woocommerce-Button--alt button alt"
+                        id="place_order"
+                        name="woocommerce_add_payment_method">
+                    {{ fn('__', 'Add payment method', 'woocommerce') }}
+                </button>
+                <input type="hidden" name="woocommerce_add_payment_method" value="1" />
+            </div>
+
+        </div>
+    </form>
+
+{% else %}
+
+    <div class="woocommerce-notice woocommerce-notice--info woocommerce-info">
+        {{ notice }}
+    </div>
+
+{% endif %}
