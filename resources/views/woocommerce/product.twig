@@ -64,7 +64,6 @@
                         {% endif %}
 
                         {% if product.is_type('variable') %}
-                            {% set product_variations = product.get_available_variations %}
                             {% if product_variations %}
                                 <table class="table table-bordered">
                                     <thead>

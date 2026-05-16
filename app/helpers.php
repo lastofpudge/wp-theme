@@ -14,7 +14,8 @@ if (!function_exists('send_email')) {
     function send_email(string $templateFilename, array $templateData): ?bool
     {
         $emailBody = compile_email_template($templateFilename, $templateData);
-        $isSent = dispatch_email($templateData['subject'], $emailBody);
+        $replyTo   = $templateData['reply_to'] ?? '';
+        $isSent    = dispatch_email($templateData['subject'], $emailBody, $replyTo);
 
         return $isSent ?: null;
     }
@@ -40,16 +41,16 @@ if (!function_exists('send_email')) {
      *
      * @return bool
      */
-    function dispatch_email(string $subject, string $body): bool
+    function dispatch_email(string $subject, string $body, string $replyTo = ''): bool
     {
         $adminEmail = get_option('admin_email');
-        $fromEmail = $adminEmail;
-        $toEmail = $adminEmail;
+        $headers    = ['Content-type: text/html; charset=utf-8', 'From: ' . $adminEmail];
 
-        $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: '.$fromEmail;
+        if ($replyTo !== '') {
+            $headers[] = 'Reply-To: ' . $replyTo;
+        }
 
-        return wp_mail($toEmail, $subject, $body, $headers);
+        return wp_mail($adminEmail, $subject, $body, $headers);
     }
 }
 

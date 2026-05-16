@@ -33,6 +33,28 @@ class ProductController extends Controller
 
         $this->data['description'] = $product->get_description();
 
+        $variations = [];
+        if ($product->is_type('variable')) {
+            foreach ($product->get_available_variations() as $variation) {
+                $parts = [];
+                foreach ($variation['attributes'] as $key => $value) {
+                    if (empty($value)) {
+                        continue;
+                    }
+                    $taxonomy = str_replace('attribute_', '', $key);
+                    if (taxonomy_exists($taxonomy)) {
+                        $term    = get_term_by('slug', $value, $taxonomy);
+                        $parts[] = $term ? $term->name : $value;
+                    } else {
+                        $parts[] = $value;
+                    }
+                }
+                $variation['name'] = implode(' / ', $parts) ?: '#' . $variation['variation_id'];
+                $variations[]      = $variation;
+            }
+        }
+        $this->data['product_variations'] = $variations;
+
         $product_attributes = [];
         foreach ($product->get_attributes() as $attribute) {
             if (!$attribute->get_visible()) {

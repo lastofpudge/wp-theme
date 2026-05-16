@@ -22,6 +22,7 @@ $isMailSent = send_email('contact', [
     'site_name' => get_bloginfo('name'),
     'name'      => $name,
     'mail'      => $mail,
+    'reply_to'  => $mail,
 ]);
 
 if ($isMailSent) {
