@@ -1,18 +1,19 @@
 import Toast from './libs/Toast'
 
-export function initLoginForm() {
-  const loginForm = document.querySelector('.js-login-form')
+export function initRegisterForm() {
+  const registerForm = document.querySelector('.js-register-form')
 
-  if (!loginForm) return
-  loginForm.addEventListener('submit', async event => {
+  if (!registerForm) return
+
+  registerForm.addEventListener('submit', async event => {
     event.preventDefault()
 
-    const formData = new FormData(loginForm)
-    formData.append('action', 'login')
+    const formData = new FormData(registerForm)
+    formData.append('action', 'register')
     formData.append('nonce', data.nonce)
 
     const preloader = document.querySelector('.js-preloader-main')
-    preloader.classList.add('js-preloading')
+    preloader?.classList.add('js-preloading')
 
     try {
       const response = await fetch(data.ajax_url, {
@@ -35,7 +36,7 @@ export function initLoginForm() {
       console.error(error)
     }
 
-    preloader.classList.remove('js-preloading')
-    loginForm.reset()
+    preloader?.classList.remove('js-preloading')
+    registerForm.reset()
   })
 }

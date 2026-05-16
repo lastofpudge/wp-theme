@@ -1,8 +1,6 @@
 <?php
 
-if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'ajax-nonce')) {
-    wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
-}
+verify_ajax_nonce();
 
 $name = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
 $mail = sanitize_email(wp_unslash($_POST['mail'] ?? ''));
@@ -19,8 +17,8 @@ if (!is_email($mail)) {
     wp_send_json(['type' => 'error', 'message' => 'Please enter a valid email address']);
 }
 
-$isMailSent = send_email('test', [
-    'subject'   => 'test form',
+$isMailSent = send_email('contact', [
+    'subject'   => __('New contact form submission', 'woocommerce'),
     'site_name' => get_bloginfo('name'),
     'name'      => $name,
     'mail'      => $mail,

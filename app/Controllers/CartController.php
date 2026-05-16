@@ -96,15 +96,15 @@ class CartController
     public function applyCoupon(string $couponCode): void
     {
         if (WC()->cart->has_discount($couponCode)) {
-            wp_send_json(['response' => false, 'message' => __('Coupon is already applied.', 'woocommerce')]);
+            wp_send_json(['type' => 'error', 'message' => __('Coupon is already applied.', 'woocommerce')]);
         }
 
         if (!WC()->cart->apply_coupon($couponCode)) {
-            wp_send_json(['response' => false, 'message' => $this->getNotice('error', __('Invalid coupon.', 'woocommerce'))]);
+            wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Invalid coupon.', 'woocommerce'))]);
         }
 
         wp_send_json([
-            'response' => true,
+            'type'     => 'success',
             'message'  => $this->getNotice('success', __('Coupon applied successfully.', 'woocommerce')),
             'total'    => $this->total(),
             'subTotal' => $this->subtotal(),
@@ -114,14 +114,16 @@ class CartController
     public function removeCoupon(string $couponCode): void
     {
         if (!WC()->cart->has_discount($couponCode)) {
-            wp_send_json(['response' => false, 'message' => __('Coupon not applied.', 'woocommerce')]);
+            wp_send_json(['type' => 'error', 'message' => __('Coupon not applied.', 'woocommerce')]);
         }
 
-        $response = WC()->cart->remove_coupon($couponCode);
+        if (!WC()->cart->remove_coupon($couponCode)) {
+            wp_send_json(['type' => 'error', 'message' => __('Could not remove coupon.', 'woocommerce')]);
+        }
 
         wp_send_json([
-            'response' => $response,
-            'message'  => $response ? __('Coupon removed.', 'woocommerce') : __('Could not remove coupon.', 'woocommerce'),
+            'type'     => 'success',
+            'message'  => __('Coupon removed.', 'woocommerce'),
             'total'    => $this->total(),
             'subTotal' => $this->subtotal(),
         ]);

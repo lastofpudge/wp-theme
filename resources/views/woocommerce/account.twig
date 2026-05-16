@@ -15,8 +15,11 @@
             </div>
 
             <div class="col-12">
-                {# {{ post.content }} #}
-                {{ function('do_shortcode', '[woocommerce_my_account]') }}
+                {% if is_logged_in or is_wc_endpoint %}
+                    {{ fn('do_shortcode', '[woocommerce_my_account]') }}
+                {% else %}
+                    {% include 'woocommerce/myaccount/form-login.twig' %}
+                {% endif %}
             </div>
 
         </div>

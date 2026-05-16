@@ -1,3 +1,5 @@
+import Toast from '../libs/Toast'
+
 export function removeFromCart() {
   const preloader = document.querySelector('.js-preloader-main')
   const cartContainer = document.querySelector('body')
@@ -34,6 +36,7 @@ export function removeFromCart() {
             cartCount.innerHTML = result.count
           }
 
+          Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
           if (result.count === 0) {
             window.location.reload()
           }

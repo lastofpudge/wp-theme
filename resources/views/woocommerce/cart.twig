@@ -27,13 +27,13 @@
                                         <tr data-key="{{ cart_item_key }}">
                                             <td class="text-center">
                                                 {% set thumbnail = _product.get_image() %}
-                                                <a href="{{ function('get_permalink', product_id) }}"
+                                                <a href="{{ fn('get_permalink', product_id) }}"
                                                    class="d-block thumb-sm">
                                                     {{ thumbnail|raw }}
                                                 </a>
                                             </td>
                                             <td class="text-start text-wrap">
-                                                <a href="{{ function('get_permalink', product_id) }}">{{ product_name }}</a>
+                                                <a href="{{ fn('get_permalink', product_id) }}">{{ product_name }}</a>
                                             </td>
                                             <td class="text-start">
                                                 {% if _product.is_sold_individually() %}
@@ -100,6 +100,7 @@
                                 {% endfor %}
                                 </tbody>
                                 <tfoot id="checkout-total">
+                                {% if coupons_enabled %}
                                 <tr>
                                     <td colspan="5">
                                         <div class="d-flex align-items-center">
@@ -120,8 +121,7 @@
                                                     <li><span>{{ coupon }}</span>
                                                         <button class="btn btn-danger js-remove-coupon"
                                                                 data-coupon="{{ coupon }}"
-                                                        ><i
-                                                                    class="fa-solid fa-circle-xmark">x</i>
+                                                        ><i class="fa-solid fa-circle-xmark">x</i>
                                                         </button>
                                                     </li>
                                                 {% endfor %}
@@ -129,6 +129,7 @@
                                         {% endif %}
                                     </td>
                                 </tr>
+                                {% endif %}
                                 <tr>
                                     <td colspan="4" class="text-end"><strong>{{ fn('__', 'Subtotal', 'woocommerce') }}</strong></td>
                                     <td class="text-end">
@@ -168,7 +169,7 @@
     {# Cross-sells #}
     <section class="cross-sells py-5">
         <div class="container">
-            {{ function('woocommerce_cross_sell_display') }}
+            {{ fn('woocommerce_cross_sell_display') }}
         </div>
     </section>
 

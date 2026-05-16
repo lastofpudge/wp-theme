@@ -63,7 +63,7 @@ class HiddenData
         wp_dequeue_script('jquery-migrate');
         wp_deregister_script('jquery-migrate');
 
-        if (!is_woocommerce() && !is_cart() && !is_checkout() && !is_account_page()) {
+        if (!function_exists('is_woocommerce') || (!is_woocommerce() && !is_cart() && !is_checkout() && !is_account_page())) {
             wp_dequeue_script('payu-gateway');
             wp_dequeue_script('jquery');
             wp_dequeue_script('jquery-core');
@@ -71,7 +71,7 @@ class HiddenData
             wp_deregister_script('jquery-core');
         }
 
-        if (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
+        if (function_exists('is_woocommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_account_page())) {
             return;
         }
 
@@ -88,7 +88,7 @@ class HiddenData
 
     public function dequeueWooCommerceBlockAssets(): void
     {
-        if (is_admin() || is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
+        if (is_admin() || (function_exists('is_woocommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_account_page()))) {
             return;
         }
 
@@ -98,6 +98,6 @@ class HiddenData
 
     public function filterWooCommerceStyles(array $styles): array
     {
-        return (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) ? $styles : [];
+        return (function_exists('is_woocommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_account_page())) ? $styles : [];
     }
 }

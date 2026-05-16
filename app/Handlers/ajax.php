@@ -1,6 +1,7 @@
 <?php
 
 add_ajax_action('login');
+add_ajax_action('register');
 add_ajax_action('contact');
 
 add_ajax_action('removeFromCart');

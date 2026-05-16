@@ -1,6 +1,6 @@
 import modalCartProduct from './modalCartProduct.data'
 
-export function iniCartQuantity() {
+export function initCartQuantity() {
   const preloader = document.querySelector('.js-preloader-main')
 
   const totals = document.querySelectorAll('.js-total')

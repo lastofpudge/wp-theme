@@ -2,12 +2,14 @@ import { initContactForm } from './contact'
 import { initLoginForm } from './login'
 import { initCart } from './cart/cart'
 import { initRangeSlider } from './rangeSlider'
-import { iniCartQuantity } from './cart/cartQuantity'
+import { initCartQuantity } from './cart/cartQuantity'
+import { initRegisterForm } from './register'
 
 document.addEventListener('DOMContentLoaded', () => {
   initContactForm()
   initLoginForm()
+  initRegisterForm()
   initCart()
-  iniCartQuantity()
+  initCartQuantity()
   initRangeSlider()
 })

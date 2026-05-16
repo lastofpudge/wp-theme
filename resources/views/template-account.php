@@ -4,7 +4,7 @@
  * Template Name: Account page
  */
 
-use App\Controllers\PageController;
+use App\Controllers\AccountController;
 use Core\Route;
 
-Route::load(PageController::class, 'account', 'woocommerce/account');
+Route::load(AccountController::class, 'account', 'woocommerce/account');

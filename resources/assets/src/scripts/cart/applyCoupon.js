@@ -23,13 +23,13 @@ export function initApplyCoupon() {
 
       const result = await response.json()
 
-      if (result.response) {
+      if (result.type === 'success') {
         document.querySelectorAll('.js-total').forEach(el => { el.textContent = result.total })
         document.querySelectorAll('.js-sub-total').forEach(el => { el.textContent = result.subTotal })
         document.querySelector('.js-coupon').value = ''
-        Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message || 'Success' })
+        Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
       } else {
-        Toast.fire({ icon: 'error', iconColor: 'red', title: result.message || 'Error' })
+        Toast.fire({ icon: 'error', iconColor: 'red', title: result.message })
       }
     } catch (error) {
       console.error(error)

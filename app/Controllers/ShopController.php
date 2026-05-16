@@ -7,13 +7,6 @@ use Timber\Timber;
 
 class ShopController extends Controller
 {
-    public function category(): array
-    {
-        $this->data['category'] = get_term(get_queried_object()->term_id, 'product_cat');
-
-        return $this->data;
-    }
-
     public function archive(): array
     {
         global $wp_query;
@@ -37,8 +30,9 @@ class ShopController extends Controller
 
         $requestedMin = get_requested_price('min_price');
         $requestedMax = get_requested_price('max_price');
-        $priceAbsMin  = 0.0;
-        $priceAbsMax  = 1000000.0;
+        $priceRange   = $this->getPriceRange();
+        $priceAbsMin  = floor($priceRange['min']);
+        $priceAbsMax  = ceil($priceRange['max']);
         $priceMin     = $requestedMin ?? $priceAbsMin;
         $priceMax     = $requestedMax ?? $priceAbsMax;
 
@@ -46,6 +40,8 @@ class ShopController extends Controller
             [$priceMin, $priceMax] = [$priceMax, $priceMin];
         }
 
+        $this->data['price_abs_min'] = $priceAbsMin;
+        $this->data['price_abs_max'] = $priceAbsMax;
         $this->data['price_min'] = max($priceAbsMin, min($priceMin, $priceAbsMax));
         $this->data['price_max'] = max($this->data['price_min'], min($priceMax, $priceAbsMax));
 
@@ -61,14 +57,20 @@ class ShopController extends Controller
 
     private function getArchiveCategories(): array
     {
-        // On category archive pages the category constraint is in the URL itself;
-        // showing a parallel category filter would be misleading and conflict.
         if (function_exists('is_product_category') && is_product_category()) {
             return ['reset_url' => $this->getCurrentArchiveUrl(), 'has_active' => false, 'terms' => []];
         }
 
-        $activeSlug  = sanitize_text_field(wp_unslash($_GET['filter_product_cat'] ?? ''));
-        $currentUrl  = $this->getCurrentArchiveUrl();
+        global $wp_query;
+        $filterQuery  = new ProductFilterQuery($wp_query instanceof \WP_Query ? $wp_query : null);
+        $productIds   = $filterQuery->getProductIds(['product_cat'], true);
+        $facetedTerms = array_values(array_filter(
+            $this->getAttributeTermsForProducts('product_cat', $productIds),
+            fn (\WP_Term $t) => $t->parent === 0
+        ));
+
+        $activeSlug = sanitize_text_field(wp_unslash($_GET['filter_product_cat'] ?? ''));
+        $currentUrl = $this->getCurrentArchiveUrl();
 
         $queryArgs = array_map(
             fn ($v) => is_array($v) ? array_map('sanitize_text_field', $v) : sanitize_text_field((string) $v),
@@ -78,19 +80,13 @@ class ShopController extends Controller
 
         $resetUrl = add_query_arg($queryArgs, $currentUrl);
 
-        $terms = get_terms([
-            'taxonomy'   => 'product_cat',
-            'hide_empty' => true,
-            'parent'     => 0,
-        ]);
-
-        if (is_wp_error($terms) || empty($terms)) {
+        if ($facetedTerms === []) {
             return ['reset_url' => $resetUrl, 'has_active' => false, 'terms' => []];
         }
 
         $termData = array_map(function (\WP_Term $term) use ($activeSlug, $queryArgs, $currentUrl, $resetUrl) {
-            $isActive   = $activeSlug === $term->slug;
-            $filterUrl  = $isActive
+            $isActive  = $activeSlug === $term->slug;
+            $filterUrl = $isActive
                 ? $resetUrl
                 : add_query_arg(array_merge($queryArgs, ['filter_product_cat' => $term->slug]), $currentUrl);
 
@@ -101,9 +97,25 @@ class ShopController extends Controller
                 'is_active'  => $isActive,
                 'filter_url' => $filterUrl,
             ];
-        }, $terms);
+        }, $facetedTerms);
 
         return ['reset_url' => $resetUrl, 'has_active' => $activeSlug !== '', 'terms' => $termData];
+    }
+
+    private function getPriceRange(): array
+    {
+        global $wpdb;
+        $row = $wpdb->get_row(
+            "SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) AS min_price,
+                    MAX(CAST(meta_value AS DECIMAL(10,2))) AS max_price
+             FROM {$wpdb->postmeta}
+             WHERE meta_key = '_price' AND meta_value != ''"
+        );
+
+        return [
+            'min' => (float) ($row->min_price ?? 0),
+            'max' => (float) ($row->max_price ?? 1000000),
+        ];
     }
 
     private function getArchiveAttributes(): array

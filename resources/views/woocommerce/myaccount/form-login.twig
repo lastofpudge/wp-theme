@@ -5,8 +5,6 @@
 
         <h2>{{ fn('__', 'Login', 'woocommerce') }}</h2>
 
-        {{ login_form_start | raw }}
-
         <form class="woocommerce-form woocommerce-form-login login js-login-form" method="post" novalidate>
 
             <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
@@ -21,8 +19,6 @@
                        type="password" name="password" id="password" autocomplete="current-password" required aria-required="true" />
             </p>
 
-            {{ login_form_middle | raw }}
-
             <p class="form-row">
                 <button type="submit" class="woocommerce-button button woocommerce-form-login__submit" name="login">
                     {{ fn('__', 'Log in', 'woocommerce') }}
@@ -33,8 +29,6 @@
                 <a href="{{ lost_password_url }}">{{ fn('__', 'Lost your password?', 'woocommerce') }}</a>
             </p>
 
-            {{ login_form_end | raw }}
-
         </form>
 
 {% if registration_enabled %}
@@ -44,46 +38,37 @@
 
         <h2>{{ fn('__', 'Register', 'woocommerce') }}</h2>
 
-        <form method="post" class="woocommerce-form woocommerce-form-register register" {{ register.form_tag_attrs | raw }}>
+        <form method="post" class="woocommerce-form woocommerce-form-register register js-register-form" novalidate>
 
-            {{ register.form_start | raw }}
+            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                <label for="reg_first_name">{{ fn('__', 'First name', 'woocommerce') }}</label>
+                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text"
+                       name="first_name" id="reg_first_name" autocomplete="given-name" />
+            </p>
 
-            {% if not register.generate_username %}
-                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                    <label for="reg_username">{{ fn('__', 'Username', 'woocommerce') }} <span class="required" aria-hidden="true">*</span></label>
-                    <input type="text" class="woocommerce-Input woocommerce-Input--text input-text"
-                           name="username" id="reg_username" autocomplete="username"
-                           value="{{ register.username_value }}" required aria-required="true" />
-                </p>
-            {% endif %}
+            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                <label for="reg_last_name">{{ fn('__', 'Last name', 'woocommerce') }}</label>
+                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text"
+                       name="last_name" id="reg_last_name" autocomplete="family-name" />
+            </p>
 
             <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                 <label for="reg_email">{{ fn('__', 'Email address', 'woocommerce') }} <span class="required" aria-hidden="true">*</span></label>
                 <input type="email" class="woocommerce-Input woocommerce-Input--text input-text"
-                       name="email" id="reg_email" autocomplete="email"
-                       value="{{ register.email_value }}" required aria-required="true" />
+                       name="email" id="reg_email" autocomplete="email" required aria-required="true" />
             </p>
 
-            {% if not register.generate_password %}
-                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                    <label for="reg_password">{{ fn('__', 'Password', 'woocommerce') }} <span class="required" aria-hidden="true">*</span></label>
-                    <input type="password" class="woocommerce-Input woocommerce-Input--text input-text"
-                           name="password" id="reg_password" autocomplete="new-password" required aria-required="true" />
-                </p>
-            {% else %}
-                <p>{{ fn('__', 'A link to set a new password will be sent to your email address.', 'woocommerce') }}</p>
-            {% endif %}
-
-            {{ register.form_middle | raw }}
+            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                <label for="reg_password">{{ fn('__', 'Password', 'woocommerce') }} <span class="required" aria-hidden="true">*</span></label>
+                <input type="password" class="woocommerce-Input woocommerce-Input--text input-text"
+                       name="password" id="reg_password" autocomplete="new-password" required aria-required="true" />
+            </p>
 
             <p class="woocommerce-form-row form-row">
-                {{ register.nonce | raw }}
-                <button type="submit" class="woocommerce-Button woocommerce-button button woocommerce-form-register__submit" name="register">
+                <button type="submit" class="woocommerce-Button woocommerce-button button woocommerce-form-register__submit">
                     {{ fn('__', 'Register', 'woocommerce') }}
                 </button>
             </p>
-
-            {{ register.form_end | raw }}
 
         </form>
 

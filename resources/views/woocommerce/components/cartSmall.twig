@@ -5,7 +5,6 @@
                 class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
     </button>
     <ul class="dropdown-menu dropdown-menu-end p-2 js-mini-cart-menu mini-cart-dropdown-menu"
-        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 42px, 0px);"
         data-popper-placement="bottom-end">
         <li>
             {% if cart.get_cart() is not empty %}

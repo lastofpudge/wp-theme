@@ -28,6 +28,10 @@
                 <a href="{{ post.link }}" class="btn btn-outline-primary w-100">
                     {{ fn('__', 'Select options', 'woocommerce') }}
                 </a>
+            {% elseif wc and not wc.is_in_stock() %}
+                <button type="button" class="btn btn-secondary w-100" disabled>
+                    {{ fn('__', 'Out of stock', 'woocommerce') }}
+                </button>
             {% else %}
                 <button type="button"
                         class="btn btn-primary w-100 js-add-to-cart"
