@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Class handling multiple or single posts export.
  *
  * @since 3.6
@@ -39,18 +35,19 @@ class PLL_Export_Posts extends PLL_Export_Translated_Objects
      *
      * @param PLL_Export_Data $export Export object.
      * @param WP_Post         $item   Post to export.
+     *
      * @return void
      */
     public function add_item(PLL_Export_Data $export, $item)
     {
-        $tr_id   = $this->translated_object->get($item->ID, $export->get_target_language());
+        $tr_id = $this->translated_object->get($item->ID, $export->get_target_language());
         $tr_item = get_post($tr_id);
 
-        $default_fields = array(
+        $default_fields = [
             PLL_Import_Export::POST_TITLE,
             PLL_Import_Export::POST_CONTENT,
             PLL_Import_Export::POST_EXCERPT,
-        );
+        ];
 
         /**
          * Filters which post fields we want to export.
@@ -76,11 +73,11 @@ class PLL_Export_Posts extends PLL_Export_Translated_Objects
                 );
             } else {
                 $export->add_translation_entry(
-                    array(
+                    [
                         'object_type' => PLL_Import_Export::TYPE_POST,
                         'field_type'  => $field,
                         'object_id'   => $item->ID,
-                    ),
+                    ],
                     $item->$field,
                     $tr_item instanceof WP_Post ? $tr_item->$field : ''
                 );
@@ -107,6 +104,7 @@ class PLL_Export_Posts extends PLL_Export_Translated_Objects
      * @since 3.6
      *
      * @param int[] $ids Post IDs.
+     *
      * @return void
      *
      * @phpstan-param non-empty-array<positive-int> $ids
@@ -122,6 +120,7 @@ class PLL_Export_Posts extends PLL_Export_Translated_Objects
      * @since 3.6
      *
      * @param WP_Post $item Post to get ID from.
+     *
      * @return int Post ID.
      */
     protected function get_item_id($item): int
@@ -137,13 +136,14 @@ class PLL_Export_Posts extends PLL_Export_Translated_Objects
      * @param PLL_Export_Data $export      Export object.
      * @param WP_Post         $post        Source post.
      * @param string          $translation Translated post content.
+     *
      * @return void
      */
     private function add_post_content(PLL_Export_Data $export, WP_Post $post, string $translation)
     {
-        $content      = PLL_Translation_Walker_Factory::create_from($post->post_content);
+        $content = PLL_Translation_Walker_Factory::create_from($post->post_content);
         $translations = new Translations();
-        $content->walk(array( $translations, 'add_entry' ));
+        $content->walk([$translations, 'add_entry']);
 
         foreach ($translations->entries as $entry) {
             if ('' === $entry->singular) {
@@ -153,11 +153,11 @@ class PLL_Export_Posts extends PLL_Export_Translated_Objects
             // The translated post content isn't exported when source or translated posts have blocks.
             $translation = has_blocks($translation) || has_blocks($post->post_content) ? '' : $translation;
             $export->add_translation_entry(
-                array(
+                [
                     'object_type' => PLL_Import_Export::TYPE_POST,
                     'field_type'  => PLL_Import_Export::POST_CONTENT,
                     'object_id'   => $post->ID,
-                ),
+                ],
                 $entry->singular,
                 $translation
             );

@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang Pro
- */
-
-/**
  * Trait for translatable objects models.
  *
  * @since 3.7
@@ -18,6 +14,7 @@ trait PLL_Translation_Object_Model_Trait
      *
      * @param int[]        $ids             Array of source object ids.
      * @param PLL_Language $target_language The target language.
+     *
      * @return void
      */
     public function do_after_process(array $ids, PLL_Language $target_language)

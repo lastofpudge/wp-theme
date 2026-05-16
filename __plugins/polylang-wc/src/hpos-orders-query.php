@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Filter order queries by language when HPOS is enabled.
  *
  * @since 1.9
@@ -29,7 +25,8 @@ class PLLWC_HPOS_Orders_Query
      */
     public function init()
     {
-        add_filter('woocommerce_orders_table_query_clauses', array( $this, 'maybe_filter_query_clauses_by_lang' ), 10, 2);
+        add_filter('woocommerce_orders_table_query_clauses', [$this, 'maybe_filter_query_clauses_by_lang'], 10, 2);
+
         return $this;
     }
 
@@ -40,26 +37,29 @@ class PLLWC_HPOS_Orders_Query
      * @since 1.9
      *
      * @param string[] $clauses {
-     *     Associative array of the clauses for the query.
+     *                          Associative array of the clauses for the query.
      *
-     *     @type string $fields  The SELECT clause of the query.
-     *     @type string $join    The JOIN clause of the query.
-     *     @type string $where   The WHERE clause of the query.
-     *     @type string $groupby The GROUP BY clause of the query.
-     *     @type string $orderby The ORDER BY clause of the query.
-     *     @type string $limits  The LIMIT clause of the query.
-     * }
-     * @param object   $query   A `Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery` instance.
+     * @var string $fields  The SELECT clause of the query.
+     * @var string $join    The JOIN clause of the query.
+     * @var string $where   The WHERE clause of the query.
+     * @var string $groupby The GROUP BY clause of the query.
+     * @var string $orderby The ORDER BY clause of the query.
+     * @var string $limits  The LIMIT clause of the query.
+     *             }
+     *
+     * @param object $query A `Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery` instance.
+     *
      * @return string[]
      *
      * @phpstan-param QueryClauses $clauses
+     *
      * @phpstan-return QueryClauses
      */
     public function maybe_filter_query_clauses_by_lang($clauses, $query)
     {
         global $wpdb;
 
-        if (! is_callable(array( $query, 'get_core_mapping_alias' )) || ! is_callable(array( $query, 'get' ))) {
+        if (!is_callable([$query, 'get_core_mapping_alias']) || !is_callable([$query, 'get'])) {
             /*
              * We can't make sure it's Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery because
              * it's a non-documented class.
@@ -70,7 +70,7 @@ class PLLWC_HPOS_Orders_Query
         /** @var PLLWC_Order_Language_CPT */
         $store = PLLWC_Data_Store::load('order_language');
 
-        if (! $this->are_translated_types((array) $query->get('type'), $store)) {
+        if (!$this->are_translated_types((array) $query->get('type'), $store)) {
             return $clauses;
         }
 
@@ -80,15 +80,15 @@ class PLLWC_HPOS_Orders_Query
             return $clauses;
         }
 
-        $tt_ids = array();
-        $alias  = $query->get_core_mapping_alias('orders');
+        $tt_ids = [];
+        $alias = $query->get_core_mapping_alias('orders');
 
         foreach ($languages as $language) {
             $tt_ids[] = (int) $language->get_tax_prop($store->get_tax_language(), 'term_taxonomy_id');
         }
 
-        $clauses['join']  .= " INNER JOIN {$wpdb->term_relationships} AS pll_tr ON pll_tr.object_id = {$alias}.id";
-        $clauses['where'] .= ' AND pll_tr.term_taxonomy_id IN ( ' . implode(',', $tt_ids) . ' )';
+        $clauses['join'] .= " INNER JOIN {$wpdb->term_relationships} AS pll_tr ON pll_tr.object_id = {$alias}.id";
+        $clauses['where'] .= ' AND pll_tr.term_taxonomy_id IN ( '.implode(',', $tt_ids).' )';
 
         return $clauses;
     }
@@ -100,28 +100,29 @@ class PLLWC_HPOS_Orders_Query
      * @since 1.9
      *
      * @param string[]|string|null $languages An array of language codes, a comma-separated list of language codes, or `null`.
+     *
      * @return PLL_Language[] A list of `PLL_Language` objects.
      */
     private function get_languages($languages): array
     {
-        if (! isset($languages) && ! empty(PLL()->curlang)) {
+        if (!isset($languages) && !empty(PLL()->curlang)) {
             // `lang` is not set at all: return the current language.
-            return array( PLL()->curlang );
+            return [PLL()->curlang];
         }
 
         if (empty($languages)) {
             // `lang` is set to an empty string: don't filter by language.
-            return array();
+            return [];
         }
 
         if (is_string($languages)) {
             $languages = explode(',', $languages);
-        } elseif (! is_array($languages)) {
-            return array();
+        } elseif (!is_array($languages)) {
+            return [];
         }
 
         $languages = array_map('trim', $languages);
-        $languages = array_map(array( PLL()->model, 'get_language' ), $languages);
+        $languages = array_map([PLL()->model, 'get_language'], $languages);
 
         return array_filter($languages);
     }
@@ -133,6 +134,7 @@ class PLLWC_HPOS_Orders_Query
      *
      * @param string[]                 $types Order types.
      * @param PLLWC_Order_Language_CPT $store The order language store.
+     *
      * @return bool
      */
     private function are_translated_types(array $types, PLLWC_Order_Language_CPT $store)
@@ -142,7 +144,7 @@ class PLLWC_HPOS_Orders_Query
             return false;
         }
 
-        $translated = $store->translated_post_types(array(), false);
+        $translated = $store->translated_post_types([], false);
 
         return empty(array_diff($types, $translated));
     }

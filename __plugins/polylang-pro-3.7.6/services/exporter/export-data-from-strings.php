@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Handles the admin action of exporting strings translations.
  *
  * @since 3.6
@@ -23,7 +19,7 @@ class PLL_Export_Data_From_Strings
      *
      * @since 3.6
      *
-     * @param PLL_Model $model  Polylang model.
+     * @param PLL_Model $model Polylang model.
      */
     public function __construct(PLL_Model $model)
     {
@@ -39,7 +35,8 @@ class PLL_Export_Data_From_Strings
      * @param array                $sources         Currated list of strings to export.
      * @param PLL_Language         $target_language The target language.
      * @param bool                 $no_update       Whether to remove already translated strings. Default to false.
-     * @return WP_Error                             A `WP_Error` object. Note: an "empty" `WP_Error` object is returned on success.
+     *
+     * @return WP_Error A `WP_Error` object. Note: an "empty" `WP_Error` object is returned on success.
      */
     public function send_to_export(PLL_Export_Container $container, array $sources, PLL_Language $target_language, bool $no_update = false): WP_Error
     {

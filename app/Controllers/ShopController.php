@@ -11,9 +11,9 @@ class ShopController extends Controller
     {
         global $wp_query;
 
-        $posts                    = Timber::get_posts();
-        $this->data['posts']      = $posts;
-        $filterArgs               = array_filter(
+        $posts = Timber::get_posts();
+        $this->data['posts'] = $posts;
+        $filterArgs = array_filter(
             $_GET,
             fn ($k) => !in_array($k, ['paged', 'page', 'product-page'], true),
             ARRAY_FILTER_USE_KEY
@@ -22,19 +22,19 @@ class ShopController extends Controller
             'total'    => (int) ($wp_query->max_num_pages ?? 1),
             'add_args' => $filterArgs,
         ]);
-        $cats                                = $this->getArchiveCategories();
-        $this->data['categories']            = $cats['terms'];
-        $this->data['categories_reset_url']  = $cats['reset_url'];
-        $this->data['active_category']       = $cats['has_active'];
+        $cats = $this->getArchiveCategories();
+        $this->data['categories'] = $cats['terms'];
+        $this->data['categories_reset_url'] = $cats['reset_url'];
+        $this->data['active_category'] = $cats['has_active'];
         $this->data['attributes'] = $this->getArchiveAttributes();
 
         $requestedMin = get_requested_price('min_price');
         $requestedMax = get_requested_price('max_price');
-        $priceRange   = $this->getPriceRange();
-        $priceAbsMin  = floor($priceRange['min']);
-        $priceAbsMax  = ceil($priceRange['max']);
-        $priceMin     = $requestedMin ?? $priceAbsMin;
-        $priceMax     = $requestedMax ?? $priceAbsMax;
+        $priceRange = $this->getPriceRange();
+        $priceAbsMin = floor($priceRange['min']);
+        $priceAbsMax = ceil($priceRange['max']);
+        $priceMin = $requestedMin ?? $priceAbsMin;
+        $priceMax = $requestedMax ?? $priceAbsMax;
 
         if ($priceMin > $priceMax) {
             [$priceMin, $priceMax] = [$priceMax, $priceMin];
@@ -50,7 +50,7 @@ class ShopController extends Controller
             fn ($k) => str_starts_with($k, 'filter_') || str_starts_with($k, 'query_type_')
         );
         $this->data['has_active_filters'] = !empty($activeFilterKeys) || $requestedMin !== null || $requestedMax !== null;
-        $this->data['reset_url']          = $this->getCurrentArchiveUrl();
+        $this->data['reset_url'] = $this->getCurrentArchiveUrl();
 
         return $this->data;
     }
@@ -62,8 +62,8 @@ class ShopController extends Controller
         }
 
         global $wp_query;
-        $filterQuery  = new ProductFilterQuery($wp_query instanceof \WP_Query ? $wp_query : null);
-        $productIds   = $filterQuery->getProductIds(['product_cat'], true);
+        $filterQuery = new ProductFilterQuery($wp_query instanceof \WP_Query ? $wp_query : null);
+        $productIds = $filterQuery->getProductIds(['product_cat'], true);
         $facetedTerms = array_values(array_filter(
             $this->getAttributeTermsForProducts('product_cat', $productIds),
             fn (\WP_Term $t) => $t->parent === 0
@@ -85,7 +85,7 @@ class ShopController extends Controller
         }
 
         $termData = array_map(function (\WP_Term $term) use ($activeSlug, $queryArgs, $currentUrl, $resetUrl) {
-            $isActive  = $activeSlug === $term->slug;
+            $isActive = $activeSlug === $term->slug;
             $filterUrl = $isActive
                 ? $resetUrl
                 : add_query_arg(array_merge($queryArgs, ['filter_product_cat' => $term->slug]), $currentUrl);
@@ -122,13 +122,13 @@ class ShopController extends Controller
     {
         global $wp_query;
         $filterQuery = new ProductFilterQuery($wp_query instanceof \WP_Query ? $wp_query : null);
-        $attributes  = [];
+        $attributes = [];
 
         foreach (wc_get_attribute_taxonomies() as $taxonomy) {
-            $attributeName     = $taxonomy->attribute_name;
+            $attributeName = $taxonomy->attribute_name;
             $attributeTaxonomy = 'pa_'.$attributeName;
-            $productIds        = $filterQuery->getProductIds([$attributeTaxonomy], true);
-            $terms             = $this->getAttributeTermsForProducts($attributeTaxonomy, $productIds);
+            $productIds = $filterQuery->getProductIds([$attributeTaxonomy], true);
+            $terms = $this->getAttributeTermsForProducts($attributeTaxonomy, $productIds);
 
             if ($terms === []) {
                 continue;
@@ -167,7 +167,7 @@ class ShopController extends Controller
 
     private function buildTermData(\WP_Term $term, string $attributeName, array $queryArgs, string $currentFilter, string $resetUrl): array
     {
-        $isActive  = $currentFilter !== '' && $currentFilter === $term->slug;
+        $isActive = $currentFilter !== '' && $currentFilter === $term->slug;
         $filterUrl = $isActive
             ? $resetUrl
             : add_query_arg(
@@ -200,16 +200,16 @@ class ShopController extends Controller
             return [];
         }
 
-        $groupedTerms   = [];
+        $groupedTerms = [];
         $termProductMap = [];
 
         foreach ($terms as $term) {
-            $termId   = (int) $term->term_id;
+            $termId = (int) $term->term_id;
             $objectId = (int) $term->object_id;
 
             if (!isset($groupedTerms[$termId])) {
-                $term->count             = 0;
-                $groupedTerms[$termId]   = $term;
+                $term->count = 0;
+                $groupedTerms[$termId] = $term;
                 $termProductMap[$termId] = [];
             }
 
@@ -227,8 +227,8 @@ class ShopController extends Controller
     private function getCurrentArchiveUrl(): string
     {
         $requestUri = (string) wp_unslash($_SERVER['REQUEST_URI'] ?? '/');
-        $path       = strtok($requestUri, '?') ?: '/';
-        $path       = (string) preg_replace('#/page/\d+/?$#', '/', $path);
+        $path = strtok($requestUri, '?') ?: '/';
+        $path = (string) preg_replace('#/page/\d+/?$#', '/', $path);
 
         return home_url($path);
     }

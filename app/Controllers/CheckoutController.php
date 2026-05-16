@@ -15,10 +15,10 @@ class CheckoutController extends Controller
 
     public function checkout(): array
     {
-        $this->data['post']              = Timber::get_post();
+        $this->data['post'] = Timber::get_post();
         $this->data['is_order_received'] = is_wc_endpoint_url('order-received');
-        $this->data['order_id']          = null;
-        $this->data['order']             = null;
+        $this->data['order_id'] = null;
+        $this->data['order'] = null;
 
         if ($this->data['is_order_received']) {
             $orderId = absint(get_query_var('order-received'));
@@ -28,7 +28,7 @@ class CheckoutController extends Controller
 
                 if ($order) {
                     $this->data['order_id'] = $order->get_id();
-                    $this->data['order']    = $order;
+                    $this->data['order'] = $order;
                 }
             }
 
@@ -42,11 +42,11 @@ class CheckoutController extends Controller
             WC()->cart->calculate_totals();
         }
 
-        $this->data['checkout']       = $checkout;
-        $this->data['fields']         = $checkout->get_checkout_fields();
-        $this->data['checkout_url']   = wc_get_checkout_url();
+        $this->data['checkout'] = $checkout;
+        $this->data['fields'] = $checkout->get_checkout_fields();
+        $this->data['checkout_url'] = wc_get_checkout_url();
         $this->data['checkout_nonce'] = wp_create_nonce('woocommerce-process_checkout');
-        $this->data['http_referer']   = esc_attr(wp_unslash($_SERVER['REQUEST_URI'] ?? '/'));
+        $this->data['http_referer'] = esc_attr(wp_unslash($_SERVER['REQUEST_URI'] ?? '/'));
 
         ob_start();
         if (WC()->cart && WC()->cart->needs_shipping()) {

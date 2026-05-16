@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 use WP_Syntex\Polylang_Pro\Modules\Import_Export\Services\Context;
 
 /**
@@ -56,6 +52,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * HTML delimiter used in {@see PLL_Translation_Walker_Blocks::parse_as_html()}.
      *
      * @var string
+     *
      * @phpstan-var non-empty-string
      */
     private $placeholder_delimiter;
@@ -69,8 +66,8 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      */
     public function __construct($content)
     {
-        $this->parsing_rules         = new PLL_Translation_Block_Parsing_Rules();
-        $this->blocks                = parse_blocks($content);
+        $this->parsing_rules = new PLL_Translation_Block_Parsing_Rules();
+        $this->blocks = parse_blocks($content);
         $this->placeholder_delimiter = sprintf('<!-- PLL_DELIMITER_%d -->', wp_rand(1, 100000));
     }
 
@@ -80,12 +77,13 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.3
      *
      * @param callable $callback A callable to be applied on each block.
+     *
      * @return string The walked content, eventually transformed by the callback.
      */
     public function walk($callback)
     {
         $this->callback = $callback;
-        $this->blocks   = array_map(array( $this, 'apply' ), $this->blocks);
+        $this->blocks = array_map([$this, 'apply'], $this->blocks);
 
         return serialize_blocks($this->blocks);
     }
@@ -98,24 +96,26 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.3
      *
      * @param array $block An associative array mimicking a WP_Block_Parser_Block object.
+     *
      * @return array An array mimicking a WP_Block_Parser_Block object.
      *
      * @phpstan-param Block $block
+     *
      * @phpstan-return Block
      */
     private function apply($block)
     {
-        if (! empty($block['innerBlocks'])) {
-            $block['innerBlocks'] = array_map(array( $this, 'apply' ), $block['innerBlocks']);
+        if (!empty($block['innerBlocks'])) {
+            $block['innerBlocks'] = array_map([$this, 'apply'], $block['innerBlocks']);
         }
 
-        if (! $this->parsing_rules->should_be_parsed($block)) {
+        if (!$this->parsing_rules->should_be_parsed($block)) {
             // No contents to translate.
             return $block;
         }
 
         $attributes_to_translate = $this->parsing_rules->get_attributes_to_translate($block);
-        if (! empty($attributes_to_translate)) {
+        if (!empty($attributes_to_translate)) {
             $block['attrs'] = $this->parse_attributes($block['attrs'], $attributes_to_translate);
         }
 
@@ -138,9 +138,11 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.3
      *
      * @param array $block An associative array mimicking a WP_Block_Parser_Block object.
+     *
      * @return array An array mimicking a WP_Block_Parser_Block object.
      *
      * @phpstan-param Block $block
+     *
      * @phpstan-return Block
      */
     private function parse_with_rules($block)
@@ -156,23 +158,23 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
             return $block;
         }
 
-        $to_replace = array();
+        $to_replace = [];
 
         foreach ($parsed_strings as $node_path => $parsed_string) {
             $entry = new Translation_Entry(
-                array(
+                [
                     'singular' => $parsed_string,
                     'context'  => Context::to_string(
-                        array(
+                        [
                             Context::FIELD => PLL_Import_Export::POST_CONTENT,
-                        )
+                        ]
                     ),
-                )
+                ]
             );
 
-            $result = call_user_func_array($this->callback, array( &$entry ));
+            $result = call_user_func_array($this->callback, [&$entry]);
 
-            if (! $result instanceof Translation_Entry || empty($result->translations)) {
+            if (!$result instanceof Translation_Entry || empty($result->translations)) {
                 continue;
             }
 
@@ -182,7 +184,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
                 continue;
             }
 
-            $to_replace[ $node_path ] = $translation;
+            $to_replace[$node_path] = $translation;
         }
 
         if (empty($to_replace)) {
@@ -203,9 +205,11 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.3
      *
      * @param array $block An associative array mimicking a WP_Block_Parser_Block object.
+     *
      * @return array An array mimicking a WP_Block_Parser_Block object.
      *
      * @phpstan-param Block $block
+     *
      * @phpstan-return Block
      */
     private function parse_as_html($block)
@@ -213,7 +217,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
         // Get the whole block's content to parse with placeholders.
         $source_string = $this->get_block_content_to_parse($block);
 
-        $walker        = new PLL_Translation_Walker_Classic($source_string, array( self::BLOCK_PLACEHOLDER ));
+        $walker = new PLL_Translation_Walker_Classic($source_string, [self::BLOCK_PLACEHOLDER]);
         $result_string = $walker->walk($this->callback);
 
         // Put the content back into the block.
@@ -226,6 +230,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.3
      *
      * @param array $block An associative array mimicking a WP_Block_Parser_Block object.
+     *
      * @return string The block's content as a string and with placeholders in place of sub-blocks.
      *
      * @phpstan-param Block $block
@@ -249,9 +254,11 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      *
      * @param array  $block   An associative array mimicking a WP_Block_Parser_Block object.
      * @param string $content The content to put back into the block.
+     *
      * @return array An array mimicking a WP_Block_Parser_Block object.
      *
      * @phpstan-param Block $block
+     *
      * @phpstan-return Block
      */
     private function update_block_with_content(array $block, $content)
@@ -259,7 +266,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
         // Explode by using a delimiter.
         $content = str_replace(
             self::BLOCK_PLACEHOLDER,
-            $this->placeholder_delimiter . self::BLOCK_PLACEHOLDER . $this->placeholder_delimiter,
+            $this->placeholder_delimiter.self::BLOCK_PLACEHOLDER.$this->placeholder_delimiter,
             $content
         );
         $content = explode($this->placeholder_delimiter, $content);
@@ -284,20 +291,22 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      *
      * @param mixed    $attrs                   An array of attributes to parse, or an attribute value.
      * @param string[] $attributes_to_translate Optional. An array of attributes to translate.
+     *
      * @return mixed An array of parsed attributes, or a translated attribute value.
      *
      * @phpstan-param array<non-empty-string, array|true> $attributes_to_translate
+     *
      * @phpstan-return (
      *     $attrs is array ? array : (
      *         $attrs is scalar ? string : mixed
      *     )
      * )
      */
-    private function parse_attributes($attrs, array $attributes_to_translate = array())
+    private function parse_attributes($attrs, array $attributes_to_translate = [])
     {
-        if (! empty($attributes_to_translate)) {
+        if (!empty($attributes_to_translate)) {
             // We have sub-keys to match.
-            if (! is_array($attrs)) {
+            if (!is_array($attrs)) {
                 // No more attributes.
                 return $attrs;
             }
@@ -306,12 +315,12 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
 
             foreach ($attributes_to_translate as $attribute_name => $attribute_sub_fields) {
                 // Find the attributes matching `$attribute_name` (may contain wildcards).
-                $entries   = $matcher->filter_list($attrs, (string) $attribute_name);
-                $sub_field = is_array($attribute_sub_fields) ? $attribute_sub_fields : array();
+                $entries = $matcher->filter_list($attrs, (string) $attribute_name);
+                $sub_field = is_array($attribute_sub_fields) ? $attribute_sub_fields : [];
 
                 foreach ($entries as $key => $values) {
                     // Parse sub-attributes.
-                    $attrs[ $key ] = $this->parse_attributes($attrs[ $key ], $sub_field);
+                    $attrs[$key] = $this->parse_attributes($attrs[$key], $sub_field);
                 }
             }
 
@@ -320,7 +329,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
 
         if (is_array($attrs)) {
             // No more sub-keys to match but we still have sub-attributes: return everything.
-            return array_map(array( $this, 'parse_attributes' ), $attrs);
+            return array_map([$this, 'parse_attributes'], $attrs);
         }
 
         if (is_scalar($attrs)) {
@@ -350,9 +359,11 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.6
      *
      * @param array $block An associative array mimicking a WP_Block_Parser_Block object.
+     *
      * @return array An array mimicking a WP_Block_Parser_Block object.
      *
      * @phpstan-param Block $block
+     *
      * @phpstan-return Block
      */
     private function parse_specific_blocks(array $block): array
@@ -360,7 +371,7 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
         if ('core/more' === $block['blockName'] && isset($block['attrs']['customText'])) {
             // Special case for 'core/more' block content that need to be updated according to its translated attribute.
             $core_more_content = "<!--more {$block['attrs']['customText']}-->";
-            $block             = $this->update_block_with_content($block, $core_more_content);
+            $block = $this->update_block_with_content($block, $core_more_content);
         }
 
         return $block;
@@ -372,23 +383,24 @@ class PLL_Translation_Walker_Blocks implements PLL_Translation_Walker_Interface
      * @since 3.6
      *
      * @param string $attribute_value The attribute value.
+     *
      * @return string Translated entry, empty if none.
      */
     private function add_entry_and_translate(string $attribute_value): string
     {
         $entry = new Translation_Entry(
-            array(
+            [
                 'singular' => trim($attribute_value),
                 'context'  => Context::to_string(
-                    array(
+                    [
                         Context::FIELD => PLL_Import_Export::POST_CONTENT,
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
-        $result = call_user_func_array($this->callback, array( &$entry ));
-        if (! $result instanceof Translation_Entry || empty($result->translations[0])) {
+        $result = call_user_func_array($this->callback, [&$entry]);
+        if (!$result instanceof Translation_Entry || empty($result->translations[0])) {
             return '';
         }
 

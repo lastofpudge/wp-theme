@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Class handling multiple or single terms export.
  *
  * @since 3.3
@@ -12,7 +8,7 @@
 class PLL_Export_Terms extends PLL_Export_Translated_Objects
 {
     /**
-     * Term Metas
+     * Term Metas.
      *
      * @var PLL_Export_Term_Metas
      */
@@ -45,16 +41,16 @@ class PLL_Export_Terms extends PLL_Export_Translated_Objects
      */
     public function add_item(PLL_Export_Data $export, $item)
     {
-        $tr_id   = $this->translated_object->get($item->term_id, $export->get_target_language());
+        $tr_id = $this->translated_object->get($item->term_id, $export->get_target_language());
         $tr_item = get_term($tr_id);
 
         if ('' !== $item->name) {
             $export->add_translation_entry(
-                array(
+                [
                     'object_type' => PLL_Import_Export::TYPE_TERM,
                     'field_type'  => PLL_Import_Export::TERM_NAME,
                     'object_id'   => $item->term_id,
-                ),
+                ],
                 $item->name,
                 $tr_item instanceof WP_Term ? $tr_item->name : ''
             );
@@ -62,11 +58,11 @@ class PLL_Export_Terms extends PLL_Export_Translated_Objects
 
         if ('' !== $item->description) {
             $export->add_translation_entry(
-                array(
+                [
                     'object_type' => PLL_Import_Export::TYPE_TERM,
                     'field_type'  => PLL_Import_Export::TERM_DESCRIPTION,
                     'object_id'   => $item->term_id,
-                ),
+                ],
                 $item->description,
                 $tr_item instanceof WP_Term ? $tr_item->description : ''
             );
@@ -92,6 +88,7 @@ class PLL_Export_Terms extends PLL_Export_Translated_Objects
      * @since 3.6
      *
      * @param int[] $ids Term IDs.
+     *
      * @return void
      *
      * @phpstan-param non-empty-array<positive-int> $ids
@@ -107,6 +104,7 @@ class PLL_Export_Terms extends PLL_Export_Translated_Objects
      * @since 3.6
      *
      * @param WP_Term $item Term to get ID from.
+     *
      * @return int Term ID.
      */
     protected function get_item_id($item): int

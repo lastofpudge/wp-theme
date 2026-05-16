@@ -6,6 +6,7 @@ do_action('woocommerce_before_edit_account_address_form');
 
 if (!$load_address) {
     wc_get_template('myaccount/my-address.php');
+
     return;
 }
 
@@ -18,7 +19,7 @@ $page_title = apply_filters(
 );
 
 $before_form = capture_action("woocommerce_before_edit_address_form_{$load_address}");
-$after_form  = capture_action("woocommerce_after_edit_address_form_{$load_address}");
+$after_form = capture_action("woocommerce_after_edit_address_form_{$load_address}");
 
 ob_start();
 foreach ($address as $key => $field) {

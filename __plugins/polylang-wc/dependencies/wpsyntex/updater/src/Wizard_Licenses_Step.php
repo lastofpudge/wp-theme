@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang Updater
- */
-
 namespace WP_Syntex\Polylang_WC\Updater;
 
 use PLL_Wizard;
@@ -58,7 +54,7 @@ class Wizard_Licenses_Step
     {
         $this->wizard = $wizard;
 
-        add_filter('pll_wizard_steps', array( $this, 'add' ), 101); // After `PLL_Wizard::add_step_licenses()`, so this can override it.
+        add_filter('pll_wizard_steps', [$this, 'add'], 101); // After `PLL_Wizard::add_step_licenses()`, so this can override it.
     }
 
     /**
@@ -67,9 +63,11 @@ class Wizard_Licenses_Step
      * @since 1.0
      *
      * @param array $steps List of steps.
+     *
      * @return array List of steps updated.
      *
      * @phpstan-param Steps $steps
+     *
      * @phpstan-return Steps
      */
     public function add($steps)
@@ -82,21 +80,21 @@ class Wizard_Licenses_Step
             }
             if ($first_step instanceof PLL_Wizard) {
                 // Remove the old system, so we don't send 2 AJAX requests for the same action (deactivate license).
-                remove_action('wp_ajax_pll_deactivate_license', array( $first_step, 'deactivate_license' ));
+                remove_action('wp_ajax_pll_deactivate_license', [$first_step, 'deactivate_license']);
                 wp_dequeue_script('pll_settings');
             }
         }
 
         $this->hooks();
 
-        if (! empty($this->get_licenses())) {
-            $steps['licenses'] = array(
+        if (!empty($this->get_licenses())) {
+            $steps['licenses'] = [
                 'name'    => esc_html__('Licenses', 'polylang-wc'),
-                'view'    => array( $this, 'display' ),
-                'handler' => array( $this, 'save' ),
-                'scripts' => array( 'pll_license' ),
-                'styles'  => array( 'pll_license' ),
-            );
+                'view'    => [$this, 'display'],
+                'handler' => [$this, 'save'],
+                'scripts' => ['pll_license'],
+                'styles'  => ['pll_license'],
+            ];
         }
 
         return $steps;
@@ -111,15 +109,15 @@ class Wizard_Licenses_Step
      */
     public function display(): void
     {
-        $atts = array(
-            'license_rows' => array(),
+        $atts = [
+            'license_rows' => [],
             'is_error'     => isset($_GET['activate_error']) && 'i18n_license_key_error' === sanitize_key($_GET['activate_error']), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        );
+        ];
         foreach ($this->get_licenses() as $license) {
             $atts['license_rows'][] = $license->get_form_field();
         }
 
-        include __DIR__ . '/views/view-wizard-step-licenses.php';
+        include __DIR__.'/views/view-wizard-step-licenses.php';
     }
 
     /**
@@ -139,11 +137,11 @@ class Wizard_Licenses_Step
         $redirect = $this->wizard->get_next_step_link();
 
         foreach ($this->get_licenses() as $license) {
-            if (! isset($_POST['licenses'][ $license->id ])) {
+            if (!isset($_POST['licenses'][$license->id])) {
                 continue;
             }
 
-            $updated_license = $license->activate_license(sanitize_key($_POST['licenses'][ $license->id ]));
+            $updated_license = $license->activate_license(sanitize_key($_POST['licenses'][$license->id]));
 
             if (empty($updated_license->license_data) || false !== $updated_license->license_data->success) {
                 // Success.
@@ -152,10 +150,10 @@ class Wizard_Licenses_Step
 
             // Stay on this step with an error.
             $redirect = add_query_arg(
-                array(
+                [
                     'step'           => $this->get_current_step(),
                     'activate_error' => 'i18n_license_key_error',
-                )
+                ]
             );
         }
 
@@ -174,8 +172,8 @@ class Wizard_Licenses_Step
     private function get_current_step(): string
     {
         /** This filter is documented in `PLL_Wizard::setup_wizard_page()`. */
-        $steps = apply_filters('pll_wizard_steps', array());
-        $step  = isset($_GET['step']) ? sanitize_key($_GET['step']) : false; // phpcs:ignore WordPress.Security.NonceVerification
+        $steps = apply_filters('pll_wizard_steps', []);
+        $step = isset($_GET['step']) ? sanitize_key($_GET['step']) : false; // phpcs:ignore WordPress.Security.NonceVerification
 
         // @phpstan-var non-empty-array<string, array> $steps
         // @phpstan-var string|false $step
