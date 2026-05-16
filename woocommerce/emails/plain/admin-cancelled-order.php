@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Admin cancelled order email (plain text)
+ * Admin cancelled order email (plain text).
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/admin-cancelled-order.php.
  *
@@ -12,7 +12,7 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 9.8.0
  */
 
@@ -32,7 +32,7 @@ if ($email_improvements_enabled) {
     /* translators: %1$s: Order number. %2$s: Customer full name */
     $text = __('We’re getting in touch to let you know that order #%1$s from %2$s has been cancelled.', 'woocommerce');
 }
-echo sprintf(esc_html($text), esc_html($order->get_order_number()), esc_html($order->get_formatted_billing_full_name())) . "\n\n";
+echo sprintf(esc_html($text), esc_html($order->get_order_number()), esc_html($order->get_formatted_billing_full_name()))."\n\n";
 
 /*
  * @hooked WC_Emails::order_details() Shows the order details table.

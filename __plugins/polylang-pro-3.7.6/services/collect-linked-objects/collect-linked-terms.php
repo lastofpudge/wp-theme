@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * A Service to collect linked terms.
  *
  * @since 3.3
@@ -16,20 +12,22 @@ class PLL_Collect_Linked_Terms
      * The idea is to prevent processing the same posts several times via the reusable block, or worse, infinite loops.
      *
      * @var int[]
+     *
      * @phpstan-var array<int, int>
      */
-    protected $processed_posts = array();
+    protected $processed_posts = [];
 
     /**
      * Gets all the term objects linked to a set of posts.
      *
      * @since 3.3
      *
-     * @param  WP_Post[] $posts      An array of post objects.
-     * @param  string[]  $taxonomies Optional. Terms will be limited to the given taxonomies.
-     * @return WP_Term[]             An array of linked term objects.
+     * @param WP_Post[] $posts      An array of post objects.
+     * @param string[]  $taxonomies Optional. Terms will be limited to the given taxonomies.
+     *
+     * @return WP_Term[] An array of linked term objects.
      */
-    public function get_linked_terms(array $posts, array $taxonomies = array())
+    public function get_linked_terms(array $posts, array $taxonomies = [])
     {
         $terms = $this->get_terms_assigned_to_posts($posts, $taxonomies);
 
@@ -43,16 +41,17 @@ class PLL_Collect_Linked_Terms
      *
      * @since 3.7
      *
-     * @param  WP_Post[] $posts      An array of post objects.
-     * @param  string[]  $taxonomies Terms will be limited to the given taxonomies.
-     * @return WP_Term[]             An array of assigned term objects.
+     * @param WP_Post[] $posts      An array of post objects.
+     * @param string[]  $taxonomies Terms will be limited to the given taxonomies.
+     *
+     * @return WP_Term[] An array of assigned term objects.
      */
     protected function get_terms_assigned_to_posts(array $posts, array $taxonomies): array
     {
-        $post_ids   = wp_list_pluck($posts, 'ID');
+        $post_ids = wp_list_pluck($posts, 'ID');
         $post_terms = wp_get_object_terms($post_ids, $taxonomies);
 
-        return is_array($post_terms) ? $post_terms : array();
+        return is_array($post_terms) ? $post_terms : [];
     }
 
     /**
@@ -60,36 +59,37 @@ class PLL_Collect_Linked_Terms
      *
      * @since 3.7
      *
-     * @param  WP_Post[] $posts      An array of post objects.
-     * @param  string[]  $taxonomies Terms will be limited to the given taxonomies.
-     * @return WP_Term[]             An array of linked term objects.
+     * @param WP_Post[] $posts      An array of post objects.
+     * @param string[]  $taxonomies Terms will be limited to the given taxonomies.
+     *
+     * @return WP_Term[] An array of linked term objects.
      */
     protected function get_terms_from_posts(array $posts, array $taxonomies): array
     {
-        $this->processed_posts = array();
-        $linked_ids            = array();
+        $this->processed_posts = [];
+        $linked_ids = [];
 
         foreach ($posts as $post) {
             $linked_ids = array_merge($linked_ids, $this->get_term_ids_from_post($post));
         }
 
-        $this->processed_posts = array();
+        $this->processed_posts = [];
 
         if (empty($linked_ids)) {
-            return array();
+            return [];
         }
 
         $linked_ids = array_unique($linked_ids);
 
         $terms = get_terms(
-            array(
+            [
                 'include'    => $linked_ids,
                 'taxonomy'   => $taxonomies,
                 'hide_empty' => false,
-            )
+            ]
         );
 
-        return is_array($terms) ? $terms : array();
+        return is_array($terms) ? $terms : [];
     }
 
     /**
@@ -98,18 +98,20 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param WP_Post $post A given WP_Post object.
+     *
      * @return int[] An array of term IDs.
+     *
      * @phpstan-return array<int<0, max>, positive-int>
      */
     protected function get_term_ids_from_post(WP_Post $post)
     {
-        if (isset($this->processed_posts[ $post->ID ])) {
-            return array();
+        if (isset($this->processed_posts[$post->ID])) {
+            return [];
         }
 
-        $this->processed_posts[ $post->ID ] = $post->ID;
+        $this->processed_posts[$post->ID] = $post->ID;
 
-        $linked_ids = array();
+        $linked_ids = [];
 
         if (has_blocks($post->post_content)) {
             $linked_ids = $this->get_term_ids_from_block_content($post->post_content);
@@ -135,6 +137,7 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param string $post_content The content of the post.
+     *
      * @return int[] An array of term IDs.
      *
      * @phpstan-return array<int<0, max>, positive-int>
@@ -150,13 +153,14 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param array[] $blocks An array of blocks.
+     *
      * @return int[] An array of term IDs.
      *
      * @phpstan-return array<int<0, max>, positive-int>
      */
     protected function get_term_ids_from_blocks(array $blocks)
     {
-        $term_ids = array();
+        $term_ids = [];
 
         foreach ($blocks as $block) {
             $term_ids = array_merge($term_ids, $this->get_term_ids_from_block($block));
@@ -171,13 +175,14 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param array $block A representative array of a block.
+     *
      * @return int[] An array of term IDs.
      *
      * @phpstan-return array<int<0, max>, positive-int>
      */
     protected function get_term_ids_from_block(array $block)
     {
-        $term_ids = array();
+        $term_ids = [];
 
         switch ($block['blockName']) {
             case 'core/block':
@@ -193,7 +198,7 @@ class PLL_Collect_Linked_Terms
                 break;
         }
 
-        if (! empty($block['innerBlocks'])) {
+        if (!empty($block['innerBlocks'])) {
             $term_ids = array_merge($term_ids, $this->get_term_ids_from_blocks($block['innerBlocks']));
         }
 
@@ -206,28 +211,29 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param array $block A representative array of a block.
+     *
      * @return int[] An array of term IDs.
      *
      * @phpstan-return array<int<0, max>, positive-int>
      */
     protected function get_term_ids_from_reusable_block(array $block)
     {
-        if (empty($block['attrs']['ref']) || ! is_int($block['attrs']['ref'])) {
-            return array();
+        if (empty($block['attrs']['ref']) || !is_int($block['attrs']['ref'])) {
+            return [];
         }
 
         $post_id = $block['attrs']['ref'];
 
-        if (isset($this->processed_posts[ $post_id ])) {
-            return array();
+        if (isset($this->processed_posts[$post_id])) {
+            return [];
         }
 
-        $this->processed_posts[ $post_id ] = $post_id;
+        $this->processed_posts[$post_id] = $post_id;
 
         $linked_post = get_post($post_id);
 
-        if (! $linked_post instanceof WP_Post) {
-            return array();
+        if (!$linked_post instanceof WP_Post) {
+            return [];
         }
 
         return $this->get_term_ids_from_block_content($linked_post->post_content);
@@ -239,14 +245,15 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param array $block A representative array of a block.
+     *
      * @return int[] An array of term IDs.
      *
      * @phpstan-return array<int<0, max>, positive-int>
      */
     protected function get_term_ids_from_latest_posts_block(array $block)
     {
-        if (empty($block['attrs']['categories']) || ! is_array($block['attrs']['categories'])) {
-            return array();
+        if (empty($block['attrs']['categories']) || !is_array($block['attrs']['categories'])) {
+            return [];
         }
 
         /**
@@ -274,14 +281,15 @@ class PLL_Collect_Linked_Terms
      * @since 3.3
      *
      * @param array $block A representative array of a block.
+     *
      * @return int[] An array of term IDs.
      *
      * @phpstan-return array<int<0, max>, positive-int>
      */
     protected function get_term_ids_from_query_block(array $block)
     {
-        if (empty($block['attrs']['query']['taxQuery']) || ! is_array($block['attrs']['query']['taxQuery'])) {
-            return array();
+        if (empty($block['attrs']['query']['taxQuery']) || !is_array($block['attrs']['query']['taxQuery'])) {
+            return [];
         }
 
         /**
@@ -311,11 +319,12 @@ class PLL_Collect_Linked_Terms
      * @since 3.7
      *
      * @param WP_Term[] $terms An array of terms.
+     *
      * @return array The array of terms parents, if any.
      */
     protected function get_terms_parents(array $terms): array
     {
-        $term_parents_ids = array();
+        $term_parents_ids = [];
         foreach ($terms as $term) {
             if (empty($term->parent)) {
                 continue;
@@ -330,16 +339,16 @@ class PLL_Collect_Linked_Terms
         }
 
         if (empty($term_parents_ids)) {
-            return array();
+            return [];
         }
 
         $terms_parents = get_terms(
-            array(
+            [
                 'include'    => $term_parents_ids,
                 'hide_empty' => false,
-            )
+            ]
         );
 
-        return is_array($terms_parents) ? $terms_parents : array();
+        return is_array($terms_parents) ? $terms_parents : [];
     }
 }

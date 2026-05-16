@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang Updater
- */
-
 namespace WP_Syntex\Polylang_WC\Updater;
 
 use PLL_License;
@@ -47,7 +43,8 @@ trait Common_Trait
          * @param (License|PLL_License)[] $licenses Array of instances of `WP_Syntex\Polylang_WC\Updater\License`
          *                                          or `PLL_License`, keyed by string IDs.
          */
-        $this->items = (array) apply_filters('pll_settings_licenses', array());
+        $this->items = (array) apply_filters('pll_settings_licenses', []);
+
         return $this->items;
     }
 
@@ -60,8 +57,8 @@ trait Common_Trait
      */
     private function hooks(): void
     {
-        add_action('admin_enqueue_scripts', array( $this, 'enqueue_scripts' ));
-        add_action('wp_ajax_pllu_deactivate_license', array( $this, 'deactivate_license' ));
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
+        add_action('wp_ajax_pllu_deactivate_license', [$this, 'deactivate_license']);
     }
 
     /**
@@ -80,10 +77,10 @@ trait Common_Trait
          * in mind if this file is moved.
          */
         $style_url = plugins_url("/css/build/license{$suffix}.css", __DIR__);
-        wp_enqueue_style('pll_license', $style_url, array(), POLYLANG_VERSION);
+        wp_enqueue_style('pll_license', $style_url, [], POLYLANG_VERSION);
 
         $script_url = plugins_url("/js/build/license{$suffix}.js", __DIR__);
-        wp_enqueue_script('pll_license', $script_url, array( 'wp-api-fetch' ), POLYLANG_VERSION, true);
+        wp_enqueue_script('pll_license', $script_url, ['wp-api-fetch'], POLYLANG_VERSION, true);
     }
 
     /**
@@ -102,28 +99,28 @@ trait Common_Trait
     {
         check_ajax_referer(self::DEACTIVATE_LICENSE_NONCE_ACTION, '_pll_nonce');
 
-        if (! current_user_can('manage_options')) {
+        if (!current_user_can('manage_options')) {
             wp_die(-1);
         }
 
-        if (! isset($_POST['id'])) {
+        if (!isset($_POST['id'])) {
             wp_die(0);
         }
 
-        $id       = substr(sanitize_text_field(wp_unslash($_POST['id'])), 11);
+        $id = substr(sanitize_text_field(wp_unslash($_POST['id'])), 11);
         $licenses = $this->get_licenses();
 
-        if (! isset($licenses[ $id ])) {
+        if (!isset($licenses[$id])) {
             wp_die(0);
         }
 
-        $license = $licenses[ $id ]->deactivate_license();
+        $license = $licenses[$id]->deactivate_license();
 
         wp_send_json_success(
-            array(
+            [
                 'id'   => $id,
                 'html' => $license->get_form_field(),
-            )
+            ]
         );
     }
 }
