@@ -61,6 +61,6 @@ if (is_404()) {
 }
 
 if (is_author()) {
-    wp_redirect(home_url(), 301);
+    wp_safe_redirect(home_url(), 301);
     exit;
 }
