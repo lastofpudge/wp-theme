@@ -323,6 +323,8 @@
                                name="_wp_http_referer"
                                value="{{ http_referer }}">
 
+                        {{ terms_html | raw }}
+
                         <button type="submit"
                                 id="place_order"
                                 name="woocommerce_checkout_place_order"

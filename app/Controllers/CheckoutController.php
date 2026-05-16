@@ -88,6 +88,7 @@ class CheckoutController extends Controller
             ];
         }
         $this->data['payment_gateways'] = $gateways;
+        $this->data['terms_html']       = capture_output('wc_get_template', 'checkout/terms.php');
 
         return $this->data;
     }
