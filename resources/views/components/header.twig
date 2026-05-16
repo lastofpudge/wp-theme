@@ -48,7 +48,9 @@
                         <a class="nav-link" href="{{ cart_link }}">
                             <i class="fa-solid fa-cart-shopping"></i> Cart
                             {% if cart and cart.get_cart_contents_count() > 0 %}
-                                <span class="badge bg-danger">{{ cart.get_cart_contents_count() }}</span>
+                                <span class="badge bg-danger js-cart-count-badge">{{ cart.get_cart_contents_count() }}</span>
+                            {% else %}
+                                <span class="badge bg-danger js-cart-count-badge d-none">0</span>
                             {% endif %}
                         </a>
                         <a class="nav-link" href="{{ checkout_link }}">

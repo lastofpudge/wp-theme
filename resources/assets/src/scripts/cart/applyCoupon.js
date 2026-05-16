@@ -1,4 +1,5 @@
 import Toast from '../libs/Toast'
+import { syncCartUi } from './ui'
 
 export function initApplyCoupon() {
   const preloader = document.querySelector('.js-preloader-main')
@@ -6,7 +7,7 @@ export function initApplyCoupon() {
 
   if (!couponButton) return
 
-  couponButton.addEventListener('click', async event => {
+  couponButton.addEventListener('click', async () => {
     preloader?.classList.add('js-preloading')
 
     const couponCode = document.querySelector('.js-coupon').value
@@ -24,15 +25,14 @@ export function initApplyCoupon() {
       const result = await response.json()
 
       if (result.type === 'success') {
-        document.querySelectorAll('.js-total').forEach(el => { el.textContent = result.total })
-        document.querySelectorAll('.js-sub-total').forEach(el => { el.textContent = result.subTotal })
+        syncCartUi(result)
         document.querySelector('.js-coupon').value = ''
         Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
       } else {
         Toast.fire({ icon: 'error', iconColor: 'red', title: result.message })
       }
     } catch (error) {
-      console.error(error)
+      Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
     }
 
     preloader?.classList.remove('js-preloading')

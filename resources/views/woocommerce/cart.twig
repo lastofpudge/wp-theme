@@ -24,7 +24,7 @@
                                     {% set product_name = _product.get_name() %}
 
                                     {% if _product and _product.exists() and cart_item['quantity'] > 0 and (cart_item|apply_filters('woocommerce_cart_item_visible', true, cart_item, cart_item_key)) %}
-                                        <tr data-key="{{ cart_item_key }}">
+                                        <tr class="js-cart-row" data-key="{{ cart_item_key }}">
                                             <td class="text-center">
                                                 {% set thumbnail = _product.get_image() %}
                                                 <a href="{{ fn('get_permalink', product_id) }}"
@@ -61,7 +61,7 @@
                                                                 'max_value': max_quantity,
                                                                 'min_value': min_quantity,
                                                                 'product_name': product_name,
-                                                                'classes': ['qty', 'my-cart-qty-input']
+                                                                'classes': ['qty', 'my-cart-qty-input', 'js-cart-qty-input']
                                                             }, _product, false) }}
                                                         </div>
 
@@ -83,10 +83,10 @@
                                             </td>
                                             <td class="text-end">
                                                 Unit
-                                                Price: {{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key)|raw }}
+                                                Price: <span class="js-cart-line-price">{{ fn('apply_filters', 'woocommerce_cart_item_price', cart.get_product_price(_product), cart_item, cart_item_key)|raw }}</span>
                                                 <br>
                                                 {% set sub_total = cart.get_product_subtotal(_product, cart_item.quantity) %}
-                                                Total: {{ fn('apply_filters', 'woocommerce_cart_item_subtotal', sub_total, cart_item, cart_item_key)|raw }}
+                                                Total: <span class="js-cart-line-subtotal">{{ fn('apply_filters', 'woocommerce_cart_item_subtotal', sub_total, cart_item, cart_item_key)|raw }}</span>
                                             </td>
                                             <td class="text-center">
                                                 <button class="btn btn-danger js-remove-from-cart"
@@ -114,34 +114,40 @@
                                             </div>
                                         </div>
 
-                                        {% if cart.get_applied_coupons() %}
-                                            <p>{{ fn('__', 'Active coupons:', 'woocommerce') }}</p>
-                                            <ul>
-                                                {% for coupon in cart.get_applied_coupons() %}
-                                                    <li><span>{{ coupon }}</span>
-                                                        <button class="btn btn-danger js-remove-coupon"
-                                                                data-coupon="{{ coupon }}"
-                                                        ><i class="fa-solid fa-circle-xmark">x</i>
-                                                        </button>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endif %}
+                                        <div class="js-cart-coupon-list">
+                                            {% if cart.get_applied_coupons() %}
+                                                <p>{{ fn('__', 'Active coupons:', 'woocommerce') }}</p>
+                                                <ul>
+                                                    {% for coupon in cart.get_applied_coupons() %}
+                                                        <li><span>{{ coupon }}</span>
+                                                            <button class="btn btn-danger js-remove-coupon"
+                                                                    data-coupon="{{ coupon }}"
+                                                                    type="button"><i class="fa-solid fa-circle-xmark">x</i>
+                                                            </button>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
                                     </td>
+                                </tr>
+                                {% endif %}
+                                {% if fn('get_cart_discount_total_amount') > 0 %}
+                                <tr class="js-cart-discount-row text-success">
+                                    <td colspan="4" class="text-end"><strong>{{ fn('__', 'Discount', 'woocommerce') }}</strong></td>
+                                    <td class="text-end">-{{ fn('get_cart_discount_total_amount')|wc_price }}</td>
                                 </tr>
                                 {% endif %}
                                 <tr>
                                     <td colspan="4" class="text-end"><strong>{{ fn('__', 'Subtotal', 'woocommerce') }}</strong></td>
                                     <td class="text-end">
-                                        <span class="js-sub-total">{{ cart.get_subtotal() | number_format(2, '.', '') }}</span>
-                                        <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
+                                        <span class="js-sub-total">{{ cart.get_cart_subtotal()|raw }}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="4" class="text-end"><strong>{{ fn('__', 'Total', 'woocommerce') }}</strong></td>
                                     <td class="text-end">
-                                        <span class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span>
-                                        <span class="woocommerce-Price-currencySymbol">{{ currency_symbol }}</span>
+                                        <span class="js-total">{{ cart.get_total()|raw }}</span>
                                     </td>
                                 </tr>
                                 </tfoot>

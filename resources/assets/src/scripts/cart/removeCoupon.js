@@ -1,4 +1,5 @@
 import Toast from '../libs/Toast'
+import { syncCartUi } from './ui'
 
 export function initRemoveCoupon() {
   const preloader = document.querySelector('.js-preloader-main')
@@ -24,15 +25,13 @@ export function initRemoveCoupon() {
       const result = await response.json()
 
       if (result.type === 'success') {
-        document.querySelectorAll('.js-total').forEach(el => { el.textContent = result.total })
-        document.querySelectorAll('.js-sub-total').forEach(el => { el.textContent = result.subTotal })
-        button.closest('li')?.remove()
+        syncCartUi(result)
         Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
       } else {
         Toast.fire({ icon: 'error', iconColor: 'red', title: result.message })
       }
     } catch (error) {
-      console.error(error)
+      Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
     }
 
     preloader?.classList.remove('js-preloading')

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-12">
                 <h1>
-                    {% if fn('is_tax', ['product_cat', 'product_tag']) %}
+                    {% if fn('is_tax') %}
                         {{ fn('single_term_title', '', false) }}
                     {% else %}
                         {{ fn('get_the_title', fn('wc_get_page_id', 'shop')) }}

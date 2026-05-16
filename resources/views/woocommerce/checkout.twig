@@ -298,11 +298,11 @@
                             </tbody>
 
                             <tfoot>
-                                {% if cart.get_coupon_discount_total() > 0 %}
+                                {% if fn('get_cart_discount_total_amount') > 0 %}
                                     <tr class="cart-discount text-success">
                                         <td>{{ fn('__', 'Discount', 'woocommerce') }}</td>
                                         <td class="text-end">
-                                            -{{ cart.get_coupon_discount_total()|wc_price }}
+                                            -{{ fn('get_cart_discount_total_amount')|wc_price }}
                                         </td>
                                     </tr>
                                 {% endif %}

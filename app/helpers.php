@@ -138,34 +138,134 @@ if (!function_exists('crb_get_i18n_theme_option')) {
 }
 
 if (!function_exists('get_cart_data')) {
+    function get_cart_item_data(string $cart_item_key, array $cart_item): array
+    {
+        $_product     = $cart_item['data'];
+        $productId    = (int) $cart_item['product_id'];
+        $productPrice = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
+        $subTotal     = WC()->cart->get_product_subtotal($_product, $cart_item['quantity']);
+
+        return [
+            'id'                 => $productId,
+            'name'               => $_product->get_name(),
+            'link'               => get_permalink($productId),
+            'thumbnail'          => $_product->get_image(),
+            'quantity'           => (int) $cart_item['quantity'],
+            'cart_item_key'      => $cart_item_key,
+            'price_html'         => $productPrice,
+            'line_subtotal_html' => apply_filters('woocommerce_cart_item_subtotal', $subTotal, $cart_item, $cart_item_key),
+        ];
+    }
+
     function get_cart_data(): array
     {
-        $cart = WC()->cart->get_cart();
+        $cart      = WC()->cart->get_cart();
         $cart_data = [];
 
         foreach ($cart as $cart_item_key => $cart_item) {
-            $_product = $cart_item['data'];
-            $sale_price = null;
-
-            if (!empty($_product->get_sale_price())) {
-                $sale_price = wc_price($_product->get_sale_price());
-            }
-
-            $item_data = [
-                'id' => $cart_item['product_id'],
-                'name' => $_product->get_name(),
-                'link' => get_permalink($cart_item['product_id']),
-                'thumbnail' => $_product->get_image(),
-                'quantity' => $cart_item['quantity'],
-                'cart_item_key' => $cart_item_key,
-                'regular_price' => wc_price($_product->get_regular_price()),
-                'sale_price' => $sale_price,
-            ];
-
-            $cart_data[] = $item_data;
+            $cart_data[] = get_cart_item_data($cart_item_key, $cart_item);
         }
 
         return $cart_data;
+    }
+}
+
+if (!function_exists('get_cart_items_map')) {
+    function get_cart_items_map(): array
+    {
+        $items = [];
+
+        foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+            $items[$cart_item_key] = get_cart_item_data($cart_item_key, $cart_item);
+        }
+
+        return $items;
+    }
+}
+
+if (!function_exists('get_cart_coupon_list_html')) {
+    function get_cart_coupon_list_html(): string
+    {
+        if (!wc_coupons_enabled()) {
+            return '';
+        }
+
+        $coupons = WC()->cart->get_applied_coupons();
+        if (empty($coupons)) {
+            return '';
+        }
+
+        ob_start();
+        ?>
+        <p><?php esc_html_e('Active coupons:', 'woocommerce'); ?></p>
+        <ul>
+            <?php foreach ($coupons as $coupon) : ?>
+                <li>
+                    <span><?php echo esc_html($coupon); ?></span>
+                    <button class="btn btn-danger js-remove-coupon" data-coupon="<?php echo esc_attr($coupon); ?>" type="button">
+                        <i class="fa-solid fa-circle-xmark">x</i>
+                    </button>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php
+
+        return trim((string) ob_get_clean());
+    }
+}
+
+if (!function_exists('get_cart_discount_row_html')) {
+    function get_cart_discount_total_amount(): float
+    {
+        $cart = WC()->cart;
+
+        $discount = method_exists($cart, 'get_discount_total')
+            ? (float) $cart->get_discount_total()
+            : 0.0;
+
+        $discountTax = method_exists($cart, 'get_discount_tax')
+            ? (float) $cart->get_discount_tax()
+            : 0.0;
+
+        return $discount + $discountTax;
+    }
+
+    function get_cart_discount_row_html(): string
+    {
+        $discountTotal = get_cart_discount_total_amount();
+        if ($discountTotal <= 0) {
+            return '';
+        }
+
+        ob_start();
+        ?>
+        <tr class="js-cart-discount-row text-success">
+            <td colspan="4" class="text-end">
+                <strong><?php esc_html_e('Discount', 'woocommerce'); ?></strong>
+            </td>
+            <td class="text-end">-<?php echo wp_kses_post(wc_price($discountTotal)); ?></td>
+        </tr>
+        <?php
+
+        return trim((string) ob_get_clean());
+    }
+}
+
+if (!function_exists('get_cart_summary_payload')) {
+    function get_cart_summary_payload(): array
+    {
+        $count = WC()->cart->get_cart_contents_count();
+
+        return [
+            'cart'            => get_cart_data(),
+            'items'           => get_cart_items_map(),
+            'count'           => $count,
+            'countLabel'      => _n('item', 'items', $count, 'woocommerce'),
+            'subTotal'        => WC()->cart->get_cart_subtotal(),
+            'total'           => WC()->cart->get_total(),
+            'couponListHtml'  => get_cart_coupon_list_html(),
+            'discountRowHtml' => get_cart_discount_row_html(),
+        ];
     }
 }
 

@@ -1,12 +1,9 @@
 import Toast from '../libs/Toast'
+import { syncCartUi } from './ui'
 
 export function removeFromCart() {
   const preloader = document.querySelector('.js-preloader-main')
   const cartContainer = document.querySelector('body')
-
-  const totals = document.querySelectorAll('.js-total')
-  const subTotals = document.querySelectorAll('.js-sub-total')
-  const cartCount = document.querySelector('.js-cart-total')
 
   cartContainer.addEventListener('click', async event => {
     const target = event.target.closest('.js-remove-from-cart')
@@ -30,19 +27,14 @@ export function removeFromCart() {
           const cartItems = cartContainer.querySelectorAll(`[data-key="${target.dataset.key}"]`)
           cartItems.forEach(cartItem => { cartItem.remove() })
 
-          totals.forEach(el => { el.innerHTML = result.total })
-          subTotals.forEach(el => { el.innerHTML = result.subTotal })
-          if (cartCount) {
-            cartCount.innerHTML = result.count
-          }
-
+          syncCartUi(result)
           Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
           if (result.count === 0) {
             window.location.reload()
           }
         }
       } catch (error) {
-        console.error(error)
+        Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
       }
 
       preloader?.classList.remove('js-preloading')

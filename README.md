@@ -31,7 +31,7 @@ npm run fix    # Auto-fix lint issues
 
 ```bash
 composer pint   # PSR-12 code style fixer
-composer test   # Run all checks
+composer test   # Pint + frontend lint
 ```
 
 ## Architecture

@@ -12,7 +12,7 @@ const modalCartProduct = product => {
            
             <td>x${product.quantity}</td>
             <td class="text-end">
-                ${product.sale_price ? `${product.sale_price}` : `${product.regular_price}`}
+                ${product.price_html}
             </td>
             
             <td class="text-end">

@@ -33,7 +33,7 @@ export function initRegisterForm() {
         Toast.fire({ icon: 'error', iconColor: 'red', title: result.message })
       }
     } catch (error) {
-      console.error(error)
+      Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
     }
 
     preloader?.classList.remove('js-preloading')

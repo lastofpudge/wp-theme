@@ -61,7 +61,8 @@
   "scripts": {
     "pint": "pint --preset psr12",
     "test": [
-      "@pint"
+      "@pint",
+      "npm run lint"
     ]
   },
   "extra": {

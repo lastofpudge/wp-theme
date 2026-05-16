@@ -56,7 +56,7 @@ class AdminOptions
             return;
         }
 
-        if ($query->is_post_type_archive('product') || $query->is_tax(['product_cat', 'product_tag'])) {
+        if ($this->isProductArchiveQuery($query)) {
             $query->set('posts_per_page', 8);
         }
     }
@@ -118,7 +118,7 @@ class AdminOptions
             return;
         }
 
-        if (!$query->is_post_type_archive('product') && !$query->is_tax(['product_cat', 'product_tag'])) {
+        if (!$this->isProductArchiveQuery($query)) {
             return;
         }
 
@@ -154,7 +154,7 @@ class AdminOptions
 
         // On product_cat archives the taxonomy constraint is already embedded in the query;
         // adding a second tax_query for a different category yields no results.
-        if (!$query->is_post_type_archive('product') && !$query->is_tax(['product_tag'])) {
+        if (!$this->isProductArchiveQuery($query) || $query->is_tax('product_cat')) {
             return;
         }
 
@@ -172,5 +172,25 @@ class AdminOptions
         ];
 
         $query->set('tax_query', $tax);
+    }
+
+    private function isProductArchiveQuery(\WP_Query $query): bool
+    {
+        if ($query->is_post_type_archive('product')) {
+            return true;
+        }
+
+        return $query->is_tax($this->getProductTaxonomies());
+    }
+
+    private function getProductTaxonomies(): array
+    {
+        $taxonomies = ['product_cat', 'product_tag', 'product_brand'];
+
+        if (function_exists('wc_get_attribute_taxonomy_names')) {
+            $taxonomies = array_merge($taxonomies, wc_get_attribute_taxonomy_names());
+        }
+
+        return array_values(array_unique($taxonomies));
     }
 }

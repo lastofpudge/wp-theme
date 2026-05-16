@@ -1,6 +1,7 @@
 @use 'sweetalert2/src/sweetalert2.scss';
 @import 'nouislider/dist/nouislider.css';
 
+/* stylelint-disable selector-id-pattern, selector-class-pattern, no-descending-specificity */
 #rangeSlider {
   margin: 0.75rem 0 0.5rem;
   border: 0;
@@ -32,6 +33,7 @@
 #rangeSlider .noUi-handle::after {
   display: none;
 }
+/* stylelint-enable selector-id-pattern, selector-class-pattern, no-descending-specificity */
 
 .preloader-main {
   position: absolute;

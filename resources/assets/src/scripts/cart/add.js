@@ -1,18 +1,12 @@
 import Toast from '../libs/Toast'
-import modalCartProduct from './modalCartProduct.data'
+import { syncCartUi } from './ui'
 
 export function addToCart() {
   const preloader = document.querySelector('.js-preloader-main')
   const addButtons = document.querySelectorAll('.js-add-to-cart')
 
-  const totals = document.querySelectorAll('.js-total')
-  const subTotals = document.querySelectorAll('.js-sub-total')
-  const cartCount = document.querySelector('.js-cart-total')
-
-  const cartList = document.querySelector('.js-cart-list')
-
   addButtons.forEach(addButton => {
-    addButton.addEventListener('click', async event => {
+    addButton.addEventListener('click', async () => {
       preloader?.classList.add('js-preloading')
 
       const formData = new FormData()
@@ -33,19 +27,7 @@ export function addToCart() {
         const result = await response.json()
 
         if (result.type === 'success') {
-          totals.forEach(el => { el.innerHTML = result.total })
-          subTotals.forEach(el => { el.innerHTML = result.subTotal })
-          if (cartCount) {
-            cartCount.innerHTML = result.count
-          }
-
-          if (result.cart && cartList) {
-            cartList.innerHTML = ''
-            result.cart.forEach(product => {
-              cartList.innerHTML += modalCartProduct(product)
-            })
-          }
-
+          syncCartUi(result)
           Toast.fire({ icon: 'success', iconColor: '#007cba', title: result.message })
         }
 
@@ -53,7 +35,7 @@ export function addToCart() {
           Toast.fire({ icon: 'error', iconColor: 'red', title: result.message })
         }
       } catch (error) {
-        console.error(error)
+        Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
       }
 
       preloader?.classList.remove('js-preloading')

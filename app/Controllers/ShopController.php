@@ -105,16 +105,29 @@ class ShopController extends Controller
     private function getPriceRange(): array
     {
         global $wpdb;
-        $row = $wpdb->get_row(
-            "SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) AS min_price,
-                    MAX(CAST(meta_value AS DECIMAL(10,2))) AS max_price
-             FROM {$wpdb->postmeta}
-             WHERE meta_key = '_price' AND meta_value != ''"
-        );
+
+        global $wp_query;
+        $filterQuery = new ProductFilterQuery($wp_query instanceof \WP_Query ? $wp_query : null);
+        $productIds  = $filterQuery->getProductIds([], true);
+
+        if ($productIds === []) {
+            return ['min' => 0.0, 'max' => 0.0];
+        }
+
+        $placeholders = implode(', ', array_fill(0, count($productIds), '%d'));
+        $sql          = "
+            SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) AS min_price,
+                   MAX(CAST(meta_value AS DECIMAL(10,2))) AS max_price
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = '_price'
+              AND meta_value != ''
+              AND post_id IN ($placeholders)
+        ";
+        $row          = $wpdb->get_row($wpdb->prepare($sql, $productIds));
 
         return [
             'min' => (float) ($row->min_price ?? 0),
-            'max' => (float) ($row->max_price ?? 1000000),
+            'max' => (float) ($row->max_price ?? 0),
         ];
     }
 

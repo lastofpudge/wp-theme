@@ -1,8 +1,8 @@
 <div class="dropdown d-grid js-mini-cart-dropdown">
     <button type="button" data-bs-toggle="dropdown" class="btn btn-lg btn-inverse btn-block dropdown-toggle js-mini-cart-toggle"
             aria-expanded="false"><i class="fa-solid fa-cart-shopping"></i> <span
-                class='js-cart-total'>{{ cart.get_cart_contents_count() }}</span> {{ fn('_n', 'item', 'items', cart.get_cart_contents_count(), 'woocommerce') }} - <span
-                class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
+                class='js-cart-total'>{{ cart.get_cart_contents_count() }}</span> <span class="js-cart-count-label">{{ fn('_n', 'item', 'items', cart.get_cart_contents_count(), 'woocommerce') }}</span> - <span
+                class="js-total">{{ cart.get_total()|raw }}</span>
     </button>
     <ul class="dropdown-menu dropdown-menu-end p-2 js-mini-cart-menu mini-cart-dropdown-menu"
         data-popper-placement="bottom-end">
@@ -53,12 +53,12 @@
                     <tr>
                         <td class="text-end"><strong>{{ fn('__', 'Subtotal', 'woocommerce') }}</strong></td>
                         <td class="text-end"><span
-                                    class="js-sub-total">{{ cart.get_subtotal() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
+                                    class="js-sub-total">{{ cart.get_cart_subtotal()|raw }}</span>
                         </td>
                     </tr>
                     <tr>
                         <td class="text-end"><strong>{{ fn('__', 'Total', 'woocommerce') }}</strong></td>
-                        <td class="text-end"><span class="js-total">{{ cart.get_cart_contents_total() | number_format(2, '.', '') }}</span> {{ currency_symbol }}
+                        <td class="text-end"><span class="js-total">{{ cart.get_total()|raw }}</span>
                         </td>
                     </tr>
                     </tbody>

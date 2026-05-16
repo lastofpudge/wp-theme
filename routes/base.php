@@ -20,6 +20,14 @@ if (function_exists('is_product_tag') && is_product_tag()) {
     Route::load(ShopController::class, 'archive', 'woocommerce/shop');
 }
 
+if (function_exists('is_tax') && is_tax('product_brand')) {
+    Route::load(ShopController::class, 'archive', 'woocommerce/shop');
+}
+
+if (function_exists('wc_get_attribute_taxonomy_names') && function_exists('is_tax') && is_tax(wc_get_attribute_taxonomy_names())) {
+    Route::load(ShopController::class, 'archive', 'woocommerce/shop');
+}
+
 if (function_exists('is_cart') && is_cart()) {
     Route::load(CheckoutController::class, 'cart', 'woocommerce/cart');
 }

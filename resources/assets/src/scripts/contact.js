@@ -34,7 +34,7 @@ export function initContactForm() {
 
       Toast.fire(toastConfig)
     } catch (error) {
-      console.error(error)
+      Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
     }
 
     preloader.classList.remove('js-preloading')

@@ -9,19 +9,9 @@ class CartController
 {
     use HandlesWcNotices;
 
-    private function total(): string
+    private function payload(): array
     {
-        return number_format(WC()->cart->get_cart_contents_total(), 2, '.', '');
-    }
-
-    private function subtotal(): string
-    {
-        $cart = WC()->cart;
-        $amount = method_exists($cart, 'get_subtotal')
-            ? (float) $cart->get_subtotal()
-            : (float) $cart->get_cart_contents_total();
-
-        return number_format($amount, 2, '.', '');
+        return get_cart_summary_payload();
     }
 
     public function addToCart(int $product_id, int $variation_id = 0, int $quantity = 1): void
@@ -38,11 +28,7 @@ class CartController
         wp_send_json([
             'type'     => 'success',
             'message'  => wp_strip_all_tags(wc_add_to_cart_message([$product_id => $quantity], false, true)),
-            'cart'     => get_cart_data(),
-            'total'    => $this->total(),
-            'subTotal' => $this->subtotal(),
-            'count'    => WC()->cart->get_cart_contents_count(),
-        ]);
+        ] + $this->payload());
     }
 
     public function removeFromCart(string $key): void
@@ -52,10 +38,7 @@ class CartController
                 wp_send_json([
                     'type'     => 'success',
                     'message'  => $this->getNotice('success', __('Product removed from the cart.', 'woocommerce')),
-                    'total'    => $this->total(),
-                    'subTotal' => $this->subtotal(),
-                    'count'    => WC()->cart->get_cart_contents_count(),
-                ]);
+                ] + $this->payload());
             } else {
                 wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not remove product from cart.', 'woocommerce'))]);
             }
@@ -79,12 +62,8 @@ class CartController
                 wp_send_json([
                     'type'        => 'success',
                     'newQuantity' => $newQuantity,
-                    'cart'        => get_cart_data(),
-                    'total'       => $this->total(),
-                    'subTotal'    => $this->subtotal(),
-                    'count'       => WC()->cart->get_cart_contents_count(),
                     'message'     => __('Quantity updated.', 'woocommerce'),
-                ]);
+                ] + $this->payload());
             } else {
                 wp_send_json(['type' => 'error', 'message' => $this->getNotice('error', __('Could not update quantity.', 'woocommerce'))]);
             }
@@ -106,9 +85,7 @@ class CartController
         wp_send_json([
             'type'     => 'success',
             'message'  => $this->getNotice('success', __('Coupon applied successfully.', 'woocommerce')),
-            'total'    => $this->total(),
-            'subTotal' => $this->subtotal(),
-        ]);
+        ] + $this->payload());
     }
 
     public function removeCoupon(string $couponCode): void
@@ -124,8 +101,6 @@ class CartController
         wp_send_json([
             'type'     => 'success',
             'message'  => __('Coupon removed.', 'woocommerce'),
-            'total'    => $this->total(),
-            'subTotal' => $this->subtotal(),
-        ]);
+        ] + $this->payload());
     }
 }

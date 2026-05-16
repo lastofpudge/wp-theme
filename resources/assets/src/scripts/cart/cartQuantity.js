@@ -1,18 +1,14 @@
-import modalCartProduct from './modalCartProduct.data'
+import Toast from '../libs/Toast'
+import { syncCartUi } from './ui'
 
 export function initCartQuantity() {
   const preloader = document.querySelector('.js-preloader-main')
-
-  const totals = document.querySelectorAll('.js-total')
-  const subTotals = document.querySelectorAll('.js-sub-total')
-  const cartList = document.querySelector('.js-cart-list')
-  const cartCount = document.querySelector('.js-cart-total')
 
   const changeButtons = document.querySelectorAll('.js-change-cart-quantity')
 
   if (changeButtons) {
     changeButtons.forEach(button => {
-      button.addEventListener('click', async event => {
+      button.addEventListener('click', async () => {
         preloader?.classList.add('js-preloading')
 
         const key = button.dataset.key
@@ -33,29 +29,10 @@ export function initCartQuantity() {
           const result = await response.json()
 
           if (result.type === 'success') {
-            const parentDiv = button.parentElement
-            const quantityInput = parentDiv.querySelector('input')
-
-            const quantityButtons = parentDiv.querySelectorAll('.js-change-cart-quantity')
-            quantityButtons.forEach(btn => { btn.dataset.quantity = result.newQuantity })
-
-            quantityInput.value = result.newQuantity
-
-            totals.forEach(el => { el.innerHTML = result.total })
-            subTotals.forEach(el => { el.innerHTML = result.subTotal })
-            if (cartCount) {
-              cartCount.innerHTML = result.count
-            }
-
-            if (result.cart && cartList) {
-              cartList.innerHTML = ''
-              result.cart.forEach(product => {
-                cartList.innerHTML += modalCartProduct(product)
-              })
-            }
+            syncCartUi(result)
           }
         } catch (error) {
-          console.error(error)
+          Toast.fire({ icon: 'error', iconColor: 'red', title: error.message || 'Request failed.' })
         }
 
         preloader?.classList.remove('js-preloading')
