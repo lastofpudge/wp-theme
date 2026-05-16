@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Expose the product language and translations in the REST API.
  * Used for backward compatibility with Polylang < 3.8.
  *
@@ -29,22 +25,22 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      */
     public function __construct(PLL_REST_API $rest_api)
     {
-        parent::__construct($rest_api, array( 'product' => array( 'filters' => false ) ));
+        parent::__construct($rest_api, ['product' => ['filters' => false]]);
 
-        $this->type           = 'post';
+        $this->type = 'post';
         $this->setter_id_name = 'ID';
 
         $this->data_store = PLLWC_Data_Store::load('product_language');
 
-        foreach (array( 'product', 'product_variation' ) as $post_type) {
-            add_filter("woocommerce_rest_prepare_{$post_type}_object", array( $this, 'prepare_response' ), 10, 3);
+        foreach (['product', 'product_variation'] as $post_type) {
+            add_filter("woocommerce_rest_prepare_{$post_type}_object", [$this, 'prepare_response'], 10, 3);
         }
 
-        add_filter('get_terms_args', array( $this, 'get_terms_args' )); // Before Auto translate.
+        add_filter('get_terms_args', [$this, 'get_terms_args']); // Before Auto translate.
 
-        add_filter('pllwc_language_for_unique_sku', array( $this, 'filter_language_with_request' ));
-        add_filter('pllwc_language_for_lock_on_sku', array( $this, 'filter_language_with_request' ));
-        add_filter('pllwc_language_for_global_unique_id', array( $this, 'filter_language_with_request' ));
+        add_filter('pllwc_language_for_unique_sku', [$this, 'filter_language_with_request']);
+        add_filter('pllwc_language_for_lock_on_sku', [$this, 'filter_language_with_request']);
+        add_filter('pllwc_language_for_global_unique_id', [$this, 'filter_language_with_request']);
     }
 
     /**
@@ -53,6 +49,7 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      * @since 1.1
      *
      * @param array $object Product array.
+     *
      * @return string|false
      */
     public function get_language($object)
@@ -67,6 +64,7 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      *
      * @param string $lang   Language code.
      * @param object $object Instance of WC_Product.
+     *
      * @return bool
      */
     public function set_language($lang, $object)
@@ -76,6 +74,7 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
         } else {
             parent::set_language($lang, $object);
         }
+
         return true;
     }
 
@@ -85,6 +84,7 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      * @since 1.1
      *
      * @param array $object Product array.
+     *
      * @return array
      */
     public function get_translations($object)
@@ -99,16 +99,18 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      *
      * @param int[]  $translations Array of translations with language codes as keys and object ids as values.
      * @param object $object       Instance of WC_Product.
+     *
      * @return bool
      */
     public function save_translations($translations, $object)
     {
         if ($object instanceof WC_Product) {
-            $translations[ $this->data_store->get_language($object->get_id()) ] = $object->get_id();
+            $translations[$this->data_store->get_language($object->get_id())] = $object->get_id();
             $this->data_store->save_translations($translations);
         } else {
             parent::save_translations($translations, $object);
         }
+
         return true;
     }
 
@@ -118,13 +120,15 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      * @since 1.1
      *
      * @param array $args WP_Term_Query arguments.
+     *
      * @return array
      */
     public function get_terms_args($args)
     {
-        if (! empty($args['include'])) {
+        if (!empty($args['include'])) {
             $args['lang'] = '';
         }
+
         return $args;
     }
 
@@ -134,11 +138,12 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      * @since 1.3
      *
      * @param PLL_Language|false $language Found language object, `false` if none.
+     *
      * @return PLL_Language|false The requested language object, `false` if a wrong slug is passed.
      */
     public function filter_language_with_request($language)
     {
-        if (isset($this->request['lang']) && in_array($this->request['lang'], $this->model->get_languages_list(array( 'fields' => 'slug' )))) {
+        if (isset($this->request['lang']) && in_array($this->request['lang'], $this->model->get_languages_list(['fields' => 'slug']))) {
             $language = PLL()->model->get_language($this->request['lang']);
         }
 
@@ -154,39 +159,40 @@ class PLLWC_REST_Product extends PLL_REST_Translated_Object
      * @param WP_REST_Response       $response The response object.
      * @param WC_Product             $product  Product object.
      * @param WP_REST_Request<array> $request  Request object.
+     *
      * @return WP_REST_Response The response object.
      */
     public function prepare_response($response, $product, $request)
     {
         global $wpdb;
 
-        if (! in_array($request->get_method(), array( 'POST', 'PUT', 'PATCH' ), true)) {
+        if (!in_array($request->get_method(), ['POST', 'PUT', 'PATCH'], true)) {
             return $response;
         }
 
         $data = $response->get_data();
 
-        if (! is_array($data) || empty($data['slug'])) {
+        if (!is_array($data) || empty($data['slug'])) {
             return $response;
         }
 
-        $params     = $request->get_params();
+        $params = $request->get_params();
         $attributes = $request->get_attributes();
 
-        if (! empty($params['slug'])) {
+        if (!empty($params['slug'])) {
             $requested_slug = $params['slug'];
         } elseif (is_array($attributes['callback']) && 'create_item' === $attributes['callback'][1]) {
             // Allow sharing slug by default when creating a new product.
             $requested_slug = sanitize_title($product->get_name());
         }
 
-        if (! isset($requested_slug) || $product->get_slug() === $requested_slug) {
+        if (!isset($requested_slug) || $product->get_slug() === $requested_slug) {
             return $response;
         }
 
         $slug = wp_unique_post_slug($requested_slug, $product->get_id(), $product->get_status(), (string) get_post_type($product->get_id()), $product->get_parent_id());
 
-        if ($slug === $data['slug'] || ! $wpdb->update($wpdb->posts, array( 'post_name' => $slug ), array( 'ID' => $product->get_id() ))) {
+        if ($slug === $data['slug'] || !$wpdb->update($wpdb->posts, ['post_name' => $slug], ['ID' => $product->get_id()])) {
             return $response;
         }
 

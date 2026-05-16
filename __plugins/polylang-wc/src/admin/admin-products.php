@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the products on admin side.
  *
  * @since 0.1
@@ -29,27 +25,27 @@ class PLLWC_Admin_Products
         $this->data_store = PLLWC_Data_Store::load('product_language');
 
         // Ajax.
-        add_action('admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ));
-        add_action('wp_ajax_product_lang_choice', array( $this, 'product_lang_choice' ));
+        add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
+        add_action('wp_ajax_product_lang_choice', [$this, 'product_lang_choice']);
 
         // Ajax product ordering.
         if (in_array('menu_order', PLL()->options['sync'])) {
-            add_action('woocommerce_after_product_ordering', array( $this, 'product_ordering' ), 10, 2);
+            add_action('woocommerce_after_product_ordering', [$this, 'product_ordering'], 10, 2);
         }
 
         // Autocomplete ajax products search.
-        add_filter('woocommerce_json_search_found_products', array( $this, 'search_found_products' ));
-        add_filter('woocommerce_json_search_found_grouped_products', array( $this, 'search_found_products' ));
+        add_filter('woocommerce_json_search_found_products', [$this, 'search_found_products']);
+        add_filter('woocommerce_json_search_found_grouped_products', [$this, 'search_found_products']);
 
         // Search in Products list table.
-        add_filter('pll_filter_query_excluded_query_vars', array( $this, 'fix_products_search' ), 10, 2); // Since Polylang 2.3.5.
+        add_filter('pll_filter_query_excluded_query_vars', [$this, 'fix_products_search'], 10, 2); // Since Polylang 2.3.5.
 
         // Deactivate the German and Danish specific sanitization for product attributes titles.
-        $specific_locales = array( 'da_DK', 'de_DE', 'de_DE_formal', 'de_CH', 'de_CH_informal' );
-        if (array_intersect(PLL()->model->get_languages_list(array( 'fields' => 'locale' )), $specific_locales)) {
-            add_action('wp_ajax_woocommerce_load_variations', array( $this, 'remove_sanitize_title' ), 5);
-            add_action('woocommerce_product_write_panel_tabs', array( $this, 'remove_sanitize_title' ), 5);
-            add_action('woocommerce_product_data_panels', array( $this, 'add_sanitize_title' ), 5);
+        $specific_locales = ['da_DK', 'de_DE', 'de_DE_formal', 'de_CH', 'de_CH_informal'];
+        if (array_intersect(PLL()->model->get_languages_list(['fields' => 'locale']), $specific_locales)) {
+            add_action('wp_ajax_woocommerce_load_variations', [$this, 'remove_sanitize_title'], 5);
+            add_action('woocommerce_product_write_panel_tabs', [$this, 'remove_sanitize_title'], 5);
+            add_action('woocommerce_product_data_panels', [$this, 'add_sanitize_title'], 5);
         }
     }
 
@@ -63,9 +59,9 @@ class PLLWC_Admin_Products
     public function admin_enqueue_scripts()
     {
         $screen = get_current_screen();
-        if (! empty($screen) && 'post' === $screen->base && 'product' === $screen->post_type) {
+        if (!empty($screen) && 'post' === $screen->base && 'product' === $screen->post_type) {
             $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
-            wp_enqueue_script('pllwc_product', plugins_url('/js/build/product' . $suffix . '.js', PLLWC_FILE), array( 'jquery', 'wp-ajax-response' ), PLLWC_VERSION, true);
+            wp_enqueue_script('pllwc_product', plugins_url('/js/build/product'.$suffix.'.js', PLLWC_FILE), ['jquery', 'wp-ajax-response'], PLLWC_VERSION, true);
         }
     }
 
@@ -81,11 +77,11 @@ class PLLWC_Admin_Products
         check_ajax_referer('pll_language', '_pll_nonce');
 
         if (isset($_POST['post_id'], $_POST['lang'], $_POST['attributes']) && is_array($_POST['attributes'])) {
-            $post_id    = (int) $_POST['post_id'];
-            $lang       = PLL()->model->get_language(sanitize_key($_POST['lang']));
+            $post_id = (int) $_POST['post_id'];
+            $lang = PLL()->model->get_language(sanitize_key($_POST['lang']));
             $attributes = array_map('sanitize_title', wp_unslash($_POST['attributes']));
 
-            $supplemental = array();
+            $supplemental = [];
 
             $x = new WP_Ajax_Response();
 
@@ -96,10 +92,10 @@ class PLLWC_Admin_Products
                     $out = '';
 
                     $product_terms = get_the_terms($post_id, $taxonomy);
-                    $term_ids      = is_array($product_terms) ? wp_list_pluck($product_terms, 'term_id') : array();
-                    $tr_term_ids   = array_map('pll_get_term', $term_ids);
+                    $term_ids = is_array($product_terms) ? wp_list_pluck($product_terms, 'term_id') : [];
+                    $tr_term_ids = array_map('pll_get_term', $term_ids);
 
-                    $all_terms = get_terms(array( 'taxonomy' => $taxonomy, 'orderby' => 'name', 'hide_empty' => 0, 'lang' => $lang->slug ));
+                    $all_terms = get_terms(['taxonomy' => $taxonomy, 'orderby' => 'name', 'hide_empty' => 0, 'lang' => $lang->slug]);
 
                     if (is_array($all_terms)) {
                         foreach ($all_terms as $term) {
@@ -112,12 +108,12 @@ class PLLWC_Admin_Products
                         }
                     }
 
-                    $supplemental[ 'value-' . $i ] = $out;
+                    $supplemental['value-'.$i] = $out;
                 }
             }
 
-            if (! empty($supplemental)) {
-                $x->Add(array( 'what' => 'attributes', 'supplemental' => $supplemental ));
+            if (!empty($supplemental)) {
+                $x->Add(['what' => 'attributes', 'supplemental' => $supplemental]);
             }
 
             $x->send();
@@ -132,6 +128,7 @@ class PLLWC_Admin_Products
      *
      * @param int   $id          Product id.
      * @param int[] $menu_orders An array with product ids as key and menu_order as value.
+     *
      * @return void
      */
     public function product_ordering($id, $menu_orders)
@@ -156,18 +153,19 @@ class PLLWC_Admin_Products
      * @since 0.1
      *
      * @param string[] $products array with product ids as keys and names as values.
+     *
      * @return string[]
      */
     public function search_found_products($products)
     {
         // Either we are editing a product or an order.
-        if (! isset($_REQUEST['pll_post_id']) || ! $lang = $this->data_store->get_language((int) $_REQUEST['pll_post_id'])) {  // phpcs:ignore WordPress.Security.NonceVerification
+        if (!isset($_REQUEST['pll_post_id']) || !$lang = $this->data_store->get_language((int) $_REQUEST['pll_post_id'])) {  // phpcs:ignore WordPress.Security.NonceVerification
             $lang = PLLWC_Admin::get_preferred_language();
         }
 
         foreach (array_keys($products) as $id) {
             if ($this->data_store->get_language($id) !== $lang) {
-                unset($products[ $id ]);
+                unset($products[$id]);
             }
         }
 
@@ -184,13 +182,15 @@ class PLLWC_Admin_Products
      *
      * @param string[] $excludes Query vars excluded from the language filter.
      * @param WP_Query $query    WP Query object.
+     *
      * @return string[]
      */
     public function fix_products_search($excludes, $query)
     {
-        if (! empty($query->query['product_search'])) {
-            $excludes = array_diff($excludes, array( 'post__in' ));
+        if (!empty($query->query['product_search'])) {
+            $excludes = array_diff($excludes, ['post__in']);
         }
+
         return $excludes;
     }
 
@@ -204,7 +204,7 @@ class PLLWC_Admin_Products
     public function remove_sanitize_title()
     {
         if (isset(PLL()->filters_sanitization)) {
-            remove_filter('sanitize_title', array( PLL()->filters_sanitization, 'sanitize_title' ));
+            remove_filter('sanitize_title', [PLL()->filters_sanitization, 'sanitize_title']);
         }
     }
 
@@ -218,7 +218,7 @@ class PLLWC_Admin_Products
     public function add_sanitize_title()
     {
         if (isset(PLL()->filters_sanitization)) {
-            add_filter('sanitize_title', array( PLL()->filters_sanitization, 'sanitize_title' ), 10, 3);
+            add_filter('sanitize_title', [PLL()->filters_sanitization, 'sanitize_title'], 10, 3);
         }
     }
 }

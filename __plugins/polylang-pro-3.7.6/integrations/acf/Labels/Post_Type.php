@@ -1,13 +1,9 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Labels;
 
-use stdClass;
 use ACF_Internal_Post_Type;
+use stdClass;
 
 /**
  * This class is part of the ACF compatibility.
