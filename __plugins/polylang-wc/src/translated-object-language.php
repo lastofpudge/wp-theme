@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 defined('ABSPATH') || exit;
 
 /**
@@ -44,6 +40,7 @@ abstract class PLLWC_Translated_Object_Language extends PLLWC_Object_Language
      * @since 1.9 Type-hinted.
      *
      * @param int[] $translations An associative array of translations with language code as key and translation ID as value.
+     *
      * @return int[] An associative array with language codes as key and object IDs as values.
      *
      * @phpstan-return array<non-empty-string, positive-int>
@@ -60,6 +57,7 @@ abstract class PLLWC_Translated_Object_Language extends PLLWC_Object_Language
      * @since 1.9 Type-hinted.
      *
      * @param int $id Object ID.
+     *
      * @return int[] An associative array of translations with language code as key and translation ID as value.
      *
      * @phpstan-return array<non-empty-string, positive-int>
@@ -76,13 +74,14 @@ abstract class PLLWC_Translated_Object_Language extends PLLWC_Object_Language
      *
      * @param int                      $id   Object ID.
      * @param PLL_Language|string|null $lang Optional language (object or slug), defaults to the current language.
+     *
      * @return int|null The translation object ID if exists, `0` otherwise. `null` if the language is not defined yet.
      *
      * @phpstan-return int<0, max>|null
      */
     public function get($id, $lang = null)
     {
-        $lang = ! empty($lang) ? $lang : pll_current_language(\OBJECT);
+        $lang = !empty($lang) ? $lang : pll_current_language(\OBJECT);
 
         if (empty($lang)) {
             return null;

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Entity;
 
 use PLL_Language;
@@ -24,6 +20,7 @@ class Media extends Post
      *
      * @param int          $to_id           Target media ID.
      * @param PLL_Language $target_language The language to translate into.
+     *
      * @return void
      */
     public function copy_fields($to_id, $target_language)
@@ -35,7 +32,7 @@ class Media extends Post
 
         $this->maybe_reset_fields_store($target_language);
 
-        $this->apply_to_all_fields(new Copy(), $to_id, array( 'target_language' => $target_language ));
+        $this->apply_to_all_fields(new Copy(), $to_id, ['target_language' => $target_language]);
     }
 
     /**
@@ -44,11 +41,12 @@ class Media extends Post
      * @since 3.7
      *
      * @param int $id Post ID.
+     *
      * @return string ACF post ID.
      */
     protected static function acf_id($id): string
     {
-        return 'attachment_' . $id;
+        return 'attachment_'.$id;
     }
 
     /**
@@ -57,6 +55,7 @@ class Media extends Post
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return array Custom field of the target object.
      */
     public function render_field($field) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable

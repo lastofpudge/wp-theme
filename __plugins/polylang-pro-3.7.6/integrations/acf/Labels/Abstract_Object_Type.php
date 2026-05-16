@@ -1,13 +1,9 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Labels;
 
-use stdClass;
 use ACF_Internal_Post_Type;
+use stdClass;
 
 /**
  * This class is part of the ACF compatibility.
@@ -27,12 +23,12 @@ abstract class Abstract_Object_Type
      */
     public function on_acf_init(): void
     {
-        if (! defined('ACF_VERSION') || version_compare(ACF_VERSION, '6.1.0', '<')) {
+        if (!defined('ACF_VERSION') || version_compare(ACF_VERSION, '6.1.0', '<')) {
             // Backward compatibility with ACF < 6.1.
             return;
         }
 
-        if (! acf_get_setting('enable_post_types')) {
+        if (!acf_get_setting('enable_post_types')) {
             // The feature is deactivated.
             return;
         }
@@ -47,7 +43,7 @@ abstract class Abstract_Object_Type
             $this->translate_registered_strings();
         } else {
             // Special case when the language is set from the content as CPT and taxonomies are registered before the language is defined.
-            add_action('pll_language_defined', array( $this, 'translate_registered_strings' ));
+            add_action('pll_language_defined', [$this, 'translate_registered_strings']);
         }
     }
 
@@ -60,8 +56,8 @@ abstract class Abstract_Object_Type
      */
     public function register_strings(): void
     {
-        foreach ($this->get_acf_type_instance()->get_posts(array( 'active' => true )) as $acf_object) {
-            $label_start = sprintf('ACF %s, %s,', $this->get_type_label(), $acf_object[ $this->get_type() ]);
+        foreach ($this->get_acf_type_instance()->get_posts(['active' => true]) as $acf_object) {
+            $label_start = sprintf('ACF %s, %s,', $this->get_type_label(), $acf_object[$this->get_type()]);
 
             pll_register_string("{$label_start} title", $acf_object['title'], 'ACF');
             pll_register_string("{$label_start} description", $acf_object['description'], 'ACF', true);
@@ -81,12 +77,12 @@ abstract class Abstract_Object_Type
      */
     public function translate_registered_strings(): void
     {
-        $acf_objects = $this->get_acf_type_instance()->get_posts(array( 'active' => true ));
+        $acf_objects = $this->get_acf_type_instance()->get_posts(['active' => true]);
         $acf_objects = array_column($acf_objects, $this->get_type(), $this->get_type());
         $acf_objects = array_intersect_key($this->get_type_objects(), $acf_objects);
 
         foreach ($acf_objects as $type) {
-            $type->label       = pll__($type->label);
+            $type->label = pll__($type->label);
             $type->description = pll__($type->description);
 
             foreach (array_keys(get_object_vars($type->labels)) as $key) {

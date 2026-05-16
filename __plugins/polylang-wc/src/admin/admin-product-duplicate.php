@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Duplicates the product translations when duplicating a product.
  *
  * @since 1.0
@@ -28,8 +24,8 @@ class PLLWC_Admin_Product_Duplicate
         $this->data_store = PLLWC_Data_Store::load('product_language');
 
         add_filter('woocommerce_duplicate_product_exclude_children', '__return_true');
-        add_action('admin_action_duplicate_product', array( $this, 'duplicate_product_action' ), 5); // Before WooCommerce.
-        add_action('woocommerce_product_duplicate', array( $this, 'product_duplicate' ), 10, 2);
+        add_action('admin_action_duplicate_product', [$this, 'duplicate_product_action'], 5); // Before WooCommerce.
+        add_action('woocommerce_product_duplicate', [$this, 'product_duplicate'], 10, 2);
     }
 
     /**
@@ -43,7 +39,7 @@ class PLLWC_Admin_Product_Duplicate
      */
     public function duplicate_product_action()
     {
-        remove_action('set_object_terms', array( PLL()->posts, 'set_object_terms' ));
+        remove_action('set_object_terms', [PLL()->posts, 'set_object_terms']);
     }
 
     /**
@@ -58,6 +54,7 @@ class PLLWC_Admin_Product_Duplicate
      *
      * @param WC_Product $duplicate Duplicated product.
      * @param WC_Product $product   Original product.
+     *
      * @return void
      */
     public function product_duplicate($duplicate, $product)
@@ -68,7 +65,7 @@ class PLLWC_Admin_Product_Duplicate
         $meta_to_exclude = (array) array_filter(
             apply_filters(
                 'woocommerce_duplicate_product_exclude_meta',
-                array(),
+                [],
                 array_map(
                     function ($datum) {
                         return $datum->key;
@@ -80,8 +77,8 @@ class PLLWC_Admin_Product_Duplicate
 
         // First set the language of the product duplicated by WooCommerce.
         $lang = $this->data_store->get_language($product->get_id());
-        $new_tr_ids = array( $lang => $duplicate->get_id() );
-        $this->data_store->set_language($new_tr_ids[ $lang ], $lang);
+        $new_tr_ids = [$lang => $duplicate->get_id()];
+        $this->data_store->set_language($new_tr_ids[$lang], $lang);
 
         // Duplicate the translations.
         foreach ($tr_ids as $lang => $tr_id) {
@@ -95,7 +92,7 @@ class PLLWC_Admin_Product_Duplicate
                 $tr_duplicate->set_status('draft');
                 $tr_duplicate->set_date_created(null);
                 $tr_duplicate->set_slug('');
-                $tr_duplicate->set_rating_counts(array());
+                $tr_duplicate->set_rating_counts([]);
                 $tr_duplicate->set_average_rating(0);
                 $tr_duplicate->set_review_count(0);
 
@@ -111,9 +108,9 @@ class PLLWC_Admin_Product_Duplicate
                 do_action('woocommerce_product_duplicate_before_save', $tr_duplicate, $tr_product);
 
                 $tr_duplicate->save();
-                $new_tr_ids[ $lang ] = $tr_duplicate->get_id();
+                $new_tr_ids[$lang] = $tr_duplicate->get_id();
 
-                $this->data_store->set_language($new_tr_ids[ $lang ], $lang);
+                $this->data_store->set_language($new_tr_ids[$lang], $lang);
 
                 // Set the SKU only now that the language is known.
                 if ('' !== $duplicate->get_sku('edit')) {
@@ -132,8 +129,8 @@ class PLLWC_Admin_Product_Duplicate
                 $tr_ids = $this->data_store->get_translations($child_id);
 
                 if ($tr_ids && $child = wc_get_product($child_id)) {
-                    $new_child_tr_ids   = array();
-                    $tr_child_duplicates = array();
+                    $new_child_tr_ids = [];
+                    $tr_child_duplicates = [];
 
                     $sku = wc_product_generate_unique_sku(0, $child->get_sku('edit'));
 
@@ -146,37 +143,37 @@ class PLLWC_Admin_Product_Duplicate
                     foreach ($tr_ids as $lang => $tr_id) {
                         $tr_child = wc_get_product($tr_id);
 
-                        if (! $tr_child instanceof WC_Product) {
+                        if (!$tr_child instanceof WC_Product) {
                             continue;
                         }
 
                         $tr_child->read_meta_data();
-                        $tr_child_duplicates[ $lang ] = clone $tr_child;
-                        $tr_child_duplicates[ $lang ]->set_parent_id($this->data_store->get($duplicate->get_id(), $lang));
-                        $tr_child_duplicates[ $lang ]->set_id(0);
-                        $tr_child_duplicates[ $lang ]->set_date_created(null);
+                        $tr_child_duplicates[$lang] = clone $tr_child;
+                        $tr_child_duplicates[$lang]->set_parent_id($this->data_store->get($duplicate->get_id(), $lang));
+                        $tr_child_duplicates[$lang]->set_id(0);
+                        $tr_child_duplicates[$lang]->set_date_created(null);
 
                         if ('' !== $child->get_sku('edit')) {
-                            $tr_child_duplicates[ $lang ]->set_sku($sku);
+                            $tr_child_duplicates[$lang]->set_sku($sku);
                         }
 
                         // Clear the product unique ID (since WC 9.2.0).
                         if (method_exists('WC_Product', 'set_global_unique_id')) {
-                            $tr_child_duplicates[ $lang ]->set_global_unique_id('');
+                            $tr_child_duplicates[$lang]->set_global_unique_id('');
                         }
 
-                        $this->generate_unique_slug($tr_child_duplicates[ $lang ]);
+                        $this->generate_unique_slug($tr_child_duplicates[$lang]);
 
                         foreach ($meta_to_exclude as $meta_key) {
-                            $tr_child_duplicates[ $lang ]->delete_meta_data($meta_key);
+                            $tr_child_duplicates[$lang]->delete_meta_data($meta_key);
                         }
 
-                        do_action('woocommerce_product_duplicate_before_save', $tr_child_duplicates[ $lang ], $tr_child);
+                        do_action('woocommerce_product_duplicate_before_save', $tr_child_duplicates[$lang], $tr_child);
                     }
 
                     foreach ($tr_child_duplicates as $lang => $child) {
                         $child->save();
-                        $new_child_tr_ids[ $lang ] = $child->get_id();
+                        $new_child_tr_ids[$lang] = $child->get_id();
                         $this->data_store->set_language($child->get_id(), $lang);
                     }
 
@@ -191,11 +188,12 @@ class PLLWC_Admin_Product_Duplicate
      * behavior of wp_unique_post_slug(). The normal slug generation will run single
      * select queries on every non-unique slug, resulting in very bad performance.
      * This is an exact copy of WC_Admin_Duplicate_Product::generate_unique_slug()
-     * Code last checked: WC 4.0
+     * Code last checked: WC 4.0.
      *
      * @since 1.5
      *
      * @param WC_Product $product The product to generate a slug for.
+     *
      * @return void
      */
     private function generate_unique_slug($product)
@@ -206,7 +204,7 @@ class PLLWC_Admin_Product_Duplicate
         // filling, this shouldn't matter for our use-case.
         $root_slug = preg_replace('/-[0-9]+$/', '', $product->get_slug());
         $results = $wpdb->get_results(
-            $wpdb->prepare("SELECT post_name FROM $wpdb->posts WHERE post_name LIKE %s AND post_type IN ( 'product', 'product_variation' )", $root_slug . '%')
+            $wpdb->prepare("SELECT post_name FROM $wpdb->posts WHERE post_name LIKE %s AND post_type IN ( 'product', 'product_variation' )", $root_slug.'%')
         );
         // The slug is already unique!
         if (empty($results)) {
@@ -221,6 +219,6 @@ class PLLWC_Admin_Product_Duplicate
                 $max_suffix = $suffix;
             }
         }
-        $product->set_slug($root_slug . '-' . ($max_suffix + 1));
+        $product->set_slug($root_slug.'-'.($max_suffix + 1));
     }
 }

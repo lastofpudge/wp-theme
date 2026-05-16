@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang
- */
-
 namespace WP_Syntex\Polylang_Pro\Options\Business;
 
 use WP_Syntex\Polylang\Options\Primitive\Abstract_Boolean;
