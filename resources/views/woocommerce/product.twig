@@ -65,37 +65,16 @@
 
                         {% if product.is_type('variable') %}
                             {% if product_variations %}
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for variation in product_variations %}
-                                        <tr>
-                                            {% if variation.name %}
-                                                <td>{{ variation.name }}</td>
-                                            {% else %}
-                                                <td>N/A</td>
-                                            {% endif %}
-                                            <td>{{ variation.price_html|raw }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-
                                 <label>
                                     <select name="variation" class="js-variant">
-                                        <option value="#" selected disabled>Select variation</option>
+                                        <option value="#" selected disabled>{{ fn('__', 'Select an option', 'woocommerce') }}</option>
                                         {% for variation in product_variations %}
                                             <option value="{{ variation.variation_id }}">{{ variation.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </label>
                             {% else %}
-                                <p>No variants found for this product.</p>
+                                <p>{{ fn('__', 'No variations found.', 'woocommerce') }}</p>
                             {% endif %}
                         {% endif %}
 
