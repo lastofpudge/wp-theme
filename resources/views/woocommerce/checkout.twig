@@ -323,7 +323,22 @@
                                name="_wp_http_referer"
                                value="{{ http_referer }}">
 
-                        {{ terms_html | raw }}
+                        {% if terms_enabled %}
+                            <div class="form-check mb-3">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="terms"
+                                       id="terms"
+                                       value="1"
+                                       required>
+                                <input type="hidden" name="terms-field" value="1">
+                                <label class="form-check-label" for="terms">
+                                    {{ fn('__', 'I have read and agree to the', 'woocommerce') }}
+                                    <a href="{{ terms_url }}" target="_blank">{{ fn('__', 'terms and conditions', 'woocommerce') }}</a>
+                                    <abbr title="{{ fn('__', 'required', 'woocommerce') }}">*</abbr>
+                                </label>
+                            </div>
+                        {% endif %}
 
                         <button type="submit"
                                 id="place_order"

@@ -88,7 +88,8 @@ class CheckoutController extends Controller
             ];
         }
         $this->data['payment_gateways'] = $gateways;
-        $this->data['terms_html']       = capture_output('wc_get_template', 'checkout/terms.php');
+        $this->data['terms_enabled']    = wc_terms_and_conditions_checkbox_enabled();
+        $this->data['terms_url']        = $this->data['terms_enabled'] ? wc_get_page_permalink('terms') : '';
 
         return $this->data;
     }
