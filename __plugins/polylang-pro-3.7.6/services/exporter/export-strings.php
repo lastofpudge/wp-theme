@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Class allowing to add string translations to an export.
  *
  * @since 3.6
@@ -31,7 +27,7 @@ class PLL_Export_Strings
      *
      * @phpstan-var array<non-empty-string, PLL_MO>
      */
-    private $mo = array();
+    private $mo = [];
 
     /**
      * Constructor.
@@ -53,6 +49,7 @@ class PLL_Export_Strings
      * @param PLL_Export_Container $export_container Export container.
      * @param string[][]           $items            Items to export.
      * @param PLL_Language         $target_language  Language to translate into.
+     *
      * @return void
      *
      * @phpstan-param non-empty-array<exportSource> $items
@@ -80,6 +77,7 @@ class PLL_Export_Strings
      *
      * @param PLL_Export_Data $export Export object.
      * @param string[]        $item   Item to export.
+     *
      * @return void
      *
      * @phpstan-param exportSource $item
@@ -87,16 +85,16 @@ class PLL_Export_Strings
     public function add_item(PLL_Export_Data $export, array $item)
     {
         $translation = $this->get_translation($item['string'], $export->get_target_language());
-        $ref         = array(
+        $ref = [
             'object_type'   => PLL_Import_Export::STRINGS_TRANSLATIONS,
             'field_type'    => 'string_translation',
             'object_id'     => 0, // Set 0 for strings so that this parameter is always filled.
             'field_comment' => sprintf('%s, %s', $item['context'], $item['name']),
-        );
+        ];
 
         // Arrays use Windows line ending syntax. This is also performed in {@see Translation_Entry::key()}.
-        $source_string = str_replace(array( "\r\n", "\r" ), "\n", $item['string']);
-        $translation   = str_replace(array( "\r\n", "\r" ), "\n", $translation);
+        $source_string = str_replace(["\r\n", "\r"], "\n", $item['string']);
+        $translation = str_replace(["\r\n", "\r"], "\n", $translation);
 
         if ('' === $source_string) {
             return;
@@ -112,16 +110,17 @@ class PLL_Export_Strings
      *
      * @param string       $item            Source string.
      * @param PLL_Language $target_language Language to translate into.
+     *
      * @return string
      */
     private function get_translation(string $item, PLL_Language $target_language): string
     {
-        if (! isset($this->mo[ $target_language->slug ])) {
+        if (!isset($this->mo[$target_language->slug])) {
             // Cache translations.
-            $this->mo[ $target_language->slug ] = new PLL_MO();
-            $this->mo[ $target_language->slug ]->import_from_db($target_language);
+            $this->mo[$target_language->slug] = new PLL_MO();
+            $this->mo[$target_language->slug]->import_from_db($target_language);
         }
 
-        return $this->mo[ $target_language->slug ]->translate($item);
+        return $this->mo[$target_language->slug]->translate($item);
     }
 }

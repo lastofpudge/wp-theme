@@ -12,13 +12,12 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 10.2.0
  */
 
 // Exit if accessed directly.
 defined('ABSPATH') || exit;
-
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
 echo esc_html(wp_strip_all_tags($email_heading));

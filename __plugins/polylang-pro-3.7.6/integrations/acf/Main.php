@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF;
 
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Labels\Field_Groups;
@@ -48,17 +44,17 @@ class Main
     public $translation_instructions;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @since 3.7
      */
     public function __construct()
     {
-        $this->ajax                     = new Ajax_Lang_Choice();
-        $this->field_settings           = new Field_Settings();
-        $this->field_groups_labels      = new Field_Groups();
-        $this->post_types_labels        = new Post_Type();
-        $this->taxonomies_labels        = new Taxonomy();
+        $this->ajax = new Ajax_Lang_Choice();
+        $this->field_settings = new Field_Settings();
+        $this->field_groups_labels = new Field_Groups();
+        $this->post_types_labels = new Post_Type();
+        $this->taxonomies_labels = new Taxonomy();
         $this->translation_instructions = new Translation_Instructions();
     }
 
@@ -94,9 +90,9 @@ class Main
 
         acf_register_location_type(Location_Language::class);
 
-        add_filter('acf/get_taxonomies', array( $this, 'get_taxonomies' ));
-        add_filter('pll_get_post_types', array( $this, 'get_post_types' ));
-        add_action('init', array( Dispatcher::class, 'on_blocks_registered' ), 999); // Late so blocks have a chance to register, usually done on `init`.
+        add_filter('acf/get_taxonomies', [$this, 'get_taxonomies']);
+        add_filter('pll_get_post_types', [$this, 'get_post_types']);
+        add_action('init', [Dispatcher::class, 'on_blocks_registered'], 999); // Late so blocks have a chance to register, usually done on `init`.
 
         PLL()->model->cache->clean('post_types'); // A bit hacky.
     }
@@ -119,11 +115,12 @@ class Main
      * @since 2.8
      *
      * @param string[] $taxonomies Taxonomy names.
+     *
      * @return string[]
      */
     public function get_taxonomies($taxonomies)
     {
-        return array_diff($taxonomies, get_taxonomies(array( '_pll' => true )));
+        return array_diff($taxonomies, get_taxonomies(['_pll' => true]));
     }
 
     /**
@@ -133,11 +130,13 @@ class Main
      * @since 3.7 Removed second param and disallow to translate the field groups.
      *
      * @param string[] $post_types List of post types.
+     *
      * @return string[]
      */
     public function get_post_types($post_types)
     {
         unset($post_types['acf-field-group']);
+
         return $post_types;
     }
 }

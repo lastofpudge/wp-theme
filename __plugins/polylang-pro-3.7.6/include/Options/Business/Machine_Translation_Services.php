@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang
- */
-
 namespace WP_Syntex\Polylang_Pro\Options\Business;
 
 use WP_Syntex\Polylang\Options\Abstract_Option;
@@ -41,10 +37,10 @@ class Machine_Translation_Services extends Abstract_Option
      */
     protected function get_default()
     {
-        $services = array();
+        $services = [];
 
         foreach (Factory::get_classnames() as $service) {
-            $services[ $service::get_slug() ] = array();
+            $services[$service::get_slug()] = [];
         }
 
         return $services;
@@ -72,18 +68,18 @@ class Machine_Translation_Services extends Abstract_Option
      */
     protected function get_data_structure(): array
     {
-        $structure = array(
+        $structure = [
             'type'                 => 'object', // Correspond to associative array in PHP, @see{https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/#primitive-types}.
-            'properties'           => array(),
+            'properties'           => [],
             'additionalProperties' => false,
-        );
+        ];
 
         foreach (Factory::get_classnames() as $service) {
-            $structure['properties'][ $service::get_slug() ] = array(
+            $structure['properties'][$service::get_slug()] = [
                 'type'                 => 'object',
                 'properties'           => $service::get_option_schema(),
                 'additionalProperties' => false,
-            );
+            ];
         }
 
         return $structure;
