@@ -1,0 +1,11 @@
+{% extends 'views/woocommerce/emails/email-base.twig' %}
+
+{% block body %}
+	{% if first_name %}<p>Hi {{ first_name }},</p>{% else %}<p>Hi,</p>{% endif %}
+	<p>{{ intro | raw }}</p>
+
+	{{ order_details | raw }}
+	{{ order_meta | raw }}
+	{{ customer_details | raw }}
+	{% if additional %}{{ additional | raw }}{% endif %}
+{% endblock %}

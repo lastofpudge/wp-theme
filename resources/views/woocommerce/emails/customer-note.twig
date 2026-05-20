@@ -1,0 +1,13 @@
+{% extends 'views/woocommerce/emails/email-base.twig' %}
+
+{% block body %}
+	{% if first_name %}<p>Hi {{ first_name }},</p>{% else %}<p>Hi,</p>{% endif %}
+	<p>The following note has been added to your order:</p>
+	<blockquote>{{ note_html | raw }}</blockquote>
+	<p>As a reminder, here are your order details:</p>
+
+	{{ order_details | raw }}
+	{{ order_meta | raw }}
+	{{ customer_details | raw }}
+	{% if additional %}{{ additional | raw }}{% endif %}
+{% endblock %}

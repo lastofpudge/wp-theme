@@ -1,0 +1,11 @@
+{% extends 'views/woocommerce/emails/email-base.twig' %}
+
+{% block body %}
+    <p>Hi {{ user_login }},</p>
+    <p>Thanks for creating an account on {{ blogname }}. Your username is <strong>{{ user_login }}</strong>.</p>
+    {% if password_generated and set_password_url %}
+        <p><a href="{{ set_password_url }}">Click here to set your password.</a></p>
+    {% endif %}
+    <p>You can access your account area to view orders, change your password, and more at: <a href="{{ myaccount_url }}">My account</a></p>
+    {% if additional %}{{ additional | raw }}{% endif %}
+{% endblock %}

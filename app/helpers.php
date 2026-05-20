@@ -287,7 +287,41 @@ if (!function_exists('get_requested_price')) {
     }
 }
 
-if (!function_exists('capture_output')) {
+
+if (!function_exists('wc_email_frame_context')) {
+    /**
+     * Build the shared WooCommerce email frame context.
+     *
+     * Returns the layout variables (store branding, heading, footer) plus sanitized
+     * additional content. Merge with template-specific vars before Timber::compile().
+     *
+     * @param string        $email_heading    The email heading text ($email_heading template var).
+     * @param \WC_Email|null $email           The WC_Email instance ($email template var).
+     * @param string        $additional_content The additional content block ($additional_content template var).
+     * @return array<string, string>
+     */
+    function wc_email_frame_context(
+        string $email_heading = '',
+        ?\WC_Email $email = null,
+        string $additional_content = ''
+    ): array {
+        $footer_raw  = wp_kses_post((string) get_option('woocommerce_email_footer_text', ''));
+        $footer_text = wp_kses_post(wpautop(wptexturize(
+            apply_filters('woocommerce_email_footer_text', $footer_raw, $email)
+        )));
+
+        return [
+            'store_name'    => get_bloginfo('name', 'display'),
+            'home_url'      => home_url('/'),
+            'logo_url'      => esc_url((string) get_option('woocommerce_email_header_image', '')),
+            'email_heading' => $email_heading,
+            'footer_text'   => $footer_text,
+            'additional'    => $additional_content
+                ? wp_kses_post(wpautop(wptexturize($additional_content)))
+                : '',
+        ];
+    }
+}if (!function_exists('capture_output')) {
     function capture_output(callable $fn, mixed ...$args): string
     {
         ob_start();

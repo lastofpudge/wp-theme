@@ -11,6 +11,7 @@ class AdminOptions
         new TimberTwigExtensions();
         new AssetManager();
         new TimberContextProvider();
+        new SmtpConfig();
 
         $this->index();
         $this->manageAdminAccess();
