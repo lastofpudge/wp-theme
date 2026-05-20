@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 use WP_Syntex\Polylang_WC\Cart\Item;
 
 /**
@@ -52,18 +48,18 @@ class PLLWC_Frontend_Cart
         if (did_action('pll_language_defined')) {
             $this->init();
         } else {
-            add_action('pll_language_defined', array( $this, 'init' ), 1);
-            add_filter('option_woocommerce_cart_page_id', array( $this, 'translate_add_to_cart_page_id' ));
+            add_action('pll_language_defined', [$this, 'init'], 1);
+            add_filter('option_woocommerce_cart_page_id', [$this, 'translate_add_to_cart_page_id']);
         }
 
         if ($this->enable_cart_translation) {
             $this->data_store = PLLWC_Data_Store::load('product_language');
 
-            add_filter('pll_set_language_from_query', array( $this, 'pll_set_language_from_query' ), 5); // Before Polylang.
+            add_filter('pll_set_language_from_query', [$this, 'pll_set_language_from_query'], 5); // Before Polylang.
 
-            add_filter('woocommerce_cart_hash', array( $this, 'cart_hash' ), 10, 2); // Hash should be language independent.
-            add_filter('woocommerce_cart_item_data_to_validate', array( $this, 'cart_item_data_to_validate' ), 10, 2); // Since WC 3.4.
-            add_filter('woocommerce_add_to_cart_product_id', array( $this, 'translate_product_id_added_to_cart' ));
+            add_filter('woocommerce_cart_hash', [$this, 'cart_hash'], 10, 2); // Hash should be language independent.
+            add_filter('woocommerce_cart_item_data_to_validate', [$this, 'cart_item_data_to_validate'], 10, 2); // Since WC 3.4.
+            add_filter('woocommerce_add_to_cart_product_id', [$this, 'translate_product_id_added_to_cart']);
         }
     }
 
@@ -80,13 +76,13 @@ class PLLWC_Frontend_Cart
          * Resets the cart when switching the language, even when the cart translation is disabled,
          * to translate the mini cart the theme.
          */
-        if (isset($_COOKIE[ PLL_COOKIE ]) && pll_current_language() !== $_COOKIE[ PLL_COOKIE ]) {
-            add_action('wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' )); // After WooCommerce load_scripts().
+        if (isset($_COOKIE[PLL_COOKIE]) && pll_current_language() !== $_COOKIE[PLL_COOKIE]) {
+            add_action('wp_enqueue_scripts', [$this, 'wp_enqueue_scripts']); // After WooCommerce load_scripts().
         }
 
         if ($this->enable_cart_translation) {
             // Translates the products in the cart.
-            add_action('woocommerce_cart_loaded_from_session', array( $this, 'woocommerce_cart_loaded_from_session' ));
+            add_action('woocommerce_cart_loaded_from_session', [$this, 'woocommerce_cart_loaded_from_session']);
         }
     }
 
@@ -96,11 +92,12 @@ class PLLWC_Frontend_Cart
      * @since 0.3.2
      *
      * @param PLL_Language|false $lang False or language object.
+     *
      * @return PLL_Language|false
      */
     public function pll_set_language_from_query($lang)
     {
-        if (! PLL()->options['force_lang']) {
+        if (!PLL()->options['force_lang']) {
             if (did_action('pll_language_defined')) {
                 /*
                  * Handle a specific case for the Site home (when the language code is hidden for the default language).
@@ -108,7 +105,7 @@ class PLLWC_Frontend_Cart
                  */
                 WC()->cart->get_cart_from_session();
             } else {
-                add_action('pll_language_defined', array( WC()->cart, 'get_cart_from_session' ));
+                add_action('pll_language_defined', [WC()->cart, 'get_cart_from_session']);
             }
         }
 
@@ -127,8 +124,8 @@ class PLLWC_Frontend_Cart
         // Reset shipping methods (required since WC 2.6).
         WC()->shipping()->calculate_shipping(WC()->cart->get_shipping_packages());
 
-        $cart_hash_key = apply_filters('woocommerce_cart_hash_key', 'wc_cart_hash_' . md5(get_current_blog_id() . '_' . get_site_url(get_current_blog_id(), '/') . get_template()));
-        $fragment_name = apply_filters('woocommerce_cart_fragment_name', 'wc_fragments_' . md5(get_current_blog_id() . '_' . get_site_url(get_current_blog_id(), '/') . get_template()));
+        $cart_hash_key = apply_filters('woocommerce_cart_hash_key', 'wc_cart_hash_'.md5(get_current_blog_id().'_'.get_site_url(get_current_blog_id(), '/').get_template()));
+        $fragment_name = apply_filters('woocommerce_cart_fragment_name', 'wc_fragments_'.md5(get_current_blog_id().'_'.get_site_url(get_current_blog_id(), '/').get_template()));
 
         // Add js to reset the cart.
         wp_add_inline_script( // Since WP 4.5.
@@ -153,7 +150,9 @@ class PLLWC_Frontend_Cart
      *
      * @param array             $contents Cart contents.
      * @param PLL_Language|null $lang     Language.
+     *
      * @return array
+     *
      * @phpstan-param array<string, CartItem> $contents
      */
     protected function translate_cart_contents($contents, ?PLL_Language $lang = null)
@@ -161,20 +160,20 @@ class PLLWC_Frontend_Cart
         $lang ??= pll_current_language(\OBJECT);
 
         /** @var PLL_Language|false $lang */
-        if (! $lang) {
+        if (!$lang) {
             return $contents;
         }
 
         foreach ($contents as $key => $item) {
-            unset($contents[ $key ]);
+            unset($contents[$key]);
             $item = (new Item($item))->translate($lang);
 
-            if (! empty($contents[ $item['key'] ])) {
+            if (!empty($contents[$item['key']])) {
                 // The cart already contains an item in this language.
-                $item['quantity'] += $contents[ $item['key'] ]['quantity'];
+                $item['quantity'] += $contents[$item['key']]['quantity'];
             }
 
-            $contents[ $item['key'] ] = $item;
+            $contents[$item['key']] = $item;
 
             /**
              * Fires after a cart item has been translated.
@@ -220,43 +219,47 @@ class PLLWC_Frontend_Cart
      *
      * @param string $hash         Cart hash.
      * @param array  $cart_session Cart session.
+     *
      * @return string Modified cart hash.
      */
     public function cart_hash($hash, $cart_session)
     {
-        if (! empty($cart_session)) {
+        if (!empty($cart_session)) {
             /** @var PLL_Language $def_lang */
-            $def_lang     = pll_default_language(\OBJECT);
+            $def_lang = pll_default_language(\OBJECT);
             $cart_session = $this->translate_cart_contents($cart_session, $def_lang);
 
             // Generate cart session like Woo does, @see{WC_Cart::get_cart_for_session()}.
             foreach ($cart_session as $key => $item) {
-                unset($cart_session[ $key ]['data']);
+                unset($cart_session[$key]['data']);
             }
 
-            $hash = md5(wp_json_encode($cart_session) . WC()->cart->get_total('edit'));
+            $hash = md5(wp_json_encode($cart_session).WC()->cart->get_total('edit'));
         }
+
         return $hash;
     }
 
     /**
-     * Makes the cart item hash language independent by relying on attributes in default language
+     * Makes the cart item hash language independent by relying on attributes in default language.
      *
      * @since 1.0
      *
      * @param array      $data    Data to validate in the hash.
      * @param WC_Product $product Product in the cart item.
+     *
      * @return array
      */
     public function cart_item_data_to_validate($data, $product)
     {
-        if (! empty($data['attributes'])) {
+        if (!empty($data['attributes'])) {
             $tr_product_id = $this->data_store->get($product->get_id(), (string) pll_default_language());
-            $tr_product    = wc_get_product($tr_product_id);
+            $tr_product = wc_get_product($tr_product_id);
             if ($tr_product && method_exists($tr_product, 'get_variation_attributes')) {
                 $data['attributes'] = $tr_product->get_variation_attributes();
             }
         }
+
         return $data;
     }
 
@@ -269,6 +272,7 @@ class PLLWC_Frontend_Cart
      * @see https://github.com/polylang/polylang-wc/issues/843
      *
      * @param int $product_id A product ID.
+     *
      * @return int A product ID.
      */
     public function translate_product_id_added_to_cart($product_id)
@@ -288,6 +292,7 @@ class PLLWC_Frontend_Cart
      * @since 1.6
      *
      * @param int $page_id Cart page id.
+     *
      * @return int
      */
     public function translate_add_to_cart_page_id($page_id)
@@ -299,9 +304,10 @@ class PLLWC_Frontend_Cart
         $product_id = absint(wp_unslash($_REQUEST['add-to-cart'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $language = $this->data_store->get_language($product_id);
 
-        if (! empty($language)) {
+        if (!empty($language)) {
             $page_id = pll_get_post($page_id, $language);
         }
+
         return $page_id ? $page_id : 0;
     }
 }

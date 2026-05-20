@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang Updater
- */
-
 namespace WP_Syntex\Polylang_WC\Updater;
 
 use PLL_Base;
@@ -47,9 +43,9 @@ class Updater
      */
     public function __construct(string $file, string $name, string $version, string $text_domain)
     {
-        $this->license      = new License($file, $name, $version);
+        $this->license = new License($file, $name, $version);
         $this->translations = new Translations($text_domain);
-        add_action('pll_init', array( $this, 'load_wizard' ));
+        add_action('pll_init', [$this, 'load_wizard']);
     }
 
     /**
@@ -58,11 +54,12 @@ class Updater
      * @since 1.0
      *
      * @param PLL_Base $polylang Polylang object.
+     *
      * @return void
      */
     public function load_wizard($polylang): void
     {
-        if (! empty($polylang->wizard)) {
+        if (!empty($polylang->wizard)) {
             $this->wizard_licenses_step = new Wizard_Licenses_Step($polylang->wizard);
         }
     }

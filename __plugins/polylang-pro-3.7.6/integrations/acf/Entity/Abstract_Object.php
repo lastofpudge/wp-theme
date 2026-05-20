@@ -1,20 +1,16 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Entity;
 
-use Translations;
-use PLL_Language;
 use PLL_Export_Data;
+use PLL_Language;
+use Translations;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Dispatcher;
+use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Abstract_Strategy;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Copy;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Export;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Import;
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Synchronize;
-use WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy\Abstract_Strategy;
 
 /**
  * This class is part of the ACF compatibility.
@@ -29,7 +25,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      *
      * @var string[]
      */
-    private static $updated = array();
+    private static $updated = [];
 
     /**
      * Object ID, could be a source or target.
@@ -39,7 +35,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
     private $id;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @since 3.7
      *
@@ -56,6 +52,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return array Custom field of the target object with a value.
      */
     public function render_field($field)
@@ -74,18 +71,19 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
             return $field;
         }
 
-        $from_value     = acf_get_value(static::acf_id($from_id), $field);
+        $from_value = acf_get_value(static::acf_id($from_id), $field);
         $original_value = $field['value'] ?? ($field['default_value'] ?? null);
         $field['value'] = (new Copy())->execute(
             $this,
             $from_value,
             $field,
-            array(
+            [
                 'target_language' => $lang,
                 'source_language' => PLL()->model->{$this->get_type()}->get_language($from_id),
                 'original_value'  => $original_value,
-            )
+            ]
         );
+
         return $field;
     }
 
@@ -96,6 +94,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      *
      * @param mixed $value Custom field value of the source object.
      * @param array $field Custom field definition.
+     *
      * @return mixed Custom field value of the target object.
      */
     public function update($value, $field)
@@ -107,8 +106,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
 
         $strategy = new Synchronize(new Copy());
 
-
-        if (! $strategy->can_execute($field)) {
+        if (!$strategy->can_execute($field)) {
             return $value;
         }
 
@@ -123,20 +121,20 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
 
             self::$updated[] = $this->get_storage_key($tr_id, $field['key']);
 
-            $acf_id   = static::acf_id($tr_id);
+            $acf_id = static::acf_id($tr_id);
             $tr_value = acf_get_value($acf_id, $field);
             $tr_value = $strategy->execute(
                 $this,
                 $value,
                 $field,
-                array(
+                [
                     'target_language' => $lang,
                     'original_value'  => $tr_value,
                     'target_id'       => $tr_id,
-                )
+                ]
             );
 
-            if (! empty($field['sub_fields']) && is_array($tr_value) && empty($tr_value)) {
+            if (!empty($field['sub_fields']) && is_array($tr_value) && empty($tr_value)) {
                 /*
                  * The fields has subfields but they have been removed
                  * by `Abstract_Strategy::apply_on_subfield()`
@@ -160,28 +158,29 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @param Abstract_Strategy $strategy Strategy to execute.
      * @param int               $to       ID of the target object.
      * @param array             $args     {
-     *      Array of arguments.
+     *                                    Array of arguments.
      *
-     *      @type mixed  $original_value Optional. The translated value of the field, if any.
-     *      @type bool   $update         Optional. Tells if we can update the target ID fields, default `true`.
-     * }
+     * @var mixed $original_value Optional. The translated value of the field, if any.
+     * @var bool  $update         Optional. Tells if we can update the target ID fields, default `true`.
+     *            }
+     *
      * @return void
      */
-    public function apply_to_all_fields(Abstract_Strategy $strategy, int $to = 0, array $args = array())
+    public function apply_to_all_fields(Abstract_Strategy $strategy, int $to = 0, array $args = [])
     {
         // Removes filters on `Dispatcher::update()` to avoid unnecessary operations on `acf_update_value`.
-        remove_filter('acf/update_value', array( Dispatcher::class, 'update' ), 5);
+        remove_filter('acf/update_value', [Dispatcher::class, 'update'], 5);
 
         $fields = get_field_objects(static::acf_id($this->get_id()), false);
 
         if (empty($fields)) {
-            $fields = array();
+            $fields = [];
         }
 
-        $args['update'] = ! isset($args['update']) || (bool) $args['update'];
+        $args['update'] = !isset($args['update']) || (bool) $args['update'];
 
         foreach ($fields as $field) {
-            if (empty($field['value']) && ! is_string($field['value'])) {
+            if (empty($field['value']) && !is_string($field['value'])) {
                 continue;
             }
 
@@ -197,7 +196,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
                 $args
             );
 
-            if (0 < $to && ! empty($args['update'])) {
+            if (0 < $to && !empty($args['update'])) {
                 acf_update_value(
                     $tr_value,
                     static::acf_id($to),
@@ -207,7 +206,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
         }
 
         // Reset filter for `Dispatcher::update` so our integration works for later operations.
-        add_filter('acf/update_value', array( Dispatcher::class, 'update' ), 5, 3);
+        add_filter('acf/update_value', [Dispatcher::class, 'update'], 5, 3);
     }
 
     /**
@@ -215,7 +214,9 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      *
      * @param PLL_Export_Data $export The export object.
      * @param object|null     $to     The translated object if it exists, `null` otherwise.
+     *
      * @return void
+     *
      * @since 3.7
      */
     public function export(PLL_Export_Data $export, ?object $to)
@@ -223,10 +224,10 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
         $this->apply_to_all_fields(
             new Export($export),
             empty($to) ? 0 : $this->get_object_id($to),
-            array(
+            [
                 'target_language' => $export->get_target_language(),
                 'update'          => false,
-            )
+            ]
         );
     }
 
@@ -238,6 +239,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @param object       $to           The target object.
      * @param PLL_Language $target_lang  Target language object.
      * @param Translations $translations A set of translations to search the custom fields translations in.
+     *
      * @return object The translated object.
      */
     public function translate(object $to, PLL_Language $target_lang, Translations $translations): object
@@ -245,7 +247,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
         $this->apply_to_all_fields(
             new Import($translations),
             $this->get_object_id($to),
-            array( 'target_language' => $target_lang )
+            ['target_language' => $target_lang]
         );
 
         return $to;
@@ -261,16 +263,17 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @param bool       $sync  True if it is synchronization, false if it is a copy.
      * @param int|string $from  ID of the object from which we copy information.
      * @param int|string $to    ID of the object to which we copy information.
+     *
      * @return string[]
      */
     public static function remove_acf_metas_from_pll_sync($metas, $sync, $from, $to)
     {
-        if (! is_array($metas)) {
+        if (!is_array($metas)) {
             return $metas;
         }
 
         $from = static::acf_id((int) $from);
-        $to   = static::acf_id((int) $to);
+        $to = static::acf_id((int) $to);
 
         $acf_metas = array_merge((array) acf_get_meta($from), (array) acf_get_meta($to));
         $acf_metas = array_keys($acf_metas);
@@ -297,11 +300,12 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      *
      * @param int    $id  Object ID.
      * @param string $key The custom field key.
+     *
      * @return string
      */
     protected function get_storage_key($id, $key)
     {
-        return static::acf_id($id) . '|' . $key;
+        return static::acf_id($id).'|'.$key;
     }
 
     /**
@@ -310,6 +314,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @since 3.7
      *
      * @param object $object The object.
+     *
      * @return int
      */
     abstract protected function get_object_id($object): int;
@@ -320,6 +325,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @since 3.7
      *
      * @param int $id Object ID.
+     *
      * @return int|string ACF post ID.
      */
     abstract protected static function acf_id($id);
@@ -343,6 +349,7 @@ abstract class Abstract_Object implements Translatable_Entity_Interface
      * @since 3.7
      *
      * @return string
+     *
      * @phpstan-return non-falsy-string
      */
     abstract public function get_type(): string;

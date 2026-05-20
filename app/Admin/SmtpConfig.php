@@ -13,14 +13,14 @@ class SmtpConfig
     {
         $phpmailer->isSMTP();
 
-        $phpmailer->Host        = SMTP_HOST;
-        $phpmailer->Port        = SMTP_PORT;
-        $phpmailer->SMTPAuth    = true;
-        $phpmailer->Username    = SMTP_USER;
-        $phpmailer->Password    = SMTP_PASS;
-        $phpmailer->SMTPSecure  = SMTP_SECURE;
-        $phpmailer->From        = defined('SMTP_FROM') ? SMTP_FROM : SMTP_USER;
-        $phpmailer->FromName    = defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : get_bloginfo('name');
+        $phpmailer->Host = SMTP_HOST;
+        $phpmailer->Port = SMTP_PORT;
+        $phpmailer->SMTPAuth = true;
+        $phpmailer->Username = SMTP_USER;
+        $phpmailer->Password = SMTP_PASS;
+        $phpmailer->SMTPSecure = SMTP_SECURE;
+        $phpmailer->From = defined('SMTP_FROM') ? SMTP_FROM : SMTP_USER;
+        $phpmailer->FromName = defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : get_bloginfo('name');
         $phpmailer->SMTPOptions = [
             'ssl' => [
                 'verify_peer'       => false,
