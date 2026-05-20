@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Handles the language information displayed for orders.
  *
  * @since 0.1
@@ -28,10 +24,10 @@ abstract class PLLWC_Admin_Orders
     {
         $this->data_store = PLLWC_Data_Store::load('order_language');
 
-        add_action('wp_loaded', array( $this, 'custom_columns' ), 20);
-        add_action('add_meta_boxes', array( $this, 'add_meta_boxes' ), 50); // After WC_Admin_Meta_Boxes:add_meta_boxes().
-        add_filter('woocommerce_admin_order_actions', array( $this, 'admin_order_actions' ));
-        add_filter('woocommerce_admin_order_preview_actions', array( $this, 'admin_order_actions' ));
+        add_action('wp_loaded', [$this, 'custom_columns'], 20);
+        add_action('add_meta_boxes', [$this, 'add_meta_boxes'], 50); // After WC_Admin_Meta_Boxes:add_meta_boxes().
+        add_filter('woocommerce_admin_order_actions', [$this, 'admin_order_actions']);
+        add_filter('woocommerce_admin_order_preview_actions', [$this, 'admin_order_actions']);
     }
 
     /**
@@ -49,13 +45,14 @@ abstract class PLLWC_Admin_Orders
      * @since 0.1
      *
      * @param string[] $columns List of table columns.
+     *
      * @return string[] modified list of columns.
      */
     public function add_order_column($columns)
     {
         // Don't add the column when the admin language filter is active.
         if (empty(PLL()->curlang)) {
-            $columns['language'] = '<span class="order_language tips" data-tip="' . __('Language', 'polylang-wc') . '">' . __('Language', 'polylang-wc') . '</span>';
+            $columns['language'] = '<span class="order_language tips" data-tip="'.__('Language', 'polylang-wc').'">'.__('Language', 'polylang-wc').'</span>';
         }
 
         return $columns;
@@ -69,6 +66,7 @@ abstract class PLLWC_Admin_Orders
      *
      * @param string       $column Column name.
      * @param WC_Order|int $order  Order object when using HPOS, or order ID otherwise.
+     *
      * @return void
      */
     public function order_column($column, $order)
@@ -81,7 +79,7 @@ abstract class PLLWC_Admin_Orders
         $lang = PLL()->model->get_language($lang);
 
         if ('language' === $column && $lang) {
-            echo $lang->flag ? $lang->flag . '<span class="screen-reader-text">' . esc_html($lang->name) . '</span>' : esc_html($lang->slug); // PHPCS:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $lang->flag ? $lang->flag.'<span class="screen-reader-text">'.esc_html($lang->name).'</span>' : esc_html($lang->slug); // PHPCS:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
     }
 
@@ -93,37 +91,38 @@ abstract class PLLWC_Admin_Orders
      * @since 0.1
      *
      * @param string $screen_id Screen id of the order edit page.
+     *
      * @return void
      */
     public function add_meta_boxes($screen_id)
     {
         global $wp_meta_boxes;
 
-        if (! $this->is_allowed_screen($screen_id)) {
+        if (!$this->is_allowed_screen($screen_id)) {
             return;
         }
 
         PLLWC_Filter_WC_Pages::init();
 
         remove_meta_box('ml_box', $screen_id, 'side'); // Remove Polylang metabox if necessary.
-        add_meta_box('pllwc_box', __('Language', 'polylang-wc'), array( $this, 'order_language' ), $screen_id, 'side', 'high');
+        add_meta_box('pllwc_box', __('Language', 'polylang-wc'), [$this, 'order_language'], $screen_id, 'side', 'high');
 
         /*
          * Replaces the default order downloads meta box.
          * To be able to update download links with the order language.
          */
         if (PLL()->options['force_lang'] > 1) {
-            $context  = 'normal';
+            $context = 'normal';
             $priority = 'default';
 
             // Keeps the title of the original metabox before removing it.
-            $meta_box_title = $wp_meta_boxes[ $screen_id ][ $context ][ $priority ]['woocommerce-order-downloads']['title'] ?? '';
+            $meta_box_title = $wp_meta_boxes[$screen_id][$context][$priority]['woocommerce-order-downloads']['title'] ?? '';
             remove_meta_box('woocommerce-order-downloads', $screen_id, $context);
 
             add_meta_box(
                 'woocommerce-order-downloads',
                 $meta_box_title,
-                array( $this, 'update_order_download_links' ),
+                [$this, 'update_order_download_links'],
                 $screen_id,
                 $context,
                 $priority
@@ -137,13 +136,14 @@ abstract class PLLWC_Admin_Orders
      * @since 2.2
      *
      * @param object $order_object Order object.
+     *
      * @return void
      */
     public function update_order_download_links($order_object)
     {
         $order = wc_get_order($order_object);
 
-        if (! $order instanceof WC_Order) {
+        if (!$order instanceof WC_Order) {
             return;
         }
 
@@ -151,6 +151,7 @@ abstract class PLLWC_Admin_Orders
 
         if (empty($language)) {
             WC_Meta_Box_Order_Downloads::output($order);
+
             return;
         }
 
@@ -160,13 +161,14 @@ abstract class PLLWC_Admin_Orders
 
         if (empty($meta_box_content)) {
             WC_Meta_Box_Order_Downloads::output($order);
+
             return;
         }
 
         $content_tags = new WP_HTML_Tag_Processor($meta_box_content);
 
-        while ($content_tags->next_tag(array( 'tag_name' => 'a', 'class_name' => 'button' ))) {
-            if ('copy-download-link' !== $content_tags->get_attribute('id') || ! is_string($content_tags->get_attribute('href'))) {
+        while ($content_tags->next_tag(['tag_name' => 'a', 'class_name' => 'button'])) {
+            if ('copy-download-link' !== $content_tags->get_attribute('id') || !is_string($content_tags->get_attribute('href'))) {
                 continue;
             }
 
@@ -182,6 +184,7 @@ abstract class PLLWC_Admin_Orders
      * @since 0.1
      *
      * @param object $order Order object.
+     *
      * @return void
      */
     abstract public function order_language($order);
@@ -192,6 +195,7 @@ abstract class PLLWC_Admin_Orders
      * @since 1.9
      *
      * @param int $order_id Order id.
+     *
      * @return void
      */
     protected function display_language_metabox($order_id)
@@ -202,21 +206,21 @@ abstract class PLLWC_Admin_Orders
         $dropdown = new PLL_Walker_Dropdown();
 
         // NOTE: the class "tags-input" allows to include the field in the autosave $_POST ( see autosave.js ).
-        $args = array(
+        $args = [
             'name'     => 'post_lang_choice',
             'class'    => 'post_lang_choice tags-input',
             'selected' => $lang,
             'flag'     => true,
-        );
+        ];
 
-        $languages     = PLL()->model->get_languages_list();
+        $languages = PLL()->model->get_languages_list();
         $dropdown_html = $dropdown->walk($languages, -1, $args);
 
         wp_nonce_field('pll_language', '_pll_nonce');
 
-        $flags_data = array();
+        $flags_data = [];
         foreach ($languages as $language) {
-            $flags_data[ $language->slug ] = empty($language->flag) ? esc_html($language->slug) : $language->flag;
+            $flags_data[$language->slug] = empty($language->flag) ? esc_html($language->slug) : $language->flag;
         }
         $flags_data = (string) wp_json_encode($flags_data);
 
@@ -236,6 +240,7 @@ abstract class PLLWC_Admin_Orders
      * @since 1.0.4
      *
      * @param array $actions Admin order actions.
+     *
      * @return array
      */
     public function admin_order_actions($actions)
@@ -246,9 +251,10 @@ abstract class PLLWC_Admin_Orders
 
         foreach ($actions as $key => $arr) {
             if (false !== strpos($arr['url'], 'admin-ajax.php')) {
-                $actions[ $key ]['url'] = add_query_arg('pll_ajax_backend', 1, $arr['url']);
+                $actions[$key]['url'] = add_query_arg('pll_ajax_backend', 1, $arr['url']);
             }
         }
+
         return $actions;
     }
 
@@ -258,16 +264,17 @@ abstract class PLLWC_Admin_Orders
      * @since 1.9
      *
      * @param string $screen_id Optional screen id, defaults to the current screen.
+     *
      * @return bool
      */
     protected function is_allowed_screen($screen_id = '')
     {
         // If we have a specific screen_id passed, check it directly.
-        if (! empty($screen_id)) {
+        if (!empty($screen_id)) {
             return in_array($screen_id, $this->get_allowed_screens(), true);
         }
 
-        if (! function_exists('get_current_screen')) {
+        if (!function_exists('get_current_screen')) {
             return false;
         }
 

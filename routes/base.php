@@ -2,9 +2,9 @@
 
 use App\Controllers\AccountController;
 use App\Controllers\CategoryController;
+use App\Controllers\CheckoutController;
 use App\Controllers\PageController;
 use App\Controllers\PostController;
-use App\Controllers\CheckoutController;
 use App\Controllers\ShopController;
 use Core\Route;
 

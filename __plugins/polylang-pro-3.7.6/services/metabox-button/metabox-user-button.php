@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang Pro
- */
-
-/**
  * Abstract class for non-rest user meta related button.
  */
 abstract class PLL_Metabox_User_Button extends PLL_Metabox_Button
@@ -35,6 +31,7 @@ abstract class PLL_Metabox_User_Button extends PLL_Metabox_Button
      *
      * @param string $post_type Current post type.
      * @param bool   $active    New requested button state.
+     *
      * @return bool Whether the new button state is accepted or not.
      */
     protected function toggle_option($post_type, $active)

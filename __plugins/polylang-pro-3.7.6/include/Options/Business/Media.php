@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang
- */
-
 namespace WP_Syntex\Polylang_Pro\Options\Business;
 
 use WP_Syntex\Polylang\Options\Abstract_Option;
@@ -40,7 +36,7 @@ class Media extends Abstract_Option
      */
     protected function get_default()
     {
-        return array( 'duplicate' => false );
+        return ['duplicate' => false];
     }
 
     /**
@@ -63,16 +59,16 @@ class Media extends Abstract_Option
      */
     protected function get_data_structure(): array
     {
-        return array(
+        return [
             'type'                 => 'object', // Correspond to associative array in PHP, @see{https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/#primitive-types}.
-            'properties'           => array(
-                'duplicate' => array(
+            'properties'           => [
+                'duplicate' => [
                     'type'     => 'boolean',
                     'required' => true,
-                ),
-            ),
+                ],
+            ],
             'additionalProperties' => false,
-        );
+        ];
     }
 
     /**

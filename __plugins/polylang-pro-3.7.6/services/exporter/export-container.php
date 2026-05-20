@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Creates and stores instances of `PLL_Export_Data`.
  *
  * @since 3.6
@@ -30,7 +26,7 @@ class PLL_Export_Container implements IteratorAggregate, Countable
      *
      * @phpstan-var array<string, PLL_Export_Data>
      */
-    private $exports = array();
+    private $exports = [];
 
     /**
      * Constructor.
@@ -54,6 +50,7 @@ class PLL_Export_Container implements IteratorAggregate, Countable
      *
      * @param PLL_Language $source_language The export's source language.
      * @param PLL_Language $target_language The export's target language.
+     *
      * @return PLL_Export_Data
      */
     public function get(PLL_Language $source_language, PLL_Language $target_language): PLL_Export_Data
@@ -61,11 +58,11 @@ class PLL_Export_Container implements IteratorAggregate, Countable
         $export_key = "{$source_language->slug}/{$target_language->slug}";
         $class_name = $this->class_name;
 
-        if (! array_key_exists($export_key, $this->exports)) {
-            $this->exports[ $export_key ] = new $class_name($source_language, $target_language);
+        if (!array_key_exists($export_key, $this->exports)) {
+            $this->exports[$export_key] = new $class_name($source_language, $target_language);
         }
 
-        return $this->exports[ $export_key ];
+        return $this->exports[$export_key];
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Content wrappers
+ * Content wrappers.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/global/wrapper-start.php.
  *
@@ -12,10 +12,9 @@
  * the readme will list any important changes.
  *
  * @see         https://woocommerce.com/document/template-structure/
- * @package     WooCommerce\Templates
+ *
  * @version     3.3.0
  */
-
 defined('ABSPATH') || exit;
 
 $template = wc_get_theme_slug_for_templates();
