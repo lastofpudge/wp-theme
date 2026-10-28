@@ -1,14 +1,14 @@
-Timber-based WordPress starter theme
+wp-theme — Lightweight Timber + Twig WordPress starter
 
-- Timber 2.x with Twig template engine
-- Vite 6 for JS/SCSS builds
-- Lightning CSS for fast CSS processing
-- Custom controllers support
-- Easy custom fields/posts integration
-- Integrated ajax handlers
-- Composer and npm support
+- Timber 2.x and Twig templates
+- Vite 6 and Lightning CSS asset pipeline
+- Controllers, routes and Carbon Fields examples
+- Optional AJAX examples
+- PHP 8.2–8.5 and WordPress 6.9+
 
-How to use:
+Quick start:
 - composer install
-- npm install
-- npm run build (production) or npm run dev (watch mode)
+- npm ci
+- npm run build
+
+See README.md for the complete installation, development, deployment and WooCommerce-branch documentation.
