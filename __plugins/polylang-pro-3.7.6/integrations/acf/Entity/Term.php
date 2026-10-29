@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Entity;
 
 use WP_Term;
@@ -22,6 +18,7 @@ class Term extends Abstract_Object
      * @since 3.7
      *
      * @param WP_Term $object The object.
+     *
      * @return int
      */
     protected function get_object_id($object): int
@@ -35,11 +32,12 @@ class Term extends Abstract_Object
      * @since 3.7
      *
      * @param int $id Term ID.
+     *
      * @return string ACF post ID.
      */
     protected static function acf_id($id)
     {
-        return 'term_' . $id;
+        return 'term_'.$id;
     }
 
     /**
@@ -64,6 +62,7 @@ class Term extends Abstract_Object
      * @since 3.7
      *
      * @return string
+     *
      * @phpstan-return non-falsy-string
      */
     public function get_type(): string

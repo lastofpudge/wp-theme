@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Single Product Share
+ * Single Product Share.
  *
  * Sharing plugins can hook into here or you can add your own code directly.
  *
@@ -14,10 +14,9 @@
  * the readme will list any important changes.
  *
  * @see     https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
+ *
  * @version 3.5.0
  */
-
 defined('ABSPATH') || exit;
 
 do_action('woocommerce_share'); // Sharing plugins can hook into here.

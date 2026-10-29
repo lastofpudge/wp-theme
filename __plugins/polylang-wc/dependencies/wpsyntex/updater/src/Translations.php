@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang Updater
- */
-
 namespace WP_Syntex\Polylang_WC\Updater;
 
 use DateTime;
@@ -66,9 +62,9 @@ class Translations
     {
         $this->slug = $slug;
 
-        add_action('init', array( self::class, 'register_clean_translations_cache' ), 9999);
-        add_filter('translations_api', array( $this, 'translations_api' ), 10, 3);
-        add_filter('site_transient_update_plugins', array( $this, 'site_transient_update_plugins' ));
+        add_action('init', [self::class, 'register_clean_translations_cache'], 9999);
+        add_filter('translations_api', [$this, 'translations_api'], 10, 3);
+        add_filter('site_transient_update_plugins', [$this, 'site_transient_update_plugins']);
     }
 
     /**
@@ -80,6 +76,7 @@ class Translations
      * @param bool|array $result         The result object. Default false.
      * @param string     $requested_type The type of translations being requested.
      * @param object     $args           Translation API arguments.
+     *
      * @return bool|array
      */
     public function translations_api($result, $requested_type, $args)
@@ -97,25 +94,25 @@ class Translations
      * Hooked to `site_transient_update_plugins`.
      *
      * @see wp_get_translation_updates().
-     *
      * @since 1.0
      *
      * @param stdClass|false $value The transient value.
+     *
      * @return stdClass|false
      */
     public function site_transient_update_plugins($value)
     {
-        if (! $value instanceof stdClass) {
+        if (!$value instanceof stdClass) {
             $value = new stdClass();
         }
 
-        if (! isset($value->translations)) {
-            $value->translations = array();
+        if (!isset($value->translations)) {
+            $value->translations = [];
         }
 
         $translations = self::get_translations($this->slug);
 
-        if (! isset($translations['translations'])) {
+        if (!isset($translations['translations'])) {
             return $value;
         }
 
@@ -123,8 +120,8 @@ class Translations
 
         foreach ((array) $translations['translations'] as $translation) {
             if (in_array($translation['language'], self::get_available_languages(), true)) {
-                if (isset($installed_translations[ $this->slug ][ $translation['language'] ]) && $translation['updated']) {
-                    $local  = new DateTime($installed_translations[ $this->slug ][ $translation['language'] ]['PO-Revision-Date']);
+                if (isset($installed_translations[$this->slug][$translation['language']]) && $translation['updated']) {
+                    $local = new DateTime($installed_translations[$this->slug][$translation['language']]['PO-Revision-Date']);
                     $remote = new DateTime($translation['updated']);
 
                     if ($local >= $remote) {
@@ -152,8 +149,8 @@ class Translations
      */
     public static function register_clean_translations_cache(): void
     {
-        add_action('set_site_transient_update_plugins', array( self::class, 'clean_translations_cache' ));
-        add_action('delete_site_transient_update_plugins', array( self::class, 'clean_translations_cache' ));
+        add_action('set_site_transient_update_plugins', [self::class, 'clean_translations_cache']);
+        add_action('delete_site_transient_update_plugins', [self::class, 'clean_translations_cache']);
     }
 
     /**
@@ -167,7 +164,7 @@ class Translations
     {
         $translations = get_site_transient(self::TRANSIENT_KEY);
 
-        if (! is_object($translations)) {
+        if (!is_object($translations)) {
             return;
         }
 
@@ -175,10 +172,10 @@ class Translations
          * Don't delete the cache if the transient gets changed multiple times
          * during a single request. Set cache lifetime to maximum 15 seconds.
          */
-        $cache_lifespan   = 15;
+        $cache_lifespan = 15;
         $time_not_changed = isset($translations->_last_checked) && (time() - $translations->_last_checked) > $cache_lifespan;
 
-        if (! $time_not_changed) {
+        if (!$time_not_changed) {
             return;
         }
 
@@ -191,13 +188,14 @@ class Translations
      * @since 1.0
      *
      * @param string $slug Project directory slug.
+     *
      * @return array Translation data.
      */
     private static function get_translations(string $slug): array
     {
         $translations = get_site_transient(self::TRANSIENT_KEY);
 
-        if (! $translations instanceof stdClass) {
+        if (!$translations instanceof stdClass) {
             $translations = new stdClass();
         }
 
@@ -205,7 +203,7 @@ class Translations
             return $translations->{$slug};
         }
 
-        $translations = json_decode(wp_remote_retrieve_body(wp_remote_get(self::API_URL, array( 'timeout' => 3 ))), true);
+        $translations = json_decode(wp_remote_retrieve_body(wp_remote_get(self::API_URL, ['timeout' => 3])), true);
 
         if (is_array($translations)) {
             $translations = (object) $translations;
@@ -221,7 +219,7 @@ class Translations
             return $translations->{$slug};
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -238,6 +236,7 @@ class Translations
         if (null === self::$installed_translations) {
             self::$installed_translations = wp_get_installed_translations('plugins');
         }
+
         return self::$installed_translations;
     }
 
@@ -255,6 +254,7 @@ class Translations
         if (null === self::$available_languages) {
             self::$available_languages = (array) get_available_languages();
         }
+
         return self::$available_languages;
     }
 }

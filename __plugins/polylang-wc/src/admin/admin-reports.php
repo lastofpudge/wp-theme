@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Filters the reports as some need to combine all languages
  * and other need to be filtered per language.
  *
@@ -30,17 +26,17 @@ class PLLWC_Admin_Reports
         $this->data_store = PLLWC_Data_Store::load('product_language');
 
         // Combines products per language.
-        add_filter('woocommerce_reports_get_order_report_query', array( $this, 'report_query' ));
-        add_filter('woocommerce_reports_get_order_report_data', array( $this, 'report_data' ));
+        add_filter('woocommerce_reports_get_order_report_query', [$this, 'report_query']);
+        add_filter('woocommerce_reports_get_order_report_data', [$this, 'report_data']);
 
         // Sales by category.
-        add_filter('woocommerce_report_sales_by_category_get_products_in_category', array( $this, 'get_products_in_category' ), 10, 2);
-        add_filter('terms_clauses', array( $this, 'terms_clauses' ), 10, 3);
+        add_filter('woocommerce_report_sales_by_category_get_products_in_category', [$this, 'get_products_in_category'], 10, 2);
+        add_filter('terms_clauses', [$this, 'terms_clauses'], 10, 3);
 
         // Filters stock queries per language.
-        add_filter('woocommerce_report_low_in_stock_query_from', array( $this, 'stock_query' ));
-        add_filter('woocommerce_report_out_of_stock_query_from', array( $this, 'stock_query' ));
-        add_filter('woocommerce_report_most_stocked_query_from', array( $this, 'stock_query' ));
+        add_filter('woocommerce_report_low_in_stock_query_from', [$this, 'stock_query']);
+        add_filter('woocommerce_report_out_of_stock_query_from', [$this, 'stock_query']);
+        add_filter('woocommerce_report_most_stocked_query_from', [$this, 'stock_query']);
     }
 
     /**
@@ -50,6 +46,7 @@ class PLLWC_Admin_Reports
      * @since 0.1
      *
      * @param string[] $query Array of SQL clauses.
+     *
      * @return string[]
      */
     public function report_query($query)
@@ -65,10 +62,10 @@ class PLLWC_Admin_Reports
              * Thus we need to make sure to get the correct language thanks to the woocommerce_reports_get_order_report_data filter.
              * FIXME never return a product which has no translation.
              */
-            $query['join']    .= " INNER JOIN {$wpdb->term_relationships} AS pll_tr ON order_item_meta__product_id.meta_value = pll_tr.object_id";
-            $query['join']    .= " INNER JOIN {$wpdb->term_taxonomy} AS pll_tt ON pll_tr.term_taxonomy_id = pll_tt.term_taxonomy_id";
-            $query['where']   .= $wpdb->prepare(' AND pll_tt.taxonomy = %s', $this->data_store->get_tax_translations());
-            $query['where']   .= $wpdb->prepare(' AND %s = %s', $lang, $lang); // Hack to be sure to get one query per filtered language to pass into woocommerce_reports_get_order_report_data filter.
+            $query['join'] .= " INNER JOIN {$wpdb->term_relationships} AS pll_tr ON order_item_meta__product_id.meta_value = pll_tr.object_id";
+            $query['join'] .= " INNER JOIN {$wpdb->term_taxonomy} AS pll_tt ON pll_tr.term_taxonomy_id = pll_tt.term_taxonomy_id";
+            $query['where'] .= $wpdb->prepare(' AND pll_tt.taxonomy = %s', $this->data_store->get_tax_translations());
+            $query['where'] .= $wpdb->prepare(' AND %s = %s', $lang, $lang); // Hack to be sure to get one query per filtered language to pass into woocommerce_reports_get_order_report_data filter.
             $query['group_by'] = 'GROUP BY pll_tr.term_taxonomy_id';
         }
 
@@ -76,16 +73,16 @@ class PLLWC_Admin_Reports
         if (false !== strpos($query['select'], 'sparkline')) {
             $pattern = "#order_item_meta__product_id.meta_value = '([0-9]+)'#";
             if (preg_match($pattern, $query['where'], $matches)) {
-                $ids = array();
+                $ids = [];
 
                 foreach ($this->data_store->get_translations((int) $matches[1]) as $tr_id) {
                     $ids[] = $tr_id;
                 }
 
-                if (! empty($ids)) {
-                    $ids            = array_unique($ids);
-                    $ids            = array_map('absint', $ids);
-                    $replace        = "order_item_meta__product_id.meta_value IN ('" . implode("','", $ids) . "')";
+                if (!empty($ids)) {
+                    $ids = array_unique($ids);
+                    $ids = array_map('absint', $ids);
+                    $replace = "order_item_meta__product_id.meta_value IN ('".implode("','", $ids)."')";
                     $query['where'] = (string) preg_replace($pattern, $replace, $query['where']);
                 }
             }
@@ -95,7 +92,7 @@ class PLLWC_Admin_Reports
         if (false !== strpos($query['select'], 'order_item_count') || false !== strpos($query['select'], 'order_item_amount')) {
             $pattern = "#order_item_meta__product_id_array.meta_value IN \('([\',0-9]+)'\)#";
             if (preg_match($pattern, $query['where'], $matches)) {
-                $ids = array();
+                $ids = [];
 
                 foreach (array_map('absint', explode("','", $matches[1])) as $id) {
                     foreach ($this->data_store->get_translations($id) as $tr_id) {
@@ -103,10 +100,10 @@ class PLLWC_Admin_Reports
                     }
                 }
 
-                if (! empty($ids)) {
-                    $ids            = array_unique($ids);
-                    $ids            = array_map('absint', $ids);
-                    $replace        = "order_item_meta__product_id_array.meta_value IN ('" . implode("','", $ids) . "')";
+                if (!empty($ids)) {
+                    $ids = array_unique($ids);
+                    $ids = array_map('absint', $ids);
+                    $replace = "order_item_meta__product_id_array.meta_value IN ('".implode("','", $ids)."')";
                     $query['where'] = (string) preg_replace($pattern, $replace, $query['where']);
                 }
             }
@@ -122,11 +119,12 @@ class PLLWC_Admin_Reports
      * @since 0.1
      *
      * @param array $results Array of products returned by WC_Admin_Report::get_order_report_data().
+     *
      * @return array
      */
     public function report_data($results)
     {
-        if (! is_array($results)) {
+        if (!is_array($results)) {
             return $results;
         }
 
@@ -137,8 +135,8 @@ class PLLWC_Admin_Reports
         }
 
         foreach ($results as $key => $result) {
-            if (! empty($result->product_id)) {
-                $results[ $key ]->product_id = $this->data_store->get($result->product_id, $lang);
+            if (!empty($result->product_id)) {
+                $results[$key]->product_id = $this->data_store->get($result->product_id, $lang);
             }
         }
 
@@ -153,15 +151,16 @@ class PLLWC_Admin_Reports
      *
      * @param int[] $product_ids Not used.
      * @param int   $category_id Product category id.
+     *
      * @return int[]
      */
     public function get_products_in_category($product_ids, $category_id)
     {
-        $term_ids = array();
+        $term_ids = [];
 
         foreach (pll_get_term_translations($category_id) as $tr_id) {
             $term_ids[] = $tr_id;
-            $tr_children  = get_term_children($tr_id, 'product_cat');
+            $tr_children = get_term_children($tr_id, 'product_cat');
 
             if (is_wp_error($tr_children)) {
                 continue;
@@ -172,7 +171,7 @@ class PLLWC_Admin_Reports
 
         $terms = get_objects_in_term($term_ids, 'product_cat');
 
-        return is_array($terms) ? array_map('intval', $terms) : array();
+        return is_array($terms) ? array_map('intval', $terms) : [];
     }
 
     /**
@@ -184,6 +183,7 @@ class PLLWC_Admin_Reports
      * @param string[] $clauses    SQL clauses.
      * @param string[] $taxonomies Not used.
      * @param array    $args       WP_Term_Query arguments.
+     *
      * @return string[] Modified SQL clauses
      */
     public function terms_clauses($clauses, $taxonomies, $args)
@@ -196,6 +196,7 @@ class PLLWC_Admin_Reports
                 return PLL()->model->terms_clauses($clauses, $lang);
             }
         }
+
         return $clauses;
     }
 
@@ -205,6 +206,7 @@ class PLLWC_Admin_Reports
      * @since 0.1
      *
      * @param string $query_from Part of the SQL query (FROM, JOIN, WHERE clauses).
+     *
      * @return string
      */
     public function stock_query($query_from)
@@ -215,6 +217,6 @@ class PLLWC_Admin_Reports
             return $query_from;
         }
 
-        return str_replace('WHERE 1=1', $this->data_store->join_clause('posts') . ' WHERE 1=1' . $this->data_store->where_clause($lang), $query_from);
+        return str_replace('WHERE 1=1', $this->data_store->join_clause('posts').' WHERE 1=1'.$this->data_store->where_clause($lang), $query_from);
     }
 }

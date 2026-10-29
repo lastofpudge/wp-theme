@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 defined('ABSPATH') || exit;
 
 /**
@@ -29,7 +25,7 @@ abstract class PLLWC_Object_Language
      */
     public function init()
     {
-        add_filter('woocommerce_get_wp_query_args', array( $this, 'restore_lang_query_arg' ), 10, 2);
+        add_filter('woocommerce_get_wp_query_args', [$this, 'restore_lang_query_arg'], 10, 2);
 
         return $this;
     }
@@ -57,6 +53,7 @@ abstract class PLLWC_Object_Language
      *
      * @param int                     $id   Object ID.
      * @param PLL_Language|string|int $lang Language (object, slug, or term ID).
+     *
      * @return bool True when successfully assigned. False otherwise (or if the given language is already assigned to
      *              the object).
      */
@@ -76,10 +73,12 @@ abstract class PLLWC_Object_Language
      *                      `{language_taxonomy_name}:{property_name}` (see {@see PLL_Language::get_tax_prop()} for
      *                      the possible values). Ex: `term_language:term_taxonomy_id`.
      *                      Pass `\OBJECT` constant to get the language object.
+     *
      * @return PLL_Language|string|int|bool|string[] The requested field value of the object language, `false` if no language is
-     *                                  associated to that object.
+     *                                               associated to that object.
      *
      * @phpstan-param non-falsy-string $field
+     *
      * @phpstan-return (
      *     $field is \OBJECT ? PLL_Language : (
      *         $field is 'slug' ? non-empty-string : string|int|bool|list<non-empty-string>
@@ -94,7 +93,7 @@ abstract class PLLWC_Object_Language
             return $lang;
         }
 
-        return ! empty($lang) ? $lang->get_prop($field) : false;
+        return !empty($lang) ? $lang->get_prop($field) : false;
     }
 
     /**
@@ -104,6 +103,7 @@ abstract class PLLWC_Object_Language
      * @since 1.9 Type-hinted.
      *
      * @param string $alias Optional alias for object table.
+     *
      * @return string The JOIN clause.
      *
      * @phpstan-return non-empty-string
@@ -121,6 +121,7 @@ abstract class PLLWC_Object_Language
      *
      * @param PLL_Language|PLL_Language[]|string|string[] $lang A `PLL_Language` object, or a comma separated list of
      *                                                          language slugs, or an array of language slugs or objects.
+     *
      * @return string The WHERE clause.
      *
      * @phpstan-param PLL_Language|PLL_Language[]|non-empty-string|non-empty-string[] $lang
@@ -140,14 +141,16 @@ abstract class PLLWC_Object_Language
      *
      * @param array $wp_query_args Query arguments after WooCommerce processing.
      * @param array $query_vars    Original query arguments before WooCommerce processing.
+     *
      * @return array Modified query arguments with 'lang' restored if needed.
      */
     public function restore_lang_query_arg($wp_query_args, $query_vars)
     {
         // Only restore if 'lang' was explicitly set in the original query.
-        if (array_key_exists('lang', $query_vars) && ! isset($wp_query_args['lang'])) {
+        if (array_key_exists('lang', $query_vars) && !isset($wp_query_args['lang'])) {
             $wp_query_args['lang'] = $query_vars['lang'];
         }
+
         return $wp_query_args;
     }
 }

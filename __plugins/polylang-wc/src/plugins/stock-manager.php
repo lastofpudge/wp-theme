@@ -1,16 +1,10 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with:
  *
  * @see https://wordpress.org/plugins/woocommerce-stock-manager/ WooCommerce Stock Manager, version tested: 1.2.6.
- *
  * @see https://woocommerce.com/products/bulk-stock-management/ WooCommerce Bulk Stock Management, version tested: 2.2.9.
- *
  * @since 0.5
  */
 class PLLWC_Stock_Manager
@@ -22,7 +16,7 @@ class PLLWC_Stock_Manager
      */
     public function __construct()
     {
-        add_action('parse_query', array( $this, 'parse_query' ), 20);
+        add_action('parse_query', [$this, 'parse_query'], 20);
     }
 
     /**
@@ -32,6 +26,7 @@ class PLLWC_Stock_Manager
      * @since 0.9
      *
      * @param array $qvars Query vars.
+     *
      * @return bool
      */
     public function is_language_in_query($qvars)
@@ -44,7 +39,7 @@ class PLLWC_Stock_Manager
             }
         }
 
-        if (! empty($qvars['lang'])) {
+        if (!empty($qvars['lang'])) {
             return true;
         }
 
@@ -57,11 +52,13 @@ class PLLWC_Stock_Manager
      * @since 0.9
      *
      * @param array $qvars Query vars.
+     *
      * @return bool
      */
     public function is_product_in_query($qvars)
     {
-        $product_types = array( 'product', 'product_variation' );
+        $product_types = ['product', 'product_variation'];
+
         return isset($qvars['post_type']) && (in_array($qvars['post_type'], $product_types) || (is_array($qvars['post_type']) && array_intersect($qvars['post_type'], $product_types)));
     }
 
@@ -72,13 +69,14 @@ class PLLWC_Stock_Manager
      * @since 0.3.2
      *
      * @param WP_Query $query WP_Query object.
+     *
      * @return void
      */
     public function parse_query($query)
     {
         $qvars = $query->query_vars;
 
-        if (! $this->is_language_in_query($qvars) && $this->is_product_in_query($qvars)) {
+        if (!$this->is_language_in_query($qvars) && $this->is_product_in_query($qvars)) {
             $query->query_vars['lang'] = PLLWC_Admin::get_preferred_language();
         }
     }

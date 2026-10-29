@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 /**
@@ -21,9 +17,11 @@ class Copy_All extends Copy
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return true
      */
     protected function can_execute_recursive(array $field): bool // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {return true;
+    {
+        return true;
     }
 }

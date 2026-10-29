@@ -108,8 +108,8 @@ class AdminOptions
         $query->set('paged', $page);
         $query->set('page', 0);
         $query->set('pagename', '');
-        $query->is_page             = false;
-        $query->is_archive          = true;
+        $query->is_page = false;
+        $query->is_archive = true;
         $query->is_post_type_archive = true;
     }
 

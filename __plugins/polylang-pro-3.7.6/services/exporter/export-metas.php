@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Abstract class to manage the export of metas.
  *
  * @since 3.3
@@ -36,6 +32,7 @@ abstract class PLL_Export_Metas
      *
      * @param int $from ID of the source object.
      * @param int $to   ID of the target object.
+     *
      * @return array List of custom fields names.
      */
     protected function get_meta_names_to_export(int $from, int $to): array
@@ -48,6 +45,7 @@ abstract class PLL_Export_Metas
          * @param array $keys A recursive array containing nested meta sub keys to translate. Wildcards (`*`) can be
          *                    used to match any characters. If `*` are already present in the meta name or sub-key,
          *                    escape them with a backslash: `\*`.
+         *
          *     @example array(
          *         'meta_to_translate_1' => 1,
          *         'meta_to_translate_2' => 1,
@@ -64,10 +62,11 @@ abstract class PLL_Export_Metas
          *             ),
          *         ),
          *     )
+         *
          * @param int $from ID of the source object.
          * @param int $to   ID of the target object.
          */
-        return (array) apply_filters("pll_{$this->meta_type}_metas_to_export", array(), $from, $to);
+        return (array) apply_filters("pll_{$this->meta_type}_metas_to_export", [], $from, $to);
     }
 
     /**
@@ -77,6 +76,7 @@ abstract class PLL_Export_Metas
      *
      * @param int $from ID of the source object.
      * @param int $to   ID of the target object.
+     *
      * @return array List of custom fields encodings.
      */
     protected function get_meta_encodings(int $from, int $to): array
@@ -90,14 +90,16 @@ abstract class PLL_Export_Metas
          * @param array $keys A recursive array containing nested meta sub keys to translate. Wildcards (`*`) can be
          *                    used to match any characters. If `*` are already present in the meta name or sub-key,
          *                    escape them with a baclslash: `\*`.
+         *
          *     @example array(
          *        'meta_to_translate_1' => 'json',
          *        'meta_name_*_foobar'  => 'json',
          *    )
+         *
          * @param int $from ID of the source object.
          * @param int $to   ID of the target object.
          */
-        return (array) apply_filters("pll_{$this->meta_type}_meta_encodings", array(), $from, $to);
+        return (array) apply_filters("pll_{$this->meta_type}_meta_encodings", [], $from, $to);
     }
 
     /**
@@ -108,6 +110,7 @@ abstract class PLL_Export_Metas
      * @param PLL_Export_Data $export Export object.
      * @param int             $from   ID of the source object.
      * @param int             $to     ID of the target object.
+     *
      * @return void
      */
     public function export(PLL_Export_Data $export, int $from, int $to = 0)
@@ -120,23 +123,23 @@ abstract class PLL_Export_Metas
 
         $source_metas = get_metadata($this->meta_type, $from);
 
-        if (empty($source_metas) || ! is_array($source_metas)) {
+        if (empty($source_metas) || !is_array($source_metas)) {
             return;
         }
 
-        $tr_metas  = get_metadata($this->meta_type, $to);
-        $tr_metas  = is_array($tr_metas) ? $tr_metas : array();
+        $tr_metas = get_metadata($this->meta_type, $to);
+        $tr_metas = is_array($tr_metas) ? $tr_metas : [];
         $encodings = $this->get_meta_encodings($from, $to);
-        $matcher   = new PLL_Format_Util();
+        $matcher = new PLL_Format_Util();
 
         foreach ($meta_names_to_export as $meta_name => $meta_subfield) {
             $entries = $matcher->filter_list($source_metas, (string) $meta_name);
 
             foreach ($entries as $meta_name => $meta_values) {
-                $tr_meta_values          = $tr_metas[ $meta_name ] ?? array();
-                $encodings[ $meta_name ] = $encodings[ $meta_name ] ?? '';
-                $decoder                 = new PLL_Data_Encoding($encodings[ $meta_name ]);
-                $index                   = 0;
+                $tr_meta_values = $tr_metas[$meta_name] ?? [];
+                $encodings[$meta_name] = $encodings[$meta_name] ?? '';
+                $decoder = new PLL_Data_Encoding($encodings[$meta_name]);
+                $index = 0;
 
                 foreach ($meta_values as $value_index => $meta_value) {
                     if ($decoder->decode_reference($meta_value)->has_errors()) {
@@ -144,12 +147,12 @@ abstract class PLL_Export_Metas
                         continue;
                     }
 
-                    $meta_subfield = is_array($meta_subfield) ? $meta_subfield : array();
-                    $tr_value      = isset($tr_meta_values[ $value_index ]) ? $tr_meta_values[ $value_index ] : array();
+                    $meta_subfield = is_array($meta_subfield) ? $meta_subfield : [];
+                    $tr_value = isset($tr_meta_values[$value_index]) ? $tr_meta_values[$value_index] : [];
 
                     if ($decoder->decode_reference($tr_value)->has_errors()) {
                         // Error while decoding.
-                        $tr_value = array();
+                        $tr_value = [];
                     }
 
                     $index += (int) $this->maybe_export_metas_sub_fields(
@@ -160,7 +163,7 @@ abstract class PLL_Export_Metas
                         $tr_value,
                         $from,
                         $export,
-                        $encodings[ $meta_name ]
+                        $encodings[$meta_name]
                     );
                 }
             }
@@ -173,7 +176,8 @@ abstract class PLL_Export_Metas
      * @since 3.3
      * @since 3.6 New parameter `$object_id`.
      *
-     * @param array           $fields_to_export  A recursive array containing nested meta sub keys to translate.
+     * @param array $fields_to_export A recursive array containing nested meta sub keys to translate.
+     *
      *     @example array(
      *        'sub_key_to_translate_1' => 1,
      *        'sub_key_to_translate_2' => array(
@@ -181,6 +185,7 @@ abstract class PLL_Export_Metas
      *         ),
      *      ),
      *    )
+     *
      * @param string          $parent_key_string A string containing parent keys separated with pipes. Each pipe in key
      *                                           should be escaped to avoid conflicts.
      * @param int             $index             Index of the current meta value. Useful when a meta has several values.
@@ -189,16 +194,17 @@ abstract class PLL_Export_Metas
      * @param int             $object_id         ID of the object the meta belongs to.
      * @param PLL_Export_Data $export            Export object.
      * @param string          $encoding          Encoding format for the field group.
+     *
      * @return bool True if the meta value has been exported, false otherwise.
      */
     protected function maybe_export_metas_sub_fields(array $fields_to_export, string $parent_key_string, int $index, $source_metas, $tr_metas, int $object_id, PLL_Export_Data $export, string $encoding = ''): bool
     {
         $is_exported = false;
 
-        if (! empty($fields_to_export)) {
+        if (!empty($fields_to_export)) {
             if (is_object($source_metas)) {
                 $source_metas = get_object_vars($source_metas);
-            } elseif (! is_array($source_metas)) {
+            } elseif (!is_array($source_metas)) {
                 return false;
             }
 
@@ -209,15 +215,15 @@ abstract class PLL_Export_Metas
 
                 foreach ($entries as $key => $meta_values) {
                     $escaped_key = addcslashes((string) $key, '\\|');
-                    $key_string  = "$parent_key_string|$escaped_key";
-                    $sub_field   = is_array($field_value) ? $field_value : array();
+                    $key_string = "$parent_key_string|$escaped_key";
+                    $sub_field = is_array($field_value) ? $field_value : [];
 
-                    if (is_array($tr_metas) && isset($tr_metas[ $key ])) {
-                        $tr_sub_meta = $tr_metas[ $key ];
+                    if (is_array($tr_metas) && isset($tr_metas[$key])) {
+                        $tr_sub_meta = $tr_metas[$key];
                     } elseif (is_object($tr_metas) && isset($tr_metas->$key)) {
                         $tr_sub_meta = $tr_metas->$key;
                     } else {
-                        $tr_sub_meta = array();
+                        $tr_sub_meta = [];
                     }
 
                     $is_exported = $this->maybe_export_metas_sub_fields(
@@ -247,26 +253,27 @@ abstract class PLL_Export_Metas
             }
 
             $export->add_translation_entry(
-                array(
+                [
                     'object_type' => $this->meta_type,
                     'field_type'  => $this->import_export_meta_type,
                     'object_id'   => $object_id,
-                    'field_id'    => $parent_key_string . $id_suffix,
+                    'field_id'    => $parent_key_string.$id_suffix,
                     'encoding'    => $encoding,
-                ),
+                ],
                 $source_metas,
                 is_scalar($tr_metas) ? (string) $tr_metas : ''
             );
+
             return true;
         }
 
-        if (! is_array($source_metas)) {
+        if (!is_array($source_metas)) {
             return false;
         }
 
         $tr_metas = (array) $tr_metas;
         foreach ($source_metas as $sub_field_index => $source_value) {
-            if (! is_scalar($source_value)) {
+            if (!is_scalar($source_value)) {
                 continue;
             }
 
@@ -277,15 +284,15 @@ abstract class PLL_Export_Metas
             }
 
             $escaped_key = addcslashes((string) $sub_field_index, '\\|');
-            $tr_values   = isset($tr_metas[ $sub_field_index ]) && is_scalar($tr_metas[ $sub_field_index ]) ? (string) $tr_metas[ $sub_field_index ] : '';
+            $tr_values = isset($tr_metas[$sub_field_index]) && is_scalar($tr_metas[$sub_field_index]) ? (string) $tr_metas[$sub_field_index] : '';
             $export->add_translation_entry(
-                array(
+                [
                     'object_type' => $this->meta_type,
                     'field_type'  => $this->import_export_meta_type,
                     'object_id'   => $object_id,
                     'field_id'    => "{$parent_key_string}|{$escaped_key}{$id_suffix}",
                     'encoding'    => $encoding,
-                ),
+                ],
                 $source_value,
                 $tr_values
             );

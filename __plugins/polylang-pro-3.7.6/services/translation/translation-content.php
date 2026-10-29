@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Class PLL_Translation_Content
- *
- * @package Polylang-Pro
+ * Class PLL_Translation_Content.
  */
 
 use WP_Syntex\Polylang_Pro\Modules\Import_Export\Services\Context;
@@ -25,11 +23,12 @@ class PLL_Translation_Content
     private $translations;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @since 3.7
      *
      * @param Translations $translations Used to translate the content.
+     *
      * @return void
      */
     public function __construct(Translations $translations)
@@ -43,6 +42,7 @@ class PLL_Translation_Content
      * @since 3.3
      *
      * @param string $from_post The post_content field of the original WP_Post.
+     *
      * @return string
      */
     public function translate_title($from_post)
@@ -50,9 +50,9 @@ class PLL_Translation_Content
         return $this->translations->translate(
             $from_post,
             Context::to_string(
-                array(
+                [
                     Context::FIELD => PLL_Import_Export::POST_TITLE,
-                )
+                ]
             )
         );
     }
@@ -63,13 +63,14 @@ class PLL_Translation_Content
      * @since 3.3
      *
      * @param string $content The post_content field of the original WP_Post.
+     *
      * @return string
      */
     public function translate_content($content)
     {
         $walker = PLL_Translation_Walker_Factory::create_from($content);
 
-        return $walker->walk(array( $this->translations, 'translate_entry' ));
+        return $walker->walk([$this->translations, 'translate_entry']);
     }
 
     /**
@@ -78,6 +79,7 @@ class PLL_Translation_Content
      * @since 3.3
      *
      * @param string $post_excerpt The post_excerpt field of the original WP_Post.
+     *
      * @return string
      */
     public function translate_excerpt($post_excerpt)
@@ -85,9 +87,9 @@ class PLL_Translation_Content
         return $this->translations->translate(
             $post_excerpt,
             Context::to_string(
-                array(
+                [
                     Context::FIELD => PLL_Import_Export::POST_EXCERPT,
-                )
+                ]
             )
         );
     }

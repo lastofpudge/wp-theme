@@ -21,8 +21,8 @@ $description_html = wp_kses(sprintf(
 ), ['a' => ['href' => []]]);
 
 \Timber\Timber::render('views/woocommerce/myaccount/dashboard.twig', [
-    'user_name'       => esc_html($current_user->display_name),
-    'logout_url'      => esc_url(wc_logout_url()),
+    'user_name'        => esc_html($current_user->display_name),
+    'logout_url'       => esc_url(wc_logout_url()),
     'description_html' => $description_html,
 ]);
 

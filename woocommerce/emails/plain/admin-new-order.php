@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Admin new order email (plain text)
+ * Admin new order email (plain text).
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/admin-new-order.php.
  *
@@ -12,7 +12,7 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 10.0.0
  */
 
@@ -32,7 +32,7 @@ if ($email_improvements_enabled) {
     /* translators: %s: Customer billing full name */
     $text = __('You’ve received a new order from %s:', 'woocommerce');
 }
-echo sprintf(esc_html($text), esc_html($order->get_formatted_billing_full_name())) . "\n\n";
+echo sprintf(esc_html($text), esc_html($order->get_formatted_billing_full_name()))."\n\n";
 
 /*
  * @hooked WC_Emails::order_details() Shows the order details table.

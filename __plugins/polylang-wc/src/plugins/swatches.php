@@ -1,12 +1,8 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce Variation Swatches and Photos.
- * Version tested: 3.0.9
+ * Version tested: 3.0.9.
  *
  * @since 1.1
  */
@@ -21,14 +17,14 @@ class PLLWC_Swatches
     public function __construct()
     {
         // Attribute terms metas.
-        add_filter('pll_copy_term_metas', array( $this, 'copy_term_metas' ), 10, 3);
+        add_filter('pll_copy_term_metas', [$this, 'copy_term_metas'], 10, 3);
         if (PLL()->options['media_support']) {
-            add_filter('pll_translate_term_meta', array( $this, 'translate_swatches_photo' ), 10, 3);
+            add_filter('pll_translate_term_meta', [$this, 'translate_swatches_photo'], 10, 3);
         }
 
         // Product metas.
-        add_filter('pllwc_copy_post_metas', array( $this, 'copy_product_metas' ));
-        add_filter('pllwc_translate_product_meta', array( $this, 'translate_product_meta' ), 10, 4);
+        add_filter('pllwc_copy_post_metas', [$this, 'copy_product_metas']);
+        add_filter('pllwc_translate_product_meta', [$this, 'translate_product_meta'], 10, 4);
     }
 
     /**
@@ -40,12 +36,13 @@ class PLLWC_Swatches
      * @param array $metas List of custom fields names.
      * @param bool  $sync  True if it is synchronization, false if it is a copy.
      * @param int   $from  Id of the product from which we copy information.
+     *
      * @return array
      */
     public function copy_term_metas($metas, $sync, $from)
     {
-        $key_names = array( '_swatches_id_type', '_swatches_id_color', '_swatches_id_photo' );
-        $to_copy = array();
+        $key_names = ['_swatches_id_type', '_swatches_id_color', '_swatches_id_photo'];
+        $to_copy = [];
 
         foreach (array_keys(get_term_meta($from)) as $key) {
             foreach ($key_names as $name) {
@@ -68,6 +65,7 @@ class PLLWC_Swatches
      * @param int    $value Photo id.
      * @param string $key   Meta key.
      * @param string $lang  Language code.
+     *
      * @return int
      */
     public function translate_swatches_photo($value, $key, $lang)
@@ -76,6 +74,7 @@ class PLLWC_Swatches
             $to_value = pll_get_post($value, $lang);
             $value = $to_value ? $to_value : $value;
         }
+
         return $value;
     }
 
@@ -86,14 +85,16 @@ class PLLWC_Swatches
      * @since 1.1
      *
      * @param array $metas List of custom fields names.
+     *
      * @return array
      */
     public function copy_product_metas($metas)
     {
-        $to_sync = array(
+        $to_sync = [
             '_swatch_type_options',
             '_swatch_type',
-        );
+        ];
+
         return array_merge($metas, array_combine($to_sync, $to_sync));
     }
 
@@ -107,6 +108,7 @@ class PLLWC_Swatches
      * @param string $key   Meta key.
      * @param string $lang  Language of target.
      * @param int    $from  Id of the source.
+     *
      * @return mixed
      */
     public function translate_product_meta($value, $key, $lang, $from)
@@ -115,21 +117,21 @@ class PLLWC_Swatches
             return $value;
         }
         $product = wc_get_product($from);
-        if (! $product instanceof WC_Product_Variable) {
+        if (!$product instanceof WC_Product_Variable) {
             return $value;
         }
 
-        $attr_terms = array();
+        $attr_terms = [];
         $data_store = PLLWC_Data_Store::load('product_language');
-        $orig_lang  = $data_store->get_language($from);
+        $orig_lang = $data_store->get_language($from);
         $attributes = $product->get_variation_attributes();
 
         foreach ($attributes as $tax => $terms) {
             foreach ($terms as $slug) {
-                $attr_terms[ md5($slug) ] = array(
+                $attr_terms[md5($slug)] = [
                     'taxonomy' => $tax,
                     'slug'     => $slug,
-                );
+                ];
             }
         }
 
@@ -139,12 +141,12 @@ class PLLWC_Swatches
                     $attr['image'] = $tr_id;
                 }
 
-                $terms = get_terms(array( 'taxonomy' => $attr_terms[ $k ]['taxonomy'], 'slug' => $attr_terms[ $k ]['slug'], 'lang' => $orig_lang ));
+                $terms = get_terms(['taxonomy' => $attr_terms[$k]['taxonomy'], 'slug' => $attr_terms[$k]['slug'], 'lang' => $orig_lang]);
                 $term = reset($terms);
                 $tr_term = get_term(pll_get_term($term->term_id, $lang));
                 $tr_k = md5($tr_term->slug);
-                unset($value[ $i ]['attributes'][ $k ]);
-                $value[ $i ]['attributes'][ $tr_k ] = $attr;
+                unset($value[$i]['attributes'][$k]);
+                $value[$i]['attributes'][$tr_k] = $attr;
             }
         }
 

@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce Min/Max Quantities.
  * Version tested: 2.4.3.
  *
@@ -22,9 +18,9 @@ class PLLWC_Min_Max_Quantities
      */
     public function __construct()
     {
-        add_filter('pllwc_copy_post_metas', array( $this, 'copy_product_metas' ));
-        add_filter('pll_copy_term_metas', array( $this, 'copy_term_metas' ));
-        add_action('add_meta_boxes', array( $this, 'set_global_post_id' ), 1, 2);
+        add_filter('pllwc_copy_post_metas', [$this, 'copy_product_metas']);
+        add_filter('pll_copy_term_metas', [$this, 'copy_term_metas']);
+        add_action('add_meta_boxes', [$this, 'set_global_post_id'], 1, 2);
     }
 
     /**
@@ -34,11 +30,12 @@ class PLLWC_Min_Max_Quantities
      * @since 1.1
      *
      * @param array $metas List of custom fields names.
+     *
      * @return array
      */
     public function copy_product_metas($metas)
     {
-        $to_sync = array(
+        $to_sync = [
             'min_max_rules',
             'allow_combination',
             'group_of_quantity',
@@ -53,7 +50,7 @@ class PLLWC_Min_Max_Quantities
             'variation_minmax_cart_exclude',
             'variation_minmax_category_group_of_exclude',
             'variation_minmax_do_not_count',
-        );
+        ];
 
         return array_merge($metas, array_combine($to_sync, $to_sync));
     }
@@ -65,11 +62,12 @@ class PLLWC_Min_Max_Quantities
      * @since 1.1
      *
      * @param array $metas List of term metas names.
+     *
      * @return array
      */
     public function copy_term_metas($metas)
     {
-        return array_merge($metas, array( 'group_of_quantity' ));
+        return array_merge($metas, ['group_of_quantity']);
     }
 
     /**
@@ -77,11 +75,11 @@ class PLLWC_Min_Max_Quantities
      * Even if this global is not the official `$post_ID`.
      *
      * @see https://github.com/polylang/polylang-wc/issues/627.
-     *
      * @since 1.8
      *
      * @param string  $post_type Post type.
      * @param WP_Post $post      Current post object.
+     *
      * @return void
      */
     public function set_global_post_id($post_type, $post)

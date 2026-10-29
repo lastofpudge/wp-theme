@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Activation / de-activation class compatible with multisite.
  * Based on PLL_Install_Base.
  *
@@ -13,7 +9,7 @@
 class PLLWC_Install
 {
     /**
-     * Plugin basename
+     * Plugin basename.
      *
      * @var string
      */
@@ -31,11 +27,11 @@ class PLLWC_Install
         $this->plugin_basename = $plugin_basename;
 
         // Manages plugin activation and deactivation.
-        register_activation_hook($plugin_basename, array( $this, 'activate' ));
-        register_deactivation_hook($plugin_basename, array( $this, 'deactivate' ));
+        register_activation_hook($plugin_basename, [$this, 'activate']);
+        register_deactivation_hook($plugin_basename, [$this, 'deactivate']);
 
         // Blog creation on multisite.
-        add_action('wpmu_new_blog', array( $this, 'wpmu_new_blog' ), 5); // Before WP attempts to send mails which can break on some PHP versions.
+        add_action('wpmu_new_blog', [$this, 'wpmu_new_blog'], 5); // Before WP attempts to send mails which can break on some PHP versions.
     }
 
     /**
@@ -57,6 +53,7 @@ class PLLWC_Install
      *
      * @param string $what        Either 'activate' or 'deactivate'.
      * @param bool   $networkwide True if the plugin is network activated, false otherwise.
+     *
      * @return void
      */
     protected function do_for_all_blogs($what, $networkwide)
@@ -80,6 +77,7 @@ class PLLWC_Install
      * @since 0.1
      *
      * @param bool $networkwide True if the plugin is network activated, false otherwise.
+     *
      * @return void
      */
     public function activate($networkwide)
@@ -105,6 +103,7 @@ class PLLWC_Install
      * @since 0.1
      *
      * @param bool $networkwide True if the plugin is network activated, false otherwise.
+     *
      * @return void
      */
     public function deactivate($networkwide)
@@ -130,6 +129,7 @@ class PLLWC_Install
      * @since 0.9.4
      *
      * @param int $blog_id Blog ID.
+     *
      * @return void
      */
     public function wpmu_new_blog($blog_id)

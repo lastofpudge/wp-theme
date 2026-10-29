@@ -2,10 +2,10 @@
 
 verify_ajax_nonce();
 
-$email     = sanitize_email(wp_unslash($_POST['email'] ?? ''));
-$password  = wp_unslash($_POST['password'] ?? '');
+$email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+$password = wp_unslash($_POST['password'] ?? '');
 $firstName = sanitize_text_field(wp_unslash($_POST['first_name'] ?? ''));
-$lastName  = sanitize_text_field(wp_unslash($_POST['last_name'] ?? ''));
+$lastName = sanitize_text_field(wp_unslash($_POST['last_name'] ?? ''));
 
 if (empty($email) || empty($password)) {
     wp_send_json(['type' => 'error', 'message' => __('Please fill in all required fields.', 'woocommerce')]);
@@ -24,7 +24,7 @@ if (email_exists($email)) {
 }
 
 $username = wc_create_new_customer_username($email);
-$userId   = wc_create_new_customer($email, $username, $password, [
+$userId = wc_create_new_customer($email, $username, $password, [
     'first_name' => $firstName,
     'last_name'  => $lastName,
 ]);

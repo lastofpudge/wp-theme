@@ -1,8 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- *
  * @since 3.1
  */
 
@@ -10,7 +8,6 @@
  * Iterator for DOM nodes.
  *
  * @see https://www.php.net/manual/en/class.recursiveiterator.php
- *
  * @since 3.1
  * @since 3.6 Renamed from `PLL_Import_Xliff_Iterator` to `PLL_DOM_Nodes_Iterator`.
  */
@@ -82,6 +79,7 @@ class PLL_DOM_Nodes_Iterator implements RecursiveIterator
         if ($this->current()) {
             return $this->current()->nodeName;
         }
+
         return null;
     }
 
@@ -95,7 +93,7 @@ class PLL_DOM_Nodes_Iterator implements RecursiveIterator
     #[\ReturnTypeWillChange]
     public function next()
     {
-        ++$this->offset;
+        $this->offset++;
     }
 
     /**
@@ -135,6 +133,7 @@ class PLL_DOM_Nodes_Iterator implements RecursiveIterator
         if ($this->current()) {
             return new self($this->current()->childNodes);
         }
+
         return null;
     }
 }
