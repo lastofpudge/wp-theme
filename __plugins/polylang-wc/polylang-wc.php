@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Polylang for WooCommerce
+ * Polylang for WooCommerce.
  *
- * @package              Polylang-WC
  * @author               WP SYNTEX
  * @license              GPL-3.0-or-later
  *
@@ -42,10 +41,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Automattic\WooCommerce\Utilities\OrderUtil;
-use WP_Syntex\Polylang_WC\Updater\Updater;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 use WP_Syntex\Polylang_WC\REST;
+use WP_Syntex\Polylang_WC\Updater\Updater;
 
 defined('ABSPATH') || exit;
 
@@ -55,8 +54,8 @@ define('PLLWC_MIN_PLL_VERSION', '3.7');
 define('PLLWC_FILE', __FILE__); // This file.
 define('PLLWC_BASENAME', plugin_basename(PLLWC_FILE)); // Plugin name as known by WP.
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/functions.php';
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/src/functions.php';
 
 /**
  * Plugin controller.
@@ -235,7 +234,7 @@ class Polylang_Woocommerce
     public function __construct()
     {
         // Registers an action when the plugin is activated.
-        add_action('activated_plugin', array( $this, 'activated_plugin' ), 10, 2);
+        add_action('activated_plugin', [$this, 'activated_plugin'], 10, 2);
 
         $install = new PLLWC_Install(plugin_basename(__FILE__));
 
@@ -247,25 +246,25 @@ class Polylang_Woocommerce
         // WC 3.3: Maybe update default product categories after WooCommerce did it.
         $db_version = get_option('woocommerce_db_version');
         if (is_string($db_version) && version_compare($db_version, '3.3.0', '<')) {
-            add_action('add_option_woocommerce_db_version', array( 'PLLWC_Admin_WC_Install', 'update_330_wc_db_version' ), 10, 2);
+            add_action('add_option_woocommerce_db_version', ['PLLWC_Admin_WC_Install', 'update_330_wc_db_version'], 10, 2);
         }
 
         /*
          * Fix home url when using plain permalinks and the shop is on front.
          * Added here because the filter is fired before the action 'pll_init'.
          */
-        add_filter('pll_additional_language_data', array( 'PLLWC_Links', 'set_home_url' ), 20, 2); // After Polylang.
+        add_filter('pll_additional_language_data', ['PLLWC_Links', 'set_home_url'], 20, 2); // After Polylang.
 
-        add_filter('pll_is_ajax_on_front', array( $this, 'fix_ajax_product_import' ));
+        add_filter('pll_is_ajax_on_front', [$this, 'fix_ajax_product_import']);
 
         // The "ajax" request for feature product is indeed a direct link and thus does not include the pll_ajax_backend query var.
         if (isset($_GET['action']) && 'woocommerce_feature_product' === $_GET['action']) {  // phpcs:ignore WordPress.Security.NonceVerification
             define('PLL_ADMIN', true);
         }
 
-        add_action('pll_pre_init', array( $this, 'pre_init' )); // `plugins_loaded` prio 1.
+        add_action('pll_pre_init', [$this, 'pre_init']); // `plugins_loaded` prio 1.
         PLLWC_Plugins_Compat::instance();
-        add_action('before_woocommerce_init', array( $this, 'declare_features_compatibility' ), 0); // `init` prio 0.
+        add_action('before_woocommerce_init', [$this, 'declare_features_compatibility'], 0); // `init` prio 0.
     }
 
     /**
@@ -280,6 +279,7 @@ class Polylang_Woocommerce
         if (empty(self::$instance)) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
 
@@ -289,6 +289,7 @@ class Polylang_Woocommerce
      * @since 1.5.3
      *
      * @param bool $is_ajax_on_front Whether the current request is an ajax request on front.
+     *
      * @return bool
      */
     public function fix_ajax_product_import($is_ajax_on_front)
@@ -302,18 +303,20 @@ class Polylang_Woocommerce
      * @since 2.2
      *
      * @param PLL_Base $polylang Polylang object.
+     *
      * @return void
      */
     public function pre_init($polylang): void
     {
         // Silently disable the plugin if WooCommerce are not active.
-        if (! defined('WOOCOMMERCE_VERSION')) {
+        if (!defined('WOOCOMMERCE_VERSION')) {
             return;
         }
 
         // If the version of Polylang is too old.
         if (version_compare(POLYLANG_VERSION, PLLWC_MIN_PLL_VERSION, '<')) {
-            add_action('all_admin_notices', array( $this, 'admin_notices' ));
+            add_action('all_admin_notices', [$this, 'admin_notices']);
+
             return;
         }
 
@@ -321,7 +324,7 @@ class Polylang_Woocommerce
         // 	$this->updater = new Updater( __FILE__, 'Polylang for WooCommerce', PLLWC_VERSION, 'polylang-wc' );
         // }
 
-        add_action('pll_init', array( $this, 'init' )); // `plugins_loaded` prio 1.
+        add_action('pll_init', [$this, 'init']); // `plugins_loaded` prio 1.
     }
 
     /**
@@ -331,6 +334,7 @@ class Polylang_Woocommerce
      * @since 2.2 Pass Polylang's instance as 1st parameter.
      *
      * @param PLL_Base $polylang Polylang object.
+     *
      * @return void
      */
     public function init($polylang): void
@@ -343,29 +347,29 @@ class Polylang_Woocommerce
             $this->admin_status_reports = new PLLWC_Admin_Status_Reports();
         }
 
-        add_action('admin_init', array( $this, 'maybe_install' ));
+        add_action('admin_init', [$this, 'maybe_install']);
 
         // Bail early if no language has been defined yet.
-        if (! pll_languages_list()) {
+        if (!pll_languages_list()) {
             return;
         }
 
-        add_action('admin_init', array( $this, 'maybe_upgrade' ));
+        add_action('admin_init', [$this, 'maybe_upgrade']);
 
-        add_action('woocommerce_delete_product_transients', array( $this, 'delete_product_transients' ));
+        add_action('woocommerce_delete_product_transients', [$this, 'delete_product_transients']);
 
         PLLWC_Variation_Data_Store_CPT::init();
 
-        $this->post_types     = new PLLWC_Post_Types();
-        $this->links          = defined('POLYLANG_PRO') && POLYLANG_PRO && get_option('permalink_structure') ? new PLLWC_Links_Pro() : new PLLWC_Links();
-        $this->stock          = new PLLWC_Stock();
-        $this->emails         = new PLLWC_Emails();
-        $this->strings        = new PLLWC_Strings();
-        $this->data           = new PLLWC_Xdata();
+        $this->post_types = new PLLWC_Post_Types();
+        $this->links = defined('POLYLANG_PRO') && POLYLANG_PRO && get_option('permalink_structure') ? new PLLWC_Links_Pro() : new PLLWC_Links();
+        $this->stock = new PLLWC_Stock();
+        $this->emails = new PLLWC_Emails();
+        $this->strings = new PLLWC_Strings();
+        $this->data = new PLLWC_Xdata();
         $this->product_export = new PLLWC_Product_Export();
         $this->product_import = new PLLWC_Product_Import();
-        $this->products       = new PLLWC_Products();
-        $this->blocks         = new PLLWC_Store_Blocks();
+        $this->products = new PLLWC_Products();
+        $this->blocks = new PLLWC_Store_Blocks();
 
         if (OrderUtil::custom_orders_table_usage_is_enabled()) {
             $this->hpos_orders_query = (new PLLWC_HPOS_Orders_Query())->init();
@@ -375,7 +379,7 @@ class Polylang_Woocommerce
 
         if (defined('POLYLANG_PRO') && POLYLANG_PRO) {
             // Backward compatibility with Polylang < 3.8.
-            if (! class_exists('WP_Syntex\Polylang_Pro\REST\Translated\Post')) {
+            if (!class_exists('WP_Syntex\Polylang_Pro\REST\Translated\Post')) {
                 $this->rest_api = new PLLWC_REST_API();
             } else {
                 $this->rest_api = new REST\Module();
@@ -388,13 +392,13 @@ class Polylang_Woocommerce
          * but also on REST requests for WooCommerce Blocks 2.5+.
          */
         if ($polylang instanceof PLL_Frontend || wp_doing_ajax() || $polylang instanceof PLL_REST_Request) {
-            $this->cart    = new PLLWC_Frontend_Cart();
+            $this->cart = new PLLWC_Frontend_Cart();
             $this->coupons = new PLLWC_Coupons();
         }
 
         // Frontend only.
         if ($polylang instanceof PLL_Frontend) {
-            $this->frontend   = new PLLWC_Frontend();
+            $this->frontend = new PLLWC_Frontend();
             $this->my_account = new PLLWC_Frontend_Account();
 
             // WC pages on front.
@@ -406,14 +410,14 @@ class Polylang_Woocommerce
 
             // Admin only ( but not useful on Polylang settings pages ).
             if ($polylang instanceof PLL_Admin) {
-                $this->admin_taxonomies        = new PLLWC_Admin_Taxonomies();
-                $this->admin_products          = new PLLWC_Admin_Products();
+                $this->admin_taxonomies = new PLLWC_Admin_Taxonomies();
+                $this->admin_products = new PLLWC_Admin_Products();
                 $this->admin_product_duplicate = new PLLWC_Admin_Product_Duplicate();
-                $this->admin_reports           = new PLLWC_Admin_Reports();
-                $this->admin_menus             = new PLLWC_Admin_Menus();
-                $this->coupons                 = new PLLWC_Admin_Coupons();
-                $this->site_health             = new PLLWC_Admin_Site_Health();
-                $this->admin_orders            = OrderUtil::custom_orders_table_usage_is_enabled() ?
+                $this->admin_reports = new PLLWC_Admin_Reports();
+                $this->admin_menus = new PLLWC_Admin_Menus();
+                $this->coupons = new PLLWC_Admin_Coupons();
+                $this->site_health = new PLLWC_Admin_Site_Health();
+                $this->admin_orders = OrderUtil::custom_orders_table_usage_is_enabled() ?
                     new PLLWC_Admin_Orders_HPOS() : new PLLWC_Admin_Orders_Legacy();
 
                 if (defined('POLYLANG_PRO') && POLYLANG_PRO) {
@@ -421,8 +425,8 @@ class Polylang_Woocommerce
                     $this->translation_import = (new PLLWC_Translation_Import($this->products))->init();
                 }
 
-                add_action('woocommerce_system_status_report', array( $this->admin_status_reports, 'status_report' ));
-                add_action('admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ));
+                add_action('woocommerce_system_status_report', [$this->admin_status_reports, 'status_report']);
+                add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
             }
 
             // Translation import is also needed in Polylang settings pages for XLIFF import.
@@ -438,7 +442,7 @@ class Polylang_Woocommerce
          *
          * @param object &$this The Polylang for WooCommerce object.
          */
-        do_action_ref_array('pllwc_init', array( &$this ));
+        do_action_ref_array('pllwc_init', [&$this]);
     }
 
     /**
@@ -492,7 +496,7 @@ class Polylang_Woocommerce
             if (version_compare($options['version'], '0.4.6', '<')) {
                 // Same as Polylang 2.0.8, for WP 4.7.
                 global $wpdb;
-                $wpdb->update($wpdb->usermeta, array( 'meta_key' => 'locale' ), array( 'meta_key' => 'user_lang' ));
+                $wpdb->update($wpdb->usermeta, ['meta_key' => 'locale'], ['meta_key' => 'user_lang']);
             }
 
             // Version 0.9.3, if already updated to WC 3.3.
@@ -523,7 +527,7 @@ class Polylang_Woocommerce
         $options = get_option('polylang-wc');
 
         if (empty($options)) {
-            $options = array( 'version' => PLLWC_VERSION );
+            $options = ['version' => PLLWC_VERSION];
             update_option('polylang-wc', $options);
         }
     }
@@ -534,6 +538,7 @@ class Polylang_Woocommerce
      * @since 0.4.5
      *
      * @param int $product_id Product ID.
+     *
      * @return void
      */
     public function delete_product_transients($product_id)
@@ -543,7 +548,7 @@ class Polylang_Woocommerce
 
         $data_store = PLLWC_Data_Store::load('product_language');
         foreach ($data_store->get_translations($product_id) as $tr_id) {
-            if (! in_array($tr_id, $ids)) {
+            if (!in_array($tr_id, $ids)) {
                 wc_delete_product_transients($tr_id);
             }
         }
@@ -559,7 +564,7 @@ class Polylang_Woocommerce
     public function admin_enqueue_scripts()
     {
         $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
-        wp_enqueue_style('pll_wc_admin', plugins_url('/css/build/admin' . $suffix . '.css', PLLWC_FILE), array(), PLLWC_VERSION);
+        wp_enqueue_style('pll_wc_admin', plugins_url('/css/build/admin'.$suffix.'.css', PLLWC_FILE), [], PLLWC_VERSION);
     }
 
     /**
@@ -569,13 +574,14 @@ class Polylang_Woocommerce
      *
      * @param string $plugin_name  Plugin basename.
      * @param bool   $network_wide If activated for all sites in the network.
+     *
      * @return void
      */
     public static function activated_plugin($plugin_name, $network_wide)
     {
         $options = get_option('polylang-wc'); // If the polylang-wc option is set, the wizard has already been launched once.
 
-        if (wp_doing_ajax() || $network_wide || ! empty($options)) {
+        if (wp_doing_ajax() || $network_wide || !empty($options)) {
             return;
         }
 

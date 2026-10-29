@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce Table Rate Shipping.
  * Version tested: 3.0.2.
  *
@@ -21,12 +17,12 @@ class PLLWC_Table_Rate_Shipping
     public function __construct()
     {
         if (PLL() instanceof PLL_Frontend) {
-            add_filter('woocommerce_table_rate_query_rates', array( $this, 'table_rate_query_rates' ));
+            add_filter('woocommerce_table_rate_query_rates', [$this, 'table_rate_query_rates']);
         }
 
         // Strings translations.
-        add_filter('pll_sanitize_string_translation', array( $this, 'sanitize_strings' ), 10, 3);
-        add_action('init', array( $this, 'register_strings' ));
+        add_filter('pll_sanitize_string_translation', [$this, 'sanitize_strings'], 10, 3);
+        add_action('init', [$this, 'register_strings']);
     }
 
     /**
@@ -57,6 +53,7 @@ class PLLWC_Table_Rate_Shipping
      * @param string $translation A string translation.
      * @param string $name        The string name.
      * @param string $context     The group the string belongs to.
+     *
      * @return string Sanitized translation
      */
     public function sanitize_strings($translation, $name, $context)
@@ -64,6 +61,7 @@ class PLLWC_Table_Rate_Shipping
         if ('WooCommerce Table Rate Shipping' === $context) {
             $translation = wc_clean($translation);
         }
+
         return $translation;
     }
 
@@ -74,13 +72,15 @@ class PLLWC_Table_Rate_Shipping
      * @since 0.5
      *
      * @param object $rates Table rate shipping method.
+     *
      * @return object
      */
     public function table_rate_query_rates($rates)
     {
         foreach ($rates as $k => $rate) {
-            $rates[ $k ]->rate_label = pll__($rate->rate_label);
+            $rates[$k]->rate_label = pll__($rate->rate_label);
         }
+
         return $rates;
     }
 }

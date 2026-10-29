@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Customer completed order email (plain text)
+ * Customer completed order email (plain text).
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-completed-order.php.
  *
@@ -12,7 +12,7 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 9.9.0
  */
 
@@ -27,10 +27,10 @@ echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name())) . "\n\n";
-echo esc_html__('We have finished processing your order.', 'woocommerce') . "\n\n";
+echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name()))."\n\n";
+echo esc_html__('We have finished processing your order.', 'woocommerce')."\n\n";
 if ($email_improvements_enabled) {
-    echo esc_html__('Here’s a reminder of what you’ve ordered:', 'woocommerce') . "\n\n";
+    echo esc_html__('Here’s a reminder of what you’ve ordered:', 'woocommerce')."\n\n";
 }
 
 /*

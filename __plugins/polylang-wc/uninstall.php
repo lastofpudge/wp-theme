@@ -1,12 +1,8 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 // If uninstall not called from WordPress exit.
-if (! defined('WP_UNINSTALL_PLUGIN')) {
-    exit();
+if (!defined('WP_UNINSTALL_PLUGIN')) {
+    exit;
 }
 
 /**
@@ -48,7 +44,7 @@ class PLLWC_Uninstall
         delete_option('polylang-wc');
 
         // Deletes Updater's cache options on uninstallation.
-        require __DIR__ . '/dependencies/wpsyntex/updater/uninstall.php';
+        require __DIR__.'/dependencies/wpsyntex/updater/uninstall.php';
     }
 }
 

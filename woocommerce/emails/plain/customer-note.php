@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Customer note email
+ * Customer note email.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-note.php.
  *
@@ -12,10 +12,9 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 10.1.0
  */
-
 defined('ABSPATH') || exit;
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
@@ -23,16 +22,16 @@ echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name())) . "\n\n";
-echo esc_html__('The following note has been added to your order:', 'woocommerce') . "\n\n";
+echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name()))."\n\n";
+echo esc_html__('The following note has been added to your order:', 'woocommerce')."\n\n";
 
 echo "----------\n\n";
 
-echo wc_wptexturize_order_note($customer_note) . "\n\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo wc_wptexturize_order_note($customer_note)."\n\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 echo "----------\n\n";
 
-echo esc_html__('As a reminder, here are your order details:', 'woocommerce') . "\n\n";
+echo esc_html__('As a reminder, here are your order details:', 'woocommerce')."\n\n";
 
 /*
  * @hooked WC_Emails::order_details() Shows the order details table.

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang Pro
- */
-
 namespace WP_Syntex\Polylang_Pro;
 
 use WP_Syntex\Polylang\Options\Options;
@@ -44,9 +40,9 @@ class Upgrade
      */
     public function upgrade()
     {
-        foreach (array( '3.7' ) as $version) {
+        foreach (['3.7'] as $version) {
             if (version_compare($this->options->get('version'), $version, '<')) {
-                $method_to_call = array( $this, 'upgrade_' . str_replace('.', '_', $version) );
+                $method_to_call = [$this, 'upgrade_'.str_replace('.', '_', $version)];
                 if (is_callable($method_to_call)) {
                     call_user_func($method_to_call);
                 }
@@ -64,11 +60,11 @@ class Upgrade
      */
     private function upgrade_3_7()
     {
-        if (! ACF_Main::can_use()) {
+        if (!ACF_Main::can_use()) {
             return;
         }
 
-        if (! in_array('acf-field-group', $this->options->get('post_types'), true)) {
+        if (!in_array('acf-field-group', $this->options->get('post_types'), true)) {
             return;
         }
 
@@ -76,7 +72,7 @@ class Upgrade
             'post_types',
             array_diff(
                 $this->options->get('post_types'),
-                array( 'acf-field-group' )
+                ['acf-field-group']
             )
         );
         $this->options->save();
@@ -93,11 +89,11 @@ class Upgrade
             }
 
             $group_language = $group_language[0];
-            $new_location = array(
+            $new_location = [
                 'param'    => 'language',
                 'operator' => '==',
                 'value'    => $group_language->slug,
-            );
+            ];
 
             foreach ($group['location'] as &$location) {
                 $location[] = $new_location;

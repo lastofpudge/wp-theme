@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang Updater
- */
-
 namespace WP_Syntex\Polylang_WC\Updater;
 
 defined('ABSPATH') || exit;
@@ -89,16 +85,16 @@ class License
      */
     public function __construct(string $file, string $item_name, string $version)
     {
-        $this->id      = sanitize_title($item_name);
-        $this->file    = $file;
-        $this->name    = $item_name;
+        $this->id = sanitize_title($item_name);
+        $this->file = $file;
+        $this->name = $item_name;
         $this->version = $version;
 
-        $licenses          = (array) get_option('polylang_licenses', array());
-        $license           = isset($licenses[ $this->id ]) && is_array($licenses[ $this->id ]) ? $licenses[ $this->id ] : array();
-        $this->license_key = ! empty($license['key']) ? (string) $license['key'] : '';
+        $licenses = (array) get_option('polylang_licenses', []);
+        $license = isset($licenses[$this->id]) && is_array($licenses[$this->id]) ? $licenses[$this->id] : [];
+        $this->license_key = !empty($license['key']) ? (string) $license['key'] : '';
 
-        if (! empty($license['data'])) {
+        if (!empty($license['data'])) {
             $this->license_data = (object) $license['data'];
         }
 
@@ -106,15 +102,15 @@ class License
         $this->auto_updater();
 
         // Register settings.
-        add_filter('pll_settings_modules', array( $this, 'settings_module' ));
-        add_filter('pll_settings_licenses', array( $this, 'settings' ));
+        add_filter('pll_settings_modules', [$this, 'settings_module']);
+        add_filter('pll_settings_licenses', [$this, 'settings']);
 
         // Weekly schedule.
-        if (! wp_next_scheduled('polylang_check_licenses')) {
+        if (!wp_next_scheduled('polylang_check_licenses')) {
             wp_schedule_event(time(), 'weekly', 'polylang_check_licenses');
         }
 
-        add_action('polylang_check_licenses', array( $this, 'check_license' ));
+        add_action('polylang_check_licenses', [$this, 'check_license']);
     }
 
     /**
@@ -126,12 +122,12 @@ class License
      */
     public function auto_updater(): void
     {
-        $args = array(
+        $args = [
             'version'   => $this->version,
             'license'   => $this->license_key,
             'author'    => $this->author,
             'item_name' => $this->name,
-        );
+        ];
 
         // Setup the updater.
         new EDD_SL_Plugin_Updater($this->api_url, $this->file, $args);
@@ -144,6 +140,7 @@ class License
      * @since 1.0
      *
      * @param string[] $modules The list of module classes.
+     *
      * @return string[]
      */
     public function settings_module($modules)
@@ -152,11 +149,12 @@ class License
          * Backward compatibility with Polylang < 3.7.
          * Remove old license settings class to avoid duplicate.
          */
-        $modules = array_diff($modules, array( 'PLL_Settings_Licenses' ));
+        $modules = array_diff($modules, ['PLL_Settings_Licenses']);
 
         if (empty($modules['licenses'])) {
             $modules['licenses'] = Settings::class;
         }
+
         return $modules;
     }
 
@@ -167,11 +165,13 @@ class License
      * @since 1.0
      *
      * @param License[] $items Array of objects allowing to manage a license.
+     *
      * @return License[]
      */
     public function settings($items)
     {
-        $items[ $this->id ] = $this;
+        $items[$this->id] = $this;
+
         return $items;
     }
 
@@ -181,6 +181,7 @@ class License
      * @since 1.0
      *
      * @param string $license_key Activation key.
+     *
      * @return self Updated License object.
      */
     public function activate_license(
@@ -192,9 +193,9 @@ class License
 
         // Tell WordPress to look for updates.
         delete_site_transient('update_plugins');
+
         return $this;
     }
-
 
     /**
      * Deactivates the license key.
@@ -206,6 +207,7 @@ class License
     public function deactivate_license(): self
     {
         $this->api_request('deactivate_license');
+
         return $this;
     }
 
@@ -229,6 +231,7 @@ class License
      * @since 1.0
      *
      * @param string $request Type of request: check_license | activate_license | deactivate_license.
+     *
      * @return void
      *
      * @phpstan-param 'check_license'|'activate_license'|'deactivate_license' $request
@@ -238,29 +241,29 @@ class License
         $licenses = get_option('polylang_licenses');
 
         if (is_array($licenses)) {
-            unset($licenses[ $this->id ]);
+            unset($licenses[$this->id]);
         } else {
-            $licenses = array();
+            $licenses = [];
         }
         unset($this->license_data);
 
-        if (! empty($this->license_key)) {
+        if (!empty($this->license_key)) {
             // Data to send in our API request.
-            $api_params = array(
+            $api_params = [
                 'edd_action' => $request,
                 'license'    => $this->license_key,
                 'item_name'  => rawurlencode($this->name),
                 'url'        => home_url(),
-            );
+            ];
 
             // Call the API.
             $response = wp_remote_post(
                 $this->api_url,
-                array(
+                [
                     'timeout'   => 3,
                     'sslverify' => false,
                     'body'      => $api_params,
-                )
+                ]
             );
 
             // Update the option only if we got a response.
@@ -269,13 +272,13 @@ class License
             }
 
             // Save new license info.
-            $licenses[ $this->id ] = array( 'key' => $this->license_key );
+            $licenses[$this->id] = ['key' => $this->license_key];
 
             $data = (object) json_decode(wp_remote_retrieve_body($response));
 
             if (isset($data->license) && 'deactivated' !== $data->license) {
-                $licenses[ $this->id ]['data'] = $data;
-                $this->license_data            = $data;
+                $licenses[$this->id]['data'] = $data;
+                $this->license_data = $data;
             }
         }
 
@@ -291,33 +294,33 @@ class License
      */
     public function get_form_field(): string
     {
-        if (! empty($this->license_data)) {
+        if (!empty($this->license_data)) {
             $license = $this->license_data;
         }
 
-        $atts = array(
+        $atts = [
             'id'          => $this->id,
             'name'        => $this->name,
             'license_key' => $this->license_key,
             'row_class'   => 'license-null',
             'button_text' => '',
             'message'     => '',
-        );
+        ];
 
-        if (! empty($license) && is_object($license)) {
-            $now        = time();
+        if (!empty($license) && is_object($license)) {
+            $now = time();
             $expiration = isset($license->expires) ? strtotime($license->expires) : false;
 
             // Special case: the license expired after the last check.
             if ($license->success && $expiration && $expiration < $now) {
                 $license->success = false;
-                $license->error   = 'expired';
+                $license->error = 'expired';
             }
 
             if (false === $license->success) {
                 $atts['row_class'] = 'notice-error notice-alt';
 
-                if (empty($license->error) && ! empty($license->license)) {
+                if (empty($license->error) && !empty($license->license)) {
                     $license->error = $license->license;
                 }
 
@@ -372,14 +375,14 @@ class License
                         break;
                 }
             } else {
-                $atts['row_class']   = 'license-valid';
+                $atts['row_class'] = 'license-valid';
                 $atts['button_text'] = __('Deactivate', 'polylang-wc');
 
                 if ('lifetime' === $license->expires) {
                     $atts['message'] = __('The license key never expires.', 'polylang-wc');
                 } elseif ($expiration > $now && $expiration - $now < (DAY_IN_SECONDS * 30)) {
                     $atts['row_class'] = 'notice-warning notice-alt';
-                    $atts['message']   = sprintf(
+                    $atts['message'] = sprintf(
                         /* translators: %1$s is a date, %2$s is link start tag, %3$s is link end tag. */
                         __('Your license key will expire soon! Precisely, it will expire on %1$s. %2$sRenew your license key today!%3$s', 'polylang-wc'),
                         date_i18n(get_option('date_format'), $expiration),
@@ -397,7 +400,8 @@ class License
         }
 
         ob_start();
-        include __DIR__ . '/views/view-field-row.php';
+        include __DIR__.'/views/view-field-row.php';
+
         return (string) ob_get_clean();
     }
 }

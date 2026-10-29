@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 /**
@@ -22,6 +18,7 @@ class Collect_Post_Ids extends Abstract_Collect_Ids
      *
      * @param mixed $value Custom field value of the source object.
      * @param array $field Custom field definition.
+     *
      * @return int|int[]|scalar|scalar[] Custom field value.
      */
     protected function get_ids_from_field($value, array $field)
@@ -40,6 +37,6 @@ class Collect_Post_Ids extends Abstract_Collect_Ids
                 break;
         }
 
-        return array();
+        return [];
     }
 }

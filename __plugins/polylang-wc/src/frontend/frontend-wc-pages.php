@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages WC pages when they are used as home page.
  *
  * @since 1.0
@@ -18,7 +14,7 @@ class PLLWC_Frontend_WC_Pages
      */
     public function __construct()
     {
-        add_filter('pll_set_language_from_query', array( $this, 'pll_set_language_from_query' ), 5, 2); // Before Polylang.
+        add_filter('pll_set_language_from_query', [$this, 'pll_set_language_from_query'], 5, 2); // Before Polylang.
     }
 
     /**
@@ -30,11 +26,12 @@ class PLLWC_Frontend_WC_Pages
      * @since 0.3.2
      *
      * @param WP_Query $query Instance of WP_Query.
+     *
      * @return int page_id
      */
     protected function get_page_id($query)
     {
-        if (! empty($query->query_vars['pagename']) && isset($query->queried_object_id)) {
+        if (!empty($query->query_vars['pagename']) && isset($query->queried_object_id)) {
             return $query->queried_object_id;
         }
 
@@ -52,13 +49,14 @@ class PLLWC_Frontend_WC_Pages
      *
      * @param PLL_Language|false $lang  False or language object.
      * @param WP_Query           $query WP_Query object.
+     *
      * @return PLL_Language|false
      */
     public function pll_set_language_from_query($lang, $query)
     {
-        $qvars     = $query->query_vars;
+        $qvars = $query->query_vars;
         $languages = PLL()->model->get_languages_list();
-        $pages     = wp_list_pluck($languages, 'page_on_front');
+        $pages = wp_list_pluck($languages, 'page_on_front');
 
         // Shop on front.
         if (in_array(wc_get_page_id('shop'), $pages)) {
@@ -69,56 +67,56 @@ class PLLWC_Frontend_WC_Pages
                 && $this->is_front_page($query)
             ) {
                 $lang = PLL()->model->get_language($qvars['lang']);
-                $query->is_home              = false;
-                $query->is_tax               = false;
-                $query->is_page              = true;
+                $query->is_home = false;
+                $query->is_tax = false;
+                $query->is_page = true;
                 $query->is_post_type_archive = true;
                 $query->set('page_id', $lang->page_on_front);
                 $query->set('post_type', 'product');
                 unset($query->query_vars['lang']);
                 // Reset queried object.
-                $query->queried_object    = null;
+                $query->queried_object = null;
                 $query->queried_object_id = 0;
             }
 
             // Set the language when requesting a static front page.
             elseif (($page_id = $this->get_page_id($query)) && false !== $n = array_search($page_id, $pages)) {
-                $lang = $languages[ $n ];
-                $query->is_home              = false;
-                $query->is_page              = true;
+                $lang = $languages[$n];
+                $query->is_home = false;
+                $query->is_page = true;
                 $query->is_post_type_archive = true;
                 $query->set('page_id', $page_id);
                 $query->set('post_type', 'product');
             }
 
             // Multiple domains (when the url contains the page slug).
-            elseif (is_post_type_archive('product') && ! empty(PLL()->curlang)) {
+            elseif (is_post_type_archive('product') && !empty(PLL()->curlang)) {
                 $query->is_page = true;
                 $query->set('page_id', PLL()->curlang->page_on_front);
             }
 
             // Language set from the content.
-            elseif (is_post_type_archive('product') && ! empty($qvars['lang']) && $lang = PLL()->model->get_language($qvars['lang'])) {
+            elseif (is_post_type_archive('product') && !empty($qvars['lang']) && $lang = PLL()->model->get_language($qvars['lang'])) {
                 $query->is_page = true;
                 $query->set('page_id', $lang->page_on_front);
             }
         }
 
         // My Account and checkout endpoints.
-        if (array_intersect(array( wc_get_page_id('myaccount'), wc_get_page_id('checkout') ), $pages) && array_intersect(array_keys($query->query), WC()->query->get_query_vars())) {
-            if (! $this->get_page_id($query)) {
-                if (empty($qvars['lang']) || ! $lang = PLL()->model->get_language($qvars['lang'])) {
+        if (array_intersect([wc_get_page_id('myaccount'), wc_get_page_id('checkout')], $pages) && array_intersect(array_keys($query->query), WC()->query->get_query_vars())) {
+            if (!$this->get_page_id($query)) {
+                if (empty($qvars['lang']) || !$lang = PLL()->model->get_language($qvars['lang'])) {
                     // Language set from the content + language code hidden in the url.
                     $lang = PLL()->model->get_language(PLL()->options['default_lang']);
                 }
-                $query->is_home     = false;
-                $query->is_tax      = false;
-                $query->is_archive  = false;
-                $query->is_page     = true;
+                $query->is_home = false;
+                $query->is_tax = false;
+                $query->is_archive = false;
+                $query->is_page = true;
                 $query->is_singular = true;
                 $query->set('page_id', $lang->page_on_front);
                 // Reset queried object.
-                $query->queried_object    = null;
+                $query->queried_object = null;
                 $query->queried_object_id = 0;
             }
             add_filter('redirect_canonical', '__return_false');
@@ -135,10 +133,10 @@ class PLLWC_Frontend_WC_Pages
      * (`rating_filter` comes from WC's widget "Products by Rating list").
      *
      * @see WC_Widget_Layered_Nav_Filters
-     *
      * @since 1.8.1
      *
      * @param WP_Query $query An instance of the main query.
+     *
      * @return bool
      */
     private function is_front_page(WP_Query $query)
@@ -148,7 +146,7 @@ class PLLWC_Frontend_WC_Pages
             return false;
         }
 
-        $vars = array(
+        $vars = [
             // WP.
             'cpage',
             'orderby',
@@ -161,7 +159,7 @@ class PLLWC_Frontend_WC_Pages
             'max_price',
             'min_price',
             'rating_filter',
-        );
+        ];
 
         foreach (wc_get_attribute_taxonomies() as $attribute) {
             $vars[] = "filter_{$attribute->attribute_name}";

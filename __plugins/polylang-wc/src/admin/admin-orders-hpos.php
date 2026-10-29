@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Handles the language information displayed for orders when using HPOS.
  *
  * @since 1.9
@@ -20,11 +16,11 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
     {
         parent::__construct();
 
-        add_filter('pll_admin_ajax_params', array( $this, 'set_pll_order_id' ));
-        add_filter('pll_admin_current_language', array( $this, 'set_current_language' ));
+        add_filter('pll_admin_ajax_params', [$this, 'set_pll_order_id']);
+        add_filter('pll_admin_current_language', [$this, 'set_current_language']);
 
-        add_action('woocommerce_after_order_object_save', array( $this, 'save_order_language' ));
-        add_action('admin_enqueue_scripts', array( $this, 'enqueue_order_script' ));
+        add_action('woocommerce_after_order_object_save', [$this, 'save_order_language']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_order_script']);
     }
 
     /**
@@ -39,8 +35,8 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
         $translated_order_types = $this->data_store->get_post_types('display');
 
         foreach ($translated_order_types as $translated_order_type) {
-            add_filter('woocommerce_' . $translated_order_type . '_list_table_columns', array( PLLWC()->admin_orders, 'add_order_column' ), 100);
-            add_action('woocommerce_' . $translated_order_type . '_list_table_custom_column', array( PLLWC()->admin_orders, 'order_column' ), 10, 2);
+            add_filter('woocommerce_'.$translated_order_type.'_list_table_columns', [PLLWC()->admin_orders, 'add_order_column'], 100);
+            add_action('woocommerce_'.$translated_order_type.'_list_table_custom_column', [PLLWC()->admin_orders, 'order_column'], 10, 2);
         }
     }
 
@@ -50,6 +46,7 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
      * @since 1.9
      *
      * @param WC_Order $order Order object.
+     *
      * @return void
      */
     public function order_language($order)
@@ -75,6 +72,7 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
      * @since 1.9
      *
      * @param array $params List of parameters to add to the admin ajax request.
+     *
      * @return array Modified list of parameters to add to the admin ajax request.
      */
     public function set_pll_order_id($params)
@@ -82,6 +80,7 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
         if ($this->is_allowed_screen() && isset($_GET['id'])) { // phpcs:ignore WordPress.Security.NonceVerification
             $params['pll_order_id'] = (int) $_GET['id']; // phpcs:ignore WordPress.Security.NonceVerification
         }
+
         return $params;
     }
 
@@ -91,14 +90,15 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
      * @since 1.9
      *
      * @param PLL_Language|bool $current_language The current language already set.
+     *
      * @return PLL_Language|bool
      */
     public function set_current_language($current_language)
     {
-        if (! empty($_GET['page']) && ! empty($_GET['id']) && is_numeric($_GET['id']) && 'admin.php' === $GLOBALS['pagenow'] && 'wc-orders' === $_GET['page']) { // phpcs:ignore WordPress.Security.NonceVerification
+        if (!empty($_GET['page']) && !empty($_GET['id']) && is_numeric($_GET['id']) && 'admin.php' === $GLOBALS['pagenow'] && 'wc-orders' === $_GET['page']) { // phpcs:ignore WordPress.Security.NonceVerification
             // Case for the order checkout link.
             $lang = PLL()->model->post->get_language((int) $_GET['id']); // phpcs:ignore WordPress.Security.NonceVerification
-        } elseif (wp_doing_ajax() && ! empty($_GET['pll_order_id']) && is_numeric($_GET['pll_order_id'])) { // phpcs:ignore WordPress.Security.NonceVerification
+        } elseif (wp_doing_ajax() && !empty($_GET['pll_order_id']) && is_numeric($_GET['pll_order_id'])) { // phpcs:ignore WordPress.Security.NonceVerification
             // Case for filtering products search by the order language.
             $lang = PLL()->model->post->get_language((int) $_GET['pll_order_id']); // phpcs:ignore WordPress.Security.NonceVerification
         }
@@ -112,24 +112,25 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
      * @since 1.9
      *
      * @param WC_Order $order Order object being saved.
+     *
      * @return void
      */
     public function save_order_language($order)
     {
-        if (! isset($_GET['id'], $_GET['page'], $_GET['action'], $_POST['post_lang_choice'], $_POST['_pll_nonce'])) {
+        if (!isset($_GET['id'], $_GET['page'], $_GET['action'], $_POST['post_lang_choice'], $_POST['_pll_nonce'])) {
             return;
         }
 
-        if (! $this->is_allowed_screen() || 'edit' !== $_GET['action']) {
+        if (!$this->is_allowed_screen() || 'edit' !== $_GET['action']) {
             return;
         }
 
         check_admin_referer('pll_language', '_pll_nonce');
 
-        $new_lang   = PLL()->model->get_language(sanitize_key($_POST['post_lang_choice']));
+        $new_lang = PLL()->model->get_language(sanitize_key($_POST['post_lang_choice']));
         $order_lang = $this->data_store->get_language($order->get_id());
 
-        if (empty($new_lang) || (! empty($order_lang) && $new_lang->slug === $order_lang)) {
+        if (empty($new_lang) || (!empty($order_lang) && $new_lang->slug === $order_lang)) {
             return;
         }
 
@@ -152,13 +153,13 @@ class PLLWC_Admin_Orders_HPOS extends PLLWC_Admin_Orders
      */
     public function enqueue_order_script()
     {
-        if (! $this->is_allowed_screen()) {
+        if (!$this->is_allowed_screen()) {
             return;
         }
 
         wp_dequeue_script('pll_classic-editor');
 
         $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
-        wp_enqueue_script('pllwc_order', plugins_url('/js/build/order' . $suffix . '.js', PLLWC_FILE), array(), PLLWC_VERSION, true);
+        wp_enqueue_script('pllwc_order', plugins_url('/js/build/order'.$suffix.'.js', PLLWC_FILE), [], PLLWC_VERSION, true);
     }
 }

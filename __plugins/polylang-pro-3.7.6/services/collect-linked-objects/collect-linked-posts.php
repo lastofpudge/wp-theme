@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 use WP_Syntex\Polylang\Options\Options;
 
 /**
@@ -42,11 +38,12 @@ class PLL_Collect_Linked_Posts
      *
      * @param WP_Post[] $posts      The posts for which searching linked posts.
      * @param string[]  $post_types Limits the linked posts search to these post types.
+     *
      * @return WP_Post[] An array of linked post objects.
      */
     public function get_linked_posts(array $posts, array $post_types)
     {
-        $linked_ids = array();
+        $linked_ids = [];
 
         foreach ($posts as $post) {
             $linked_ids = array_merge($linked_ids, $this->get_post_ids_from_post($post));
@@ -55,18 +52,18 @@ class PLL_Collect_Linked_Posts
         $linked_ids = array_unique($linked_ids);
 
         if (empty($linked_ids)) {
-            return array();
+            return [];
         }
 
         // Query all the linked posts outside the PLL_Export_Bulk_Option::translate() loop to avoid multiple SQL queries with get_post() call.
         return get_posts(
-            array(
+            [
                 'include'     => $linked_ids,
                 'post_type'   => $post_types,
                 'post_status' => 'any',
                 'orderby'     => 'ID',
                 'order'       => 'ASC',
-            )
+            ]
         );
     }
 
@@ -76,11 +73,12 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param WP_Post $post A given WP_Post object.
+     *
      * @return int[] An array of post ids.
      */
     protected function get_post_ids_from_post($post)
     {
-        $linked_ids = array();
+        $linked_ids = [];
 
         if (function_exists('has_blocks') && has_blocks($post->post_content)) {
             $linked_ids = $this->get_post_ids_from_block_content($post->post_content);
@@ -114,6 +112,7 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param string $post_content The content of the post.
+     *
      * @return int[] An array of post ids.
      */
     protected function get_post_ids_from_block_content($post_content)
@@ -129,11 +128,12 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param array $blocks An array of blocks.
+     *
      * @return int[] An array of post ids.
      */
     protected function get_post_ids_from_blocks_deep($blocks)
     {
-        $post_ids = array();
+        $post_ids = [];
 
         foreach ($blocks as $block) {
             if ($this->options['media_support']) {
@@ -142,6 +142,7 @@ class PLL_Collect_Linked_Posts
             $post_ids = array_merge($post_ids, $this->get_navigation_block_ids($block));
             $post_ids = array_merge($post_ids, $this->get_reusable_block_ids($block));
         }
+
         return array_unique($post_ids);
     }
 
@@ -151,11 +152,12 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param array $block A representative array of a block.
+     *
      * @return int[] An array of media ids, empty if none found.
      */
     protected function get_media_ids_from_block($block)
     {
-        $post_ids = array();
+        $post_ids = [];
 
         switch ($block['blockName']) {
             case 'core/audio':
@@ -163,28 +165,28 @@ class PLL_Collect_Linked_Posts
             case 'core/file':
             case 'core/image':
             case 'core/video':
-                if (! empty($block['attrs']['id'])) {
+                if (!empty($block['attrs']['id'])) {
                     $post_ids[] = $block['attrs']['id'];
                 }
                 break;
             case 'core/gallery':
                 // Backward compatibility with WP < 5.9.
-                if (! empty($block['attrs']['ids']) && is_array($block['attrs']['ids'])) {
+                if (!empty($block['attrs']['ids']) && is_array($block['attrs']['ids'])) {
                     $post_ids = array_merge($post_ids, $block['attrs']['ids']);
                 }
                 break;
             case 'core/media-text':
-                if (! empty($block['attrs']['mediaId'])) {
+                if (!empty($block['attrs']['mediaId'])) {
                     $post_ids[] = $block['attrs']['mediaId'];
                 }
                 break;
             default:
-                if (! empty($block['innerHTML'])) {
+                if (!empty($block['innerHTML'])) {
                     $post_ids = array_merge($post_ids, $this->get_medias_from_html_content($block['innerHTML']));
                 }
                 break;
         }
-        if (! empty($block['innerBlocks'])) {
+        if (!empty($block['innerBlocks'])) {
             $post_ids = array_merge($post_ids, $this->get_post_ids_from_blocks_deep($block['innerBlocks']));
         }
 
@@ -197,11 +199,11 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param string $post_content The content of the post.
+     *
      * @return int[]
      */
     protected function get_medias_from_html_content($post_content)
     {
-
         return array_merge($this->get_medias_from_img_tags($post_content), $this->get_medias_from_shortcodes($post_content));
     }
 
@@ -211,13 +213,14 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param string $post_content The content of the required post.
+     *
      * @return int[] The media ids.
      */
     protected function get_medias_from_shortcodes($post_content)
     {
-        $media_ids = array();
+        $media_ids = [];
 
-        if (preg_match_all('/' . get_shortcode_regex() . '/s', $post_content, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('/'.get_shortcode_regex().'/s', $post_content, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $shortcode) {
                 $attributes = shortcode_parse_atts($shortcode[3]); // $shortcode[3] returns the shortcode attributes as string.
 
@@ -241,18 +244,19 @@ class PLL_Collect_Linked_Posts
     }
 
     /**
-     * Gets media ids from img tags
+     * Gets media ids from img tags.
      *
      * @since 3.3
      *
      * @param string $post_content The content of the post to search from.
+     *
      * @return int[] An array of media ids (empty if no media is found).
      */
     protected function get_medias_from_img_tags($post_content)
     {
-        $media_ids = array();
-        $textarr   = wp_html_split($post_content);
-        if (! is_array($textarr)) {
+        $media_ids = [];
+        $textarr = wp_html_split($post_content);
+        if (!is_array($textarr)) {
             return $media_ids;
         }
         foreach ($textarr as $text) {
@@ -260,7 +264,7 @@ class PLL_Collect_Linked_Posts
                 continue;
             }
             $attributes = wp_kses_attr_parse($text);
-            if (! is_array($attributes)) {
+            if (!is_array($attributes)) {
                 continue;
             }
             foreach ($attributes as $attr) {
@@ -280,11 +284,12 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param array $block An array containing block data.
+     *
      * @return int[] An array of reusable block ids, empty if none found.
      */
     protected function get_reusable_block_ids($block)
     {
-        $ids = array();
+        $ids = [];
 
         if ('core/block' !== $block['blockName']) {
             return $ids;
@@ -307,13 +312,15 @@ class PLL_Collect_Linked_Posts
      * @since 3.3
      *
      * @param array $block An array containing block data.
+     *
      * @return int[] An array of navigation post IDs, empty if none found.
      */
     protected function get_navigation_block_ids($block)
     {
         if ('core/navigation' !== $block['blockName']) {
-            return array();
+            return [];
         }
-        return array( (int) $block['attrs']['ref'] );
+
+        return [(int) $block['attrs']['ref']];
     }
 }

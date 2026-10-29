@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 use WP_Syntex\Polylang_Pro\Modules\Import_Export\Services\Context;
 
 /**
@@ -38,7 +34,7 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
      */
     public function __construct(&$polylang)
     {
-        $this->model           = &$polylang->model;
+        $this->model = &$polylang->model;
         $this->sync_term_metas = &$polylang->sync->term_metas;
     }
 
@@ -49,30 +45,31 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
      *
      * @param array        $entry           Properties array of an entry.
      * @param PLL_Language $target_language The target language.
+     *
      * @return int|WP_Error The translated term id, `WP_Error` on failure.
      */
     public function translate(array $entry, PLL_Language $target_language)
     {
-        if (! $entry['data'] instanceof Translations) {
+        if (!$entry['data'] instanceof Translations) {
             /* translators: %d is a term ID. */
             return new WP_Error('pll_translate_term_no_translations', sprintf(__('The term with ID %d could not be translated.', 'polylang-pro'), (int) $entry['id']));
         }
 
         $source_term = get_term($entry['id']);
 
-        if (! $source_term instanceof WP_Term) {
+        if (!$source_term instanceof WP_Term) {
             /* translators: %d is a term ID. */
             return new WP_Error('pll_translate_term_no_source_term', sprintf(__('The term with ID %d could not be translated as it doesn\'t exist.', 'polylang-pro'), (int) $entry['id']));
         }
 
-        $tr_term_name        = $this->get_translated_term_name($source_term, $entry['data']);
+        $tr_term_name = $this->get_translated_term_name($source_term, $entry['data']);
         $tr_term_description = $this->get_translated_term_description($source_term, $entry['data']);
-        $tr_term_id          = $this->model->term->get($entry['id'], $target_language);
-        $translation_exists  = $tr_term_id > 0;
+        $tr_term_id = $this->model->term->get($entry['id'], $target_language);
+        $translation_exists = $tr_term_id > 0;
 
         if ($tr_term_id) {
             // The translation already exists.
-            $args = array();
+            $args = [];
             // Don't update name or description if not provided in translations.
             if ($source_term->name !== $tr_term_name) {
                 $args['name'] = $tr_term_name;
@@ -87,10 +84,10 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
                 return new WP_Error('pll_translate_update_term_failed', sprintf(__('The term with ID %d could not be updated.', 'polylang-pro'), (int) $tr_term_id));
             }
         } else {
-            $args = array(
+            $args = [
                 'translations' => $this->model->term->get_translations($source_term->term_id),
                 'description'  => $tr_term_description,
-            );
+            ];
 
             $tr_term = $this->model->term->insert($tr_term_name, $source_term->taxonomy, $target_language, $args);
             if (is_wp_error($tr_term)) {
@@ -105,7 +102,7 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
                 $source_term->term_id,
                 $tr_term_id,
                 $target_language,
-                ! $translation_exists
+                !$translation_exists
             );
 
         /** @var WP_Term $tr_term */
@@ -137,16 +134,17 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
      *
      * @param WP_Term      $source_term  The source term object.
      * @param Translations $translations Translated data object.
+     *
      * @return string The translated name.
      */
     private function get_translated_term_name(WP_Term $source_term, Translations $translations)
     {
         $translated = $translations->translate(
             $source_term->name,
-            Context::to_string(array( Context::FIELD => PLL_Import_Export::TERM_NAME ))
+            Context::to_string([Context::FIELD => PLL_Import_Export::TERM_NAME])
         );
 
-        return ! empty($translated) ? $translated : $source_term->name;
+        return !empty($translated) ? $translated : $source_term->name;
     }
 
     /**
@@ -157,16 +155,17 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
      *
      * @param WP_Term      $source_term  The source term object.
      * @param Translations $translations Translated data object.
+     *
      * @return string The translated description.
      */
     private function get_translated_term_description(WP_Term $source_term, Translations $translations)
     {
         $translated = $translations->translate(
             $source_term->description,
-            Context::to_string(array( Context::FIELD => PLL_Import_Export::TERM_DESCRIPTION ))
+            Context::to_string([Context::FIELD => PLL_Import_Export::TERM_DESCRIPTION])
         );
 
-        return ! empty($translated) ? $translated : $source_term->description;
+        return !empty($translated) ? $translated : $source_term->description;
     }
 
     /**
@@ -177,20 +176,21 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
      *
      * @param int[]        $ids             Array of source term ids.
      * @param PLL_Language $target_language The target language.
+     *
      * @return void
      */
     public function assign_parents(array $ids, PLL_Language $target_language)
     {
         // Get the terms with their parents (or 0).
         $terms = get_terms(
-            array(
+            [
                 'include'    => $ids,
                 'hide_empty' => false,
                 'fields'     => 'id=>parent',
-            )
+            ]
         );
 
-        if (! is_array($terms)) {
+        if (!is_array($terms)) {
             // No terms with parents.
             return;
         }
@@ -206,9 +206,9 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
             return;
         }
 
-        $tr_ids = array();
+        $tr_ids = [];
         foreach ($terms as $child => $term_id) {
-            $tr_ids[ $child ] = $this->model->term->get($child, $target_language->slug);
+            $tr_ids[$child] = $this->model->term->get($child, $target_language->slug);
         }
         $tr_ids = array_filter($tr_ids);
 
@@ -218,7 +218,7 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
         }
 
         foreach ($terms as $child => $term_id) {
-            if (empty($tr_ids[ $child ])) {
+            if (empty($tr_ids[$child])) {
                 // Not translated.
                 continue;
             }
@@ -229,18 +229,18 @@ class PLL_Translation_Term_Model implements PLL_Translation_Data_Model_Interface
                 continue;
             }
 
-            $tr_term_id = $this->model->term->get($tr_ids[ $child ], $target_language->slug);
+            $tr_term_id = $this->model->term->get($tr_ids[$child], $target_language->slug);
             if (empty($tr_term_id)) {
                 continue;
             }
 
             $tr_term = get_term($tr_term_id);
-            if (! $tr_term instanceof WP_Term) {
+            if (!$tr_term instanceof WP_Term) {
                 continue;
             }
 
             // Set term parent for shared slugs.
-            $this->model->term->update($tr_term->term_id, array( 'parent' => $tr_parent_term ));
+            $this->model->term->update($tr_term->term_id, ['parent' => $tr_parent_term]);
         }
     }
 }

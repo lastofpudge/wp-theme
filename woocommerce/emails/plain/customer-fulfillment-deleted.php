@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Customer fulfillment deleted email (plain text)
+ * Customer fulfillment deleted email (plain text).
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-fulfillment-deleted.php.
  *
@@ -12,17 +12,16 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 10.1.0
  */
-
 defined('ABSPATH') || exit;
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
 echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
-echo esc_html__('We wanted to let you know that one of the previously fulfilled shipments from your order has been removed from our system. This may have been due to a correction or an update in our fulfillment records. Don’t worry — this won’t affect any items you’ve already received.', 'woocommerce') . "\n\n";
+echo esc_html__('We wanted to let you know that one of the previously fulfilled shipments from your order has been removed from our system. This may have been due to a correction or an update in our fulfillment records. Don’t worry — this won’t affect any items you’ve already received.', 'woocommerce')."\n\n";
 
 /**
  * Display fulfillment details.

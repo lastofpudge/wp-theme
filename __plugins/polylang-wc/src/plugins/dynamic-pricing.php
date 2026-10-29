@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages compatibility with WooCommerce Dynamic Pricing.
  * Version tested: 3.1.6.
  *
@@ -20,21 +16,20 @@ class PLLWC_Dynamic_Pricing
      */
     public function __construct()
     {
-        add_action('pllwc_copy_post_metas', array( $this, 'copy_metas' ));
-        add_action('pllwc_translate_product_meta', array( $this, 'translate_meta' ), 10, 3);
+        add_action('pllwc_copy_post_metas', [$this, 'copy_metas']);
+        add_action('pllwc_translate_product_meta', [$this, 'translate_meta'], 10, 3);
 
         if (isset($_GET['page'], $_GET['tab']) && 'wc_dynamic_pricing' === $_GET['page'] && 'category' === $_GET['tab']) {  // phpcs:ignore WordPress.Security.NonceVerification
-            add_action('get_terms_args', array( $this, 'get_terms_args' ), 5, 2);
+            add_action('get_terms_args', [$this, 'get_terms_args'], 5, 2);
         }
 
         if (is_ajax() && isset($_POST['action']) && 'create_empty_category_ruleset' === $_POST['action']) {  // phpcs:ignore WordPress.Security.NonceVerification
-            add_action('get_terms_args', array( $this, 'get_terms_args' ), 5, 2);
+            add_action('get_terms_args', [$this, 'get_terms_args'], 5, 2);
         }
 
-        add_filter('sanitize_option__s_category_pricing_rules', array( $this, 'category_pricing_rules' ), 20);
-        add_filter('sanitize_option__a_category_pricing_rules', array( $this, 'advanced_category_pricing_rules' ), 20);
+        add_filter('sanitize_option__s_category_pricing_rules', [$this, 'category_pricing_rules'], 20);
+        add_filter('sanitize_option__a_category_pricing_rules', [$this, 'advanced_category_pricing_rules'], 20);
     }
-
 
     /**
      * Add Pricing rules to metas to copy or synchronize.
@@ -43,11 +38,13 @@ class PLLWC_Dynamic_Pricing
      * @since 1.0
      *
      * @param array $metas Meta keys to copy or synchronize.
+     *
      * @return array
      */
     public function copy_metas($metas)
     {
         $metas[] = '_pricing_rules';
+
         return $metas;
     }
 
@@ -60,6 +57,7 @@ class PLLWC_Dynamic_Pricing
      * @param array  $pricing_rules Meta value.
      * @param string $key           Meta key.
      * @param string $lang          Language of target.
+     *
      * @return array
      */
     public function translate_meta($pricing_rules, $key, $lang)
@@ -69,21 +67,21 @@ class PLLWC_Dynamic_Pricing
 
             foreach ($pricing_rules as $k => $rule) {
                 if (isset($rule['collector']['args']['cats'])) {
-                    $cats = array();
+                    $cats = [];
                     foreach ($rule['collector']['args']['cats'] as $term_id) {
                         $cats[] = pll_get_term($term_id, $lang);
                     }
 
-                    $pricing_rules[ $k ]['collector']['args']['cats'] = $cats;
+                    $pricing_rules[$k]['collector']['args']['cats'] = $cats;
                 }
 
                 if (isset($rule['variation_rules']['args']['variations'])) {
-                    $ids = array();
+                    $ids = [];
                     foreach ($rule['variation_rules']['args']['variations'] as $id) {
                         $ids[] = $data_store->get($id, $lang);
                     }
 
-                    $pricing_rules[ $k ]['variation_rules']['args']['variations'] = $ids;
+                    $pricing_rules[$k]['variation_rules']['args']['variations'] = $ids;
                 }
             }
         }
@@ -100,6 +98,7 @@ class PLLWC_Dynamic_Pricing
      *
      * @param array $args       WP_Term_Query arguments.
      * @param array $taxonomies Taxonomies used for the terms query.
+     *
      * @return array modified arguments
      */
     public function get_terms_args($args, $taxonomies)
@@ -107,6 +106,7 @@ class PLLWC_Dynamic_Pricing
         if (in_array('product_cat', $taxonomies) && empty(PLL()->curlang)) {
             $args['lang'] = PLL()->options['default_lang'];
         }
+
         return $args;
     }
 
@@ -117,6 +117,7 @@ class PLLWC_Dynamic_Pricing
      * @since 0.5
      *
      * @param array $rules Pricing rules set.
+     *
      * @return array
      */
     public function category_pricing_rules($rules)
@@ -128,10 +129,11 @@ class PLLWC_Dynamic_Pricing
                     if (isset($rule['collector']['args']['cats'][0])) {
                         $rule['collector']['args']['cats'][0] = pll_get_term($rule['collector']['args']['cats'][0], $lang);
                     }
-                    $rules[ 'set_' . $tr_id ] = $rule;
+                    $rules['set_'.$tr_id] = $rule;
                 }
             }
         }
+
         return $rules;
     }
 
@@ -142,27 +144,29 @@ class PLLWC_Dynamic_Pricing
      * @since 0.5
      *
      * @param array $rules Pricing rules set.
+     *
      * @return array
      */
     public function advanced_category_pricing_rules($rules)
     {
         foreach ($rules as $set_id => $rule) {
             if (isset($rule['collector']['args']['cats'])) {
-                $cats = array();
+                $cats = [];
                 foreach ($rule['collector']['args']['cats'] as $term_id) {
                     $cats = array_merge($cats, array_values(pll_get_term_translations($term_id)));
                 }
-                $rules[ $set_id ]['collector']['args']['cats'] = $cats;
+                $rules[$set_id]['collector']['args']['cats'] = $cats;
             }
 
             if (isset($rule['targets'])) {
-                $cats = array();
+                $cats = [];
                 foreach ($rule['targets'] as $term_id) {
                     $cats = array_merge($cats, array_values(pll_get_term_translations($term_id)));
                 }
-                $rules[ $set_id ]['targets'] = $cats;
+                $rules[$set_id]['targets'] = $cats;
             }
         }
+
         return $rules;
     }
 }

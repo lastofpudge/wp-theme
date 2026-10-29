@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 defined('ABSPATH') || exit;
 
 /**
@@ -57,7 +53,8 @@ class PLL_Toggle_User_Meta
     {
         global $post;
         $user_meta = $this->get();
-        return ! empty($user_meta[ $post->post_type ]);
+
+        return !empty($user_meta[$post->post_type]);
     }
 
     /**
@@ -70,7 +67,8 @@ class PLL_Toggle_User_Meta
     public function get()
     {
         $user_meta = get_user_meta((int) get_current_user_id(), $this->get_meta_name(), true);
-        return is_array($user_meta) ? $user_meta : array();
+
+        return is_array($user_meta) ? $user_meta : [];
     }
 
     /**
@@ -80,11 +78,12 @@ class PLL_Toggle_User_Meta
      *
      * @param bool[]       $user_meta An array with post type as key and boolean as value.
      * @param WP_User|null $user      An instance of `WP_User`.
+     *
      * @return bool
      */
     public function update($user_meta, $user = null)
     {
-        if (! $user instanceof WP_User) {
+        if (!$user instanceof WP_User) {
             $user = wp_get_current_user();
         }
 
@@ -98,12 +97,13 @@ class PLL_Toggle_User_Meta
      *
      * @param string $post_type Current post type.
      * @param bool   $active    New requested button state.
+     *
      * @return bool Whether the new button state is accepted or not.
      */
     public function toggle_option($post_type, $active)
     {
-        $user_meta               = $this->get();
-        $user_meta[ $post_type ] = (bool) $active;
+        $user_meta = $this->get();
+        $user_meta[$post_type] = (bool) $active;
 
         return $this->update($user_meta);
     }

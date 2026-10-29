@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce Shipment Tracking.
  * Version tested: 1.6.10.
  *
@@ -21,7 +17,7 @@ class PLLWC_Shipment_Tracking
     {
         if (version_compare($GLOBALS['wp_version'], '6.7-beta') < 0) {
             // Backward compatibility with WP < 6.7.
-            add_action('change_locale', array( $this, 'change_locale' ));
+            add_action('change_locale', [$this, 'change_locale']);
         }
     }
 

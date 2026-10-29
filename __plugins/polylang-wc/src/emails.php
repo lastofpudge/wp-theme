@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Associates a language to the user and to orders and manages the customer emails languages.
  *
  * @since 0.1
@@ -21,14 +17,14 @@ class PLLWC_Emails
     /**
      * Stores previous language information each time it may be switched.
      *
-     * @var array[] {
-     *   @type bool              $switched Has the WordPress locale been switched?
-     *   @type PLL_Language|null $language Previous current language.
-     * }
+     * @var array[]           {
+     * @var bool              $switched Has the WordPress locale been switched?
+     * @var PLL_Language|null $language Previous current language.
+     *                        }
      *
      * @phpstan-var array<array{switched:bool, language:PLL_Language|null}>
      */
-    private $previous_languages = array();
+    private $previous_languages = [];
 
     /**
      * Constructor.
@@ -41,29 +37,29 @@ class PLLWC_Emails
     {
         $this->data_store = PLLWC_Data_Store::load('order_language');
 
-        add_action('change_locale', array( $this, 'change_locale' ), 1); // Soon to load the plugin_locale filter.
+        add_action('change_locale', [$this, 'change_locale'], 1); // Soon to load the plugin_locale filter.
 
         // Deactivate the email locale switch from WooCommerce.
         add_filter('woocommerce_email_setup_locale', '__return_false');
         add_filter('woocommerce_email_restore_locale', '__return_false');
 
         // Define the customer preferred language.
-        add_action('woocommerce_created_customer', array( $this, 'created_customer' ), 5); // Before WC sends the notification.
-        add_action('woocommerce_new_order', array( $this, 'new_order' ));
+        add_action('woocommerce_created_customer', [$this, 'created_customer'], 5); // Before WC sends the notification.
+        add_action('woocommerce_new_order', [$this, 'new_order']);
 
         // Manually sent order emails from order action metabox.
-        add_action('woocommerce_before_resend_order_emails', array( $this, 'resend_order_email' ), 10, 2);
-        add_action('woocommerce_after_resend_order_email', array( $this, 'after_email' ));
+        add_action('woocommerce_before_resend_order_emails', [$this, 'resend_order_email'], 10, 2);
+        add_action('woocommerce_after_resend_order_email', [$this, 'after_email']);
 
         // Translate site title.
-        add_filter('woocommerce_email_format_string_replace', array( $this, 'format_string_replace' ), 10, 2);
+        add_filter('woocommerce_email_format_string_replace', [$this, 'format_string_replace'], 10, 2);
 
         // Delays the the addition of other actions after WC_Emails init.
-        add_action('woocommerce_email', array( $this, 'mailer_init' ));
+        add_action('woocommerce_email', [$this, 'mailer_init']);
 
         if (is_user_logged_in()) {
             // Sets the email language for previewed emails in the admin. Useful when displaying and sending the previewed emails.
-            add_filter('woocommerce_prepare_email_for_preview', array( $this, 'set_previewed_email_language' ));
+            add_filter('woocommerce_prepare_email_for_preview', [$this, 'set_previewed_email_language']);
         }
     }
 
@@ -74,6 +70,7 @@ class PLLWC_Emails
      * @since 2.2
      *
      * @param WC_Email $email The email object. Unused.
+     *
      * @return WC_Email
      */
     public function set_previewed_email_language($email)
@@ -89,7 +86,6 @@ class PLLWC_Emails
         return $email;
     }
 
-
     /**
      * Setups actions related to automatically sent emails.
      *
@@ -99,6 +95,7 @@ class PLLWC_Emails
      * @since 1.6.3
      *
      * @param WC_Emails $mailer The WooCommerce emails controller.
+     *
      * @return void
      */
     public function mailer_init($mailer)
@@ -137,15 +134,15 @@ class PLLWC_Emails
          */
         $actions = apply_filters(
             'pllwc_user_email_actions',
-            array(
+            [
                 'woocommerce_created_customer_notification', // Customer new account.
                 'woocommerce_reset_password_notification', // Reset password.
-            )
+            ]
         );
 
         foreach ($actions as $action) {
-            add_action($action, array( $this, 'before_user_email' ), 1); // Switch the language for the email.
-            add_action($action, array( $this, 'after_email' ), 999); // Switch the language back after the email has been sent.
+            add_action($action, [$this, 'before_user_email'], 1); // Switch the language for the email.
+            add_action($action, [$this, 'after_email'], 999); // Switch the language back after the email has been sent.
         }
     }
 
@@ -168,7 +165,7 @@ class PLLWC_Emails
          */
         $actions = apply_filters(
             'pllwc_order_email_actions',
-            array(
+            [
                 // Completed order.
                 'woocommerce_order_status_completed_notification',
                 // Customer note.
@@ -185,12 +182,12 @@ class PLLWC_Emails
                 // Refunded order.
                 'woocommerce_order_fully_refunded_notification',
                 'woocommerce_order_partially_refunded_notification',
-            )
+            ]
         );
 
         foreach ($actions as $action) {
-            add_action($action, array( $this, 'before_order_email' ), 1); // Switch the language for the email.
-            add_action($action, array( $this, 'after_email' ), 999); // Switch the language back after the email has been sent.
+            add_action($action, [$this, 'before_order_email'], 1); // Switch the language for the email.
+            add_action($action, [$this, 'after_email'], 999); // Switch the language back after the email has been sent.
         }
     }
 
@@ -200,6 +197,7 @@ class PLLWC_Emails
      * @since 1.7
      *
      * @param WC_Emails $mailer The WooCommerce emails controller.
+     *
      * @return void
      */
     protected function shop_manager_emails_init($mailer)
@@ -209,23 +207,23 @@ class PLLWC_Emails
         }
 
         // Define email types and their corresponding actions.
-        $email_config = array(
-            'WC_Email_Cancelled_Order' => array(
-                'actions'  => array( // Cancelled order emails sent to shop managers.
+        $email_config = [
+            'WC_Email_Cancelled_Order' => [
+                'actions'  => [ // Cancelled order emails sent to shop managers.
                     'woocommerce_order_status_processing_to_cancelled_notification',
                     'woocommerce_order_status_on-hold_to_cancelled_notification',
-                ),
+                ],
                 'callback' => 'send_cancelled_order_email',
-            ),
-            'WC_Email_Failed_Order'    => array(
-                'actions'  => array( // Failed order emails sent to shop managers.
+            ],
+            'WC_Email_Failed_Order'    => [
+                'actions'  => [ // Failed order emails sent to shop managers.
                     'woocommerce_order_status_pending_to_failed_notification',
                     'woocommerce_order_status_on-hold_to_failed_notification',
-                ),
+                ],
                 'callback' => 'send_failed_order_email',
-            ),
-            'WC_Email_New_Order'       => array(
-                'actions'  => array( // New order emails sent to shop managers.
+            ],
+            'WC_Email_New_Order'       => [
+                'actions'  => [ // New order emails sent to shop managers.
                     'woocommerce_order_status_pending_to_processing_notification',
                     'woocommerce_order_status_pending_to_completed_notification',
                     'woocommerce_order_status_pending_to_on-hold_notification',
@@ -235,21 +233,21 @@ class PLLWC_Emails
                     'woocommerce_order_status_cancelled_to_processing_notification',
                     'woocommerce_order_status_cancelled_to_completed_notification',
                     'woocommerce_order_status_cancelled_to_on-hold_notification',
-                ),
+                ],
                 'callback' => 'send_new_order_email',
-            ),
-        );
+            ],
+        ];
 
         // Process each email type.
         foreach ($email_config as $email_class => $config) {
-            if (! isset($mailer->emails[ $email_class ])) {
+            if (!isset($mailer->emails[$email_class])) {
                 continue;
             }
 
-            $email = $mailer->emails[ $email_class ];
+            $email = $mailer->emails[$email_class];
             foreach ($config['actions'] as $action) {
-                remove_action($action, array( $email, 'trigger' ));
-                add_action($action, array( $this, $config['callback'] ));
+                remove_action($action, [$email, 'trigger']);
+                add_action($action, [$this, $config['callback']]);
             }
         }
     }
@@ -261,6 +259,7 @@ class PLLWC_Emails
      * @since 0.1
      *
      * @param int $user_id User ID.
+     *
      * @return void
      */
     public function created_customer($user_id)
@@ -276,6 +275,7 @@ class PLLWC_Emails
      * @since 1.0
      *
      * @param int $order_id Order ID.
+     *
      * @return void
      */
     public function new_order($order_id)
@@ -286,8 +286,8 @@ class PLLWC_Emails
                 $user_id = $order->get_user_id();
                 if ($user_id) {
                     $order_locale = $this->data_store->get_language($order_id, 'locale');
-                    $user_locale  = get_user_meta($user_id, 'locale', true);
-                    if (! empty($order_locale) && $order_locale !== $user_locale) {
+                    $user_locale = get_user_meta($user_id, 'locale', true);
+                    if (!empty($order_locale) && $order_locale !== $user_locale) {
                         update_user_meta($user_id, 'locale', $order_locale);
                     }
                 }
@@ -307,15 +307,15 @@ class PLLWC_Emails
     {
         if (is_locale_switched()) {
             if (isset(PLL()->filters)) {
-                remove_filter('locale', array( PLL()->filters, 'get_locale' ));
-                remove_filter('load_textdomain_mofile', array( PLL()->filters, 'load_textdomain_mofile' ));
+                remove_filter('locale', [PLL()->filters, 'get_locale']);
+                remove_filter('load_textdomain_mofile', [PLL()->filters, 'load_textdomain_mofile']);
             }
-            add_filter('get_user_metadata', array( $this, 'filter_user_locale' ), 10, 3);
+            add_filter('get_user_metadata', [$this, 'filter_user_locale'], 10, 3);
         } else {
             if (PLL() instanceof PLL_Frontend && isset(PLL()->filters)) {
-                add_filter('locale', array( PLL()->filters, 'get_locale' ));
+                add_filter('locale', [PLL()->filters, 'get_locale']);
             }
-            remove_filter('get_user_metadata', array( $this, 'filter_user_locale' ));
+            remove_filter('get_user_metadata', [$this, 'filter_user_locale']);
         }
 
         if (version_compare($GLOBALS['wp_version'], '6.7-beta', '<') && method_exists(WC(), 'load_plugin_textdomain')) {
@@ -330,20 +330,21 @@ class PLLWC_Emails
      * @since 0.1
      *
      * @param PLL_Language $language An instance of PLL_Language.
+     *
      * @return void
      */
     public function set_email_language($language)
     {
-        $this->previous_languages[] = array(
+        $this->previous_languages[] = [
             'switched' => switch_to_locale($language->locale),
             'language' => empty(PLL()->curlang) ? null : PLL()->curlang,
-        );
+        ];
 
         PLL()->curlang = $language;
 
         PLLWC_Filter_WC_Pages::init();
 
-        if (! is_locale_switched()) {
+        if (!is_locale_switched()) {
             PLL()->load_strings_translations($language->get_locale());
         }
 
@@ -362,6 +363,7 @@ class PLLWC_Emails
      * @since  0.1
      *
      * @param int|array|WC_Order $order Order or order ID.
+     *
      * @return void
      */
     public function before_order_email($order)
@@ -374,7 +376,7 @@ class PLLWC_Emails
             $order_id = $order->get_id();
         }
 
-        if (! empty($order_id)) {
+        if (!empty($order_id)) {
             $lang = $this->data_store->get_language($order_id);
             $language = PLL()->model->get_language($lang);
             if ($language) {
@@ -390,6 +392,7 @@ class PLLWC_Emails
      * @since 0.1
      *
      * @param int|string $user User ID or user login.
+     *
      * @return void
      */
     public function before_user_email($user)
@@ -444,19 +447,21 @@ class PLLWC_Emails
      *
      * @param string[] $replace Array of strings to replace placeholders in emails.
      * @param WC_Email $email   Instance of WC_Email.
+     *
      * @return string[]
      */
     public function format_string_replace($replace, $email)
     {
-        $replace['blogname']   = $email->get_blogname();
+        $replace['blogname'] = $email->get_blogname();
         $replace['site-title'] = $email->get_blogname();
         // Ensures the date format is used in the correct language for previewed emails.
         if ($email->object instanceof WC_Order) {
             $order_date = $email->object->get_date_created();
-            if (! empty($order_date)) {
+            if (!empty($order_date)) {
                 $replace['order-date'] = wc_format_datetime($order_date);
             }
         }
+
         return $replace;
     }
 
@@ -468,6 +473,7 @@ class PLLWC_Emails
      * @param mixed  $value    The value get_metadata() should return.
      * @param int    $user_id  User ID.
      * @param string $meta_key Meta key.
+     *
      * @return mixed The meta value.
      */
     public function filter_user_locale($value, $user_id, $meta_key)
@@ -481,6 +487,7 @@ class PLLWC_Emails
      * @nince 1.6
      *
      * @param string $email Email.
+     *
      * @return PLL_Language The language of the user having this email, the default language if not found.
      */
     protected function get_language_by_email($email)
@@ -507,6 +514,7 @@ class PLLWC_Emails
      *
      * @param WC_Email $email    WooCommerce Email Class.
      * @param int      $order_id Order id.
+     *
      * @return void
      */
     protected function send_order_email($email, $order_id)
@@ -514,14 +522,14 @@ class PLLWC_Emails
         if (method_exists($email, 'trigger')) {
             $recipients = $this->get_recipients($email);
 
-            remove_filter('get_user_metadata', array( $this, 'filter_user_locale' ));
+            remove_filter('get_user_metadata', [$this, 'filter_user_locale']);
 
-            $emails_by_language = array();
+            $emails_by_language = [];
 
             foreach ($recipients as $recipient) {
                 $language = $this->get_language_by_email($recipient);
-                $emails_by_language[ $language->slug ]['language']     = $language;
-                $emails_by_language[ $language->slug ]['recipients'][] = $recipient;
+                $emails_by_language[$language->slug]['language'] = $language;
+                $emails_by_language[$language->slug]['recipients'][] = $recipient;
             }
 
             foreach ($emails_by_language as $em) {
@@ -539,6 +547,7 @@ class PLLWC_Emails
      * @since 1.6
      *
      * @param int $order_id Order id.
+     *
      * @return void
      */
     public function send_cancelled_order_email($order_id)
@@ -552,6 +561,7 @@ class PLLWC_Emails
      * @since 1.6
      *
      * @param int $order_id Order id.
+     *
      * @return void
      */
     public function send_failed_order_email($order_id)
@@ -565,6 +575,7 @@ class PLLWC_Emails
      * @since 1.6
      *
      * @param int $order_id Order id.
+     *
      * @return void
      */
     public function send_new_order_email($order_id)
@@ -580,6 +591,7 @@ class PLLWC_Emails
      *
      * @param WC_Order $order  Order.
      * @param string   $action Order action.
+     *
      * @return void
      */
     public function resend_order_email($order, $action)
@@ -598,6 +610,7 @@ class PLLWC_Emails
      * @since 1.8
      *
      * @param WC_Email $email Email object.
+     *
      * @return string[] Array of recipients for the email.
      */
     protected function get_recipients($email)
@@ -605,6 +618,7 @@ class PLLWC_Emails
         $recipients = $email->get_option('recipient', get_option('admin_email'));
         $recipients = explode(',', $recipients);
         $recipients = array_map('trim', $recipients);
+
         return array_filter($recipients);
     }
 }

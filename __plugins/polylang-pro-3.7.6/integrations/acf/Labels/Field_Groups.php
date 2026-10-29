@@ -1,13 +1,9 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Labels;
 
-use PLL_Settings;
 use PLL_Format_Util;
+use PLL_Settings;
 
 /**
  * This class is part of the ACF compatibility.
@@ -41,12 +37,12 @@ class Field_Groups
     {
         $this->register_field_groups();
 
-        if (! $this->can_translate_labels()) {
+        if (!$this->can_translate_labels()) {
             return;
         }
 
-        add_filter('acf/load_field', array( $this, 'translate_field_labels' ), 20); // After `child_of_acf_field::load_field()` (prio 10).
-        add_filter('acf/load_field_groups', array( $this, 'translate_field_groups_labels' ), 25); // After `_acf_apply_get_local_internal_posts()` (prio 20).
+        add_filter('acf/load_field', [$this, 'translate_field_labels'], 20); // After `child_of_acf_field::load_field()` (prio 10).
+        add_filter('acf/load_field_groups', [$this, 'translate_field_groups_labels'], 25); // After `_acf_apply_get_local_internal_posts()` (prio 20).
     }
 
     /**
@@ -74,18 +70,19 @@ class Field_Groups
      * @since 3.7
      *
      * @param array $field The field array.
+     *
      * @return array
      */
     public function translate_field_labels($field)
     {
-        if (! is_array($field) || ! isset($field['type'])) {
+        if (!is_array($field) || !isset($field['type'])) {
             return $field;
         }
 
         $matcher = new PLL_Format_Util();
 
         foreach ($this->get_field_labels_to_translate() as $field_type => $field_labels) {
-            if (! $matcher->matches($field['type'], $field_type)) {
+            if (!$matcher->matches($field['type'], $field_type)) {
                 continue;
             }
 
@@ -112,7 +109,7 @@ class Field_Groups
         }
 
         // ACF's settings pages.
-        $acf_post_types = array( 'acf-field-group', 'acf-post-type', 'acf-taxonomy', 'acf-ui-options-page' );
+        $acf_post_types = ['acf-field-group', 'acf-post-type', 'acf-taxonomy', 'acf-ui-options-page'];
 
         if ('edit.php' === $pagenow && isset($_GET['post_type']) && in_array($_GET['post_type'], $acf_post_types, true)) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             return false;
@@ -132,6 +129,7 @@ class Field_Groups
      *
      * @param array $labels An array of labels to translate with label keys as array keys and label names as array values.
      * @param array $field  A custom field definition.
+     *
      * @return array The translated labels.
      *
      * @phpstan-param LabelsMap $labels
@@ -158,10 +156,10 @@ class Field_Groups
                      * )
                      */
                     if (is_array($field_value)) {
-                        $field[ $key ] = $this->translate_field_labels_recursive($sub_labels, $field_value);
+                        $field[$key] = $this->translate_field_labels_recursive($sub_labels, $field_value);
                     }
                 } elseif ('' !== $field_value) {
-                    $field[ $key ] = pll__($field_value);
+                    $field[$key] = pll__($field_value);
                 }
             }
         }
@@ -176,17 +174,18 @@ class Field_Groups
      * not to be overridden by ACF when its local store is enabled.
      *
      * @see _acf_apply_get_local_internal_posts()
-     *
      * @since 3.7
      *
      * @param array[] $posts An array of ACF posts.
+     *
      * @return array[] The array of ACF posts with the translated post title.
      */
     public function translate_field_groups_labels($posts)
     {
         foreach ($posts as $key => $post) {
-            $posts[ $key ]['title'] = pll__($post['title']);
+            $posts[$key]['title'] = pll__($post['title']);
         }
+
         return $posts;
     }
 
@@ -197,6 +196,7 @@ class Field_Groups
      * @since 3.7
      *
      * @param array $fields An array of Custom field definitions.
+     *
      * @return void
      */
     private function register_fields($fields)
@@ -216,7 +216,7 @@ class Field_Groups
 
             $matcher = new PLL_Format_Util();
             foreach ($this->get_field_labels_to_translate() as $field_type => $field_labels) {
-                if (! is_string($field['type']) || ! $matcher->matches($field['type'], (string) $field_type)) {
+                if (!is_string($field['type']) || !$matcher->matches($field['type'], (string) $field_type)) {
                     continue;
                 }
 
@@ -235,6 +235,7 @@ class Field_Groups
      *
      * @param array $labels An array of labels to register with label keys as array keys and label names as array values.
      * @param array $field  A custom field definition.
+     *
      * @return void
      *
      * @phpstan-param LabelsMap $labels
@@ -272,8 +273,8 @@ class Field_Groups
      * @since 3.7
      *
      * @return array {
-     *     An array with field types as array keys, and recursive sub-arrays as array values.
-     *     These sub-arrays have label keys as array keys, and label names as array values.
+     *               An array with field types as array keys, and recursive sub-arrays as array values.
+     *               These sub-arrays have label keys as array keys, and label names as array values.
      *
      *     Ex:
      *     array(
@@ -295,7 +296,7 @@ class Field_Groups
             return $this->labels;
         }
 
-        $labels = array(
+        $labels = [
             'default_value' => _x('Default value', 'ACF field setting label', 'polylang-pro'),
             'placeholder'   => _x('Placeholder', 'ACF field setting label', 'polylang-pro'),
             'prepend'       => _x('Prefix', 'ACF field setting label', 'polylang-pro'),
@@ -305,94 +306,94 @@ class Field_Groups
             'ui_off_text'   => _x('OFF text', 'ACF field setting label', 'polylang-pro'),
             'choice'        => _x('Choice', 'ACF field setting label', 'polylang-pro'),
             'label'         => _x('Label', 'ACF field setting label', 'polylang-pro'),
-        );
+        ];
 
-        $this->labels = array(
-            '*'                => array(
+        $this->labels = [
+            '*'                => [
                 'label'        => $labels['label'],
                 'instructions' => _x('Instructions', 'ACF field setting label', 'polylang-pro'),
-            ),
-            'button_group'     => array(
-                'choices' => array(
+            ],
+            'button_group'     => [
+                'choices' => [
                     '*' => $labels['choice'],
-                ),
-            ),
-            'checkbox'         => array(
-                'choices' => array(
+                ],
+            ],
+            'checkbox'         => [
+                'choices' => [
                     '*' => $labels['choice'],
-                ),
-            ),
-            'email'            => array(
+                ],
+            ],
+            'email'            => [
                 'default_value' => $labels['default_value'],
                 'placeholder'   => $labels['placeholder'],
                 'prepend'       => $labels['prepend'],
                 'append'        => $labels['append'],
-            ),
-            'flexible_content' => array(
-                'layouts' => array(
-                    '*' => array(
+            ],
+            'flexible_content' => [
+                'layouts' => [
+                    '*' => [
                         'label' => $labels['label'],
-                    ),
-                ),
-            ),
-            'number'           => array(
+                    ],
+                ],
+            ],
+            'number'           => [
                 'placeholder' => $labels['placeholder'],
                 'prepend'     => $labels['prepend'],
                 'append'      => $labels['append'],
-            ),
-            'message'          => array(
+            ],
+            'message'          => [
                 'message' => $labels['message'],
-            ),
-            'password'         => array(
+            ],
+            'password'         => [
                 'placeholder' => $labels['placeholder'],
                 'prepend'     => $labels['prepend'],
                 'append'      => $labels['append'],
-            ),
-            'radio'            => array(
-                'choices' => array(
+            ],
+            'radio'            => [
+                'choices' => [
                     '*' => $labels['choice'],
-                ),
-            ),
-            'range'            => array(
+                ],
+            ],
+            'range'            => [
                 'prepend' => $labels['prepend'],
                 'append'  => $labels['append'],
-            ),
-            'select'           => array(
-                'choices' => array(
+            ],
+            'select'           => [
+                'choices' => [
                     '*' => $labels['choice'],
-                ),
-            ),
-            'text'             => array(
+                ],
+            ],
+            'text'             => [
                 'default_value' => $labels['default_value'],
                 'placeholder'   => $labels['placeholder'],
                 'prepend'       => $labels['prepend'],
                 'append'        => $labels['append'],
-            ),
-            'textarea'         => array(
+            ],
+            'textarea'         => [
                 'default_value' => $labels['default_value'],
                 'placeholder'   => $labels['placeholder'],
-            ),
-            'true_false'       => array(
+            ],
+            'true_false'       => [
                 'message'     => $labels['message'],
                 'ui_on_text'  => $labels['ui_on_text'],
                 'ui_off_text' => $labels['ui_off_text'],
-            ),
-            'url'              => array(
+            ],
+            'url'              => [
                 'default_value' => $labels['default_value'],
                 'placeholder'   => $labels['placeholder'],
-            ),
-            'wysiwyg'          => array(
+            ],
+            'wysiwyg'          => [
                 'default_value' => $labels['default_value'],
-            ),
-        );
+            ],
+        ];
 
         /**
          * Filters the list of field keys to translate, by field type.
          * Wildcards are supported for the field types.
          *
          * @var array $labels array {
-         *     An array with field types as array keys, and recursive sub-arrays as array values.
-         *     These sub-arrays have label keys as array keys, and label names as array values.
+         *            An array with field types as array keys, and recursive sub-arrays as array values.
+         *            These sub-arrays have label keys as array keys, and label names as array values.
          *
          *     Ex:
          *     array(

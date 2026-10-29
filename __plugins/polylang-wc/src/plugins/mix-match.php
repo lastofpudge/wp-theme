@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 use WP_Syntex\Polylang_WC\Cart\Item;
 
 /**
@@ -32,7 +28,7 @@ class PLLWC_Mix_Match
      *
      * @var array
      */
-    private $translated_cart_keys = array();
+    private $translated_cart_keys = [];
 
     /**
      * Constructor.
@@ -45,19 +41,19 @@ class PLLWC_Mix_Match
         $this->has_custom_db = class_exists('WC_MNM_Compatibility') && WC_MNM_Compatibility::is_db_version_gte('2.0');
 
         // Product synchronization.
-        add_filter('pllwc_copy_post_metas', array( $this, 'copy_product_metas' ));
-        add_filter('pllwc_translate_product_meta', array( $this, 'translate_product_meta' ), 10, 3);
+        add_filter('pllwc_copy_post_metas', [$this, 'copy_product_metas']);
+        add_filter('pllwc_translate_product_meta', [$this, 'translate_product_meta'], 10, 3);
 
         if ($this->has_custom_db) {
-            add_action('pllwc_copy_product', array( $this, 'copy_product' ), 10, 3);
+            add_action('pllwc_copy_product', [$this, 'copy_product'], 10, 3);
         }
 
         // Cart.
-        add_filter('pllwc_translate_cart_item', array( $this, 'translate_cart_item' ), 10, 2);
-        add_filter('pllwc_add_cart_item_data', array( $this, 'add_cart_item_data' ), 10, 2);
-        add_action('pllwc_translated_cart_item', array( $this, 'translated_cart_item' ), 10, 2);
-        add_filter('pllwc_translate_cart_contents', array( $this, 'translate_cart_contents' ));
-        add_action('woocommerce_cart_loaded_from_session', array( $this, 'cart_loaded_from_session' ), 20); // After PLLWC_Frontend_Cart.
+        add_filter('pllwc_translate_cart_item', [$this, 'translate_cart_item'], 10, 2);
+        add_filter('pllwc_add_cart_item_data', [$this, 'add_cart_item_data'], 10, 2);
+        add_action('pllwc_translated_cart_item', [$this, 'translated_cart_item'], 10, 2);
+        add_filter('pllwc_translate_cart_contents', [$this, 'translate_cart_contents']);
+        add_action('woocommerce_cart_loaded_from_session', [$this, 'cart_loaded_from_session'], 20); // After PLLWC_Frontend_Cart.
     }
 
     /**
@@ -67,6 +63,7 @@ class PLLWC_Mix_Match
      * @since 1.1
      *
      * @param string[] $metas List of custom fields names.
+     *
      * @return string[]
      */
     public function copy_product_metas($metas)
@@ -74,7 +71,7 @@ class PLLWC_Mix_Match
         if ($this->has_custom_db) {
             return array_merge(
                 $metas,
-                array(
+                [
                     '_mnm_base_price'                => '_mnm_base_price',
                     '_mnm_base_regular_price'        => '_mnm_base_regular_price',
                     '_mnm_base_sale_price'           => '_mnm_base_sale_price',
@@ -90,12 +87,12 @@ class PLLWC_Mix_Match
                     '_mnm_packing_mode'              => '_mnm_packing_mode',
                     '_mnm_per_product_discount'      => '_mnm_per_product_discount',
                     '_mnm_weight_cumulative'         => '_mnm_weight_cumulative',
-                )
+                ]
             );
         } else {
             return array_merge(
                 $metas,
-                array(
+                [
                     '_mnm_base_price'           => '_mnm_base_price',
                     '_mnm_base_regular_price'   => '_mnm_base_regular_price',
                     '_mnm_base_sale_price'      => '_mnm_base_sale_price',
@@ -105,7 +102,7 @@ class PLLWC_Mix_Match
                     // Only M&M < 2.0.
                     '_mnm_data'                 => '_mnm_data',
                     '_mnm_per_product_shipping' => '_mnm_per_product_shipping',
-                )
+                ]
             );
         }
     }
@@ -116,9 +113,10 @@ class PLLWC_Mix_Match
      *
      * @since 1.1
      *
-     * @param  mixed  $value Meta value.
-     * @param  string $key   Meta key.
-     * @param  string $lang  Language of target.
+     * @param mixed  $value Meta value.
+     * @param string $key   Meta key.
+     * @param string $lang  Language of target.
+     *
      * @return mixed
      */
     public function translate_product_meta($value, $key, $lang)
@@ -126,15 +124,15 @@ class PLLWC_Mix_Match
         switch ($key) {
             case '_mnm_child_category_ids':
                 // For MNM 2.x category contents.
-                if (empty($value) || ! is_array($value)) {
+                if (empty($value) || !is_array($value)) {
                     // An array of IDs is expected.
-                    return array();
+                    return [];
                 }
 
-                $out = array();
+                $out = [];
 
                 foreach ($value as $category_id) {
-                    if (! is_numeric($category_id) || $category_id <= 0) {
+                    if (!is_numeric($category_id) || $category_id <= 0) {
                         continue;
                     }
 
@@ -150,40 +148,40 @@ class PLLWC_Mix_Match
                  *
                  * @see: PLLWC_Mix_Match::copy_product()
                  */
-                if (empty($value) || ! is_array($value)) {
+                if (empty($value) || !is_array($value)) {
                     // An array of IDs is expected.
-                    return array();
+                    return [];
                 }
 
-                $out        = array();
+                $out = [];
                 $data_store = PLLWC_Data_Store::load('product_language');
 
                 foreach ($value as $post_id => $data) {
-                    if (! is_numeric($post_id) || $post_id <= 0) {
+                    if (!is_numeric($post_id) || $post_id <= 0) {
                         continue;
                     }
 
                     $tr_id = $data_store->get($post_id, $lang);
 
                     if (empty($tr_id)) {
-                        $out[ $post_id ] = $data;
+                        $out[$post_id] = $data;
                         continue;
                     }
 
-                    $tr_product_id   = $tr_id;
+                    $tr_product_id = $tr_id;
                     $tr_variation_id = 0;
 
                     // If a variation, need to also translate the parent ID.
-                    if (! empty($data['product_id']) && ! empty($data['variation_id'])) {
-                        $tr_product_id   = $data_store->get($data['product_id'], $lang);
+                    if (!empty($data['product_id']) && !empty($data['variation_id'])) {
+                        $tr_product_id = $data_store->get($data['product_id'], $lang);
                         $tr_variation_id = $tr_id;
                     }
 
-                    $out[ $tr_id ] = array(
+                    $out[$tr_id] = [
                         'child_id'     => $tr_id,
                         'product_id'   => $tr_product_id,
                         'variation_id' => $tr_variation_id,
-                    );
+                    ];
                 }
 
                 $value = $out;
@@ -202,6 +200,7 @@ class PLLWC_Mix_Match
      * @param int    $from Id of the post from which we copy information.
      * @param int    $to   Id of the post to which we paste information.
      * @param string $lang language slug.
+     *
      * @return void
      */
     public function copy_product($from, $to, $lang)
@@ -211,9 +210,9 @@ class PLLWC_Mix_Match
          *
          * @var array<int,int> Post IDs as array keys. 1 as values
          */
-        static $copying_products = array();
+        static $copying_products = [];
 
-        if (isset($copying_products[ $from ])) {
+        if (isset($copying_products[$from])) {
             // Prevent an infinite loop.
             return;
         }
@@ -221,7 +220,7 @@ class PLLWC_Mix_Match
         /** @var WC_Product_Mix_and_Match|null|false $from_product */
         $from_product = wc_get_product($from);
 
-        if (empty($from_product) || ! $from_product->is_type('mix-and-match')) {
+        if (empty($from_product) || !$from_product->is_type('mix-and-match')) {
             return;
         }
 
@@ -231,10 +230,10 @@ class PLLWC_Mix_Match
             return;
         }
 
-        $copying_products[ $from ] = 1;
+        $copying_products[$from] = 1;
 
         $data_store = PLLWC_Data_Store::load('product_language');
-        $tr_items   = array();
+        $tr_items = [];
 
         foreach ($from_product->get_child_items() as $item) {
             $tr_product_id = $data_store->get($item->get_product_id(), $lang);
@@ -243,25 +242,25 @@ class PLLWC_Mix_Match
                 $tr_variation_id = $data_store->get($item->get_variation_id(), $lang);
 
                 if ($tr_product_id && $tr_variation_id) {
-                    $tr_items[] = array(
+                    $tr_items[] = [
                         'product_id'   => $tr_product_id,
                         'variation_id' => $tr_variation_id,
-                    );
+                    ];
                 }
             } elseif ($tr_product_id) {
-                $tr_items[] = array(
+                $tr_items[] = [
                     'product_id'   => $tr_product_id,
                     'variation_id' => 0,
-                );
+                ];
             }
         }
 
-        if (! empty($tr_items)) {
+        if (!empty($tr_items)) {
             $to_product->set_child_items($tr_items);
             $to_product->save();
         }
 
-        unset($copying_products[ $from ]);
+        unset($copying_products[$from]);
     }
 
     /**
@@ -272,20 +271,22 @@ class PLLWC_Mix_Match
      *
      * @param array  $item Cart item.
      * @param string $lang Language code.
+     *
      * @return array
+     *
      * @phpstan-param CartItem $item
      * @phpstan-param string $lang
      */
     public function translate_cart_item($item, $lang = '')
     {
         // `wc_mnm_is_container_cart_item()` and `wc_mnm_maybe_is_child_cart_item()` were introoduced in M&M 1.7.
-        if (! function_exists('wc_mnm_is_container_cart_item')) {
+        if (!function_exists('wc_mnm_is_container_cart_item')) {
             return $item;
         }
 
         if (wc_mnm_is_container_cart_item($item)) {
             $lang = PLL()->model->get_language($lang);
-            if (! $lang) {
+            if (!$lang) {
                 return $item;
             }
 
@@ -294,11 +295,11 @@ class PLLWC_Mix_Match
             if (isset($item['mnm_contents'])) {
                 // Stash the content keys for later. Cannot translate now as the child products have not yet been translated.
                 $item['mnm_contents_tr'] = $item['mnm_contents'];
-                $item['mnm_contents']    = array();
+                $item['mnm_contents'] = [];
             }
         } elseif (wc_mnm_maybe_is_child_cart_item($item)) {
-            if (isset($item['mnm_container'], $this->translated_cart_keys[ $item['mnm_container'] ])) {
-                $item['mnm_container'] = $this->translated_cart_keys[ $item['mnm_container'] ];
+            if (isset($item['mnm_container'], $this->translated_cart_keys[$item['mnm_container']])) {
+                $item['mnm_container'] = $this->translated_cart_keys[$item['mnm_container']];
             }
         }
 
@@ -310,8 +311,9 @@ class PLLWC_Mix_Match
      *
      * @since 1.7
      *
-     * @param  array        $config Config.
-     * @param  PLL_Language $lang   Language.
+     * @param array        $config Config.
+     * @param PLL_Language $lang   Language.
+     *
      * @return array<int<0,max>,array{
      *     product_id: int<0,max>,
      *     variation_id: int<0,max>,
@@ -320,11 +322,11 @@ class PLLWC_Mix_Match
      */
     protected function translate_config($config, PLL_Language $lang)
     {
-        $tr_config = array();
+        $tr_config = [];
 
         foreach ($config as $row) {
-            $row                             = (new Item($row))->translate($lang);
-            $tr_config[ $row['product_id'] ] = $row;
+            $row = (new Item($row))->translate($lang);
+            $tr_config[$row['product_id']] = $row;
         }
 
         return $tr_config;
@@ -338,15 +340,17 @@ class PLLWC_Mix_Match
      *
      * @param array $cart_item_data Cart item data.
      * @param array $item           Cart item.
+     *
      * @return array
      */
     public function add_cart_item_data($cart_item_data, $item)
     {
-        $keys = array(
+        $keys = [
             'mnm_config',
             'mnm_contents',
             'mnm_container',
-        );
+        ];
+
         return array_merge($cart_item_data, array_intersect_key($item, array_flip($keys)));
     }
 
@@ -359,11 +363,12 @@ class PLLWC_Mix_Match
      *
      * @param array  $item Cart item.
      * @param string $key  Previous cart item key. The new key can be found in $item['key'].
+     *
      * @return void
      */
     public function translated_cart_item($item, $key)
     {
-        $this->translated_cart_keys[ $key ] = $item['key'];
+        $this->translated_cart_keys[$key] = $item['key'];
     }
 
     /**
@@ -374,6 +379,7 @@ class PLLWC_Mix_Match
      * @since 1.1
      *
      * @param array $contents Cart contents.
+     *
      * @return array
      */
     public function translate_cart_contents($contents)
@@ -383,11 +389,11 @@ class PLLWC_Mix_Match
         }
 
         foreach ($contents as $key => $cart_item) {
-            if (! wc_mnm_is_container_cart_item($cart_item) || empty($cart_item['mnm_contents_tr'])) {
+            if (!wc_mnm_is_container_cart_item($cart_item) || empty($cart_item['mnm_contents_tr'])) {
                 continue;
             }
 
-            $contents[ $key ]['mnm_contents'] = array_unique(
+            $contents[$key]['mnm_contents'] = array_unique(
                 array_keys(
                     array_intersect(
                         array_flip($this->translated_cart_keys),
@@ -395,7 +401,7 @@ class PLLWC_Mix_Match
                     )
                 )
             );
-            unset($contents[ $key ]['mnm_contents_tr']);
+            unset($contents[$key]['mnm_contents_tr']);
         }
 
         return $contents;
@@ -419,7 +425,7 @@ class PLLWC_Mix_Match
                 continue;
             }
 
-            WC()->cart->cart_contents[ $cart_key ] = $mnm_cart->add_cart_item_filter($item, $cart_key);
+            WC()->cart->cart_contents[$cart_key] = $mnm_cart->add_cart_item_filter($item, $cart_key);
         }
     }
 }

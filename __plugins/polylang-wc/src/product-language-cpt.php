@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 defined('ABSPATH') || exit;
 
 use Automattic\WooCommerce\Internal\CostOfGoodsSold\CostOfGoodsSoldController;
@@ -43,7 +39,7 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      */
     public function __construct()
     {
-        $this->object     = PLL()->model->post;
+        $this->object = PLL()->model->post;
         $this->data_store = new PLLWC_Product_Data_Store_CPT();
     }
 
@@ -61,22 +57,23 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
 
         $this->permalinks = get_option('woocommerce_permalinks');
 
-        add_filter('pll_get_post_types', array( $this, 'translated_post_types' ), 10, 2);
-        add_filter('woocommerce_register_post_type_product', array( $this, 'woocommerce_register_post_type_product' ));
-        add_filter('woocommerce_variable_children_args', array( $this, 'variable_children_args' ));
+        add_filter('pll_get_post_types', [$this, 'translated_post_types'], 10, 2);
+        add_filter('woocommerce_register_post_type_product', [$this, 'woocommerce_register_post_type_product']);
+        add_filter('woocommerce_variable_children_args', [$this, 'variable_children_args']);
 
         // Synchronization.
-        add_action('set_object_terms', array( $this, 'set_object_terms' ), 10, 4);
-        add_filter('pll_copy_post_metas', array( $this, 'copy_post_metas' ), 5, 5);
-        add_filter('pll_translate_post_meta', array( $this, 'translate_post_meta' ), 5, 5);
-        add_action('woocommerce_product_object_updated_props', array( $this, 'updated_props' ), 10, 2);
-        add_action('pll_post_synchronized', array( $this, 'post_synchronized' ), 10, 2);
+        add_action('set_object_terms', [$this, 'set_object_terms'], 10, 4);
+        add_filter('pll_copy_post_metas', [$this, 'copy_post_metas'], 5, 5);
+        add_filter('pll_translate_post_meta', [$this, 'translate_post_meta'], 5, 5);
+        add_action('woocommerce_product_object_updated_props', [$this, 'updated_props'], 10, 2);
+        add_action('pll_post_synchronized', [$this, 'post_synchronized'], 10, 2);
 
         // Attributes.
-        remove_action('edit_term', array( 'WC_Post_Data', 'edit_term' ));
-        remove_action('edited_term', array( 'WC_Post_Data', 'edited_term' ));
-        add_action('edit_term', array( $this, 'edit_term' ), 10, 3);
-        add_action('edited_term', array( $this, 'edited_term' ), 10, 3);
+        remove_action('edit_term', ['WC_Post_Data', 'edit_term']);
+        remove_action('edited_term', ['WC_Post_Data', 'edited_term']);
+        add_action('edit_term', [$this, 'edit_term'], 10, 3);
+        add_action('edited_term', [$this, 'edited_term'], 10, 3);
+
         return $this;
     }
 
@@ -87,11 +84,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @param string[] $types List of post type names for which Polylang manages language and translations.
      * @param bool     $hide  True when displaying the list in Polylang settings.
+     *
      * @return string[] List of post type names for which Polylang manages language and translations.
      */
     public function translated_post_types($types, $hide)
     {
-        $woo_types = array( 'product', 'product_variation' );
+        $woo_types = ['product', 'product_variation'];
+
         return $hide ? array_diff($types, $woo_types) : array_merge($types, $woo_types);
     }
 
@@ -101,12 +100,14 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @since 0.1
      *
      * @param array $args arguments used to register the post type.
+     *
      * @return array
      */
     public function woocommerce_register_post_type_product($args)
     {
         $product_permalink = empty($this->permalinks['product_base']) ? 'product' : $this->permalinks['product_base'];
-        $args['rewrite'] = array( 'slug' => untrailingslashit($product_permalink), 'with_front' => false, 'feeds' => true );
+        $args['rewrite'] = ['slug' => untrailingslashit($product_permalink), 'with_front' => false, 'feeds' => true];
+
         return $args;
     }
 
@@ -116,11 +117,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @since 0.7.3
      *
      * @param array $args Query arguments.
+     *
      * @return array
      */
     public function variable_children_args($args)
     {
         $args['lang'] = '';
+
         return $args;
     }
 
@@ -133,12 +136,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @param WP_Term[] $terms     An array of object terms.
      * @param int[]     $tt_ids    An array of term taxonomy IDs.
      * @param string    $taxonomy  Taxonomy slug.
+     *
      * @return void
      */
     public function set_object_terms($object_id, $terms, $tt_ids, $taxonomy)
     {
         if ('product_type' === $taxonomy) {
-            $cache_key = WC_Cache_Helper::get_cache_prefix('product_' . $object_id) . '_type_' . $object_id;
+            $cache_key = WC_Cache_Helper::get_cache_prefix('product_'.$object_id).'_type_'.$object_id;
             wp_cache_delete($cache_key, 'products');
         }
     }
@@ -150,11 +154,12 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @since 1.9 Type-hinted.
      *
      * @param bool $sync True if it is synchronization, false if it is a copy.
+     *
      * @return string[]
      */
     protected function get_legacy_metas($sync): array
     {
-        $metas_to_sync = array(
+        $metas_to_sync = [
             '_backorders'             => 'backorders',
             '_children'               => 'children',
             '_crosssell_ids'          => 'cross_sell_ids',
@@ -192,10 +197,11 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
             '_variation_description'  => 'description',
             '_cogs_total_value'       => 'cogs_total_value',
             '_cogs_value_is_additive' => 'cogs_value_is_additive',
-        );
+        ];
+
         return $sync ? $metas_to_sync : array_merge(
             $metas_to_sync,
-            array( '_stock_status' => 'stock_status' )
+            ['_stock_status' => 'stock_status']
         );
     }
 
@@ -209,11 +215,12 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @param int      $from  Id of the product from which we copy information.
      * @param int      $to    Id of the product to which we copy information.
      * @param string   $lang  Language code.
+     *
      * @return string[]
      */
     public function copy_post_metas($metas, $sync, $from, $to, $lang)
     {
-        if (! in_array(get_post_type($from), array( 'product', 'product_variation' ))) {
+        if (!in_array(get_post_type($from), ['product', 'product_variation'])) {
             return $metas;
         }
 
@@ -228,18 +235,18 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
         }
 
         $_to_copy = self::get_legacy_metas($sync);
-        $to_copy  = array_keys($_to_copy);
+        $to_copy = array_keys($_to_copy);
 
         // Should we copy text?
-        if (! PLLWC_Products::should_copy_texts($from, $to, $sync)) {
+        if (!PLLWC_Products::should_copy_texts($from, $to, $sync)) {
             $to_copy = array_diff(
                 $to_copy,
-                array(
+                [
                     '_button_text',
                     '_product_url',
                     '_purchase_note',
                     '_variation_description',
-                )
+                ]
             );
         }
 
@@ -267,6 +274,7 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @param int    $id    ID of object to update.
      * @param string $table Lookup table name.
+     *
      * @return void
      */
     public function update_lookup_table($id, $table)
@@ -281,13 +289,14 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @param WC_Product|false $product       Product.
      * @param array            $updated_props Product properties being updated.
+     *
      * @return void
      */
     public function updated_props($product, $updated_props)
     {
         static $avoid_recursion = false;
 
-        if ($avoid_recursion || ! $product) {
+        if ($avoid_recursion || !$product) {
             return;
         }
 
@@ -297,7 +306,6 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
 
         foreach ($this->get_translations($id) as $tr_id) {
             if ($id && $id !== $tr_id && $tr_product = wc_get_product($tr_id)) {
-
                 if (in_array('stock_quantity', $updated_props, true)) {
                     if ($tr_product->is_type('variation')) {
                         do_action('woocommerce_variation_set_stock', $tr_product);
@@ -325,11 +333,12 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @param int $from Id of the product from which we copy information.
      * @param int $to   Id of the target.
+     *
      * @return void
      */
     public function post_synchronized($from, $to)
     {
-        if (in_array(get_post_type($to), array( 'product', 'product_variation' ))) {
+        if (in_array(get_post_type($to), ['product', 'product_variation'])) {
             $this->update_lookup_table($to, 'wc_product_meta_lookup');
         }
     }
@@ -344,23 +353,24 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @param string $lang  Language of target.
      * @param int    $from  Id of the object from which we copy information.
      * @param int    $to    Id of the target.
+     *
      * @return mixed
      */
     public function translate_post_meta($value, $key, $lang, $from, $to)
     {
-        if (in_array(get_post_type($from), array( 'product', 'product_variation' ))) {
+        if (in_array(get_post_type($from), ['product', 'product_variation'])) {
             if (0 === strpos($key, 'attribute_')) {
                 // Translate taxonomy attributes in variations.
                 $tax = substr($key, 10);
-                if (! empty($tax) && ! empty($value) && is_string($value)) {
-                    $attribute    = array( $tax => $value );
+                if (!empty($tax) && !empty($value) && is_string($value)) {
+                    $attribute = [$tax => $value];
                     $tr_attribute = PLLWC_Products::maybe_translate_attributes($attribute, $lang);
-                    $value        = $tr_attribute[ $tax ];
+                    $value = $tr_attribute[$tax];
                 }
             } else {
                 $props = self::get_legacy_metas(false);
-                if (isset($props[ $key ])) {
-                    $value = PLLWC_Products::maybe_translate_property($value, $props[ $key ], $lang);
+                if (isset($props[$key])) {
+                    $value = PLLWC_Products::maybe_translate_property($value, $props[$key], $lang);
                 }
             }
 
@@ -377,6 +387,7 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
              */
             $value = apply_filters('pllwc_translate_product_meta', $value, $key, $lang, $from, $to);
         }
+
         return $value;
     }
 
@@ -385,16 +396,17 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @since 1.0
      *
-     * @param int    $from  Id of the product from which we copy information.
-     * @param int    $to    Id of the product to which we copy information.
-     * @param string $lang  Language code.
-     * @param bool   $sync  Optional, defaults to false. True if it is synchronization, false if it is a copy.
+     * @param int    $from Id of the product from which we copy information.
+     * @param int    $to   Id of the product to which we copy information.
+     * @param string $lang Language code.
+     * @param bool   $sync Optional, defaults to false. True if it is synchronization, false if it is a copy.
+     *
      * @return void
      */
     public function copy($from, $to, $lang, $sync = false)
     {
         if (isset(PLL()->sync)) {
-            if (! $sync) {
+            if (!$sync) {
                 PLL()->sync->taxonomies->copy($from, $to, $lang);
             }
 
@@ -412,12 +424,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @param int $id    Product id.
      * @param int $order Product order.
+     *
      * @return void
      */
     public function save_product_ordering($id, $order)
     {
         global $wpdb;
-        $wpdb->update($wpdb->posts, array( 'menu_order' => $order ), array( 'ID' => $id ));
+        $wpdb->update($wpdb->posts, ['menu_order' => $order], ['ID' => $id]);
     }
 
     /**
@@ -427,11 +440,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @since 1.0
      *
      * @param int $id Product id.
+     *
      * @return string
      */
     public function get_translation_group_name($id)
     {
         $term = $this->object->get_object_term($id, 'post_translations');
+
         return empty($term) ? '' : $term->name;
     }
 
@@ -445,17 +460,19 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      * @param string       $value      The field value to search (slashed to work around https://core.trac.wordpress.org/ticket/27421).
      * @param int          $product_id Product ID.
      * @param PLL_Language $language   The product language.
+     *
      * @return bool
      */
     public function lookup_table_has(string $column, string $value, int $product_id, PLL_Language $language): bool
     {
         $meta_lookup_props = $this->get_meta_lookup_props();
-        if (! in_array($column, $meta_lookup_props, true)) {
+        if (!in_array($column, $meta_lookup_props, true)) {
             _doing_it_wrong(
                 __METHOD__,
                 esc_html(sprintf('The column name must be one of the columns in the `wc_product_meta_lookup` table: %s', implode(', ', $meta_lookup_props))),
                 '2.1'
             );
+
             return false;
         }
 
@@ -484,12 +501,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
     /**
      * Returns a product id based on the sku and the language.
      * Modified version WC_Product_Data_Store_CPT::get_product_id_by_sku().
-     * Code last checked: WC 4.0
+     * Code last checked: WC 4.0.
      *
      * @since 1.0
      *
      * @param string $sku  SKU.
      * @param string $lang Language code.
+     *
      * @return int Product id.
      */
     public function get_product_id_by_sku($sku, $lang)
@@ -528,9 +546,10 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @since 1.2
      *
-     * @param  int    $term_id  Term ID.
-     * @param  int    $tt_id    Term taxonomy ID.
-     * @param  string $taxonomy Taxonomy slug.
+     * @param int    $term_id  Term ID.
+     * @param int    $tt_id    Term taxonomy ID.
+     * @param string $taxonomy Taxonomy slug.
+     *
      * @return void
      */
     public static function edit_term($term_id, $tt_id, $taxonomy)
@@ -553,16 +572,17 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      *
      * @since 1.2
      *
-     * @param  int    $term_id  Term ID.
-     * @param  int    $tt_id    Term taxonomy ID.
-     * @param  string $taxonomy Taxonomy slug.
+     * @param int    $term_id  Term ID.
+     * @param int    $tt_id    Term taxonomy ID.
+     * @param string $taxonomy Taxonomy slug.
+     *
      * @return void
      */
     public function edited_term($term_id, $tt_id, $taxonomy)
     {
         global $wpdb;
 
-        if (! is_null(self::$editing_term) && strpos($taxonomy, 'pa_') === 0) {
+        if (!is_null(self::$editing_term) && strpos($taxonomy, 'pa_') === 0) {
             $edited_term = get_term_by('id', $term_id, $taxonomy);
 
             if ($edited_term instanceof WP_Term && $edited_term->slug !== self::$editing_term->slug) {
@@ -578,7 +598,7 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
 						AND meta_value = %s
 						AND pll_tr.term_taxonomy_id = %d",
                         $edited_term->slug,
-                        'attribute_' . sanitize_title($taxonomy),
+                        'attribute_'.sanitize_title($taxonomy),
                         self::$editing_term->slug,
                         $language
                     )
@@ -591,8 +611,8 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
 						SET meta_value = REPLACE( meta_value, %s, %s )
 						WHERE meta_key = '_default_attributes'
 						AND pll_tr.term_taxonomy_id = %d",
-                        serialize(self::$editing_term->taxonomy) . serialize(self::$editing_term->slug), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
-                        serialize($edited_term->taxonomy) . serialize($edited_term->slug), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+                        serialize(self::$editing_term->taxonomy).serialize(self::$editing_term->slug), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+                        serialize($edited_term->taxonomy).serialize($edited_term->slug), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
                         $language
                     )
                 );
@@ -612,12 +632,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
     private function is_cogs_enabled(): bool
     {
         // Backward compatibility with WC < 9.5.
-        if (! class_exists(CostOfGoodsSoldController::class)) {
+        if (!class_exists(CostOfGoodsSoldController::class)) {
             return false;
         }
 
         /** @var CostOfGoodsSoldController */
         $cogs_controller = wc_get_container()->get(CostOfGoodsSoldController::class);
+
         return $cogs_controller->feature_is_enabled();
     }
 
@@ -631,12 +652,13 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      */
     private function use_cogs_lookup_column(): bool
     {
-        if (! $this->is_cogs_enabled()) {
+        if (!$this->is_cogs_enabled()) {
             return false;
         }
 
         /** @var CostOfGoodsSoldController */
         $cogs_controller = wc_get_container()->get(CostOfGoodsSoldController::class);
+
         // Backward compatibility with WC < 9.8.
         return method_exists($cogs_controller, 'product_meta_lookup_table_cogs_value_columns_exist') && $cogs_controller->product_meta_lookup_table_cogs_value_columns_exist();
     }
@@ -650,7 +672,7 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
      */
     private function get_meta_lookup_props(): array
     {
-        $meta_lookup_props = array(
+        $meta_lookup_props = [
             'sku',
             'global_unique_id',
             'regular_price',
@@ -666,11 +688,12 @@ class PLLWC_Product_Language_CPT extends PLLWC_Translated_Object_Language
             'virtual',
             'tax_status',
             'tax_class',
-        );
+        ];
 
         if ($this->use_cogs_lookup_column()) {
             $meta_lookup_props[] = 'cogs_value';
         }
+
         return $meta_lookup_props;
     }
 }

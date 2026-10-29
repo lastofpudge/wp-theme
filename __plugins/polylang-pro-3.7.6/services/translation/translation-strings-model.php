@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polyang-Pro
- */
-
-/**
  * Class to manage translated strings import.
  *
  * @since 3.7
@@ -16,7 +12,7 @@ class PLL_Translation_Strings_Model implements PLL_Translation_Data_Model_Interf
      *
      * @var string[]
      */
-    private $imported_strings = array();
+    private $imported_strings = [];
 
     /**
      * Handles the import of strings translations.
@@ -24,18 +20,21 @@ class PLL_Translation_Strings_Model implements PLL_Translation_Data_Model_Interf
      * @since 3.3
      * @since 3.7 Moved from PLL_Import_Strings to PLL_Translation_Strings_Model.
      *
-     * @param array        $entry {
-     *     An array containing the translations data.
-     *     @type string       $type Either 'post', 'term' or 'string_translations'.
-     *     @type int          $id   Id of the object in the database (if applicable).
-     *     @type Translations $data Objects holding all the retrieved Translation_Entry objects.
-     * }
+     * @param array $entry {
+     *                     An array containing the translations data.
+     *
+     * @var string       $type Either 'post', 'term' or 'string_translations'.
+     * @var int          $id   Id of the object in the database (if applicable).
+     * @var Translations $data Objects holding all the retrieved Translation_Entry objects.
+     *                   }
+     *
      * @param PLL_Language $target_language The targeted language for import.
+     *
      * @return string[]|WP_Error The imported strings, `WP_Error` on failure.
      */
     public function translate(array $entry, PLL_Language $target_language)
     {
-        $this->imported_strings = array(); // Reset the imported strings array.
+        $this->imported_strings = []; // Reset the imported strings array.
 
         $pll_mo = new PLL_MO();
         $pll_mo->import_from_db($target_language);
@@ -52,7 +51,7 @@ class PLL_Translation_Strings_Model implements PLL_Translation_Data_Model_Interf
 
         foreach ($translations->entries as $entry) {
             if (empty($entry->translations)) {
-                $entry->translations = array( '' );
+                $entry->translations = [''];
             }
 
             /** This filter is documented in /polylang/settings/table-string.php */
@@ -70,9 +69,9 @@ class PLL_Translation_Strings_Model implements PLL_Translation_Data_Model_Interf
             if (empty($key)) {
                 continue;
             }
-            if (isset($pll_mo_clone->entries[ $key ]->translations[0]) || isset($registered_strings[ md5($key) ])) {
+            if (isset($pll_mo_clone->entries[$key]->translations[0]) || isset($registered_strings[md5($key)])) {
                 // Checks that the string did not exist or has been edited before updating.
-                if (! isset($pll_mo_clone->entries[ $key ]->translations[0]) || $pll_mo_clone->entries[ $key ]->translations[0] !== $sanitized_translation) {
+                if (!isset($pll_mo_clone->entries[$key]->translations[0]) || $pll_mo_clone->entries[$key]->translations[0] !== $sanitized_translation) {
                     $pll_mo->add_entry($pll_mo->make_entry($entry->singular, $sanitized_translation));
                     // Store the source strings as ids during the import process.
                     $this->imported_strings[] = $entry->singular;
@@ -97,6 +96,7 @@ class PLL_Translation_Strings_Model implements PLL_Translation_Data_Model_Interf
      *
      * @param string[]     $ids             The entity ids to process after translation.
      * @param PLL_Language $target_language The target language.
+     *
      * @return void
      */
     public function do_after_process(array $ids, PLL_Language $target_language) //phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
@@ -110,14 +110,16 @@ class PLL_Translation_Strings_Model implements PLL_Translation_Data_Model_Interf
      * @since 3.3 Moved from PLL_Import_Action to PLL_Import_Strings.
      * @since 3.7 Moved from PLL_Import_Strings to PLL_Translation_Strings_Model.
      *
-     * @param  Translation_Entry[] $translations An array with all the entries.
-     * @return Translation_Entry[]               An array with the same entries with an empty context.
+     * @param Translation_Entry[] $translations An array with all the entries.
+     *
+     * @return Translation_Entry[] An array with the same entries with an empty context.
      */
     private function remove_context_from_translations($translations)
     {
         foreach ($translations as $translation_entry) {
             $translation_entry->context = '';
         }
+
         return $translations;
     }
 }

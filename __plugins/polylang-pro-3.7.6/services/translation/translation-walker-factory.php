@@ -1,11 +1,7 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
- * Class PLL_Translation_Walker_Factory
+ * Class PLL_Translation_Walker_Factory.
  *
  * A factory to create a translation walker with a given content.
  *
@@ -19,6 +15,7 @@ class PLL_Translation_Walker_Factory
      * @since 3.3
      *
      * @param string $content A content to iterate over.
+     *
      * @return PLL_Translation_Walker_Interface
      */
     public static function create_from($content)
@@ -28,6 +25,7 @@ class PLL_Translation_Walker_Factory
         } else {
             $walker = new PLL_Translation_Walker_Classic($content);
         }
+
         return $walker;
     }
 }

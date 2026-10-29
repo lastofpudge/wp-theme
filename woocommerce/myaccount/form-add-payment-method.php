@@ -11,8 +11,8 @@ if ($available_gateways) {
 
     $gateways = [];
     foreach ($available_gateways as $gateway) {
-        $has_fields   = $gateway->has_fields() || $gateway->get_description();
-        $gateways[]   = [
+        $has_fields = $gateway->has_fields() || $gateway->get_description();
+        $gateways[] = [
             'id'          => $gateway->id,
             'title'       => $gateway->get_title(),
             'icon'        => $gateway->get_icon(),

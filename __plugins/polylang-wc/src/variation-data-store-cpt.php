@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Decorates the Product variation data store.
  *
  * @since 1.6
@@ -41,7 +37,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      */
     public static function init()
     {
-        add_filter('woocommerce_product-variation_data_store', array( __CLASS__, 'filter_data_store' ), PHP_INT_MAX - 10);
+        add_filter('woocommerce_product-variation_data_store', [__CLASS__, 'filter_data_store'], PHP_INT_MAX - 10);
     }
 
     /**
@@ -50,6 +46,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param string|WC_Object_Data_Store_Interface $store A data store object or class name.
+     *
      * @return PLLWC_Variation_Data_Store_CPT
      */
     public static function filter_data_store($store)
@@ -58,7 +55,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
             $store = new $store();
         }
 
-        if (! $store instanceof WC_Object_Data_Store_Interface) {
+        if (!$store instanceof WC_Object_Data_Store_Interface) {
             $store = new WC_Product_Variation_Data_Store_CPT();
         }
 
@@ -75,9 +72,8 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
     public function __construct($store)
     {
         $this->variation_data_store = $store;
-        $this->language_data_store  = PLLWC_Data_Store::load('product_language');
+        $this->language_data_store = PLLWC_Data_Store::load('product_language');
     }
-
 
     /**
      * Reads a product from the database and sets its data.
@@ -85,16 +81,17 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param WC_Product_Variation $product Product object.
+     *
      * @return void
      */
     public function read(&$product)
     {
         $this->attribute_filter_lang = $this->language_data_store->get_language($product->get_id());
-        add_filter('get_terms_args', array( $this, 'get_terms_args' ));
+        add_filter('get_terms_args', [$this, 'get_terms_args']);
 
         $this->variation_data_store->read($product);
 
-        remove_filter('get_terms_args', array( $this, 'get_terms_args' ));
+        remove_filter('get_terms_args', [$this, 'get_terms_args']);
     }
 
     /**
@@ -103,21 +100,22 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 2.1.5
      *
      * @param WC_Product $product Product object.
+     *
      * @return string The generated attribute summary.
      */
     public function get_attribute_summary($product)
     {
-        if (! is_callable(array( $this->variation_data_store, 'get_attribute_summary' ))) {
+        if (!is_callable([$this->variation_data_store, 'get_attribute_summary'])) {
             // Ensure custom data store implements the method, since it's not in `WC_Object_Data_Store_Interface`.
             return '';
         }
 
         $this->attribute_filter_lang = $this->language_data_store->get_language($product->get_id());
-        add_filter('get_terms_args', array( $this, 'get_terms_args' ));
+        add_filter('get_terms_args', [$this, 'get_terms_args']);
 
         $attribute_summary = $this->variation_data_store->get_attribute_summary($product);
 
-        remove_filter('get_terms_args', array( $this, 'get_terms_args' ));
+        remove_filter('get_terms_args', [$this, 'get_terms_args']);
 
         return $attribute_summary;
     }
@@ -128,6 +126,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param WC_Product $product Product object.
+     *
      * @return void
      */
     public function create(&$product)
@@ -141,6 +140,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param WC_Product $product Product object.
+     *
      * @return void
      */
     public function update(&$product)
@@ -155,9 +155,10 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      *
      * @param WC_Product $product Product object.
      * @param array      $args    Array of args to pass to the delete method.
+     *
      * @return void
      */
-    public function delete(&$product, $args = array())
+    public function delete(&$product, $args = [])
     {
         $this->variation_data_store->delete($product, $args);
     }
@@ -168,6 +169,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param WC_Data $object WC_Data object.
+     *
      * @return array
      */
     public function read_meta(&$object)
@@ -179,8 +181,9 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * Deletes meta based on meta ID.
      *
      * @since 1.6
+     *
      * @param WC_Data  $object WC_Data object.
-     * @param stdClass $meta  (containing at least ->id).
+     * @param stdClass $meta   (containing at least ->id).
      */
     public function delete_meta(&$object, $meta)
     {
@@ -193,7 +196,8 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param WC_Data  $object WC_Data object.
-     * @param stdClass $meta (containing ->key and ->value).
+     * @param stdClass $meta   (containing ->key and ->value).
+     *
      * @return int meta ID
      */
     public function add_meta(&$object, $meta)
@@ -207,7 +211,8 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param WC_Data  $object WC_Data object.
-     * @param stdClass $meta (containing ->id, ->key and ->value).
+     * @param stdClass $meta   (containing ->id, ->key and ->value).
+     *
      * @return void
      */
     public function update_meta(&$object, $meta)
@@ -222,6 +227,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      *
      * @param WC_Data $object        WC_Data object.
      * @param array   $raw_meta_data Array of std object of meta data to be filtered.
+     *
      * @return mixed|void
      */
     public function filter_raw_meta_data(&$object, $raw_meta_data)
@@ -236,13 +242,15 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      *
      * @param string $method Method name.
      * @param array  $args   Method arguments.
+     *
      * @return mixed
      */
     public function __call($method, $args)
     {
-        if (is_callable(array( $this->variation_data_store, $method ))) {
+        if (is_callable([$this->variation_data_store, $method])) {
             $object = array_shift($args);
-            $args   = array_merge(array( &$object ), $args);
+            $args = array_merge([&$object], $args);
+
             return $this->variation_data_store->$method(...$args);
         }
     }
@@ -254,6 +262,7 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
      * @since 1.6
      *
      * @param array $args The terms query arguments.
+     *
      * @return array
      */
     public function get_terms_args($args)
@@ -262,17 +271,17 @@ class PLLWC_Variation_Data_Store_CPT implements WC_Object_Data_Store_Interface
             return $args;
         }
 
-        if (! isset($args['taxonomy']) || empty($args['slug']) || count($args['taxonomy']) !== 1 || 0 !== strpos(reset($args['taxonomy']), 'pa_')) {
+        if (!isset($args['taxonomy']) || empty($args['slug']) || count($args['taxonomy']) !== 1 || 0 !== strpos(reset($args['taxonomy']), 'pa_')) {
             return $args;
         }
 
         // These arguments are all added by `get_term_by()`. Having them all should help us detecting the usage of this function.
-        $get_terms_by_args = array(
+        $get_terms_by_args = [
             'get'                    => 'all',
             'number'                 => 1,
             'update_term_meta_cache' => false,
             'orderby'                => 'none',
-        );
+        ];
 
         if (array_diff_assoc($get_terms_by_args, $args)) {
             return $args;
