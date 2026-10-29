@@ -1,6 +1,6 @@
 # wp-theme
 
-Lightweight WordPress starter theme built with [Timber 2](https://timber.github.io/docs/), Twig and Vite. It keeps a familiar WordPress request lifecycle while providing controllers, Twig views, Carbon Fields examples and a small asset pipeline.
+Lightweight WordPress starter theme built with [Timber 2](https://timber.github.io/docs/v2/), Twig and Vite. It keeps a familiar WordPress request lifecycle while providing controllers, Twig views, Carbon Fields examples and a small asset pipeline.
 
 ## Requirements
 
