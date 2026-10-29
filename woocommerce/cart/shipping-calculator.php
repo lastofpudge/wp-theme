@@ -42,7 +42,7 @@ do_action('woocommerce_before_shipping_calculator'); ?>
 		<?php if (apply_filters('woocommerce_shipping_calculator_enable_state', true)) : ?>
 			<p class="form-row form-row-wide" id="calc_shipping_state_field">
 				<?php
-                $current_cc = WC()->customer->get_shipping_country();
+		        $current_cc = WC()->customer->get_shipping_country();
 		    $current_r  = WC()->customer->get_shipping_state();
 		    $states     = WC()->countries->get_states($current_cc);
 

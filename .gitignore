@@ -2,7 +2,6 @@
 /node_modules
 /.idea
 .env
-composer.lock
 npm-debug.log
 CLAUDE.md
 docs

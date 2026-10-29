@@ -1,8 +1,7 @@
 {
   "name": "theme/blank",
   "type": "wp-theme",
-  "version": "2.0.21",
-  "description": "Wordpress starter theme with Timber/Twig",
+  "description": "WooCommerce WordPress starter theme with Timber, Twig, and Vite",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
@@ -30,8 +29,8 @@
     "timber/timber": "^2.2",
     "twig/twig": "^3.14",
     "wp-theme/core": "^1.0.4",
-    "wpackagist-plugin/all-in-one-wp-migration": "*",
-    "wpackagist-plugin/wordpress-seo": "*"
+    "wpackagist-plugin/all-in-one-wp-migration": "^7.113",
+    "wpackagist-plugin/wordpress-seo": "^28.8"
   },
   "autoload": {
     "psr-4": {
@@ -61,8 +60,7 @@
   "scripts": {
     "pint": "pint --preset psr12",
     "test": [
-      "@pint",
-      "npm run lint"
+      "pint --test --preset psr12"
     ]
   },
   "extra": {
