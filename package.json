@@ -13,8 +13,8 @@
     "format": "prettier --write resources/assets/src/**/*.{js,scss}"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "eslint": "^9.18.0",
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.0.0",
     "eslint-config-prettier": "^9.1.0",
     "git-commit-msg-linter": "^5.0.8",
     "glob": "^13.0.0",
