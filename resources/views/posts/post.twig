@@ -3,7 +3,7 @@
 {% block content %}
     <div class="post-wrap" id="post-{{ post.ID }}">
         {% if fn('function_exists', 'yoast_breadcrumb') %}
-            {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', true ) }}
+            {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">', '</nav>', true) }}
         {% endif %}
 
         <h1>
@@ -11,7 +11,7 @@
         </h1>
 
         {% if post.thumbnail.src %}
-            <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt='' />
+            <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt=''/>
         {% endif %}
 
         {{ post.content }}

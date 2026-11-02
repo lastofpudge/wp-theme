@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html {{ site.language_attributes|raw }} dir="ltr">
-<head>
-    {% include 'components/head.twig' %}
-</head>
-<body class="{{ body_class|e('html_attr') }}">
-<div class="preloader-main js-preloader-main"></div>
-{% include 'components/header.twig' %}
+    <head>
+        {% include 'components/head.twig' %}
+    </head>
+    <body class="{{ body_class|e('html_attr') }}">
+        {{ fn('wp_body_open') }}
+        <div class="preloader-main js-preloader-main"></div>
+        {% include 'components/header.twig' %}
 
-<div class="wrapper">
-    {% block content %}
-    {% endblock %}
-</div>
+        <div class="wrapper">
+            {% block content %}
+            {% endblock %}
+        </div>
 
-{% block modals %}
-    {% include 'components/modals.twig' %}
-{% endblock %}
+        {% block modals %}
+            {% include 'components/modals.twig' %}
+        {% endblock %}
 
-{% block footer %}
-    {% include 'components/footer.twig' %}
-    {{ fn('wp_footer') }}
-{% endblock %}
-</body>
+        {% block footer %}
+            {% include 'components/footer.twig' %}
+            {{ fn('wp_footer') }}
+        {% endblock %}
+    </body>
 </html>
 

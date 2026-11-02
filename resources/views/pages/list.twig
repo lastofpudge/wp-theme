@@ -8,7 +8,7 @@
             </h2>
 
             {% if post.thumbnail %}
-                <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}" />
+                <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}"/>
             {% else %}
                 {{ post.excerpt({ words: 20, read_more: '' }) }}
             {% endif %}

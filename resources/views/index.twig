@@ -9,8 +9,12 @@
             <h2>
                 Contact form </h2>
 
-            <form method="POST"
-                  class="contact-form js-contact-form" accept-charset="utf-8" autocomplete="on">
+            <form
+                method="POST"
+                class="contact-form js-contact-form"
+                accept-charset="utf-8"
+                autocomplete="on"
+            >
                 <div class="form-group">
                     <label for="contact-name">Name *
                         <input id="contact-name" name="name" type="text" placeholder="Name" required maxlength="100">
@@ -57,7 +61,7 @@
             </form>
 
             {% if user %}
-                <a href="{{ fn('wp_logout_url', "/" ) }}">Log out</a>
+                <a href="{{ fn('wp_logout_url', "/") }}">Log out</a>
             {% endif %}
         </div>
     </div>

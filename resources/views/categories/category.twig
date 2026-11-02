@@ -6,7 +6,7 @@
     </p>
 
     {% if fn('function_exists', 'yoast_breadcrumb') %}
-        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">','</nav>', false ) }}
+        {{ fn('yoast_breadcrumb', '<nav id="breadcrumbs" class="main-breadcrumbs">', '</nav>', false) }}
     {% endif %}
 
     {% for post in posts %}
@@ -21,10 +21,12 @@
                 </time>
             </p>
             {% if post.thumbnail %}
-                <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}" />
+                <img src="{{ post.thumbnail.src }}" srcset="{{ post.thumbnail.srcset }}" alt="{{ post.title }}"/>
             {% else %}
-                <img src="{{ theme.path }}/resources/assets/dist/images/placeholders/no-image-default.png"
-                     alt="" />
+                <img
+                    src="{{ theme.path }}/resources/assets/dist/images/placeholders/no-image-default.png"
+                    alt=""
+                />
             {% endif %}
             <div class="clear">
                 {{ post.excerpt({ words: 20, read_more: '' }) }}
