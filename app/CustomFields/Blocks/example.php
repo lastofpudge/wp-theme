@@ -5,7 +5,7 @@ use Carbon_Fields\Field;
 
 wp_register_style(
     'crb-my-shiny-gutenberg-block-stylesheet',
-    get_stylesheet_directory_uri().'../app/CustomFields/Blocks/example.css'
+    get_theme_file_uri('/resources/assets/src/styles/blocks/example.css')
 );
 
 Block::make(__('My Gutenberg Block'))

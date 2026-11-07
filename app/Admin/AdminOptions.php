@@ -14,7 +14,8 @@ class AdminOptions
         new SmtpConfig();
 
         $this->index();
-        $this->manageAdminAccess();
+        add_action('admin_init', [$this, 'manageAdminAccess']);
+        add_filter('show_admin_bar', static fn ($show) => current_user_can('manage_options') && $show);
         add_action('init', [$this, 'registerMenus']);
         add_action('pre_get_posts', [$this, 'filterByPrice']);
         add_action('pre_get_posts', [$this, 'filterByCategory']);
@@ -36,11 +37,7 @@ class AdminOptions
 
     public function manageAdminAccess(): void
     {
-        if (!current_user_can('administrator')) {
-            show_admin_bar(false);
-        }
-
-        if (!current_user_can('administrator') && is_admin() && !wp_doing_ajax()) {
+        if (!current_user_can('manage_options') && is_admin() && !wp_doing_ajax()) {
             wp_safe_redirect(home_url());
             exit;
         }

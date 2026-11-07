@@ -40,7 +40,12 @@ if (function_exists('is_account_page') && is_account_page()) {
     Route::load(AccountController::class, 'account', 'woocommerce/account');
 }
 
-if (is_category() || is_tag() || is_search()) {
+if (is_home() || is_archive() || is_search()) {
+    if (is_author()) {
+        wp_safe_redirect(home_url(), 301);
+        exit;
+    }
+
     Route::load(CategoryController::class, 'index', 'categories/category');
 }
 
@@ -58,9 +63,4 @@ if (is_page() && !is_cart() && !is_checkout() && !is_account_page()) {
 
 if (is_404()) {
     Route::view('pages/404');
-}
-
-if (is_author()) {
-    wp_safe_redirect(home_url(), 301);
-    exit;
 }
