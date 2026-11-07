@@ -1,8 +1,22 @@
 <?php
 
-if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+if (!wp_verify_nonce(is_string($_POST['nonce'] ?? null) ? wp_unslash($_POST['nonce']) : '', 'ajax-nonce')) {
     wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
 }
+
+// Use the direct peer address: forwarded headers can be forged by visitors.
+$address = $_SERVER['REMOTE_ADDR'] ?? '';
+$rateKey = 'theme_contact_'.hash_hmac('sha256', $address, wp_salt('nonce'));
+$attempts = get_transient($rateKey);
+if (!is_array($attempts) || ($attempts['expires'] ?? 0) <= time()) {
+    $attempts = ['count' => 0, 'expires' => time() + 10 * MINUTE_IN_SECONDS];
+}
+if ($attempts['count'] >= 5) {
+    header('Retry-After: '.max(1, $attempts['expires'] - time()));
+    wp_send_json(['type' => 'error', 'message' => 'Too many requests. Please try again later.'], 429);
+}
+$attempts['count']++;
+set_transient($rateKey, $attempts, max(1, $attempts['expires'] - time()));
 
 $name = sanitize_text_field($_POST['name'] ?? '');
 $mail = sanitize_email($_POST['mail'] ?? '');

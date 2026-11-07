@@ -5,7 +5,12 @@ use App\Controllers\PageController;
 use App\Controllers\PostController;
 use Core\Route;
 
-if (is_category() || is_tag() || is_search()) {
+if (is_home() || is_archive() || is_search()) {
+    if (is_author()) {
+        wp_safe_redirect(home_url(), 301);
+        exit;
+    }
+
     Route::load(CategoryController::class, 'index', 'categories/category');
 }
 
@@ -23,9 +28,4 @@ if (is_page()) {
 
 if (is_404()) {
     Route::view('pages/404');
-}
-
-if (is_author()) {
-    wp_redirect(home_url(), 301);
-    exit;
 }

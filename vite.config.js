@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import { resolve, dirname } from 'path'
+import { resolve, dirname, relative } from 'path'
 import { fileURLToPath } from 'url'
 import { copyFileSync, existsSync, mkdirSync } from 'fs'
 import { globSync } from 'glob'
@@ -26,7 +26,7 @@ export default defineConfig({
 
         const files = globSync(`${srcDir}/**/*`, { nodir: true })
         files.forEach(file => {
-          const relativePath = file.replace(srcDir + '/', '')
+          const relativePath = relative(srcDir, file)
           const destFile = `${destDir}/${relativePath}`
           const destFileDir = dirname(destFile)
 
@@ -41,7 +41,7 @@ export default defineConfig({
   ],
   build: {
     outDir: 'resources/assets/dist',
-    emptyOutDir: false,
+    emptyOutDir: true,
     cssMinify: 'lightningcss',
     rollupOptions: {
       input: {

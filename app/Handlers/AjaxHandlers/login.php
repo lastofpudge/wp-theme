@@ -1,6 +1,6 @@
 <?php
 
-if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+if (!wp_verify_nonce(is_string($_POST['nonce'] ?? null) ? wp_unslash($_POST['nonce']) : '', 'ajax-nonce')) {
     wp_send_json(['type' => 'error', 'message' => 'nonce_error']);
 }
 
@@ -26,7 +26,7 @@ $user = wp_signon($credentials, false);
 if (is_wp_error($user)) {
     wp_send_json([
         'type'    => 'error',
-        'message' => json_decode($user->get_error_message()),
+        'message' => wp_strip_all_tags($user->get_error_message()),
     ]);
 }
 
