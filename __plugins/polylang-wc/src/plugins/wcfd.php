@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with Checkout Field Editor for WooCommerce.
  * Version tested: 1.4.2.
  *
@@ -17,11 +13,11 @@ class PLLWC_WCFD
      *
      * @var array
      */
-    protected static $options = array(
+    protected static $options = [
         'wc_fields_additional',
         'wc_fields_billing',
         'wc_fields_shipping',
-    );
+    ];
 
     /**
      * Constructor.
@@ -33,13 +29,13 @@ class PLLWC_WCFD
     {
         if (PLL() instanceof PLL_Frontend) {
             foreach (self::$options as $option) {
-                add_filter('option_' . $option, array( $this, 'translate_fields' ));
+                add_filter('option_'.$option, [$this, 'translate_fields']);
             }
         }
 
         // Strings translations.
-        add_filter('pll_sanitize_string_translation', array( $this, 'sanitize_strings' ), 10, 3);
-        add_action('init', array( $this, 'register_strings' ));
+        add_filter('pll_sanitize_string_translation', [$this, 'sanitize_strings'], 10, 3);
+        add_action('init', [$this, 'register_strings']);
     }
 
     /**
@@ -48,18 +44,19 @@ class PLLWC_WCFD
      * @since 1.3
      *
      * @param array $fields List of fields.
+     *
      * @return array
      */
     public function translate_fields($fields)
     {
         if (is_array($fields)) {
             foreach ($fields as $name => $field) {
-                if (! empty($field['label'])) {
-                    $fields[ $name ]['label'] = pll__($field['label']);
+                if (!empty($field['label'])) {
+                    $fields[$name]['label'] = pll__($field['label']);
                 }
 
-                if (! empty($field['placeholder'])) {
-                    $fields[ $name ]['placeholder'] = pll__($field['placeholder']);
+                if (!empty($field['placeholder'])) {
+                    $fields[$name]['placeholder'] = pll__($field['placeholder']);
                 }
             }
         }
@@ -81,11 +78,11 @@ class PLLWC_WCFD
 
             if (is_array($fields)) {
                 foreach ($fields as $name => $field) {
-                    if (! empty($field['label'])) {
+                    if (!empty($field['label'])) {
                         pll_register_string(sprintf(__('Label', 'polylang-wc'), $name), $field['label'], 'Checkout Field Editor');
                     }
 
-                    if (! empty($field['placeholder'])) {
+                    if (!empty($field['placeholder'])) {
                         pll_register_string(sprintf(__('Placeholder', 'polylang-wc'), $name), $field['placeholder'], 'Checkout Field Editor');
                     }
                 }
@@ -94,13 +91,14 @@ class PLLWC_WCFD
     }
 
     /**
-     * Translated strings must be sanitized the same way Checkout Field Editor for WooCommerce does before they are saved
+     * Translated strings must be sanitized the same way Checkout Field Editor for WooCommerce does before they are saved.
      *
      * @since 1.3
      *
      * @param string $translation The string translation.
      * @param string $name        The name as defined in pll_register_string.
      * @param string $context     The context as defined in pll_register_string.
+     *
      * @return string Sanitized translation.
      */
     public function sanitize_strings($translation, $name, $context)

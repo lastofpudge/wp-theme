@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 use Automattic\WooCommerce\Packages;
 
 /**
@@ -118,7 +114,7 @@ class PLLWC_Plugins_Compat
      */
     protected function __construct()
     {
-        add_action('pllwc_init', array( $this, 'init' ));
+        add_action('pllwc_init', [$this, 'init']);
     }
 
     /**
@@ -132,7 +128,7 @@ class PLLWC_Plugins_Compat
     {
         if (is_admin()) {
             // WooCommerce Stock Manager + WooCommerce Bulk Stock Management.
-            if (isset($_GET['page']) && in_array(sanitize_key($_GET['page']), array( 'stock-manager', 'woocommerce-bulk-stock-management' ))) {  // phpcs:ignore WordPress.Security.NonceVerification
+            if (isset($_GET['page']) && in_array(sanitize_key($_GET['page']), ['stock-manager', 'woocommerce-bulk-stock-management'])) {  // phpcs:ignore WordPress.Security.NonceVerification
                 $this->stock_manager = new PLLWC_Stock_Manager();
             }
 
@@ -190,16 +186,16 @@ class PLLWC_Plugins_Compat
         }
 
         // special case for WC brands.
-        add_action('plugins_loaded', array( $this, 'init_wc_brand' ), 20);
+        add_action('plugins_loaded', [$this, 'init_wc_brand'], 20);
 
         // Special case for Checkout Field Editor which defines constant in a function hooked to 'init'.
-        add_action('init', array( $this, 'maybe_init_wcfd' ), 20);
+        add_action('init', [$this, 'maybe_init_wcfd'], 20);
 
         // WC Free Gift Coupons initializes itself after us.
-        add_action('init', array( $this, 'maybe_init_fgc' ));
+        add_action('init', [$this, 'maybe_init_fgc']);
 
         // WC Mix and Match Products initializes itself after us.
-        add_action('init', array( $this, 'maybe_init_mnm' ));
+        add_action('init', [$this, 'maybe_init_mnm']);
     }
 
     /**
@@ -214,10 +210,11 @@ class PLLWC_Plugins_Compat
         if (defined('WC_BRANDS_VERSION')) {
             // Backward compatibility with WC < 9.4, before it is merged into WC's core.
             $this->brands = new PLLWC_Brands();
+
             return;
         }
 
-        if (! method_exists(Packages::class, 'is_package_enabled') || ! Packages::is_package_enabled('woocommerce-brands')) {
+        if (!method_exists(Packages::class, 'is_package_enabled') || !Packages::is_package_enabled('woocommerce-brands')) {
             // The method `Packages::is_package_enabled()` was introduced in WC 9.4.
             return;
         }

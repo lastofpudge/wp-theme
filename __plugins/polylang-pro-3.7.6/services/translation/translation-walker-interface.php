@@ -1,11 +1,7 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
- * Class PLL_Translation_Walker_Interface
+ * Class PLL_Translation_Walker_Interface.
  *
  * Define interface for classes that iterate over content.
  *
@@ -19,6 +15,7 @@ interface PLL_Translation_Walker_Interface
      * @since 3.3
      *
      * @param callable $callback A callback function.
+     *
      * @return string The content (potentially) modified by the callback.
      */
     public function walk($callback);

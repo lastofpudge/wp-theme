@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 use PLL_Language;
@@ -28,16 +24,17 @@ class Copy extends Abstract_Strategy
      * @param mixed           $value  Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   {
-     *      Array of arguments.
+     *                                Array of arguments.
      *
-     *      @type PLL_Language $target_language Optional. The language object of the target object.
-     *      @type PLL_Language $source_language Optional. The language object of the source object.
-     * }
+     * @var PLL_Language $target_language Optional. The language object of the target object.
+     * @var PLL_Language $source_language Optional. The language object of the source object.
+     *                   }
+     *
      * @return mixed Custom field value of the target object.
      */
-    protected function apply(Abstract_Object $object, $value, array $field, array $args = array())
+    protected function apply(Abstract_Object $object, $value, array $field, array $args = [])
     {
-        if (! isset($args['target_language']) || ! $args['target_language'] instanceof PLL_Language) {
+        if (!isset($args['target_language']) || !$args['target_language'] instanceof PLL_Language) {
             return $value;
         }
 
@@ -55,12 +52,12 @@ class Copy extends Abstract_Strategy
                 break;
             case 'post_object':
             case 'relationship':
-                if (is_array($value) || (is_numeric($value) && ! is_float($value))) {
+                if (is_array($value) || (is_numeric($value) && !is_float($value))) {
                     $value = $this->translate_post($value, $args['target_language']);
                 }
                 break;
             case 'taxonomy':
-                if (! is_array($value) && ! (is_numeric($value) && ! is_float($value))) {
+                if (!is_array($value) && !(is_numeric($value) && !is_float($value))) {
                     break;
                 }
                 if (pll_is_translated_taxonomy($field['taxonomy'])) {
@@ -79,7 +76,6 @@ class Copy extends Abstract_Strategy
                         null,
                         $args['target_language']
                     );
-
                 }
                 break;
         }
@@ -94,18 +90,18 @@ class Copy extends Abstract_Strategy
      *
      * @param mixed $value Custom field value of the source object.
      * @param array $field Custom field definition.
-     * @param array $args {
-     *      Array of arguments.
+     * @param array $args  {
+     *                     Array of arguments.
      *
-     *      @type PLL_Language $source_language Optional. The language object of the source object.
-     *      @type mixed        $original_value  Optional. The translated value of the field, if any.
-     * }
+     * @var PLL_Language $source_language Optional. The language object of the source object.
+     * @var mixed        $original_value  Optional. The translated value of the field, if any.
+     *                   }
      *
      * @return mixed Custom field value of the target object.
      */
-    protected function maybe_translate_field_default_value($value, array $field, array $args = array())
+    protected function maybe_translate_field_default_value($value, array $field, array $args = [])
     {
-        if (! isset($field['pll_default_value'], $args['source_language']) || ! $args['source_language'] instanceof PLL_Language) {
+        if (!isset($field['pll_default_value'], $args['source_language']) || !$args['source_language'] instanceof PLL_Language) {
             return $value;
         }
 
@@ -120,6 +116,7 @@ class Copy extends Abstract_Strategy
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return bool
      */
     protected function can_execute_recursive(array $field): bool
@@ -138,6 +135,7 @@ class Copy extends Abstract_Strategy
      *
      * @param int          $value Custom field value of the source object.
      * @param PLL_Language $lang  Language object of the target object.
+     *
      * @return int Custom field value of the target object.
      */
     protected function translate_media(int $value, PLL_Language $lang): int
@@ -158,14 +156,16 @@ class Copy extends Abstract_Strategy
      *
      * @param int[]        $values Custom field value of the source object.
      * @param PLL_Language $lang   Language object of the target object.
+     *
      * @return string[] Custom field value of the target object.
      *
      * @phpstan-param array<int|numeric-string> $values
+     *
      * @phpstan-return list<numeric-string>
      */
     protected function translate_gallery(array $values, PLL_Language $lang): array
     {
-        $return = array();
+        $return = [];
 
         foreach ($values as $value) {
             $return[] = $this->translate_media((int) $value, $lang);
@@ -182,9 +182,11 @@ class Copy extends Abstract_Strategy
      *
      * @param int|int[]    $value Custom field value of the source object.
      * @param PLL_Language $lang  Language object of the target object.
+     *
      * @return int|string[] Custom field value of the target object.
      *
      * @phpstan-param int|numeric-string|array<int|numeric-string> $value
+     *
      * @phpstan-return (
      *     $value is array ? list<numeric-string> : int
      * )
@@ -192,10 +194,10 @@ class Copy extends Abstract_Strategy
     protected function translate_post($value, PLL_Language $lang)
     {
         if (is_numeric($value)) {
-            $value     = (int) $value;
+            $value = (int) $value;
             $post_type = get_post_type($value);
 
-            if (! $post_type || ! pll_is_translated_post_type($post_type)) {
+            if (!$post_type || !pll_is_translated_post_type($post_type)) {
                 // Same ID for not-translated languages.
                 return $value;
             }
@@ -204,10 +206,11 @@ class Copy extends Abstract_Strategy
         }
 
         if (is_array($value)) {
-            $return = array();
+            $return = [];
             foreach ($value as $id) {
                 $return[] = $this->translate_post($id, $lang);
             }
+
             /** @phpstan-var list<numeric-string> */
             return array_map('strval', $return); // See the method update_value() for these fields.
         }
@@ -223,9 +226,11 @@ class Copy extends Abstract_Strategy
      *
      * @param int|int[]    $value Custom field value of the source object.
      * @param PLL_Language $lang  Language object of the target object.
+     *
      * @return int|int[] Custom field value of the target object.
      *
      * @phpstan-param int|numeric-string|array<int|numeric-string> $value
+     *
      * @phpstan-return (
      *     $value is array ? list<int> : int
      * )
@@ -237,10 +242,11 @@ class Copy extends Abstract_Strategy
         }
 
         if (is_array($value)) {
-            $return = array();
+            $return = [];
             foreach ($value as $id) {
                 $return[] = $this->translate_term($id, $lang);
             }
+
             return $return;
         }
 
@@ -255,6 +261,7 @@ class Copy extends Abstract_Strategy
      *
      * @param int|string|(int|string)[] $value Custom field value of the source object.
      * @param PLL_Language              $lang  Language slug of the target object.
+     *
      * @return int|string|string[] Custom field value of the target object.
      */
     protected function translate_page_link($value, PLL_Language $lang)
@@ -265,7 +272,7 @@ class Copy extends Abstract_Strategy
 
         if (is_array($value)) {
             // Multiple choices.
-            $return = array();
+            $return = [];
             foreach ($value as $p) {
                 if (is_numeric($p)) {
                     $return[] = (int) pll_get_post((int) $p, $lang);
@@ -273,6 +280,7 @@ class Copy extends Abstract_Strategy
                     $return[] = $this->translate_cpt_archive_link($p, $lang); // Archive.
                 }
             }
+
             return array_map('strval', $return); // See `acf_field_page_link::update_value()`.
         }
 
@@ -287,6 +295,7 @@ class Copy extends Abstract_Strategy
      *
      * @param string       $link CPT archive link.
      * @param PLL_Language $lang Language object of the target object.
+     *
      * @return string Modified link.
      */
     protected function translate_cpt_archive_link(string $link, PLL_Language $lang): string
@@ -300,18 +309,19 @@ class Copy extends Abstract_Strategy
             $link = home_url('/');
         }
 
-        $show_on_front  = get_option('show_on_front');
+        $show_on_front = get_option('show_on_front');
         $page_for_posts = get_option('page_for_posts');
 
         if ('page' === $show_on_front && is_numeric($page_for_posts)) {
             // Gets `page_for_posts` URL of the target language.
             $post_archive_link = get_permalink($lang->page_for_posts);
-            return ! empty($post_archive_link) ? $post_archive_link : $link;
+
+            return !empty($post_archive_link) ? $post_archive_link : $link;
         }
 
         $link = PLL()->links_model->switch_language_in_link($link, $lang);
 
-        if (! isset(PLL()->translate_slugs)) {
+        if (!isset(PLL()->translate_slugs)) {
             return $link;
         }
 

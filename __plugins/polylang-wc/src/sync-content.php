@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Smart copies WooCommerce blocks.
  *
  * @since 1.2
@@ -19,7 +15,7 @@ class PLLWC_Sync_Content
      */
     public function __construct()
     {
-        add_filter('pll_translate_blocks', array( $this, 'translate_blocks' ), 10, 2);
+        add_filter('pll_translate_blocks', [$this, 'translate_blocks'], 10, 2);
     }
 
     /**
@@ -30,6 +26,7 @@ class PLLWC_Sync_Content
      *
      * @param array  $blocks An array of blocks arrays.
      * @param string $lang   Target language.
+     *
      * @return array
      */
     public function translate_blocks($blocks, $lang)
@@ -38,15 +35,15 @@ class PLLWC_Sync_Content
             switch ($block['blockName']) {
                 case 'woocommerce/handpicked-products':
                     $data_store = PLLWC_Data_Store::load('product_language');
-                    $products = array();
+                    $products = [];
 
                     foreach ($block['attrs']['products'] as $id) {
                         $products[] = $data_store->get($id, $lang);
                     }
 
-                    $blocks[ $k ]['attrs']['products'] = $products;
-                    $blocks[ $k ]['innerHTML']         = preg_replace('#ids="\d+(,\d+)*"#', 'ids="' . implode(',', $products) . '"', $block['innerHTML']);
-                    $blocks[ $k ]['innerContent'][0]   = $blocks[ $k ]['innerHTML'];
+                    $blocks[$k]['attrs']['products'] = $products;
+                    $blocks[$k]['innerHTML'] = preg_replace('#ids="\d+(,\d+)*"#', 'ids="'.implode(',', $products).'"', $block['innerHTML']);
+                    $blocks[$k]['innerContent'][0] = $blocks[$k]['innerHTML'];
                     break;
 
                 case 'woocommerce/product-category':
@@ -54,30 +51,30 @@ class PLLWC_Sync_Content
                 case 'woocommerce/product-new':
                 case 'woocommerce/product-top-rated':
                 case 'woocommerce/product-on-sale':
-                    if (! empty($block['attrs']['categories'])) {
-                        $categories = array();
+                    if (!empty($block['attrs']['categories'])) {
+                        $categories = [];
 
                         foreach ($block['attrs']['categories'] as $id) {
                             $categories[] = pll_get_term($id, $lang);
                         }
 
-                        $blocks[ $k ]['attrs']['categories'] = $categories;
-                        $blocks[ $k ]['innerHTML']           = preg_replace('#category="\d+(,\d+)*"#', 'category="' . implode(',', $categories) . '"', $block['innerHTML']);
-                        $blocks[ $k ]['innerContent'][0]     = $blocks[ $k ]['innerHTML'];
+                        $blocks[$k]['attrs']['categories'] = $categories;
+                        $blocks[$k]['innerHTML'] = preg_replace('#category="\d+(,\d+)*"#', 'category="'.implode(',', $categories).'"', $block['innerHTML']);
+                        $blocks[$k]['innerContent'][0] = $blocks[$k]['innerHTML'];
                     }
                     break;
 
                 case 'woocommerce/products-by-attribute':
-                    $terms = array();
+                    $terms = [];
 
                     foreach ($block['attrs']['attributes'] as $n => $attributes) {
                         $tr_id = pll_get_term($attributes['id'], $lang);
-                        $blocks[ $k ]['attrs']['attributes'][ $n ]['id'] = $tr_id;
+                        $blocks[$k]['attrs']['attributes'][$n]['id'] = $tr_id;
                         $terms[] = $tr_id;
                     }
 
-                    $blocks[ $k ]['innerHTML']       = preg_replace('#terms="\d+(,\d+)*"#', 'terms="' . implode(',', $terms) . '"', $block['innerHTML']);
-                    $blocks[ $k ]['innerContent'][0] = $blocks[ $k ]['innerHTML'];
+                    $blocks[$k]['innerHTML'] = preg_replace('#terms="\d+(,\d+)*"#', 'terms="'.implode(',', $terms).'"', $block['innerHTML']);
+                    $blocks[$k]['innerContent'][0] = $blocks[$k]['innerHTML'];
                     break;
 
                 case 'woocommerce/featured-product':
@@ -86,7 +83,7 @@ class PLLWC_Sync_Content
                     }
 
                     $data_store = PLLWC_Data_Store::load('product_language');
-                    $tr_id      = $data_store->get($block['attrs']['productId'], $lang);
+                    $tr_id = $data_store->get($block['attrs']['productId'], $lang);
 
                     if (empty($tr_id)) {
                         break;
@@ -98,16 +95,16 @@ class PLLWC_Sync_Content
                         break;
                     }
 
-                    $blocks[ $k ]['attrs']['productId'] = $tr_id;
+                    $blocks[$k]['attrs']['productId'] = $tr_id;
 
                     $tr_link = $product->get_permalink();
 
-                    if (empty($tr_link) || ! is_string($tr_link)) {
+                    if (empty($tr_link) || !is_string($tr_link)) {
                         break;
                     }
 
                     // Translates the URL in the button.
-                    $this->translate_button_link($blocks[ $k ]['innerBlocks'][0], $tr_link);
+                    $this->translate_button_link($blocks[$k]['innerBlocks'][0], $tr_link);
                     break;
 
                 case 'woocommerce/featured-category':
@@ -121,16 +118,16 @@ class PLLWC_Sync_Content
                         break;
                     }
 
-                    $blocks[ $k ]['attrs']['categoryId'] = $tr_id;
+                    $blocks[$k]['attrs']['categoryId'] = $tr_id;
 
                     $tr_link = get_term_link($tr_id);
 
-                    if (empty($tr_link) || ! is_string($tr_link)) {
+                    if (empty($tr_link) || !is_string($tr_link)) {
                         break;
                     }
 
                     // Translates the URL in the button.
-                    $this->translate_button_link($blocks[ $k ]['innerBlocks'][0], $tr_link);
+                    $this->translate_button_link($blocks[$k]['innerBlocks'][0], $tr_link);
                     break;
 
                 case 'woocommerce/reviews-by-product':
@@ -138,13 +135,13 @@ class PLLWC_Sync_Content
 
                     $tr_id = $data_store->get($block['attrs']['productId'], $lang);
 
-                    $blocks[ $k ]['attrs']['productId'] = $tr_id;
-                    $blocks[ $k ]['innerHTML']          = preg_replace('#data-product-id="\d+"#', 'data-product-id="' . $tr_id . '"', $block['innerHTML']);
-                    $blocks[ $k ]['innerContent'][0]    = $blocks[ $k ]['innerHTML'];
+                    $blocks[$k]['attrs']['productId'] = $tr_id;
+                    $blocks[$k]['innerHTML'] = preg_replace('#data-product-id="\d+"#', 'data-product-id="'.$tr_id.'"', $block['innerHTML']);
+                    $blocks[$k]['innerContent'][0] = $blocks[$k]['innerHTML'];
                     break;
 
                 case 'woocommerce/reviews-by-category':
-                    $categories = array();
+                    $categories = [];
 
                     foreach ($block['attrs']['categoryIds'] as $id) {
                         $tr_id = pll_get_term($id, $lang);
@@ -153,15 +150,15 @@ class PLLWC_Sync_Content
                         }
                     }
 
-                    if (! empty($categories)) {
-                        $blocks[ $k ]['attrs']['categoryIds'] = $categories;
-                        $blocks[ $k ]['innerHTML']            = preg_replace('#data-category-ids="\d+(,\d+)*"#', 'data-category-ids="' . implode(',', $categories) . '"', $block['innerHTML']);
-                        $blocks[ $k ]['innerContent'][0]      = $blocks[ $k ]['innerHTML'];
+                    if (!empty($categories)) {
+                        $blocks[$k]['attrs']['categoryIds'] = $categories;
+                        $blocks[$k]['innerHTML'] = preg_replace('#data-category-ids="\d+(,\d+)*"#', 'data-category-ids="'.implode(',', $categories).'"', $block['innerHTML']);
+                        $blocks[$k]['innerContent'][0] = $blocks[$k]['innerHTML'];
                     }
                     break;
 
                 case 'woocommerce/product-tag':
-                    $tags = array();
+                    $tags = [];
 
                     foreach ($block['attrs']['tags'] as $id) {
                         $tr_id = pll_get_term($id, $lang);
@@ -170,8 +167,8 @@ class PLLWC_Sync_Content
                         }
                     }
 
-                    if (! empty($tags)) {
-                        $blocks[ $k ]['attrs']['tags'] = $tags;
+                    if (!empty($tags)) {
+                        $blocks[$k]['attrs']['tags'] = $tags;
                     }
                     break;
             }
@@ -187,11 +184,12 @@ class PLLWC_Sync_Content
      *
      * @param array  $innerblock The block to search into and to modify.
      * @param string $link       The translated link for replacing.
+     *
      * @return void
      */
     private function translate_button_link(array &$innerblock, string $link)
     {
-        if (! empty($innerblock['innerBlocks'])) {
+        if (!empty($innerblock['innerBlocks'])) {
             $this->translate_link($innerblock['innerBlocks'][0], $link); // Since WC 6.4.0.
         } else {
             $this->translate_link($innerblock, $link); // If the block was created in WC < 6.4.0.
@@ -205,6 +203,7 @@ class PLLWC_Sync_Content
      *
      * @param array  $innerblock The block to search into and to modify.
      * @param string $link       The translated link for replacing.
+     *
      * @return void
      */
     private function translate_link(array &$innerblock, string $link)
@@ -219,7 +218,7 @@ class PLLWC_Sync_Content
 
         $href = $tags[0]->getAttribute('href');
 
-        $innerblock['innerHTML']       = str_replace($href, $link, $innerblock['innerHTML']);
+        $innerblock['innerHTML'] = str_replace($href, $link, $innerblock['innerHTML']);
         $innerblock['innerContent'][0] = $innerblock['innerHTML'];
     }
 }

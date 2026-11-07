@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * A class to export languages and translations of products in CSV files.
  *
  * @since 0.8
@@ -19,8 +15,8 @@ class PLLWC_Product_Export
      */
     public function __construct()
     {
-        add_filter('woocommerce_product_export_product_default_columns', array( $this, 'default_columns' ));
-        add_filter('woocommerce_product_export_row_data', array( $this, 'row_data' ), 10, 2);
+        add_filter('woocommerce_product_export_product_default_columns', [$this, 'default_columns']);
+        add_filter('woocommerce_product_export_row_data', [$this, 'row_data'], 10, 2);
     }
 
     /**
@@ -30,16 +26,17 @@ class PLLWC_Product_Export
      * @since 0.8
      *
      * @param string[] $columns Columns to export.
+     *
      * @return string[]
      */
     public function default_columns($columns)
     {
         return array_merge(
             $columns,
-            array(
+            [
                 'language'     => __('Language', 'polylang-wc'),
                 'translations' => __('Translation group', 'polylang-wc'),
-            )
+            ]
         );
     }
 
@@ -51,6 +48,7 @@ class PLLWC_Product_Export
      *
      * @param array      $row     Data exported in a CSV row.
      * @param WC_Product $product Product.
+     *
      * @return array
      */
     public function row_data($row, $product)

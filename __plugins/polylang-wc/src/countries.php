@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Class managing countries, behaves like the WooCommerce one.
  *
  * @since 1.9.2
@@ -32,7 +28,7 @@ class PLLWC_Countries extends WC_Countries
      */
     public function get_countries()
     {
-        if (! PLL()->curlang instanceof PLL_Language) { // Do not hit the cache if current language is not defined yet.
+        if (!PLL()->curlang instanceof PLL_Language) { // Do not hit the cache if current language is not defined yet.
             return $this->read_countries();
         }
 
@@ -53,7 +49,7 @@ class PLLWC_Countries extends WC_Countries
     private function read_countries()
     {
         /** This filter is documented in woocommerce/include/class-wc-countries.php */
-        $countries = apply_filters('woocommerce_countries', include WC()->plugin_path() . '/i18n/countries.php'); // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingCustomFunction
+        $countries = apply_filters('woocommerce_countries', include WC()->plugin_path().'/i18n/countries.php'); // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingCustomFunction
         if (apply_filters('woocommerce_sort_countries', true)) {
             wc_asort_by_locale($countries);
         }

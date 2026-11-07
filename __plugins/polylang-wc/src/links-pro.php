@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Translates links (including endpoints) when the slugs are translatable.
  *
  * @since 0.1
@@ -32,9 +28,9 @@ class PLLWC_Links_Pro extends PLLWC_Links
         $this->slugs_model = PLL()->translate_slugs->slugs_model;
 
         // Endpoints slugs.
-        add_filter('pll_translated_slugs', array( $this, 'pll_translated_slugs' ), 10, 3);
-        add_filter('woocommerce_get_endpoint_url', array( $this, 'get_endpoint_url' ), 10, 2);
-        add_filter('woocommerce_edit_address_slugs', array( $this, 'edit_address_slugs' ));
+        add_filter('pll_translated_slugs', [$this, 'pll_translated_slugs'], 10, 3);
+        add_filter('woocommerce_get_endpoint_url', [$this, 'get_endpoint_url'], 10, 2);
+        add_filter('woocommerce_edit_address_slugs', [$this, 'edit_address_slugs']);
     }
 
     /**
@@ -58,10 +54,11 @@ class PLLWC_Links_Pro extends PLLWC_Links
          */
         $query_vars = apply_filters_deprecated(
             'pllwc_endpoints_query_vars',
-            array( WC()->query->get_query_vars() ),
+            [WC()->query->get_query_vars()],
             '2.0',
             'woocommerce_get_query_vars'
         );
+
         return array_filter((array) $query_vars);
     }
 
@@ -73,6 +70,7 @@ class PLLWC_Links_Pro extends PLLWC_Links
      * @param array        $slugs    The list of slugs.
      * @param PLL_Language $language Instance of PLL_Language.
      * @param PLL_MO       $mo       The translations object, instance of PLL_MO.
+     *
      * @return array
      */
     public function pll_translated_slugs($slugs, $language, &$mo)
@@ -86,19 +84,20 @@ class PLLWC_Links_Pro extends PLLWC_Links
             if ($slug) {
                 $slugs['product']['slug'] = $slug;
                 $tr_slug = $mo->translate($slug);
-                $slugs['product']['translations'][ $language->slug ] = empty($tr_slug) ? $slug : $tr_slug;
+                $slugs['product']['translations'][$language->slug] = empty($tr_slug) ? $slug : $tr_slug;
             } else {
                 unset($slugs['product']);
             }
         }
 
         $endpoints = $this->get_query_vars();
-        $endpoints = array_merge($endpoints, array( 'billing', 'shipping' )); // Adds edit-address slugs.
+        $endpoints = array_merge($endpoints, ['billing', 'shipping']); // Adds edit-address slugs.
         foreach ($endpoints as $slug) {
-            $slugs[ 'wc_' . $slug ]['slug'] = $slug;
+            $slugs['wc_'.$slug]['slug'] = $slug;
             $tr_slug = $mo->translate($slug);
-            $slugs[ 'wc_' . $slug ]['translations'][ $language->slug ] = empty($tr_slug) ? $slug : $tr_slug;
+            $slugs['wc_'.$slug]['translations'][$language->slug] = empty($tr_slug) ? $slug : $tr_slug;
         }
+
         return $slugs;
     }
 
@@ -115,8 +114,8 @@ class PLLWC_Links_Pro extends PLLWC_Links
     {
         parent::prepare_rewrite_rules();
 
-        if (! has_filter('page_rewrite_rules', array( $this, 'rewrite_translated_slug' ))) {
-            add_filter('page_rewrite_rules', array( $this, 'rewrite_translated_slug' ), 5);
+        if (!has_filter('page_rewrite_rules', [$this, 'rewrite_translated_slug'])) {
+            add_filter('page_rewrite_rules', [$this, 'rewrite_translated_slug'], 5);
         }
     }
 
@@ -127,13 +126,15 @@ class PLLWC_Links_Pro extends PLLWC_Links
      * @since 0.1
      *
      * @param string[] $rules Rewrite rules.
+     *
      * @return string[] modified rewrite rules.
      */
     public function rewrite_translated_slug($rules)
     {
         foreach ($this->get_query_vars() as $slug) {
-            $rules = $this->translate_rule($rules, 'wc_' . $slug);
+            $rules = $this->translate_rule($rules, 'wc_'.$slug);
         }
+
         return $rules;
     }
 
@@ -144,6 +145,7 @@ class PLLWC_Links_Pro extends PLLWC_Links
      *
      * @param string[] $rules Rewrite rules.
      * @param string   $type  Type of slug to translate.
+     *
      * @return string[] Modified rewrite rules.
      */
     public function translate_rule($rules, $type)
@@ -153,27 +155,28 @@ class PLLWC_Links_Pro extends PLLWC_Links
          * '/' replaced by '(/' in old and new
          * and the [1] which is not replaced
          */
-        if (empty($this->slugs_model->translated_slugs[ $type ])) {
+        if (empty($this->slugs_model->translated_slugs[$type])) {
             return $rules;
         }
 
-        $newrules = array();
+        $newrules = [];
 
-        $old = $this->slugs_model->translated_slugs[ $type ]['slug'] . '(/';
-        $new = '(' . implode('|', $this->slugs_model->translated_slugs[ $type ]['translations']) . ')(/';
+        $old = $this->slugs_model->translated_slugs[$type]['slug'].'(/';
+        $new = '('.implode('|', $this->slugs_model->translated_slugs[$type]['translations']).')(/';
 
         foreach ($rules as $key => $rule) {
             if (false !== $found = strpos($key, $old)) {
-                $new_key = 0 === $found ? str_replace($old, $new, $key) : str_replace('/' . $old, '/' . $new, $key);
-                $newrules[ $new_key ] = str_replace(
-                    array( '[8]', '[7]', '[6]', '[5]', '[4]', '[3]', '[2]' ),
-                    array( '[9]', '[8]', '[7]', '[6]', '[5]', '[4]', '[3]' ),
+                $new_key = 0 === $found ? str_replace($old, $new, $key) : str_replace('/'.$old, '/'.$new, $key);
+                $newrules[$new_key] = str_replace(
+                    ['[8]', '[7]', '[6]', '[5]', '[4]', '[3]', '[2]'],
+                    ['[9]', '[8]', '[7]', '[6]', '[5]', '[4]', '[3]'],
                     $rule
                 ); // Hopefully it is sufficient!
             } else {
-                $newrules[ $key ] = $rule;
+                $newrules[$key] = $rule;
             }
         }
+
         return $newrules;
     }
 
@@ -184,12 +187,14 @@ class PLLWC_Links_Pro extends PLLWC_Links
      *
      * @param string $link     Endpoint url.
      * @param string $endpoint Endpoint name.
+     *
      * @return string
      */
     public function get_endpoint_url($link, $endpoint)
     {
         $lang = PLL()->model->get_language(PLLWC_Admin::get_preferred_language()); // The function translate_slug expects the language object.
-        return $this->slugs_model->translate_slug($link, $lang, 'wc_' . $endpoint);
+
+        return $this->slugs_model->translate_slug($link, $lang, 'wc_'.$endpoint);
     }
 
     /**
@@ -198,17 +203,19 @@ class PLLWC_Links_Pro extends PLLWC_Links
      * @øince 0.1
      *
      * @param string[] $slugs Edit address endpoint slugs, typically 'billing' and 'shipping'.
+     *
      * @return string[]
      */
     public function edit_address_slugs($slugs)
     {
         foreach (array_keys($slugs) as $key) {
-            if (isset($this->slugs_model->translated_slugs[ 'wc_' . $key ]) && $lang = pll_current_language()) {
-                $slugs[ $key ] = rawurlencode($this->slugs_model->translated_slugs[ 'wc_' . $key ]['translations'][ $lang ]);
+            if (isset($this->slugs_model->translated_slugs['wc_'.$key]) && $lang = pll_current_language()) {
+                $slugs[$key] = rawurlencode($this->slugs_model->translated_slugs['wc_'.$key]['translations'][$lang]);
             } else {
-                $slugs[ $key ] = rawurlencode($key); // Don't rely on woocommerce mo file and accept translation only from our own system.
+                $slugs[$key] = rawurlencode($key); // Don't rely on woocommerce mo file and accept translation only from our own system.
             }
         }
+
         return $slugs;
     }
 
@@ -220,6 +227,7 @@ class PLLWC_Links_Pro extends PLLWC_Links
      *
      * @param string $url  Translation url.
      * @param string $lang Language slug.
+     *
      * @return string
      */
     public function pll_translation_url($url, $lang)
@@ -230,18 +238,18 @@ class PLLWC_Links_Pro extends PLLWC_Links
 
         $language = PLL()->model->get_language($lang);
         $endpoint = WC()->query->get_current_endpoint();
-        if (! $language || ! $endpoint) {
+        if (!$language || !$endpoint) {
             return $url;
         }
 
         $query_vars = WC()->query->get_query_vars();
 
-        $url = $this->slugs_model->switch_translated_slug($url, $language, 'wc_' . $query_vars[ $endpoint ]);
+        $url = $this->slugs_model->switch_translated_slug($url, $language, 'wc_'.$query_vars[$endpoint]);
 
         if ('edit-address' === $endpoint) {
-            $value = wc_edit_address_i18n($wp->query_vars[ $endpoint ], true);
+            $value = wc_edit_address_i18n($wp->query_vars[$endpoint], true);
             $url = trailingslashit($url);
-            $url = $this->slugs_model->switch_translated_slug($url, $language, 'wc_' . $value);
+            $url = $this->slugs_model->switch_translated_slug($url, $language, 'wc_'.$value);
         }
 
         return $url;

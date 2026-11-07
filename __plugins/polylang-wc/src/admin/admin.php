@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Helper methods used on admin.
  *
  * @since 0.6
@@ -23,14 +19,14 @@ class PLLWC_Admin
     public static function get_preferred_language()
     {
         // We rely on the admin language filter.
-        if (! empty(PLL()->curlang)) {
+        if (!empty(PLL()->curlang)) {
             return PLL()->curlang->slug;
         }
 
         // Or the current locale (admin language).
         $curlang = PLL()->model->get_language(get_user_locale());
 
-        if (! empty($curlang)) {
+        if (!empty($curlang)) {
             return $curlang->slug;
         }
 

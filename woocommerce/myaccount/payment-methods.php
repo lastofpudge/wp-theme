@@ -3,8 +3,8 @@
 defined('ABSPATH') || exit;
 
 $saved_methods = wc_get_customer_saved_methods_list(get_current_user_id());
-$has_methods   = (bool) $saved_methods;
-$columns       = wc_get_account_payment_methods_columns();
+$has_methods = (bool) $saved_methods;
+$columns = wc_get_account_payment_methods_columns();
 
 do_action('woocommerce_before_account_payment_methods', $has_methods);
 
@@ -13,8 +13,8 @@ foreach ($saved_methods as $type => $methods) {
     foreach ($methods as $method) {
         $cells = [];
         foreach ($columns as $column_id => $column_name) {
-            if (has_action('woocommerce_account_payment_methods_column_' . $column_id)) {
-                $content = capture_action('woocommerce_account_payment_methods_column_' . $column_id, $method);
+            if (has_action('woocommerce_account_payment_methods_column_'.$column_id)) {
+                $content = capture_action('woocommerce_account_payment_methods_column_'.$column_id, $method);
             } elseif ('method' === $column_id) {
                 if (!empty($method['method']['last4'])) {
                     $content = sprintf(

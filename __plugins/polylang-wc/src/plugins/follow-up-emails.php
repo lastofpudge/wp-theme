@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with Follow-Up Emails.
  * Version tested: 4.7.1.
  *
@@ -21,25 +17,25 @@ class PLLWC_Follow_Up_Emails
     public function __construct()
     {
         // Post types.
-        add_filter('pll_get_post_types', array( $this, 'translate_types' ), 10, 2);
+        add_filter('pll_get_post_types', [$this, 'translate_types'], 10, 2);
 
         // Synchronizations.
-        add_filter('pll_copy_taxonomies', array( $this, 'copy_taxonomies' ));
-        add_filter('pll_copy_post_metas', array( $this, 'copy_post_metas' ), 10, 3);
-        add_filter('pll_translate_post_meta', array( $this, 'translate_post_meta' ), 10, 4);
+        add_filter('pll_copy_taxonomies', [$this, 'copy_taxonomies']);
+        add_filter('pll_copy_post_metas', [$this, 'copy_post_metas'], 10, 3);
+        add_filter('pll_translate_post_meta', [$this, 'translate_post_meta'], 10, 4);
 
         // Filter emails.
-        add_action('parse_query', array( $this, 'parse_query' ), 5);
-        add_filter('fue_insert_email_order', array( $this, 'insert_email_order' ));
+        add_action('parse_query', [$this, 'parse_query'], 5);
+        add_filter('fue_insert_email_order', [$this, 'insert_email_order']);
 
         // Email preview.
         if (1 === PLL()->options['force_lang']) {
-            add_filter('fue_email_preview_url', array( $this, 'preview_url' ));
+            add_filter('fue_email_preview_url', [$this, 'preview_url']);
         }
 
         // Email language.
-        add_action('fue_before_email_send', array( $this, 'before_email_send' ), 10, 4);
-        add_action('fue_after_email_sent', array( PLLWC()->emails, 'after_email' ));
+        add_action('fue_before_email_send', [$this, 'before_email_send'], 10, 4);
+        add_action('fue_after_email_sent', [PLLWC()->emails, 'after_email']);
     }
 
     /**
@@ -50,11 +46,13 @@ class PLLWC_Follow_Up_Emails
      *
      * @param string[] $types List of post type names for which Polylang manages language and translations.
      * @param bool     $hide  True when displaying the list in Polylang settings.
+     *
      * @return string[] List of post type names for which Polylang manages language and translations.
      */
     public function translate_types($types, $hide)
     {
-        $fue_types = array( 'follow_up_email' );
+        $fue_types = ['follow_up_email'];
+
         return $hide ? array_diff($types, $fue_types) : array_merge($types, $fue_types);
     }
 
@@ -65,11 +63,12 @@ class PLLWC_Follow_Up_Emails
      * @since 0.9
      *
      * @param string[] $taxonomies List of taxonomies to Synchronize.
+     *
      * @return string[] Modified list of taxonomies.
      */
     public function copy_taxonomies($taxonomies)
     {
-        return array_merge($taxonomies, array( 'follow_up_email_type', 'follow_up_email_campaign' ));
+        return array_merge($taxonomies, ['follow_up_email_type', 'follow_up_email_campaign']);
     }
 
     /**
@@ -81,12 +80,13 @@ class PLLWC_Follow_Up_Emails
      * @param string[] $keys List of custom fields names.
      * @param bool     $sync True if it is synchronization, false if it is a copy.
      * @param int      $from Id of the post from which we copy information.
+     *
      * @return string[]
      */
     public function copy_post_metas($keys, $sync, $from)
     {
         if ('follow_up_email' === get_post_type($from)) {
-            $to_sync = array(
+            $to_sync = [
                 '_template',
                 '_interval_type',
                 '_interval_num',
@@ -101,13 +101,13 @@ class PLLWC_Follow_Up_Emails
                 '_category_id',
                 '_product_id',
                 '_meta',
-            );
+            ];
 
-            $to_copy = array(
+            $to_copy = [
                 '_tracking_on',
                 '_tracking',
                 '_tracking_code',
-            );
+            ];
 
             if ($sync) {
                 $keys = array_merge($keys, $to_sync);
@@ -115,6 +115,7 @@ class PLLWC_Follow_Up_Emails
                 $keys = array_merge($keys, $to_copy, $to_sync);
             }
         }
+
         return $keys;
     }
 
@@ -123,15 +124,17 @@ class PLLWC_Follow_Up_Emails
      * Hooked to the filter 'pll_translate_post_meta'.
      *
      * @since 1.0
+     *
      * @param mixed  $value Meta value.
      * @param string $key   Meta key.
      * @param string $lang  Language of target.
      * @param int    $from  Id of the follow-up email from which we copy information.
+     *
      * @return mixed
      */
     public function translate_post_meta($value, $key, $lang, $from)
     {
-        if ('follow_up_email' === get_post_type($from) && ! empty($value)) {
+        if ('follow_up_email' === get_post_type($from) && !empty($value)) {
             switch ($key) {
                 case '_category_id':
                     // Translate a product category id.
@@ -149,12 +152,12 @@ class PLLWC_Follow_Up_Emails
                         switch ($k) {
                             case 'excluded_customers_products':
                                 // Translate an array of product ids.
-                                if (! empty($v)) {
-                                    $value[ $k ] = array();
+                                if (!empty($v)) {
+                                    $value[$k] = [];
                                     $data_store = PLLWC_Data_Store::load('product_language');
                                     foreach ($v as $product_id) {
                                         if ($tr_id = $data_store->get($product_id, $lang)) {
-                                            $value[ $k ][] = $tr_id;
+                                            $value[$k][] = $tr_id;
                                         }
                                     }
                                 }
@@ -162,11 +165,11 @@ class PLLWC_Follow_Up_Emails
                             case 'excluded_categories':
                             case 'excluded_customers_categories':
                                 // Translate an array of product category ids.
-                                if (! empty($v)) {
-                                    $value[ $k ] = array();
+                                if (!empty($v)) {
+                                    $value[$k] = [];
                                     foreach ($v as $term_id) {
                                         if ($tr_id = pll_get_term($term_id, $lang)) {
-                                            $value[ $k ][] = $tr_id;
+                                            $value[$k][] = $tr_id;
                                         }
                                     }
                                 }
@@ -179,11 +182,11 @@ class PLLWC_Follow_Up_Emails
                         switch ($v['condition']) {
                             case 'bought_categories':
                                 // Translate an array of product category ids.
-                                if (! empty($v['categories'])) {
-                                    $value[ $k ]['categories'] = array();
+                                if (!empty($v['categories'])) {
+                                    $value[$k]['categories'] = [];
                                     foreach ($v['categories'] as $term_id) {
                                         if ($tr_id = pll_get_term($term_id, $lang)) {
-                                            $value[ $k ]['categories'][] = $tr_id;
+                                            $value[$k]['categories'][] = $tr_id;
                                         }
                                     }
                                 }
@@ -205,6 +208,7 @@ class PLLWC_Follow_Up_Emails
      * @since 0.9
      *
      * @param WP_Query $query WP_Query object.
+     *
      * @return void
      */
     public function parse_query($query)
@@ -227,16 +231,19 @@ class PLLWC_Follow_Up_Emails
      * @since 0.9
      *
      * @param array $data Email order data.
+     *
      * @return string|bool
      */
     protected function get_email_order_language($data)
     {
-        if (! empty($data['order_id'])) {
+        if (!empty($data['order_id'])) {
             $data_store = PLLWC_Data_Store::load('order_language');
+
             return $data_store->get_language($data['order_id']);
-        } elseif (! empty($data['user_id'])) {
+        } elseif (!empty($data['user_id'])) {
             return get_user_meta($data['user_id'], 'locale', true);
         }
+
         return false;
     }
 
@@ -247,20 +254,21 @@ class PLLWC_Follow_Up_Emails
      * @since 0.9
      *
      * @param array $data Email order data.
+     *
      * @return array
      */
     public function insert_email_order($data)
     {
         $lang = $this->get_email_order_language($data);
 
-        if (! empty($lang) && ! empty($data['email_id'])) {
+        if (!empty($lang) && !empty($data['email_id'])) {
             if (doing_action('user_register')) {
                 // In this case Follow-Up Emails sends each email only once.
                 if ($tr_id = pll_get_post($data['email_id'], $lang)) {
-                    $args = array(
+                    $args = [
                         'email_id' => $tr_id,
                         'user_id'  => $data['user_id'],
-                    );
+                    ];
 
                     if (count(Follow_Up_Emails::instance()->scheduler->get_items($args)) === 0) {
                         $data['email_id'] = $tr_id;
@@ -278,6 +286,7 @@ class PLLWC_Follow_Up_Emails
                 $data['email_id'] = 0;
             }
         }
+
         return $data;
     }
 
@@ -288,6 +297,7 @@ class PLLWC_Follow_Up_Emails
      * @since 0.9
      *
      * @param string $url Preview url.
+     *
      * @return string Modified url.
      */
     public function preview_url($url)
@@ -295,12 +305,13 @@ class PLLWC_Follow_Up_Emails
         $query = wp_parse_url($url, PHP_URL_QUERY);
         parse_str($query, $args);
 
-        if (! empty($args['email']) && $lang = pll_get_post_language((int) $args['email'])) {
-            if (! PLL()->options['hide_default'] || PLL()->options['default_lang'] !== $lang) {
+        if (!empty($args['email']) && $lang = pll_get_post_language((int) $args['email'])) {
+            if (!PLL()->options['hide_default'] || PLL()->options['default_lang'] !== $lang) {
                 // Can't use switch_language_in_link() due to the lack of slash before the query.
                 $url = str_replace('?', "/{$lang}?", $url);
             }
         }
+
         return $url;
     }
 
@@ -314,11 +325,12 @@ class PLLWC_Follow_Up_Emails
      * @param string $message    Email message.
      * @param string $headers    Email headers.
      * @param object $queue_item Email queue item.
+     *
      * @return void
      */
     public function before_email_send($subject, $message, $headers, $queue_item)
     {
-        if (! empty($queue_item->email_id)) {
+        if (!empty($queue_item->email_id)) {
             $language = PLL()->model->post->get_language($queue_item->email_id);
             PLLWC()->emails->set_email_language($language);
         }

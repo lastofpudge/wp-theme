@@ -1,17 +1,12 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce Brands.
  * Version tested: 1.6.41
  * Merged into WC core from version 9.4.
  * Enabled for everyone from version 9.6.
  *
  * @since 1.6
- *
  * @link https://woocommerce.com/fr-fr/products/brands/
  */
 class PLLWC_Brands
@@ -23,23 +18,23 @@ class PLLWC_Brands
      */
     public function __construct()
     {
-        add_filter('pll_copy_term_metas', array( $this, 'copy_term_metas' ), 10, 3);
-        add_filter('pll_get_taxonomies', array( $this, 'add_taxonomy' ), 10, 2);
+        add_filter('pll_copy_term_metas', [$this, 'copy_term_metas'], 10, 3);
+        add_filter('pll_get_taxonomies', [$this, 'add_taxonomy'], 10, 2);
 
-        if (! empty($GLOBALS['WC_Brands_Admin'])) {
-            remove_action('product_brand_add_form_fields', array( $GLOBALS['WC_Brands_Admin'], 'add_thumbnail_field' ));
-            add_action('product_brand_add_form_fields', array( $this, 'add_product_brand_fields' ));
+        if (!empty($GLOBALS['WC_Brands_Admin'])) {
+            remove_action('product_brand_add_form_fields', [$GLOBALS['WC_Brands_Admin'], 'add_thumbnail_field']);
+            add_action('product_brand_add_form_fields', [$this, 'add_product_brand_fields']);
         }
 
         if (PLL()->options['media_support']) {
-            add_action('admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ));
+            add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
             // WooCommerce ( verified in 2.5.5 ) inconsistently uses created_term and edit_term so we can't use pll_save_term.
-            add_action('created_product_brand', array( PLLWC()->admin_taxonomies, 'fix_term_thumbnail' ), 999);
-            add_action('edited_product_brand', array( PLLWC()->admin_taxonomies, 'fix_term_thumbnail' ), 999);
+            add_action('created_product_brand', [PLLWC()->admin_taxonomies, 'fix_term_thumbnail'], 999);
+            add_action('edited_product_brand', [PLLWC()->admin_taxonomies, 'fix_term_thumbnail'], 999);
         }
 
         // Sync brands taxonomy.
-        add_filter('pll_copy_taxonomies', array( $this, 'copy_taxonomies' ), 10, 3);
+        add_filter('pll_copy_taxonomies', [$this, 'copy_taxonomies'], 10, 3);
     }
 
     /**
@@ -51,14 +46,16 @@ class PLLWC_Brands
      * @param array $metas List of custom fields names.
      * @param bool  $sync  True if it is synchronization, false if it is a copy.
      * @param int   $from  ID of the product from which we copy information.
+     *
      * @return array
      */
     public function copy_term_metas($metas, $sync, $from)
     {
         $term = get_term($from);
         if ($term instanceof WP_Term && 'product_brand' === $term->taxonomy) {
-            return array_merge($metas, array( 'thumbnail_id' ));
+            return array_merge($metas, ['thumbnail_id']);
         }
+
         return $metas;
     }
 
@@ -67,8 +64,9 @@ class PLLWC_Brands
      *
      * @since 1.6
      *
-     * @param string[] $taxonomies List of taxonomy names.
+     * @param string[] $taxonomies  List of taxonomy names.
      * @param bool     $is_settings True when displaying the list of custom taxonomies in Polylang settings.
+     *
      * @return string[] List of taxonomy names.
      */
     public function add_taxonomy($taxonomies, $is_settings)
@@ -96,7 +94,7 @@ class PLLWC_Brands
             $term = get_term((int) $_GET['from_tag'], 'product_brand');  // phpcs:ignore WordPress.Security.NonceVerification
         }
 
-        if (! empty($term)) {
+        if (!empty($term)) {
             // Add the edit "thumbnail field" with pre-filled with the source language term id.
             $GLOBALS['WC_Brands_Admin']->edit_thumbnail_field($term, 'product_brand');
         } else {
@@ -115,7 +113,7 @@ class PLLWC_Brands
     public function admin_enqueue_scripts()
     {
         $screen = get_current_screen();
-        if (! empty($screen) && in_array($screen->base, array( 'edit-tags', 'term' )) && 'product_brand' === $screen->taxonomy) {
+        if (!empty($screen) && in_array($screen->base, ['edit-tags', 'term']) && 'product_brand' === $screen->taxonomy) {
             PLLWC()->admin_taxonomies->load_scripts();
         }
     }
@@ -127,11 +125,13 @@ class PLLWC_Brands
      * @since 2.2
      *
      * @param string[] $taxonomies List of taxonomy names to sync.
+     *
      * @return string[] Modified list of taxonomies.
      */
     public function copy_taxonomies($taxonomies)
     {
         $taxonomies[] = 'product_brand';
+
         return $taxonomies;
     }
 }

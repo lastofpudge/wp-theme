@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce Bookings.
  * Version tested: 1.10.11.
  *
@@ -28,15 +24,15 @@ class PLLWC_Bookings
     public function __construct()
     {
         // Post types.
-        add_filter('pll_get_post_types', array( $this, 'translate_types' ), 10, 2);
+        add_filter('pll_get_post_types', [$this, 'translate_types'], 10, 2);
 
         if (PLL() instanceof PLL_Admin) {
-            add_action('wp_loaded', array( $this, 'custom_columns' ), 20);
-            add_action('add_meta_boxes', array( $this, 'add_meta_boxes' ), 20);
+            add_action('wp_loaded', [$this, 'custom_columns'], 20);
+            add_action('add_meta_boxes', [$this, 'add_meta_boxes'], 20);
         }
 
         // Bookings.
-        $statuses = array(
+        $statuses = [
             'unpaid',
             'pending-confirmation',
             'confirmed',
@@ -44,58 +40,57 @@ class PLLWC_Bookings
             'complete',
             'in-cart',
             'cancelled',
-        );
+        ];
 
         foreach ($statuses as $status) {
-            add_action('woocommerce_booking_' . $status, array( $this, 'before_booking_metabox_save' ));
+            add_action('woocommerce_booking_'.$status, [$this, 'before_booking_metabox_save']);
         }
-        add_action('woocommerce_booking_process_meta', array( $this, 'after_booking_metabox_save' ));
+        add_action('woocommerce_booking_process_meta', [$this, 'after_booking_metabox_save']);
 
         // Create booking.
-        add_action('woocommerce_new_booking', array( $this, 'new_booking' ), 1);
+        add_action('woocommerce_new_booking', [$this, 'new_booking'], 1);
 
         // Hooked just before WC_Booking_Cart_Manager::order_item_meta.
-        add_action('woocommerce_new_order_item', array( $this, 'set_booking_language_at_checkout' ), 49, 2);
+        add_action('woocommerce_new_order_item', [$this, 'set_booking_language_at_checkout'], 49, 2);
 
         // Products.
-        add_action('pllwc_copy_product', array( $this, 'copy_resources' ), 10, 3);
-        add_action('pllwc_copy_product', array( $this, 'copy_persons' ), 10, 3);
-        add_action('wp_ajax_woocommerce_remove_bookable_resource', array( $this, 'remove_bookable_resource' ), 5); // Before WooCommerce Bookings.
-        add_action('wp_ajax_woocommerce_unlink_bookable_person', array( $this, 'unlink_bookable_person' ), 5); // Before WooCommerce Bookings.
+        add_action('pllwc_copy_product', [$this, 'copy_resources'], 10, 3);
+        add_action('pllwc_copy_product', [$this, 'copy_persons'], 10, 3);
+        add_action('wp_ajax_woocommerce_remove_bookable_resource', [$this, 'remove_bookable_resource'], 5); // Before WooCommerce Bookings.
+        add_action('wp_ajax_woocommerce_unlink_bookable_person', [$this, 'unlink_bookable_person'], 5); // Before WooCommerce Bookings.
 
-        add_action('pll_save_post', array( $this, 'save_post' ), 10, 3);
-        add_filter('update_post_metadata', array( $this, 'update_post_metadata' ), 99, 4); // After Yoast SEO which returns null at priority 10. See https://github.com/Yoast/wordpress-seo/pull/6902.
-        add_filter('get_post_metadata', array( $this, 'get_post_metadata' ), 10, 4);
-        add_filter('pll_copy_post_metas', array( $this, 'copy_post_metas' ));
-        add_filter('pll_translate_post_meta', array( $this, 'translate_post_meta' ), 10, 3);
-        add_filter('pll_post_metas_to_export', array( $this, 'get_metas_to_translate' ), 10);
+        add_action('pll_save_post', [$this, 'save_post'], 10, 3);
+        add_filter('update_post_metadata', [$this, 'update_post_metadata'], 99, 4); // After Yoast SEO which returns null at priority 10. See https://github.com/Yoast/wordpress-seo/pull/6902.
+        add_filter('get_post_metadata', [$this, 'get_post_metadata'], 10, 4);
+        add_filter('pll_copy_post_metas', [$this, 'copy_post_metas']);
+        add_filter('pll_translate_post_meta', [$this, 'translate_post_meta'], 10, 3);
+        add_filter('pll_post_metas_to_export', [$this, 'get_metas_to_translate'], 10);
 
         // Cart.
-        add_filter('pllwc_translate_cart_item', array( $this, 'translate_cart_item' ), 10, 2);
-        add_filter('pllwc_add_cart_item_data', array( $this, 'add_cart_item_data' ), 10, 2);
-
+        add_filter('pllwc_translate_cart_item', [$this, 'translate_cart_item'], 10, 2);
+        add_filter('pllwc_add_cart_item_data', [$this, 'add_cart_item_data'], 10, 2);
 
         // Add e-mails for translation.
-        add_filter('pllwc_order_email_actions', array( $this, 'filter_order_email_actions' ));
+        add_filter('pllwc_order_email_actions', [$this, 'filter_order_email_actions']);
 
         if (version_compare($GLOBALS['wp_version'], '6.7-beta') < 0) {
             // Backward compatibility with WP < 6.7.
-            add_action('change_locale', array( $this, 'change_locale' ));
+            add_action('change_locale', [$this, 'change_locale']);
         }
 
-        add_action('parse_query', array( $this, 'filter_bookings_notifications' ));
+        add_action('parse_query', [$this, 'filter_bookings_notifications']);
 
         // Endpoints in emails.
         if (isset(PLL()->translate_slugs)) {
-            add_action('pllwc_email_language', array( PLL()->translate_slugs->slugs_model, 'init_translated_slugs' ));
+            add_action('pllwc_email_language', [PLL()->translate_slugs->slugs_model, 'init_translated_slugs']);
         }
 
         // Bookings endpoint.
-        add_filter('pll_translation_url', array( $this, 'pll_translation_url' ), 10, 2);
-        add_filter('woocommerce_get_query_vars', array( $this, 'get_endpoints_query_vars' ));
+        add_filter('pll_translation_url', [$this, 'pll_translation_url'], 10, 2);
+        add_filter('woocommerce_get_query_vars', [$this, 'get_endpoints_query_vars']);
 
         if (PLL() instanceof PLL_Frontend) {
-            add_action('parse_query', array( $this, 'parse_query' ), 3); // Before Polylang (for orders).
+            add_action('parse_query', [$this, 'parse_query'], 3); // Before Polylang (for orders).
         }
     }
 
@@ -105,13 +100,14 @@ class PLLWC_Bookings
      * @since 1.6
      *
      * @param string[] $actions Array of actions used to send emails.
+     *
      * @return string[]
      */
     public function filter_order_email_actions($actions)
     {
         return array_merge(
             $actions,
-            array(
+            [
                 // Cancelled booking.
                 'woocommerce_booking_pending-confirmation_to_cancelled_notification',
                 'woocommerce_booking_confirmed_to_cancelled_notification',
@@ -125,7 +121,7 @@ class PLLWC_Bookings
                 // New booking.
                 'woocommerce_new_booking_notification',
                 'woocommerce_admin_new_booking_notification',
-            )
+            ]
         );
     }
 
@@ -137,11 +133,13 @@ class PLLWC_Bookings
      *
      * @param array $types List of post type names for which Polylang manages language and translations.
      * @param bool  $hide  True when displaying the list in Polylang settings.
+     *
      * @return array List of post type names for which Polylang manages language and translations.
      */
     public function translate_types($types, $hide)
     {
-        $wc_bookings_types = array( 'bookable_resource', 'bookable_person', 'wc_booking' );
+        $wc_bookings_types = ['bookable_resource', 'bookable_person', 'wc_booking'];
+
         return $hide ? array_diff($types, $wc_bookings_types) : array_merge($types, $wc_bookings_types);
     }
 
@@ -156,11 +154,11 @@ class PLLWC_Bookings
      */
     public function custom_columns()
     {
-        remove_filter('manage_edit-wc_booking_columns', array( PLL()->filters_columns, 'add_post_column' ), 100);
-        remove_action('manage_wc_booking_posts_custom_column', array( PLL()->filters_columns, 'post_column' ), 10, 2);
+        remove_filter('manage_edit-wc_booking_columns', [PLL()->filters_columns, 'add_post_column'], 100);
+        remove_action('manage_wc_booking_posts_custom_column', [PLL()->filters_columns, 'post_column'], 10, 2);
 
-        add_filter('manage_edit-wc_booking_columns', array( PLLWC()->admin_orders, 'add_order_column' ), 100);
-        add_action('manage_wc_booking_posts_custom_column', array( PLLWC()->admin_orders, 'order_column' ), 10, 2);
+        add_filter('manage_edit-wc_booking_columns', [PLLWC()->admin_orders, 'add_order_column'], 100);
+        add_action('manage_wc_booking_posts_custom_column', [PLLWC()->admin_orders, 'order_column'], 10, 2);
 
         // FIXME add a filter in PLLWC for the position of the column?
     }
@@ -172,6 +170,7 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param string $post_type Post type.
+     *
      * @return void
      */
     public function add_meta_boxes($post_type)
@@ -192,7 +191,7 @@ class PLLWC_Bookings
      */
     public function change_locale()
     {
-        load_plugin_textdomain('woocommerce-bookings', false, plugin_basename(__DIR__) . '/languages');
+        load_plugin_textdomain('woocommerce-bookings', false, plugin_basename(__DIR__).'/languages');
     }
 
     /**
@@ -202,6 +201,7 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param int $post_id Booking ID.
+     *
      * @return void
      */
     public function before_booking_metabox_save($post_id)
@@ -236,6 +236,7 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param int $booking_id Booking ID.
+     *
      * @return void
      */
     public function new_booking($booking_id)
@@ -243,10 +244,10 @@ class PLLWC_Bookings
         $data_store = PLLWC_Data_Store::load('product_language');
 
         $booking = get_wc_booking($booking_id);
-        $lang    = $data_store->get_language($booking->product_id);
+        $lang = $data_store->get_language($booking->product_id);
         pll_set_post_language($booking->id, $lang);
 
-        if (! empty($booking->order_id)) {
+        if (!empty($booking->order_id)) {
             $data_store = PLLWC_Data_Store::load('order_language');
             $data_store->set_language($booking->order_id, $lang);
         }
@@ -260,19 +261,20 @@ class PLLWC_Bookings
      *
      * @since 1.9
      *
-     * @param int                 $item_id     An order item ID.
-     * @param WC_Order_Item|false $order_item  Order item object.
+     * @param int                 $item_id    An order item ID.
+     * @param WC_Order_Item|false $order_item Order item object.
+     *
      * @return int
      */
     public function set_booking_language_at_checkout($item_id, $order_item)
     {
-        if (empty($order_item->legacy_values) || ! is_array($order_item->legacy_values) || empty($order_item->legacy_values['booking'])) {
+        if (empty($order_item->legacy_values) || !is_array($order_item->legacy_values) || empty($order_item->legacy_values['booking'])) {
             return $item_id;
         }
         $booking_id = $order_item->legacy_values['booking']['_booking_id'];
 
         $lang = pll_current_language();
-        if (! empty($lang) && pll_get_post_language($booking_id) !== $lang) {
+        if (!empty($lang) && pll_get_post_language($booking_id) !== $lang) {
             pll_set_post_language($booking_id, $lang);
         }
 
@@ -287,6 +289,7 @@ class PLLWC_Bookings
      * @param array  $post Bookable post to copy (person or resource).
      * @param int    $to   ID of the product to which we paste information.
      * @param string $lang Language slug.
+     *
      * @return int Translated bookable post.
      */
     protected function copy_bookable_post($post, $to, $lang)
@@ -298,18 +301,18 @@ class PLLWC_Bookings
             // If the translated bookable_person already exists, make sure it has the right post_parent.
             $post = get_post($tr_id);
             if ($post->post_parent !== $to) {
-                wp_update_post(array( 'ID' => $tr_id, 'post_parent' => $to ));
+                wp_update_post(['ID' => $tr_id, 'post_parent' => $to]);
             }
         } else {
             // Creates the bookable_resource if it does not exist yet.
-            $post['ID']          = null;
+            $post['ID'] = null;
             $post['post_parent'] = $to;
-            $tr_id               = wp_insert_post($post);
+            $tr_id = wp_insert_post($post);
             pll_set_post_language($tr_id, $lang);
 
             $translations = pll_get_post_translations($id);
-            $translations[ pll_get_post_language($id) ] = $id; // In case this is the first translation created.
-            $translations[ $lang ] = $tr_id;
+            $translations[pll_get_post_language($id)] = $id; // In case this is the first translation created.
+            $translations[$lang] = $tr_id;
             pll_save_post_translations($translations);
         }
 
@@ -328,6 +331,7 @@ class PLLWC_Bookings
      * @param int    $from ID of the product from which we copy information.
      * @param int    $to   ID of the product to which we paste information.
      * @param string $lang Language slug.
+     *
      * @return void
      */
     public function copy_resources($from, $to, $lang)
@@ -336,11 +340,11 @@ class PLLWC_Bookings
         $relationships = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wc_booking_relationships WHERE product_id = %d", $from), ARRAY_A);
 
         foreach ($relationships as $relationship) {
-            $resource       = get_post($relationship['resource_id'], ARRAY_A); // wp_insert_post() expects an array.
+            $resource = get_post($relationship['resource_id'], ARRAY_A); // wp_insert_post() expects an array.
             $tr_resource_id = $this->copy_bookable_post($resource, $to, $lang);
-            if (! $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}wc_booking_relationships WHERE product_id = %d AND resource_id = %d", $to, $tr_resource_id))) {
+            if (!$wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}wc_booking_relationships WHERE product_id = %d AND resource_id = %d", $to, $tr_resource_id))) {
                 unset($relationship['ID']);
-                $relationship['product_id']  = $to;
+                $relationship['product_id'] = $to;
                 $relationship['resource_id'] = $tr_resource_id;
                 $wpdb->insert("{$wpdb->prefix}wc_booking_relationships", $relationship);
 
@@ -360,17 +364,18 @@ class PLLWC_Bookings
      * @param int    $from ID of the product from which we copy information.
      * @param int    $to   ID of the product to which we paste information.
      * @param string $lang Language slug.
+     *
      * @return void
      */
     public function copy_persons($from, $to, $lang)
     {
         // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_posts_get_children
         $persons = get_children(
-            array(
+            [
                 'post_parent' => $from,
                 'post_type'   => 'bookable_person',
                 'lang'        => '',
-            ),
+            ],
             ARRAY_A // wp_insert_post() expects an array.
         );
 
@@ -391,15 +396,15 @@ class PLLWC_Bookings
     {
         global $wpdb;
 
-        if (! isset($_POST['post_id'], $_POST['resource_id'], $_REQUEST['security'])) {
+        if (!isset($_POST['post_id'], $_POST['resource_id'], $_REQUEST['security'])) {
             return;
         }
 
-        if (! wp_verify_nonce($_REQUEST['security'], 'delete-bookable-resource')) {
+        if (!wp_verify_nonce($_REQUEST['security'], 'delete-bookable-resource')) {
             return;
         }
 
-        $product_id  = absint($_POST['post_id']);
+        $product_id = absint($_POST['post_id']);
         $resource_id = absint($_POST['resource_id']);
 
         $data_store = PLLWC_Data_Store::load('product_language');
@@ -413,10 +418,10 @@ class PLLWC_Bookings
 
             $wpdb->delete(
                 "{$wpdb->prefix}wc_booking_relationships",
-                array(
+                [
                     'product_id'  => $tr_id,
                     'resource_id' => $tr_resource_id,
-                )
+                ]
             );
         }
     }
@@ -431,18 +436,18 @@ class PLLWC_Bookings
      */
     public function unlink_bookable_person()
     {
-        if (! isset($_POST['person_id'], $_REQUEST['security'])) {
+        if (!isset($_POST['person_id'], $_REQUEST['security'])) {
             return;
         }
 
-        if (! wp_verify_nonce($_REQUEST['security'], 'unlink-bookable-person')) {
+        if (!wp_verify_nonce($_REQUEST['security'], 'unlink-bookable-person')) {
             return;
         }
 
         $person_type_id = intval($_POST['person_id']);
-        $person_type    = get_post($person_type_id);
+        $person_type = get_post($person_type_id);
 
-        if (! $person_type || 'bookable_person' !== $person_type->post_type) {
+        if (!$person_type || 'bookable_person' !== $person_type->post_type) {
             return;
         }
 
@@ -465,57 +470,58 @@ class PLLWC_Bookings
      * @param int    $post_id      New product or resource.
      * @param array  $translations Existing product or resource translations.
      * @param string $meta_key     Meta to add to the booking.
+     *
      * @return void
      */
     protected function add_metas_to_booking($post_id, $translations, $meta_key)
     {
         global $wpdb;
 
-        if (! empty($translations)) { // If there is no translation, the query returns all bookings!
+        if (!empty($translations)) { // If there is no translation, the query returns all bookings!
             $query_translations = new WP_Query(
-                array(
+                [
                     'fields'      => 'ids',
                     'post_type'   => 'wc_booking',
                     'numberposts' => -1,
                     'nopaging'    => true, // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.nopaging_nopaging
                     'lang'        => '',
-                    'meta_query'  => array(
-                        array(
+                    'meta_query'  => [
+                        [
                             'key'     => $meta_key,
                             'value'   => $translations,
                             'compare' => 'IN',
-                        ),
-                    ),
-                )
+                        ],
+                    ],
+                ]
             );
 
             $query_current = new WP_Query(
-                array(
+                [
                     'fields'      => 'ids',
                     'post_type'   => 'wc_booking',
                     'numberposts' => -1,
                     'nopaging'    => true, // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.nopaging_nopaging
                     'lang'        => '',
-                    'meta_query'  => array(
-                        array(
+                    'meta_query'  => [
+                        [
                             'key'     => $meta_key,
-                            'value'   => array( $post_id ),
+                            'value'   => [$post_id],
                             'compare' => 'IN',
-                        ),
-                    ),
-                )
+                        ],
+                    ],
+                ]
             );
 
             $booking_ids = array_diff($query_translations->posts, $query_current->posts);
 
-            if (! empty($booking_ids)) {
-                $values = array();
+            if (!empty($booking_ids)) {
+                $values = [];
 
                 foreach ($booking_ids as $booking) {
                     $values[] = $wpdb->prepare('( %d, %s, %d )', $booking, $meta_key, $post_id);
                 }
 
-                $wpdb->query("INSERT INTO {$wpdb->postmeta} ( post_id, meta_key, meta_value ) VALUES " . implode(',', $values)); // // PHPCS:ignore WordPress.DB.PreparedSQL.NotPrepared
+                $wpdb->query("INSERT INTO {$wpdb->postmeta} ( post_id, meta_key, meta_value ) VALUES ".implode(',', $values)); // // PHPCS:ignore WordPress.DB.PreparedSQL.NotPrepared
             }
         }
     }
@@ -530,11 +536,12 @@ class PLLWC_Bookings
      * @param int     $post_id      Post id.
      * @param WP_Post $post         Post object.
      * @param array   $translations Post translations.
+     *
      * @return void
      */
     public function save_post($post_id, $post, $translations)
     {
-        $translations = array_diff($translations, array( $post_id ));
+        $translations = array_diff($translations, [$post_id]);
 
         if ('product' === $post->post_type) {
             $this->add_metas_to_booking($post_id, $translations, '_booking_product_id');
@@ -555,18 +562,20 @@ class PLLWC_Bookings
      * @param int        $post_id    Booking id.
      * @param string     $meta_key   Meta key.
      * @param int|string $meta_value Meta value.
+     *
      * @return null|bool
      */
     public function update_post_metadata($r, $post_id, $meta_key, $meta_value)
     {
         static $once = false;
 
-        if (in_array($meta_key, array( '_booking_product_id', '_booking_resource_id' )) && ! empty($meta_value) && ! $once) {
+        if (in_array($meta_key, ['_booking_product_id', '_booking_resource_id']) && !empty($meta_value) && !$once) {
             $once = true;
             $r = $this->update_post_meta($post_id, $meta_key, $meta_value);
         }
 
         $once = false;
+
         return $r;
     }
 
@@ -578,6 +587,7 @@ class PLLWC_Bookings
      * @param int    $post_id    Booking id.
      * @param string $meta_key   Meta key.
      * @param int    $meta_value Product id.
+     *
      * @return bool
      */
     protected function update_post_meta($post_id, $meta_key, $meta_value)
@@ -590,10 +600,10 @@ class PLLWC_Bookings
             }
         } else {
             $to_keep = array_intersect($values, pll_get_post_translations($meta_value));
-            $olds    = array_values(array_diff($values, $to_keep));
-            $news    = array_values(array_diff(pll_get_post_translations($meta_value), $to_keep));
+            $olds = array_values(array_diff($values, $to_keep));
+            $news = array_values(array_diff(pll_get_post_translations($meta_value), $to_keep));
             foreach ($olds as $k => $old) {
-                update_post_meta($post_id, $meta_key, $news[ $k ], $old);
+                update_post_meta($post_id, $meta_key, $news[$k], $old);
             }
         }
 
@@ -607,18 +617,20 @@ class PLLWC_Bookings
      *
      * @param array  $persons  An array of persons.
      * @param string $language Language slug.
+     *
      * @return array
      */
     protected function translate_booking_persons_meta($persons, $language)
     {
-        if (! empty($persons)) {
-            $_persons = array();
+        if (!empty($persons)) {
+            $_persons = [];
 
             foreach ($persons as $person => $n) {
-                $_persons[ pll_get_post($person, $language) ] = $n;
+                $_persons[pll_get_post($person, $language)] = $n;
             }
             $persons = $_persons;
         }
+
         return $persons;
     }
 
@@ -632,45 +644,49 @@ class PLLWC_Bookings
      * @param int       $post_id  Booking id.
      * @param string    $meta_key Meta key.
      * @param bool      $single   Whether a single meta value has been requested.
+     *
      * @return mixed
      */
     public function get_post_metadata($r, $post_id, $meta_key, $single)
     {
         static $once = false;
 
-        if (! $once && $single) {
+        if (!$once && $single) {
             switch ($meta_key) {
                 case '_booking_product_id':
                 case '_booking_resource_id':
-                    $once     = true;
-                    $value    = get_post_meta($post_id, $meta_key, true);
+                    $once = true;
+                    $value = get_post_meta($post_id, $meta_key, true);
                     $language = PLL() instanceof PLL_Frontend ? pll_current_language() : pll_get_post_language($post_id);
-                    $once     = false;
+                    $once = false;
+
                     return pll_get_post($value, $language);
                 case '_booking_persons':
-                    $once  = true;
+                    $once = true;
                     $value = get_post_meta($post_id, $meta_key, true);
-                    $once  = false;
-                    return array( $this->translate_booking_persons_meta($value, pll_get_post_language($post_id)) );
+                    $once = false;
+
+                    return [$this->translate_booking_persons_meta($value, pll_get_post_language($post_id))];
             }
         }
 
-        if (! $once && empty($meta_key) && 'wc_booking' === get_post_type($post_id)) {
-            $once     = true;
-            $value    = get_post_meta($post_id);
+        if (!$once && empty($meta_key) && 'wc_booking' === get_post_type($post_id)) {
+            $once = true;
+            $value = get_post_meta($post_id);
             $language = PLL() instanceof PLL_Frontend ? pll_current_language() : pll_get_post_language($post_id);
 
-            foreach (array( '_booking_product_id', '_booking_resource_id' ) as $key) {
-                if (! empty($value[ $key ])) {
-                    $value[ $key ] = array( pll_get_post(reset($value[ $key ]), $language) );
+            foreach (['_booking_product_id', '_booking_resource_id'] as $key) {
+                if (!empty($value[$key])) {
+                    $value[$key] = [pll_get_post(reset($value[$key]), $language)];
                 }
             }
 
             if (isset($value['_booking_persons']) && is_array($value['_booking_persons'])) {
-                $value['_booking_persons'] = array( serialize($this->translate_booking_persons_meta(maybe_unserialize(reset($value['_booking_persons'])), pll_get_post_language($post_id))) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
+                $value['_booking_persons'] = [serialize($this->translate_booking_persons_meta(maybe_unserialize(reset($value['_booking_persons'])), pll_get_post_language($post_id)))]; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
             }
 
             $once = false;
+
             return $value;
         }
 
@@ -684,11 +700,12 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param string[] $metas List of custom fields names.
+     *
      * @return string[]
      */
     public function copy_post_metas($metas)
     {
-        $to_sync = array(
+        $to_sync = [
             '_wc_display_cost',
             '_wc_booking_base_cost', // Renamed to _wc_booking_block_cost, maybe in v1.10.9.
             '_wc_booking_block_cost',
@@ -728,7 +745,7 @@ class PLLWC_Bookings
             '_wc_booking_restricted_days', // Since 1.10.7.
             '_resource_base_costs', // To translate.
             '_resource_block_costs', // To translate.
-        );
+        ];
 
         // wc_booking_resource_label is automatically copied, not synced as public meta.
         return array_merge($metas, $to_sync);
@@ -743,19 +760,21 @@ class PLLWC_Bookings
      * @param mixed  $value Meta value.
      * @param string $key   Meta key.
      * @param string $lang  Language of target.
+     *
      * @return mixed
      */
     public function translate_post_meta($value, $key, $lang)
     {
-        if (in_array($key, array( '_resource_base_costs', '_resource_block_costs' ))) {
-            $tr_value = array();
+        if (in_array($key, ['_resource_base_costs', '_resource_block_costs'])) {
+            $tr_value = [];
             foreach ($value as $post_id => $cost) {
                 if ($tr_id = pll_get_post($post_id, $lang)) {
-                    $tr_value[ $tr_id ] = $cost;
+                    $tr_value[$tr_id] = $cost;
                 }
             }
             $value = $tr_value;
         }
+
         return $value;
     }
 
@@ -765,11 +784,12 @@ class PLLWC_Bookings
      * @since 1.8
      *
      * @param array $metas An array of post metas to export.
+     *
      * @return array
      */
     public function get_metas_to_translate($metas)
     {
-        return array_merge($metas, array( 'wc_booking_resource_label' => 1 ));
+        return array_merge($metas, ['wc_booking_resource_label' => 1]);
     }
 
     /**
@@ -781,66 +801,67 @@ class PLLWC_Bookings
      *
      * @param array  $item Cart item.
      * @param string $lang Language code.
+     *
      * @return array
      */
     public function translate_cart_item($item, $lang)
     {
-        if (! empty($item['booking'])) {
-            $persons = array();
+        if (!empty($item['booking'])) {
+            $persons = [];
             $booking = &$item['booking'];
 
             // Translate persons types.
-            if (! empty($booking['_persons'])) {
+            if (!empty($booking['_persons'])) {
                 foreach ($booking['_persons'] as $id => $n) {
                     $tr_id = pll_get_post($id, $lang);
-                    $persons[ $tr_id ] = $n;
-                    unset($booking[ get_the_title($id) ]);
-                    $booking[ get_the_title($tr_id) ] = $n;
+                    $persons[$tr_id] = $n;
+                    unset($booking[get_the_title($id)]);
+                    $booking[get_the_title($tr_id)] = $n;
                 }
 
                 $booking['_persons'] = $persons;
             }
 
             // Translate resource.
-            if (! empty($booking['_resource_id'])) {
-                $tr_id                   = pll_get_post($booking['_resource_id'], $lang);
+            if (!empty($booking['_resource_id'])) {
+                $tr_id = pll_get_post($booking['_resource_id'], $lang);
                 $booking['_resource_id'] = $tr_id;
-                $booking['type']         = get_the_title($tr_id);
+                $booking['type'] = get_the_title($tr_id);
             }
 
             // Translate date.
-            if (! empty($booking['date']) && ! empty($booking['_date'])) {
+            if (!empty($booking['date']) && !empty($booking['_date'])) {
                 $booking['date'] = date_i18n(wc_date_format(), strtotime($booking['_date']));
             }
 
             // Translate time.
-            if (! empty($booking['time']) && ! empty($booking['_time'])) {
+            if (!empty($booking['time']) && !empty($booking['_time'])) {
                 $booking['time'] = date_i18n(get_option('time_format'), strtotime("{$booking['_year']}-{$booking['_month']}-{$booking['_day']} {$booking['_time']}"));
             }
 
             // Translate Duration.
-            if (! empty($booking['duration']) && ! empty($booking['_duration']) && $product = wc_get_product($item['product_id'])) {
+            if (!empty($booking['duration']) && !empty($booking['_duration']) && $product = wc_get_product($item['product_id'])) {
                 $total_duration = $booking['_duration'] * $product->get_duration();
 
                 switch ($booking['_duration_unit']) {
                     case 'month':
-                        $booking['duration'] = $total_duration . ' ' . _n('month', 'months', $total_duration, 'polylang-wc');
+                        $booking['duration'] = $total_duration.' '._n('month', 'months', $total_duration, 'polylang-wc');
                         break;
                     case 'day':
                         if ($total_duration % 7) {
-                            $booking['duration'] = $total_duration . ' ' . _n('day', 'days', $total_duration, 'polylang-wc');
+                            $booking['duration'] = $total_duration.' '._n('day', 'days', $total_duration, 'polylang-wc');
                         } else {
-                            $booking['duration'] = ($total_duration / 7) . ' ' . _n('week', 'weeks', $total_duration, 'polylang-wc');
+                            $booking['duration'] = ($total_duration / 7).' '._n('week', 'weeks', $total_duration, 'polylang-wc');
                         }
                         break;
                     case 'hour':
-                        $booking['duration'] = $total_duration . ' ' . _n('hour', 'hours', $total_duration, 'polylang-wc');
+                        $booking['duration'] = $total_duration.' '._n('hour', 'hours', $total_duration, 'polylang-wc');
                         break;
                     case 'minute':
-                        $booking['duration'] = $total_duration . ' ' . _n('minute', 'minutes', $total_duration, 'polylang-wc');
+                        $booking['duration'] = $total_duration.' '._n('minute', 'minutes', $total_duration, 'polylang-wc');
                         break;
                     case 'night':
-                        $booking['duration'] = $total_duration . ' ' . _n('night', 'nights', $total_duration, 'polylang-wc');
+                        $booking['duration'] = $total_duration.' '._n('night', 'nights', $total_duration, 'polylang-wc');
                         break;
                     default:
                         $booking['duration'] = $total_duration;
@@ -849,7 +870,7 @@ class PLLWC_Bookings
             }
 
             // We need to set the price.
-            if (! empty($item['data']) && ! empty($booking['_cost'])) {
+            if (!empty($item['data']) && !empty($booking['_cost'])) {
                 $item['data']->set_price($booking['_cost']);
             }
         }
@@ -865,6 +886,7 @@ class PLLWC_Bookings
      *
      * @param array $cart_item_data Cart item data.
      * @param array $item           Cart item.
+     *
      * @return array
      */
     public function add_cart_item_data($cart_item_data, $item)
@@ -872,6 +894,7 @@ class PLLWC_Bookings
         if (isset($item['booking'])) {
             $cart_item_data['booking'] = $item['booking'];
         }
+
         return $cart_item_data;
     }
 
@@ -882,6 +905,7 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param WP_Query $query WP_Query object.
+     *
      * @return void
      */
     public function filter_bookings_notifications($query)
@@ -902,6 +926,7 @@ class PLLWC_Bookings
      *
      * @param string $url  URL of the translation, to modify.
      * @param string $lang Language slug.
+     *
      * @return string
      */
     public function pll_translation_url($url, $lang)
@@ -910,10 +935,10 @@ class PLLWC_Bookings
 
         $endpoint = apply_filters('woocommerce_bookings_account_endpoint', 'bookings');
 
-        if (isset(PLL()->translate_slugs->slugs_model, $wp->query_vars[ $endpoint ])) {
+        if (isset(PLL()->translate_slugs->slugs_model, $wp->query_vars[$endpoint])) {
             $language = PLL()->model->get_language($lang);
-            $url      = wc_get_endpoint_url($endpoint, '', $url);
-            $url      = PLL()->translate_slugs->slugs_model->switch_translated_slug($url, $language, 'wc_bookings');
+            $url = wc_get_endpoint_url($endpoint, '', $url);
+            $url = PLL()->translate_slugs->slugs_model->switch_translated_slug($url, $language, 'wc_bookings');
         }
 
         return $url;
@@ -927,11 +952,13 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param array $slugs Endpoints slugs.
+     *
      * @return array
      */
     public function get_endpoints_query_vars($slugs)
     {
         $slugs[] = apply_filters('woocommerce_bookings_account_endpoint', 'bookings');
+
         return $slugs;
     }
 
@@ -942,6 +969,7 @@ class PLLWC_Bookings
      * @since 0.6
      *
      * @param WP_Query $query WP_Query object.
+     *
      * @return void
      */
     public function parse_query($query)

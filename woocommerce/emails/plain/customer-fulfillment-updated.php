@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Customer fulfillment updated email (plain text)
+ * Customer fulfillment updated email (plain text).
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-fulfillment-updated.php.
  *
@@ -12,10 +12,9 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 10.1.0
  */
-
 defined('ABSPATH') || exit;
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
@@ -23,8 +22,8 @@ echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo esc_html__('Some details of your shipment have recently been updated. This may include tracking information, item contents, or delivery status.', 'woocommerce') . "\n\n";
-echo esc_html__('Here’s the latest info we have:', 'woocommerce') . "\n\n";
+echo esc_html__('Some details of your shipment have recently been updated. This may include tracking information, item contents, or delivery status.', 'woocommerce')."\n\n";
+echo esc_html__('Here’s the latest info we have:', 'woocommerce')."\n\n";
 
 /**
  * Display fulfillment details.

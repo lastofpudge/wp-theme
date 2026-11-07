@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Template for displaying products in a product category. Simply includes the archive template
+ * The Template for displaying products in a product category. Simply includes the archive template.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/taxonomy-product-cat.php.
  *
@@ -12,10 +12,9 @@
  * the readme will list any important changes.
  *
  * @see         https://woocommerce.com/document/template-structure/
- * @package     WooCommerce\Templates
+ *
  * @version     4.7.0
  */
-
 defined('ABSPATH') || exit;
 
 wc_get_template('archive-product.php');

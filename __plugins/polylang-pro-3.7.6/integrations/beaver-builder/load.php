@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit; // Don't access directly.
 }
 

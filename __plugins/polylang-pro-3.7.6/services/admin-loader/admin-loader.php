@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Loads the correct class depending on the context.
  *
  * @since 2.8
@@ -44,13 +40,13 @@ class PLL_Admin_Loader
      *
      * @phpstan-param non-falsy-string $property
      */
-    public function __construct(&$polylang, $property, array $args = array())
+    public function __construct(&$polylang, $property, array $args = [])
     {
         $this->polylang = &$polylang;
         $this->property = $property;
-        $this->args     = $args;
+        $this->args = $args;
 
-        add_action('admin_init', array( $this, 'load' ), 20); // After fusion Builder.
+        add_action('admin_init', [$this, 'load'], 20); // After fusion Builder.
     }
 
     /**
@@ -64,7 +60,7 @@ class PLL_Admin_Loader
     {
         if ('post-new.php' === $GLOBALS['pagenow']) {
             // We need to wait until we know which editor is in use
-            add_filter('use_block_editor_for_post', array( $this, '_load' ), 999); // After the plugin Classic Editor
+            add_filter('use_block_editor_for_post', [$this, '_load'], 999); // After the plugin Classic Editor
         } elseif ('post.php' === $GLOBALS['pagenow'] && isset($_GET['action'], $_GET['post']) && 'edit' === $_GET['action'] && empty($_GET['meta-box-loader'])) { // phpcs:ignore WordPress.Security.NonceVerification
             $this->_load(use_block_editor_for_post((int) $_GET['post'])); // phpcs:ignore WordPress.Security.NonceVerification
         } else {
@@ -80,6 +76,7 @@ class PLL_Admin_Loader
      * @since 2.8
      *
      * @param bool $is_block_editor Whether to use the block editor or not.
+     *
      * @return bool
      */
     public function _load($is_block_editor)
@@ -96,7 +93,7 @@ class PLL_Admin_Loader
                 break;
 
             default:
-                $classname = 'PLL_' . ucwords($prop, '_');
+                $classname = 'PLL_'.ucwords($prop, '_');
                 break;
         }
 
@@ -104,9 +101,9 @@ class PLL_Admin_Loader
             $classname = "{$classname}_REST";
         }
 
-        $args = array( $this->polylang );
+        $args = [$this->polylang];
 
-        if (! empty($this->args)) {
+        if (!empty($this->args)) {
             $args = array_merge($args, array_values($this->args));
         }
 

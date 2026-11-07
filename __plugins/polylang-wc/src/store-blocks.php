@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 use Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry;
 use Automattic\WooCommerce\Blocks\Package;
 
@@ -26,12 +22,12 @@ class PLLWC_Store_Blocks
         if (did_action('pll_language_defined')) {
             $this->add_filters();
         } else {
-            add_action('pll_language_defined', array( $this, 'add_filters' ), 1);
+            add_action('pll_language_defined', [$this, 'add_filters'], 1);
         }
 
         // The language is not defined yet in REST.
         if (Polylang::is_rest_request()) {
-            add_filter('locale', array( $this, 'get_locale' ));
+            add_filter('locale', [$this, 'get_locale']);
         }
     }
 
@@ -44,21 +40,21 @@ class PLLWC_Store_Blocks
      */
     public function add_filters()
     {
-        add_action('wp_footer', array( $this, 'filter_dynamic_blocks' ), 0);
+        add_action('wp_footer', [$this, 'filter_dynamic_blocks'], 0);
 
-        add_action('woocommerce_blocks_checkout_enqueue_data', array( $this, 'hydrate_store_routes' ));
-        add_action('woocommerce_blocks_cart_enqueue_data', array( $this, 'hydrate_store_routes' ));
+        add_action('woocommerce_blocks_checkout_enqueue_data', [$this, 'hydrate_store_routes']);
+        add_action('woocommerce_blocks_cart_enqueue_data', [$this, 'hydrate_store_routes']);
 
         // Use `render_block_data` to translate only attribute ids rather than content (which contains content such as post titles and links).
-        add_filter('render_block_data', array( $this, 'filter_reviews_by_product_block_id' ));
+        add_filter('render_block_data', [$this, 'filter_reviews_by_product_block_id']);
 
         // Fix assets URLs when using one domain per language.
         if (PLL()->options['force_lang'] > 1) {
-            add_filter('transient_woocommerce_blocks_asset_api_script_data', array( $this, 'blocks_assets_links' ));
-            add_filter('transient_woocommerce_blocks_asset_api_script_data_ssl', array( $this, 'blocks_assets_links' ));
+            add_filter('transient_woocommerce_blocks_asset_api_script_data', [$this, 'blocks_assets_links']);
+            add_filter('transient_woocommerce_blocks_asset_api_script_data_ssl', [$this, 'blocks_assets_links']);
         }
 
-        add_action('woocommerce_store_api_checkout_order_processed', array( $this, 'ensure_order_language' ));
+        add_action('woocommerce_store_api_checkout_order_processed', [$this, 'ensure_order_language']);
     }
 
     /**
@@ -90,7 +86,7 @@ class PLLWC_Store_Blocks
          * is loaded before `wp-api-fetch` we're using to register our script to filter by language.
          * So we need to check `wc-cart-checkout-base` is enqueued to add our script after `wp-api-fetch`
          * only in this case.
-        */
+         */
         if (wp_script_is('wc-cart-checkout-base')) {
             wp_add_inline_script('wp-api-fetch', $script, 'after');
         }
@@ -108,12 +104,12 @@ class PLLWC_Store_Blocks
      */
     public function hydrate_store_routes(): void
     {
-        if (! is_admin() && ! WC()->is_rest_api_request()) {
+        if (!is_admin() && !WC()->is_rest_api_request()) {
             $asset_data_registry = Package::container()->get(AssetDataRegistry::class);
-            $asset_data_registry->hydrate_api_request('/wc/store/v1/cart?lang=' . pll_current_language());
+            $asset_data_registry->hydrate_api_request('/wc/store/v1/cart?lang='.pll_current_language());
 
             if (current_action() === 'woocommerce_blocks_checkout_enqueue_data') {
-                $asset_data_registry->hydrate_data_from_api_request('checkoutData', '/wc/store/v1/checkout?lang=' . pll_current_language());
+                $asset_data_registry->hydrate_data_from_api_request('checkoutData', '/wc/store/v1/checkout?lang='.pll_current_language());
             }
         }
     }
@@ -124,6 +120,7 @@ class PLLWC_Store_Blocks
      * @since 1.5.3
      *
      * @param string $path The REST API path to filter.
+     *
      * @return string Inline js script to add.
      */
     protected function get_filter_script($path)
@@ -131,8 +128,8 @@ class PLLWC_Store_Blocks
         /** @var string $current_language This cannot be false because the language is defined at this point */
         $current_language = pll_current_language();
 
-        $path   = esc_js($path);
-        $lang   = esc_js($current_language);
+        $path = esc_js($path);
+        $lang = esc_js($current_language);
 
         return "wp.apiFetch.use(
 			function( options, next ) {
@@ -150,6 +147,7 @@ class PLLWC_Store_Blocks
      * @since 1.9
      *
      * @param array $parsed_block The block being rendered.
+     *
      * @return array
      */
     public function filter_reviews_by_product_block_id($parsed_block)
@@ -170,7 +168,7 @@ class PLLWC_Store_Blocks
         }
 
         $translated_product_id = $data_store->get($parsed_block['attrs']['productId']);
-        if (! $translated_product_id) {
+        if (!$translated_product_id) {
             return $parsed_block;
         }
 
@@ -184,13 +182,14 @@ class PLLWC_Store_Blocks
      *
      * @since 1.9.5
      *
-     * @param  string $locale The locale ID.
+     * @param string $locale The locale ID.
+     *
      * @return string
      */
     public function get_locale($locale)
     {
         $requested_url = pll_get_requested_url();
-        if (! is_string($requested_url) || ! strpos($requested_url, '/wc/store/v1')) {
+        if (!is_string($requested_url) || !strpos($requested_url, '/wc/store/v1')) {
             return $locale;
         }
 
@@ -213,6 +212,7 @@ class PLLWC_Store_Blocks
      * @since 2.1
      *
      * @param string|false $value Current value of the WooCommerce transient (JSON encoded).
+     *
      * @return string|false WooCommerce transient with blocks assets URLs modified with the current language.
      */
     public function blocks_assets_links($value)
@@ -222,7 +222,7 @@ class PLLWC_Store_Blocks
         if (
             json_last_error() !== JSON_ERROR_NONE ||
             empty($transient_value['script_data']) ||
-            ! is_array($transient_value['script_data'])
+            !is_array($transient_value['script_data'])
         ) {
             return $value;
         }
@@ -234,13 +234,11 @@ class PLLWC_Store_Blocks
             /** @var PLL_Language $language */
             $language = PLL()->curlang;
 
-            $transient_value['script_data'][ $key ]['src'] = PLL()->links_model->switch_language_in_link($script_data['src'], $language);
+            $transient_value['script_data'][$key]['src'] = PLL()->links_model->switch_language_in_link($script_data['src'], $language);
         }
 
         return wp_json_encode($transient_value);
     }
-
-
 
     /**
      * Ensures the order language is set correctly.
@@ -248,6 +246,7 @@ class PLLWC_Store_Blocks
      * @since 2.2
      *
      * @param WC_Order $order Order being processed.
+     *
      * @return void
      */
     public function ensure_order_language($order)

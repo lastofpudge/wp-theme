@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the compatibility with WooCommerce subscriptions.
  * Version tested: 2.2.19.
  *
@@ -20,51 +16,51 @@ class PLLWC_Subscriptions
      */
     public function __construct()
     {
-        add_filter('pllwc_copy_post_metas', array( $this, 'copy_post_metas' ));
+        add_filter('pllwc_copy_post_metas', [$this, 'copy_post_metas']);
 
         // Add languages to the subscriptions, similar to orders.
-        add_filter('pllwc_get_order_types', array( $this, 'translate_types' ));
+        add_filter('pllwc_get_order_types', [$this, 'translate_types']);
 
         // Renewal and Resubscribe.
-        add_filter('wcs_new_order_created', array( $this, 'new_order_created' ), 10, 2);
+        add_filter('wcs_new_order_created', [$this, 'new_order_created'], 10, 2);
 
         if (PLL() instanceof PLL_Admin && PLLWC()->admin_orders instanceof PLLWC_Admin_Orders_HPOS) {
-            add_action('woocommerce_after_subscription_object_save', array( PLLWC()->admin_orders, 'save_order_language' ));
+            add_action('woocommerce_after_subscription_object_save', [PLLWC()->admin_orders, 'save_order_language']);
         }
 
         if (version_compare($GLOBALS['wp_version'], '6.7-beta') < 0) {
             // Backward compatibility with WP < 6.7.
-            add_action('change_locale', array( $this, 'change_locale' ));
+            add_action('change_locale', [$this, 'change_locale']);
         }
 
         if (PLL() instanceof PLL_Frontend) {
-            add_action('parse_query', array( $this, 'parse_query' ), 3); // Before Polylang.
+            add_action('parse_query', [$this, 'parse_query'], 3); // Before Polylang.
         }
 
         // Strings translations.
-        add_filter('pll_sanitize_string_translation', array( $this, 'sanitize_strings' ), 10, 3);
-        add_action('init', array( $this, 'register_strings' ));
+        add_filter('pll_sanitize_string_translation', [$this, 'sanitize_strings'], 10, 3);
+        add_action('init', [$this, 'register_strings']);
 
         // Endpoints.
-        add_filter('pll_translation_url', array( $this, 'pll_translation_url' ), 10, 2);
+        add_filter('pll_translation_url', [$this, 'pll_translation_url'], 10, 2);
 
         // Check if a user has a subscription.
-        add_filter('wcs_user_has_subscription', array( $this, 'user_has_subscription' ), 10, 4);
-        add_filter('woocommerce_get_subscriptions_query_args', array( $this, 'get_subscriptions_query_args' ), 10, 2);
+        add_filter('wcs_user_has_subscription', [$this, 'user_has_subscription'], 10, 4);
+        add_filter('woocommerce_get_subscriptions_query_args', [$this, 'get_subscriptions_query_args'], 10, 2);
 
         // Variable subscription products.
-        add_action('wp_trash_post', array( $this, 'delete_variation' ));
-        add_action('before_delete_post', array( $this, 'delete_variation' ));
+        add_action('wp_trash_post', [$this, 'delete_variation']);
+        add_action('before_delete_post', [$this, 'delete_variation']);
 
         // Work around endpoints options added in wpml-config.xml :/.
-        remove_filter('option_woocommerce_myaccount_subscriptions_endpoint', array( PLL_WPML_Config::instance(), 'translate_strings' ));
-        remove_filter('option_woocommerce_myaccount_view_subscription_endpoint', array( PLL_WPML_Config::instance(), 'translate_strings' ));
+        remove_filter('option_woocommerce_myaccount_subscriptions_endpoint', [PLL_WPML_Config::instance(), 'translate_strings']);
+        remove_filter('option_woocommerce_myaccount_view_subscription_endpoint', [PLL_WPML_Config::instance(), 'translate_strings']);
 
         // Add e-mails for translation.
-        add_filter('pllwc_order_email_actions', array( $this, 'filter_order_email_actions' ));
+        add_filter('pllwc_order_email_actions', [$this, 'filter_order_email_actions']);
 
         // Translate slugs for endpoints.
-        add_action('plugins_loaded', array( $this, 'add_query_vars' ), 20); // After `WC_Subscriptions_Core_Plugin::init_version_dependant_classes()` (prio 10).
+        add_action('plugins_loaded', [$this, 'add_query_vars'], 20); // After `WC_Subscriptions_Core_Plugin::init_version_dependant_classes()` (prio 10).
     }
 
     /**
@@ -73,13 +69,14 @@ class PLLWC_Subscriptions
      * @since 1.6
      *
      * @param string[] $actions Array of actions used to send emails.
+     *
      * @return string[]
      */
     public function filter_order_email_actions($actions)
     {
         return array_merge(
             $actions,
-            array(
+            [
                 // Cancelled subscription.
                 'cancelled_subscription_notification',
                 // Customer completed order.
@@ -111,7 +108,7 @@ class PLLWC_Subscriptions
                 'woocommerce_subscriptions_switch_completed_switch_notification',
                 // Suspended Subscription.
                 'on-hold_subscription_notification', // Since WCS 2.1.
-            )
+            ]
         );
     }
 
@@ -122,11 +119,12 @@ class PLLWC_Subscriptions
      * @since 0.4
      *
      * @param array $keys List of custom fields names.
+     *
      * @return array
      */
     public function copy_post_metas($keys)
     {
-        $wcs_keys = array(
+        $wcs_keys = [
             '_subscription_payment_sync_date',
             '_subscription_length',
             '_subscription_limit',
@@ -136,7 +134,8 @@ class PLLWC_Subscriptions
             '_subscription_sign_up_fee',
             '_subscription_trial_length',
             '_subscription_trial_period',
-        );
+        ];
+
         return array_merge($keys, $wcs_keys);
     }
 
@@ -147,11 +146,12 @@ class PLLWC_Subscriptions
      * @since 0.4
      *
      * @param array $types List of post type names for which Polylang manages language and translations.
+     *
      * @return array List of post type names for which Polylang manages language and translations.
      */
     public function translate_types($types)
     {
-        return array_merge($types, array( 'shop_subscription' ));
+        return array_merge($types, ['shop_subscription']);
     }
 
     /**
@@ -162,6 +162,7 @@ class PLLWC_Subscriptions
      *
      * @param object $new_order    New order.
      * @param object $subscription Parent subscription.
+     *
      * @return object Unmodified order
      */
     public function new_order_created($new_order, $subscription)
@@ -170,6 +171,7 @@ class PLLWC_Subscriptions
             $data_store = PLLWC_Data_Store::load('order_language');
             $data_store->set_language($new_order->get_id(), $lang);
         }
+
         return $new_order;
     }
 
@@ -197,23 +199,23 @@ class PLLWC_Subscriptions
      */
     public function register_strings(): void
     {
-        $options = array(
+        $options = [
             'add_to_cart_button_text' => __('Add to Cart Button Text', 'polylang-wc'),
             'order_button_text'       => __('Place Order Button Text', 'polylang-wc'),
             'switch_button_text'      => __('Switch Button Text', 'polylang-wc'),
-        );
+        ];
 
         foreach ($options as $option => $name) {
             if (PLL() instanceof PLL_Frontend) {
-                add_filter('option_woocommerce_subscriptions_' . $option, 'pll__');
+                add_filter('option_woocommerce_subscriptions_'.$option, 'pll__');
                 continue;
             }
 
-            if (! PLL() instanceof PLL_Admin_Base) {
+            if (!PLL() instanceof PLL_Admin_Base) {
                 continue;
             }
 
-            $string = get_option('woocommerce_subscriptions_' . $option);
+            $string = get_option('woocommerce_subscriptions_'.$option);
 
             if (empty($string)) {
                 continue;
@@ -232,6 +234,7 @@ class PLLWC_Subscriptions
      * @param string $translation A string translation.
      * @param string $name        The string name.
      * @param string $context     The group the string belongs to.
+     *
      * @return string Sanitized translation
      */
     public function sanitize_strings($translation, $name, $context)
@@ -239,6 +242,7 @@ class PLLWC_Subscriptions
         if ('WooCommerce Subscriptions' === $context) {
             $translation = wp_kses_post(trim($translation));
         }
+
         return $translation;
     }
 
@@ -249,6 +253,7 @@ class PLLWC_Subscriptions
      * @since 0.4
      *
      * @param WP_Query $query WP_Query object.
+     *
      * @return void
      */
     public function parse_query($query)
@@ -270,19 +275,20 @@ class PLLWC_Subscriptions
      *
      * @param string $url  URL of the translation, to modify.
      * @param string $lang Language slug.
+     *
      * @return string
      */
     public function pll_translation_url($url, $lang)
     {
         if ($url && defined('POLYLANG_PRO') && POLYLANG_PRO && get_option('permalink_structure')) {
-            $wcs_query = pll_get_anonymous_object_from_filter('init', array( 'WCS_Query', 'add_endpoints' ));
+            $wcs_query = pll_get_anonymous_object_from_filter('init', ['WCS_Query', 'add_endpoints']);
 
             if (is_object($wcs_query)) {
                 $endpoint = $wcs_query->get_current_endpoint();
 
-                if ($endpoint && isset($wcs_query->query_vars[ $endpoint ])) {
+                if ($endpoint && isset($wcs_query->query_vars[$endpoint])) {
                     $language = PLL()->model->get_language($lang);
-                    $url      = PLL()->translate_slugs->slugs_model->switch_translated_slug($url, $language, 'wc_' . $wcs_query->query_vars[ $endpoint ]);
+                    $url = PLL()->translate_slugs->slugs_model->switch_translated_slug($url, $language, 'wc_'.$wcs_query->query_vars[$endpoint]);
                 }
             }
         }
@@ -300,11 +306,12 @@ class PLLWC_Subscriptions
      * @param int   $user_id          The ID of a user in the store.
      * @param int   $product_id       The ID of a product in the store.
      * @param mixed $status           Subscription status.
+     *
      * @return bool
      */
     public function user_has_subscription($has_subscription, $user_id, $product_id, $status)
     {
-        if (false === $has_subscription && ! empty($product_id)) {
+        if (false === $has_subscription && !empty($product_id)) {
             $data_store = PLLWC_Data_Store::load('product_language');
             foreach (wcs_get_users_subscriptions($user_id) as $subscription) {
                 if (empty($status) || 'any' === $status || $subscription->has_status($status)) {
@@ -317,6 +324,7 @@ class PLLWC_Subscriptions
                 }
             }
         }
+
         return $has_subscription;
     }
 
@@ -329,11 +337,12 @@ class PLLWC_Subscriptions
      *
      * @param array $query_args WP_Query() arguments.
      * @param array $args       Arguments of wcs_get_subscriptions().
+     *
      * @return array
      */
     public function get_subscriptions_query_args($query_args, $args)
     {
-        if (isset($query_args['post__in']) && array( 0 ) === $query_args['post__in']) { // Where `array( 0 ) correspond to `WCS_Admin_Post_Types::$post__in_none`, telling no result should be returned.
+        if (isset($query_args['post__in']) && [0] === $query_args['post__in']) { // Where `array( 0 ) correspond to `WCS_Admin_Post_Types::$post__in_none`, telling no result should be returned.
             $data_store = PLLWC_Data_Store::load('product_language');
             $found_subs_from_translations = wcs_get_subscriptions_for_product(
                 array_merge(
@@ -342,10 +351,11 @@ class PLLWC_Subscriptions
                 )
             );
 
-            if (! empty($found_subs_from_translations)) {
+            if (!empty($found_subs_from_translations)) {
                 $query_args['post__in'] = $found_subs_from_translations;
             }
         }
+
         return $query_args;
     }
 
@@ -358,15 +368,16 @@ class PLLWC_Subscriptions
      * @since 1.3.3
      *
      * @param int $variation_id Subscription variation id.
+     *
      * @return void
      */
     public function delete_variation($variation_id)
     {
-        static $avoid_delete = array();
+        static $avoid_delete = [];
 
         $post_type = get_post_type($variation_id);
 
-        if ('product_variation' === $post_type && ! in_array($variation_id, $avoid_delete)) {
+        if ('product_variation' === $post_type && !in_array($variation_id, $avoid_delete)) {
             $variation_product = wc_get_product($variation_id);
 
             if ($variation_product && $variation_product->is_type('subscription_variation')) {
@@ -389,12 +400,12 @@ class PLLWC_Subscriptions
      */
     public function add_query_vars(): void
     {
-        $wcs_query = pll_get_anonymous_object_from_filter('init', array( 'WCS_Query', 'add_endpoints' ));
+        $wcs_query = pll_get_anonymous_object_from_filter('init', ['WCS_Query', 'add_endpoints']);
 
-        if (! $wcs_query instanceof WCS_Query) {
+        if (!$wcs_query instanceof WCS_Query) {
             return;
         }
 
-        add_filter('woocommerce_get_query_vars', array( $wcs_query, 'add_wcs_query_vars' ));
+        add_filter('woocommerce_get_query_vars', [$wcs_query, 'add_wcs_query_vars']);
     }
 }

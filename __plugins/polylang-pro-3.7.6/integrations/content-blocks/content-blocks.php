@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * A class to manage the integration with Content Blocks (Custom Post Widget).
  * Version tested: 3.0.4.
  *
@@ -21,7 +17,7 @@ class PLL_Content_Blocks
      */
     public function init()
     {
-        add_filter('pll_get_post_types', array( $this, 'get_post_types' ), 10, 2);
+        add_filter('pll_get_post_types', [$this, 'get_post_types'], 10, 2);
     }
 
     /**
@@ -31,13 +27,15 @@ class PLL_Content_Blocks
      *
      * @param string[] $post_types  List of post types.
      * @param bool     $is_settings True when displaying the list of custom post types in Polylang settings.
+     *
      * @return string[]
      */
     public function get_post_types($post_types, $is_settings)
     {
-        if (! $is_settings) {
+        if (!$is_settings) {
             $post_types['content_block'] = 'content_block';
         }
+
         return $post_types;
     }
 }

@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Data store factory.
  *
  * As our language data stores don't implement the WC_Object_Data_Store_Interface
@@ -20,22 +16,24 @@ class PLLWC_Data_Store
      *
      * @var array<string, class-string>
      */
-    private static $stores = array(
+    private static $stores = [
         'order_language'   => 'PLLWC_Order_Language_CPT',
         'product_language' => 'PLLWC_Product_Language_CPT',
-    );
+    ];
 
     /**
      * Loads a data store.
      *
      * @since 1.0
      *
+     * @param 'order_language'|'product_language' $object_type Identifier for the data store.
+     *
      * @throws Exception If the data store doesn't exist.
      *
-     * @param 'order_language'|'product_language' $object_type Identifier for the data store.
      * @return PLLWC_Order_Language_CPT|PLLWC_Product_Language_CPT
-     *         PLLWC_Order_Language_CPT if $object_type is 'order_language',
-     *         PLLWC_Product_Language_CPT if $object_type is 'product_language'.
+     *                                                             PLLWC_Order_Language_CPT if $object_type is 'order_language',
+     *                                                             PLLWC_Product_Language_CPT if $object_type is 'product_language'.
+     *
      * @phpstan-return ($object_type is 'order_language' ? PLLWC_Order_Language_CPT : PLLWC_Product_Language_CPT)
      */
     public static function load($object_type)
@@ -50,7 +48,7 @@ class PLLWC_Data_Store
         self::$stores = apply_filters('pllwc_data_stores', self::$stores);
 
         /** @var class-string */
-        $store = self::$stores[ $object_type ];
+        $store = self::$stores[$object_type];
 
         if (class_exists($store)) {
             /** @var PLLWC_Order_Language_CPT|PLLWC_Product_Language_CPT */

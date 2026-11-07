@@ -14,12 +14,12 @@ class ProductFilterQuery
             return [];
         }
 
-        $queryArgs                           = $this->baseQuery->query_vars;
-        $queryArgs['fields']                 = 'ids';
-        $queryArgs['nopaging']               = true;
-        $queryArgs['no_found_rows']          = true;
-        $queryArgs['cache_results']          = false;
-        $queryArgs['suppress_filters']       = false;
+        $queryArgs = $this->baseQuery->query_vars;
+        $queryArgs['fields'] = 'ids';
+        $queryArgs['nopaging'] = true;
+        $queryArgs['no_found_rows'] = true;
+        $queryArgs['cache_results'] = false;
+        $queryArgs['suppress_filters'] = false;
         $queryArgs['update_post_meta_cache'] = false;
         $queryArgs['update_post_term_cache'] = false;
 

@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the synchronization of the stock between translations of the same product.
  *
  * @since 0.1
@@ -29,10 +25,10 @@ class PLLWC_Stock
     {
         $this->data_store = PLLWC_Data_Store::load('product_language');
 
-        add_filter('woocommerce_update_product_stock_query', array( $this, 'update_product_stock_query' ), 10, 2); // Since WC 3.6.
-        add_action('woocommerce_updated_product_stock', array( $this, 'updated_product_stock' )); // Since WC 3.6.
+        add_filter('woocommerce_update_product_stock_query', [$this, 'update_product_stock_query'], 10, 2); // Since WC 3.6.
+        add_action('woocommerce_updated_product_stock', [$this, 'updated_product_stock']); // Since WC 3.6.
 
-        add_filter('woocommerce_query_for_reserved_stock', array( $this, 'query_for_reserved_stock' ), 10, 2);
+        add_filter('woocommerce_query_for_reserved_stock', [$this, 'query_for_reserved_stock'], 10, 2);
     }
 
     /**
@@ -42,6 +38,7 @@ class PLLWC_Stock
      *
      * @param string $sql        SQL query used to update the product stock.
      * @param int    $product_id Product id.
+     *
      * @return string Modified SQL query.
      */
     public function update_product_stock_query($sql, $product_id)
@@ -63,6 +60,7 @@ class PLLWC_Stock
      * @since 1.2
      *
      * @param int $id Product id.
+     *
      * @return void
      */
     public function updated_product_stock($id)
@@ -78,13 +76,14 @@ class PLLWC_Stock
     }
 
     /**
-     * Synchronizes reserve_stock_for_product across translations
+     * Synchronizes reserve_stock_for_product across translations.
      *
      * @since 1.5
      * @since 1.8 Removed the 3rd parameter.
      *
      * @param string $query      The query to get the reserved stock of a product.
      * @param int    $product_id Product ID.
+     *
      * @return string
      */
     public function query_for_reserved_stock($query, $product_id)
@@ -93,7 +92,7 @@ class PLLWC_Stock
 
         $product_ids = $this->data_store->get_translations($product_id);
 
-        if (empty(array_diff($product_ids, array( $product_id )))) {
+        if (empty(array_diff($product_ids, [$product_id]))) {
             // No other translations.
             return $query;
         }

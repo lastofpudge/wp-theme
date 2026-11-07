@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Holds the rules defining which part of a block should be "translated".
  * Translated may mean different actions, like exporting it into a translation file, or updating the database...
  *
@@ -26,163 +22,165 @@ class PLL_Translation_Block_Parsing_Rules
      *     blocks_not_to_parse?: string[]
      * }
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Holds some rules for block attributes to translate.
      * Keep this list alphabetically sorted when adding entries.
      *
      * @var array
+     *
      * @phpstan-var AttributesParsingRules
      */
-    private $parsing_rules_attributes = array(
-        'core/comments-pagination-next'     => array(
+    private $parsing_rules_attributes = [
+        'core/comments-pagination-next'     => [
             'label' => true,
-        ),
-        'core/comments-pagination-previous' => array(
+        ],
+        'core/comments-pagination-previous' => [
             'label' => true,
-        ),
-        'core/home-link'                    => array(
+        ],
+        'core/home-link'                    => [
             'label' => true,
-        ),
-        'core/more'                         => array(
+        ],
+        'core/more'                         => [
             'customText' => true,
-        ),
-        'core/navigation-link'              => array(
+        ],
+        'core/navigation-link'              => [
             'label'       => true,
             'title'       => true,
             'description' => true,
-        ),
-        'core/navigation-submenu'           => array(
+        ],
+        'core/navigation-submenu'           => [
             'label'       => true,
             'title'       => true,
             'description' => true,
-        ),
-        'core/page-list-item'               => array(
+        ],
+        'core/page-list-item'               => [
             'label' => true,
             'title' => true,
-        ),
-        'core/post-excerpt'                 => array(
+        ],
+        'core/post-excerpt'                 => [
             'moreText' => true,
-        ),
-        'core/post-navigation-link'         => array(
+        ],
+        'core/post-navigation-link'         => [
             'label' => true,
-        ),
-        'core/post-terms'                   => array(
+        ],
+        'core/post-terms'                   => [
             'prefix' => true,
             'suffix' => true,
-        ),
-        'core/query'                        => array(
-            'query' => array(
+        ],
+        'core/query'                        => [
+            'query' => [
                 'search' => true,
-            ),
-        ),
-        'core/query-pagination-next'        => array(
+            ],
+        ],
+        'core/query-pagination-next'        => [
             'label' => true,
-        ),
-        'core/query-pagination-previous'    => array(
+        ],
+        'core/query-pagination-previous'    => [
             'label' => true,
-        ),
-        'core/read-more'                    => array(
+        ],
+        'core/read-more'                    => [
             'content' => true,
-        ),
-        'core/search'                       => array(
+        ],
+        'core/search'                       => [
             'label'       => true,
             'placeholder' => true,
             'buttonText'  => true,
-        ),
-        'core/social-link'                  => array(
+        ],
+        'core/social-link'                  => [
             'label' => true,
-        ),
-        'core/widget-group'                 => array(
+        ],
+        'core/widget-group'                 => [
             'title' => true,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Holds some rules as Xpath expressions to evaluate in the blocks content.
      * Keep this list alphabetically sorted when adding entries.
      *
      * @var string[][]
+     *
      * @phpstan-var XpathParsingRules
      */
-    private $parsing_rules = array(
-        'core/accordion-heading' => array(
+    private $parsing_rules = [
+        'core/accordion-heading' => [
             '//span[@class="wp-block-accordion-heading__toggle-title"]',
-        ),
-        'core/audio'             => array(
+        ],
+        'core/audio'             => [
             '//figure/figcaption',
-        ),
-        'core/button'            => array(
+        ],
+        'core/button'            => [
             '//a',
             '//a/@href',
-        ),
-        'core/cover'             => array(
+        ],
+        'core/cover'             => [
             '//div/p',
-        ),
-        'core/cover-image'       => array(
+        ],
+        'core/cover-image'       => [
             '//div/p',
-        ),
-        'core/details'           => array(
+        ],
+        'core/details'           => [
             '//details/summary',
-        ),
-        'core/embed'             => array(
+        ],
+        'core/embed'             => [
             '//figure/figcaption',
-        ),
-        'core/file'              => array(
+        ],
+        'core/file'              => [
             '//div/a',
-        ),
-        'core/gallery'           => array(
+        ],
+        'core/gallery'           => [
             '//figure/figcaption',
             '//figure/img/@alt', // Backward compatibility.
-        ),
-        'core/heading'           => array(
+        ],
+        'core/heading'           => [
             '//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]',
-        ),
-        'core/image'             => array(
+        ],
+        'core/image'             => [
             '//figure/figcaption',
             '//figure/img/@alt|//figure/a/img/@alt',
             '//figure/img/@title|//figure/a/img/@title',
             '//figure/a/@href',
-        ),
-        'core/list'              => array(
+        ],
+        'core/list'              => [
             '//ul/li|//ol/li',
-        ),
-        'core/media-text'        => array(
+        ],
+        'core/media-text'        => [
             '//figure/img/@alt',
-        ),
-        'core/paragraph'         => array(
+        ],
+        'core/paragraph'         => [
             '//p',
-        ),
-        'core/preformatted'      => array(
+        ],
+        'core/preformatted'      => [
             '//pre',
-        ),
-        'core/pullquote'         => array(
+        ],
+        'core/pullquote'         => [
             '//blockquote/p',
             '//blockquote/cite',
-        ),
-        'core/quote'             => array(
+        ],
+        'core/quote'             => [
             '//blockquote/p',
             '//blockquote/cite',
-        ),
-        'core/subhead'           => array(
+        ],
+        'core/subhead'           => [
             '//p',
-        ),
-        'core/table'             => array(
+        ],
+        'core/table'             => [
             '//th',
             '//td',
             '//figure/figcaption',
-        ),
-        'core/text-columns'      => array(
+        ],
+        'core/text-columns'      => [
             '//div[@class="wp-block-column"]',
-        ),
-        'core/verse'             => array(
+        ],
+        'core/verse'             => [
             '//pre',
-        ),
-        'core/video'             => array(
+        ],
+        'core/video'             => [
             '//figure/figcaption',
-        ),
-    );
+        ],
+    ];
 
     /**
      * List of known blocks that don't need to be parsed, because they don't contain contents to be translated.
@@ -191,7 +189,7 @@ class PLL_Translation_Block_Parsing_Rules
      *
      * @var string[]
      */
-    private $blocks_not_to_parse = array(
+    private $blocks_not_to_parse = [
         'core/buttons',
         'core/code',
         'core/column',
@@ -202,12 +200,12 @@ class PLL_Translation_Block_Parsing_Rules
         'core/separator',
         'core/shortcode',
         'core/spacer',
-    );
+    ];
 
     /**
      * Holds the name of the block type being currently parsed.
      *
-     * @var string $block_type Similar to {@see WP_Block_Parser_Block::$blockName}.
+     * @var string Similar to {@see WP_Block_Parser_Block::$blockName}.
      */
     private $block_type;
 
@@ -217,11 +215,13 @@ class PLL_Translation_Block_Parsing_Rules
      * @since 3.3
      *
      * @param string $block_type {@see WP_Block_Parser_Block::$blockName}.
+     *
      * @return PLL_Translation_Block_Parsing_Rules $this This object with its $rules property updated.
      */
     public function set_block_name($block_type)
     {
         $this->block_type = $block_type;
+
         return $this;
     }
 
@@ -232,6 +232,7 @@ class PLL_Translation_Block_Parsing_Rules
      * @since 3.3
      *
      * @param string $content {@see WP_Block_Parser_Block::$innerContent}.
+     *
      * @return string[] Parsing rules as array keys, strings to translate as array values.
      *
      * @phpstan-return array<string,string>
@@ -240,18 +241,18 @@ class PLL_Translation_Block_Parsing_Rules
     {
         $rules = $this->get_parsing_rules($this->block_type);
 
-        if (! isset($rules[ $this->block_type ])) {
-            return array();
+        if (!isset($rules[$this->block_type])) {
+            return [];
         }
 
         // Check if there's HTML encoded non-breaking-space, if so decode it for consistency.
         $content = str_replace('&nbsp;', html_entity_decode('&nbsp;'), $content);
 
-        $rules             = $rules[ $this->block_type ];
+        $rules = $rules[$this->block_type];
         $sanitized_content = wp_kses_post($content);
 
         if (empty($sanitized_content)) {
-            return array();
+            return [];
         }
 
         return (new PLL_DOM_Content($content))->get_strings($rules);
@@ -263,12 +264,14 @@ class PLL_Translation_Block_Parsing_Rules
      * @since 3.3
      *
      * @param array $block An array mimicking a {@see WP_Block_Parser_Block}.
+     *
      * @return bool
      */
     public function has_parsing_rules($block)
     {
         $rules = $this->get_parsing_rules($block['blockName']);
-        return isset($rules[ $block['blockName'] ]);
+
+        return isset($rules[$block['blockName']]);
     }
 
     /**
@@ -278,6 +281,7 @@ class PLL_Translation_Block_Parsing_Rules
      * @since 3.3
      *
      * @param array $block An array mimicking a {@see WP_Block_Parser_Block}.
+     *
      * @return bool
      */
     public function should_be_parsed($block)
@@ -305,13 +309,14 @@ class PLL_Translation_Block_Parsing_Rules
      *
      * @param string|null $block_name Optional. The block name we want to get the parsing rules for.
      *                                Only necessary for back-compatibility with the old `core-embed/` blocks.
+     *
      * @return string[][]
      *
      * @phpstan-return XpathParsingRules
      */
     private function get_parsing_rules($block_name = null)
     {
-        if (! isset($this->cache['parsing_rules']) || ! is_array($this->cache['parsing_rules'])) {
+        if (!isset($this->cache['parsing_rules']) || !is_array($this->cache['parsing_rules'])) {
             /**
              * Filters the rules as Xpath expressions to evaluate in the blocks content.
              *
@@ -326,10 +331,10 @@ class PLL_Translation_Block_Parsing_Rules
 
         $parsing_rules = $this->cache['parsing_rules'];
 
-        if (is_string($block_name) && ! isset($parsing_rules[ $block_name ]) && strpos($block_name, 'core-embed/') === 0) {
-            $parsing_rules[ $block_name ] = array(
+        if (is_string($block_name) && !isset($parsing_rules[$block_name]) && strpos($block_name, 'core-embed/') === 0) {
+            $parsing_rules[$block_name] = [
                 '//figure/figcaption',
-            );
+            ];
         }
 
         return $parsing_rules;
@@ -346,19 +351,19 @@ class PLL_Translation_Block_Parsing_Rules
      *               Arrays values are `true` or an array containing sub attributes.
      *               Wildcards are allowed. Ex:
      *               array(
-     *                   'block/name' => array(
-     *                       'sub_key_1' => true,
-     *                       'sub_key_2' => array(
-     *                           'sub_sub_key_*' => true,
-     *                       ),
-     *                   ),
+     *               'block/name' => array(
+     *               'sub_key_1' => true,
+     *               'sub_key_2' => array(
+     *               'sub_sub_key_*' => true,
+     *               ),
+     *               ),
      *               )
      *
      * @phpstan-return AttributesParsingRules
      */
     private function get_parsing_rules_for_attributes()
     {
-        if (! isset($this->cache['parsing_rules_for_attributes']) || ! is_array($this->cache['parsing_rules_for_attributes'])) {
+        if (!isset($this->cache['parsing_rules_for_attributes']) || !is_array($this->cache['parsing_rules_for_attributes'])) {
             /**
              * Filters the list of blocks attributes to translate.
              *
@@ -366,17 +371,17 @@ class PLL_Translation_Block_Parsing_Rules
              * @since 3.6 Format changed from `array<string>` to `array<non-falsy-string, array<non-empty-string, array|true>>`.
              *
              * @param array $parsing_rules_attributes Rules for block attributes to translate.
-             *               Array keys are block names for the 1st level, then attribute names for the next levels.
-             *               Arrays values are `true` or an array containing sub attributes.
-             *               Wildcards are allowed. Ex:
-             *               array(
-             *                   'block/name' => array(
-             *                       'sub_key_1' => true,
-             *                       'sub_key_2' => array(
-             *                           'sub_sub_key_*' => true,
-             *                       ),
-             *                   ),
-             *               )
+             *                                        Array keys are block names for the 1st level, then attribute names for the next levels.
+             *                                        Arrays values are `true` or an array containing sub attributes.
+             *                                        Wildcards are allowed. Ex:
+             *                                        array(
+             *                                        'block/name' => array(
+             *                                        'sub_key_1' => true,
+             *                                        'sub_key_2' => array(
+             *                                        'sub_sub_key_*' => true,
+             *                                        ),
+             *                                        ),
+             *                                        )
              */
             $this->cache['parsing_rules_for_attributes'] = (array) apply_filters('pll_blocks_rules_for_attributes', $this->parsing_rules_attributes);
 
@@ -394,22 +399,24 @@ class PLL_Translation_Block_Parsing_Rules
      * @since 3.6
      *
      * @param array $rules Rules for attributes (old and new formats).
+     *
      * @return array Rules for attributes (new format only).
      *
      * @phpstan-param array<non-falsy-string, (array<non-empty-string, array|true>|array<int, non-empty-string>)> $rules
+     *
      * @phpstan-return AttributesParsingRules
      */
     private function handle_blocks_rules_for_attributes_old_format(array $rules): array
     {
-        $deprecated = array();
+        $deprecated = [];
 
         // Change old format into new format.
         foreach ($rules as $block_name => $attributes) {
             foreach ($attributes as $index => $value) {
                 if (is_string($value)) {
                     $deprecated[] = $value;
-                    $rules[ $block_name ][ $value ] = true;
-                    unset($rules[ $block_name ][ $index ]);
+                    $rules[$block_name][$value] = true;
+                    unset($rules[$block_name][$index]);
                 }
             }
         }
@@ -421,9 +428,9 @@ class PLL_Translation_Block_Parsing_Rules
          *
          * @param bool $trigger Whether to trigger the error for deprecated argument format. Default true.
          */
-        if (! empty($deprecated) && WP_DEBUG && apply_filters('deprecated_argument_trigger_error', true)) {
-            $message  = "Filter 'pll_blocks_rules_for_attributes' was used with an argument format that is <strong>deprecated</strong> since version 3.6!";
-            $message .= "\n<pre>\n" . wp_strip_all_tags(var_export($deprecated, true)) . "\n</pre>"; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
+        if (!empty($deprecated) && WP_DEBUG && apply_filters('deprecated_argument_trigger_error', true)) {
+            $message = "Filter 'pll_blocks_rules_for_attributes' was used with an argument format that is <strong>deprecated</strong> since version 3.6!";
+            $message .= "\n<pre>\n".wp_strip_all_tags(var_export($deprecated, true))."\n</pre>"; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
             trigger_error($message, E_USER_DEPRECATED); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error, WordPress.Security.EscapeOutput.OutputNotEscaped
         }
@@ -465,6 +472,7 @@ class PLL_Translation_Block_Parsing_Rules
      * @since 3.3
      *
      * @param array $block An array mimicking a {@see WP_Block_Parser_Block}.
+     *
      * @return array An array with attributes to translate or an empty array.
      *
      * @phpstan-return array<non-empty-string, array|true>
@@ -472,14 +480,14 @@ class PLL_Translation_Block_Parsing_Rules
     public function get_attributes_to_translate($block)
     {
         if (empty($block['attrs'])) {
-            return array();
+            return [];
         }
 
         $rules = $this->get_parsing_rules_for_attributes();
-        if (! isset($rules[ $block['blockName'] ])) {
-            return array();
+        if (!isset($rules[$block['blockName']])) {
+            return [];
         }
 
-        return $rules[ $block['blockName'] ];
+        return $rules[$block['blockName']];
     }
 }

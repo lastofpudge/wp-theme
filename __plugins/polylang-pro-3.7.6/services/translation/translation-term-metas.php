@@ -1,11 +1,7 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
- * Class PLL_Translation_Term_Metas
+ * Class PLL_Translation_Term_Metas.
  *
  * @since 3.3
  *

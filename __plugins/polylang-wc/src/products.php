@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-WC
- */
-
-/**
  * Manages the products (mainly the synchronization of data).
  *
  * @since 1.3
@@ -24,15 +20,15 @@ class PLLWC_Products
      * @see PLLWC_Products::store_product_data()
      * @see PLLWC_Products::get_terms_args()
      *
-     * @var array {
-     *     @type string|false $lang       The product's language.
-     *     @type string[]     $taxonomies Attribute taxonomies.
-     * }
+     * @var array        {
+     * @var string|false $lang       The product's language.
+     * @var string[]     $taxonomies Attribute taxonomies.
+     *                   }
      */
-    private $product_data = array(
+    private $product_data = [
         'lang'       => false,
-        'taxonomies' => array(),
-    );
+        'taxonomies' => [],
+    ];
 
     /**
      * Constructor.
@@ -44,33 +40,32 @@ class PLLWC_Products
         $this->data_store = PLLWC_Data_Store::load('product_language');
 
         // Variations synchronization.
-        add_action('add_meta_boxes', array( $this, 'add_meta_boxes' ), 5, 2);
-        add_action('woocommerce_update_product', array( $this, 'save_product' ));
-        add_action('woocommerce_new_product_variation', array( $this, 'save_variation' ));
-        add_action('woocommerce_update_product_variation', array( $this, 'save_variation' ));
-        add_action('woocommerce_after_product_object_save', array( $this, 'copy_product' ));
+        add_action('add_meta_boxes', [$this, 'add_meta_boxes'], 5, 2);
+        add_action('woocommerce_update_product', [$this, 'save_product']);
+        add_action('woocommerce_new_product_variation', [$this, 'save_variation']);
+        add_action('woocommerce_update_product_variation', [$this, 'save_variation']);
+        add_action('woocommerce_after_product_object_save', [$this, 'copy_product']);
 
         // Filters `get_terms()` in `LookupDataStore::get_term_ids_by_slug_cache()`.
-        add_action('woocommerce_before_product_object_save', array( $this, 'store_product_data' ));
-        add_filter('get_terms_args', array( $this, 'get_terms_args' ), 20); // After Polylang and Polylang Pro.
-        add_action('woocommerce_after_product_object_save', array( $this, 'reset_product_data' ), 5); // Before copy_product(), not mandatory though.
-        add_action('woocommerce_run_product_attribute_lookup_update_callback', array( $this, 'store_product_data' ), 1); // To set the language before WC processes the product.
+        add_action('woocommerce_before_product_object_save', [$this, 'store_product_data']);
+        add_filter('get_terms_args', [$this, 'get_terms_args'], 20); // After Polylang and Polylang Pro.
+        add_action('woocommerce_after_product_object_save', [$this, 'reset_product_data'], 5); // Before copy_product(), not mandatory though.
+        add_action('woocommerce_run_product_attribute_lookup_update_callback', [$this, 'store_product_data'], 1); // To set the language before WC processes the product.
 
-        add_action('pll_post_synchronized', array( $this, 'synchronize_product' ), 10, 4);
-        add_action('pll_created_sync_post', array( $this, 'copy_variations' ), 5, 3);
+        add_action('pll_post_synchronized', [$this, 'synchronize_product'], 10, 4);
+        add_action('pll_created_sync_post', [$this, 'copy_variations'], 5, 3);
 
         // Variations deletion.
-        add_action('woocommerce_before_delete_product_variation', array( $this, 'delete_variation' ));
+        add_action('woocommerce_before_delete_product_variation', [$this, 'delete_variation']);
 
         // Unique product ID.
-        add_filter('wc_product_has_global_unique_id', array( $this, 'unique_id' ), 10, 3);
+        add_filter('wc_product_has_global_unique_id', [$this, 'unique_id'], 10, 3);
         // Unique SKU.
-        add_filter('wc_product_has_unique_sku', array( $this, 'unique_id' ), 10, 3);
-        add_filter('wc_product_pre_lock_on_sku', array( $this, 'filter_lock_on_sku' ), 10, 2);
-
+        add_filter('wc_product_has_unique_sku', [$this, 'unique_id'], 10, 3);
+        add_filter('wc_product_pre_lock_on_sku', [$this, 'filter_lock_on_sku'], 10, 2);
 
         // On sale products block.
-        add_filter('pll_filter_query_excluded_query_vars', array( $this, 'fix_on_sale_products_block_query' ), 10, 2);
+        add_filter('pll_filter_query_excluded_query_vars', [$this, 'fix_on_sale_products_block_query'], 10, 2);
     }
 
     /**
@@ -81,6 +76,7 @@ class PLLWC_Products
      * @param int    $id        Source variation product id.
      * @param int    $tr_parent Target variable product id.
      * @param string $lang      Target language.
+     *
      * @return void
      *
      * @phpstan-param non-empty-string $lang
@@ -88,14 +84,14 @@ class PLLWC_Products
     protected function copy_variation($id, $tr_parent, $lang)
     {
         static $avoid_recursion = false;
-        static $avoid_double    = array();
-        static $avoid_reverse   = array();
+        static $avoid_double = [];
+        static $avoid_reverse = [];
 
-        if ($avoid_recursion || ! empty($avoid_double[ "$id|$tr_parent" ]) || ! empty($avoid_reverse[ $id ])) {
+        if ($avoid_recursion || !empty($avoid_double["$id|$tr_parent"]) || !empty($avoid_reverse[$id])) {
             return;
         }
 
-        $avoid_double[ "$id|$tr_parent" ] = true;
+        $avoid_double["$id|$tr_parent"] = true;
 
         $tr_id = $this->data_store->get($id, $lang);
 
@@ -109,28 +105,28 @@ class PLLWC_Products
             return;
         }
 
-        if (! $tr_id) {
+        if (!$tr_id) {
             // If the product variation is untranslated, attempt to find a translation based on the attribute.
             $tr_product = wc_get_product($tr_parent);
 
             if ($tr_product instanceof WC_Product_Variable) {
                 $tr_attributes = $tr_product->get_variation_attributes();
 
-                if (! empty($tr_attributes)) {
+                if (!empty($tr_attributes)) {
                     // At least one translated variation was manually created.
                     $attributes = $variation->get_attributes();
-                    if (! in_array('', $attributes)) {
+                    if (!in_array('', $attributes)) {
                         $attributes = $this->maybe_translate_attributes($attributes, $lang);
                         foreach ($tr_product->get_children() as $_tr_id) {
                             $tr_variation = wc_get_product($_tr_id);
 
-                            if (! $tr_variation || $attributes !== $tr_variation->get_attributes()) {
+                            if (!$tr_variation || $attributes !== $tr_variation->get_attributes()) {
                                 continue;
                             }
 
                             $source_lang = $this->data_store->get_language($id);
 
-                            if (! $source_lang || ! empty($this->data_store->get($tr_variation->get_id(), $source_lang))) {
+                            if (!$source_lang || !empty($this->data_store->get($tr_variation->get_id(), $source_lang))) {
                                 continue;
                             }
 
@@ -141,7 +137,7 @@ class PLLWC_Products
                 }
             }
 
-            if (! $tr_id) {
+            if (!$tr_id) {
                 // Creates the translated product variation if it does not exist yet.
                 $avoid_recursion = true;
 
@@ -157,11 +153,11 @@ class PLLWC_Products
             $this->data_store->copy($id, $tr_id, $lang);
             $this->data_store->set_language($tr_id, $lang);
             $translations = $this->data_store->get_translations($id);
-            $source_lang  = $this->data_store->get_language($id);
+            $source_lang = $this->data_store->get_language($id);
             if ($source_lang) {
-                $translations[ $source_lang ] = $id; // In case this is the first translation created.
+                $translations[$source_lang] = $id; // In case this is the first translation created.
             }
-            $translations[ $lang ] = $tr_id;
+            $translations[$lang] = $tr_id;
             $this->data_store->save_translations($translations);
         } else {
             // Make sure the parent product is correct. Fixes edge case reported in #153.
@@ -179,7 +175,7 @@ class PLLWC_Products
             $this->data_store->copy($id, $tr_id, $lang, true);
         }
 
-        $avoid_reverse[ $tr_id ] = true;
+        $avoid_reverse[$tr_id] = true;
     }
 
     /**
@@ -190,6 +186,7 @@ class PLLWC_Products
      * @param int    $from Product id from which we copy information.
      * @param int    $to   Product id to which we paste information.
      * @param string $lang Language code.
+     *
      * @return void
      *
      * @phpstan-param non-empty-string $lang
@@ -203,12 +200,12 @@ class PLLWC_Products
             if ($language) {
                 $variations = $product->get_children(); // Note: it does not return disabled variations in WC < 3.3.
 
-                remove_action('woocommerce_new_product_variation', array( $this, 'save_variation' )); // Avoid reverse sync.
+                remove_action('woocommerce_new_product_variation', [$this, 'save_variation']); // Avoid reverse sync.
                 foreach ($variations as $id) {
                     $this->data_store->set_language($id, $language);
                     $this->copy_variation($id, $to, $lang);
                 }
-                add_action('woocommerce_new_product_variation', array( $this, 'save_variation' ));
+                add_action('woocommerce_new_product_variation', [$this, 'save_variation']);
             }
         }
     }
@@ -221,6 +218,7 @@ class PLLWC_Products
      *
      * @param string  $post_type Post type.
      * @param WP_Post $post      Current post object.
+     *
      * @return void
      */
     public function add_meta_boxes($post_type, $post)
@@ -256,6 +254,7 @@ class PLLWC_Products
      * @since 1.0
      *
      * @param int $id Product ID.
+     *
      * @return void
      */
     public function save_product($id)
@@ -269,7 +268,7 @@ class PLLWC_Products
         foreach ($translations as $lang => $tr_id) {
             if ($id !== $tr_id) {
                 // It's useless to copy variations if we already did it by saving variations before.
-                if (! did_action('woocommerce_update_product_variation') && ! did_action('woocommerce_new_product_variation')) {
+                if (!did_action('woocommerce_update_product_variation') && !did_action('woocommerce_new_product_variation')) {
                     $this->copy_variations($id, $tr_id, $lang);
                 }
 
@@ -286,13 +285,14 @@ class PLLWC_Products
      * @since 1.0
      *
      * @param int $id Variation product id.
+     *
      * @return void
      */
     public function save_variation($id)
     {
         static $avoid_recursion = false;
 
-        if (! doing_action('woocommerce_product_duplicate') && ! doing_action('wp_ajax_woocommerce_do_ajax_product_import') && ! $avoid_recursion) {
+        if (!doing_action('woocommerce_product_duplicate') && !doing_action('wp_ajax_woocommerce_do_ajax_product_import') && !$avoid_recursion) {
             $avoid_recursion = true;
 
             if ($variation = wc_get_product($id)) {
@@ -320,13 +320,14 @@ class PLLWC_Products
      * @since 1.0
      *
      * @param int $id Variation product id.
+     *
      * @return void
      */
     public function delete_variation($id)
     {
-        static $avoid_delete = array();
+        static $avoid_delete = [];
 
-        if (! doing_action('delete_post') && ! in_array($id, $avoid_delete)) {
+        if (!doing_action('delete_post') && !in_array($id, $avoid_delete)) {
             $tr_ids = $this->data_store->get_translations($id);
             $avoid_delete = array_merge($avoid_delete, array_values($tr_ids)); // To avoid deleting a variation two times.
             foreach ($tr_ids as $tr_id) {
@@ -344,6 +345,7 @@ class PLLWC_Products
      *
      * @param int $id       ID of the first product to compare.
      * @param int $other_id ID of the second product to compare.
+     *
      * @return bool
      */
     protected static function are_synchronized($id, $other_id)
@@ -359,22 +361,23 @@ class PLLWC_Products
      * @param int  $from Product id from which we copy information.
      * @param int  $to   Product id which we paste information.
      * @param bool $sync True if it is synchronization, false if it is a copy.
+     *
      * @return bool
      */
     public static function should_copy_texts($from, $to, $sync)
     {
-        if (! $sync) {
+        if (!$sync) {
             $duplicate_options = get_user_meta(get_current_user_id(), 'pll_duplicate_content', true);
-            if (! empty($duplicate_options) && is_array($duplicate_options) && ! empty($duplicate_options['product'])) {
+            if (!empty($duplicate_options) && is_array($duplicate_options) && !empty($duplicate_options['product'])) {
                 return true;
             }
         }
 
         if (isset(PLL()->sync_post)) {
             $from = wc_get_product($from);
-            $to   = wc_get_product($to);
+            $to = wc_get_product($to);
 
-            if (! empty($from) && ! empty($to)) {
+            if (!empty($from) && !empty($to)) {
                 if ('variation' === $from->get_type()) {
                     return self::are_synchronized($from->get_parent_id(), $to->get_parent_id());
                 } else {
@@ -395,16 +398,17 @@ class PLLWC_Products
      * @param mixed  $value Property value.
      * @param string $prop  Property name.
      * @param string $lang  Language code.
+     *
      * @return mixed Property value, possibly translated.
      */
     public static function maybe_translate_property($value, string $prop, string $lang)
     {
         $tr_value = $value;
 
-        if (! empty($value)) {
+        if (!empty($value)) {
             switch ($prop) {
                 case 'image_id':
-                    if (! PLL()->options['media_support'] || ! is_numeric($value)) {
+                    if (!PLL()->options['media_support'] || !is_numeric($value)) {
                         break;
                     }
 
@@ -416,11 +420,11 @@ class PLLWC_Products
                     break;
 
                 case 'gallery_image_ids':
-                    if (! PLL()->options['media_support'] || ! is_string($value)) {
+                    if (!PLL()->options['media_support'] || !is_string($value)) {
                         break;
                     }
 
-                    $tr_value = array();
+                    $tr_value = [];
 
                     foreach (array_map('absint', explode(',', $value)) as $post_id) {
                         if (empty($post_id)) {
@@ -442,15 +446,15 @@ class PLLWC_Products
                 case 'children':
                 case 'upsell_ids':
                 case 'cross_sell_ids':
-                    if (! is_array($value)) {
+                    if (!is_array($value)) {
                         break;
                     }
 
                     $data_store = PLLWC_Data_Store::load('product_language');
-                    $tr_value   = array();
+                    $tr_value = [];
 
                     foreach ($value as $id) {
-                        if (! is_numeric($id)) {
+                        if (!is_numeric($id)) {
                             continue;
                         }
                         $tr_id = $data_store->get((int) $id, $lang);
@@ -464,7 +468,7 @@ class PLLWC_Products
 
                 case 'default_attributes':
                 case 'attributes':
-                    if (! is_array($value)) {
+                    if (!is_array($value)) {
                         break;
                     }
 
@@ -496,15 +500,17 @@ class PLLWC_Products
      * @param array  $attributes Product attributes. Could be pairs of attribute taxonomies and term slugs (from `WC_Product_Variation`)
      *                           or a list of `WC_Product_Attribute` objects (from other kind of `WC_Product`).
      * @param string $lang       Language code.
+     *
      * @return array Array of translated attributes with preserved keys.
      *
      * @phpstan-param array<string|WC_Product_Attribute> $attributes
+     *
      * @phpstan-return array<string|WC_Product_Attribute>
      */
     public static function maybe_translate_attributes($attributes, $lang)
     {
         foreach ($attributes as $k => $v) {
-            if (! pll_is_translated_taxonomy($k)) {
+            if (!pll_is_translated_taxonomy($k)) {
                 continue;
             }
 
@@ -515,24 +521,24 @@ class PLLWC_Products
                  */
                 case 'string':
                     $attributes_taxonomies = wc_get_attribute_taxonomy_names();
-                    if (! in_array($k, $attributes_taxonomies)) {
+                    if (!in_array($k, $attributes_taxonomies)) {
                         break;
                     }
 
                     if ('' === $v) { // Correspond to attribute value "Any".
-                        $attributes[ $k ] = '';
+                        $attributes[$k] = '';
                         break;
                     }
 
-                    $terms = get_terms(array( 'taxonomy' => $k, 'slug' => $v, 'hide_empty' => false, 'lang' => '' )); // Don't use get_term_by filtered by language since WP 4.7.
+                    $terms = get_terms(['taxonomy' => $k, 'slug' => $v, 'hide_empty' => false, 'lang' => '']); // Don't use get_term_by filtered by language since WP 4.7.
 
-                    if (! is_array($terms)) {
+                    if (!is_array($terms)) {
                         break;
                     }
 
                     $term = reset($terms);
 
-                    if (! $term instanceof WP_Term) {
+                    if (!$term instanceof WP_Term) {
                         break;
                     }
 
@@ -544,11 +550,11 @@ class PLLWC_Products
 
                     $tr_term = get_term($tr_id, $k);
 
-                    if (! $tr_term instanceof WP_Term) {
+                    if (!$tr_term instanceof WP_Term) {
                         break;
                     }
 
-                    $attributes[ $k ] = $tr_term->slug;
+                    $attributes[$k] = $tr_term->slug;
                     break;
 
                     /*
@@ -556,7 +562,7 @@ class PLLWC_Products
                      * See: {https://github.com/woocommerce/woocommerce/blob/7.3.0/plugins/woocommerce/includes/abstracts/abstract-wc-product.php#L1095-L1120}
                      */
                 case 'object':
-                    if (! $v instanceof WC_Product_Attribute || ! $v->is_taxonomy()) {
+                    if (!$v instanceof WC_Product_Attribute || !$v->is_taxonomy()) {
                         break;
                     }
 
@@ -566,7 +572,7 @@ class PLLWC_Products
                         break;
                     }
 
-                    $tr_ids = array();
+                    $tr_ids = [];
 
                     foreach ($terms as $term) {
                         $tr_id = pll_get_term($term->term_id, $lang);
@@ -580,7 +586,7 @@ class PLLWC_Products
 
                     $v = clone $v; // Avoid original attribute to be modified.
                     $v->set_options($tr_ids);
-                    $attributes[ $k ] = $v;
+                    $attributes[$k] = $v;
                     break;
             }
         }
@@ -599,21 +605,22 @@ class PLLWC_Products
      * @param bool   $id_found   True if the ID is already associated to an existing product, false otherwise.
      * @param int    $product_id Product ID.
      * @param string $id_value   Product SKU or global unique ID.
+     *
      * @return bool
      */
     public function unique_id($id_found, $product_id, $id_value)
     {
-        if (! $id_found) {
+        if (!$id_found) {
             return $id_found;
         }
 
         $current_filter = current_filter();
-        if (! $current_filter) {
+        if (!$current_filter) {
             return $id_found;
         }
 
         $current_filter = substr($current_filter, 15); // Can be unique_sku, lock_on_sku or global_unique_id.
-        $language       = PLL()->model->get_language($this->data_store->get_language($product_id));
+        $language = PLL()->model->get_language($this->data_store->get_language($product_id));
 
         /**
          * Filters the language used to filter `wc_product_has_unique_sku` and `wc_product_has_global_unique_id`.
@@ -626,9 +633,11 @@ class PLLWC_Products
          */
         $language = apply_filters("pllwc_language_for_{$current_filter}", $language, $product_id);
         if ($language instanceof PLL_Language) {
-            $column = in_array($current_filter, array( 'unique_sku', 'lock_on_sku' )) ? 'sku' : $current_filter;
+            $column = in_array($current_filter, ['unique_sku', 'lock_on_sku']) ? 'sku' : $current_filter;
+
             return $this->data_store->lookup_table_has($column, $id_value, $product_id, $language);
         }
+
         return $id_found;
     }
 
@@ -639,12 +648,13 @@ class PLLWC_Products
      *
      * @param bool|null  $locked  Whether the SKU is locked or not, `null` if not processed at all.
      * @param WC_Product $product Product of the SKU to lock.
+     *
      * @return bool|null Whether the SKU is locked or not, `null` if not bypassed.
      */
     public function filter_lock_on_sku($locked, $product)
     {
         if (null === $locked && $product instanceof WC_Product) {
-            return ! $this->unique_id(true, $product->get_id(), $product->get_sku());
+            return !$this->unique_id(true, $product->get_id(), $product->get_sku());
         }
 
         return $locked;
@@ -657,15 +667,17 @@ class PLLWC_Products
      *
      * @param string[] $excludes Query vars excluded from the language filter.
      * @param WP_Query $query    WP Query object.
+     *
      * @return string[]
      */
     public function fix_on_sale_products_block_query($excludes, $query)
     {
         $q = &$query->query;
 
-        if (isset($q['post_type'], $q['post__in']) && 'product' === $q['post_type'] && array_merge(array( 0 ), wc_get_product_ids_on_sale()) === $q['post__in']) {
-            $excludes = array_diff($excludes, array( 'post__in' ));
+        if (isset($q['post_type'], $q['post__in']) && 'product' === $q['post_type'] && array_merge([0], wc_get_product_ids_on_sale()) === $q['post__in']) {
+            $excludes = array_diff($excludes, ['post__in']);
         }
+
         return $excludes;
     }
 
@@ -680,15 +692,16 @@ class PLLWC_Products
      * @see PLLWC_Products::get_terms_args()
      *
      * @param WC_Product|int $product A product being saved.
+     *
      * @return void
      */
     public function store_product_data($product)
     {
-        if (! $product instanceof WC_Product) {
+        if (!$product instanceof WC_Product) {
             $product = wc_get_product($product);
         }
 
-        if (! $product instanceof WC_Product) {
+        if (!$product instanceof WC_Product) {
             return;
         }
 
@@ -699,6 +712,7 @@ class PLLWC_Products
 
             if (empty($lang)) {
                 $this->reset_product_data();
+
                 return;
             }
         }
@@ -707,13 +721,14 @@ class PLLWC_Products
 
         if (empty($attributes)) {
             $this->reset_product_data();
+
             return;
         }
 
-        $this->product_data = array(
+        $this->product_data = [
             'lang'       => $lang,
             'taxonomies' => array_map('wc_sanitize_taxonomy_name', array_keys($attributes)),
-        );
+        ];
     }
 
     /**
@@ -725,6 +740,7 @@ class PLLWC_Products
      * @see \Automattic\WooCommerce\Internal\ProductAttributesLookup\LookupDataStore::get_term_ids_by_slug_cache()
      *
      * @param array $args Arguments passed to WP_Term_Query.
+     *
      * @return array Modified arguments.
      */
     public function get_terms_args($args)
@@ -737,7 +753,7 @@ class PLLWC_Products
             // Not the arguments we're looking for.
             return $args;
         }
-        if (empty($args['taxonomy']) || ! is_array($args['taxonomy']) || 1 !== count($args['taxonomy'])) {
+        if (empty($args['taxonomy']) || !is_array($args['taxonomy']) || 1 !== count($args['taxonomy'])) {
             // Not the arguments we're looking for.
             return $args;
         }
@@ -766,20 +782,21 @@ class PLLWC_Products
      */
     public function reset_product_data()
     {
-        $this->product_data = array(
+        $this->product_data = [
             'lang'       => false,
-            'taxonomies' => array(),
-        );
+            'taxonomies' => [],
+        ];
     }
 
     /**
      * Synchronizes product properties through all its translations.
      * The goal is also to trigger the product attributes lookup table update.
-     * See https://github.com/woocommerce/woocommerce/blob/7.4.1/plugins/woocommerce/includes/abstracts/abstract-wc-product.php#L1428-L1431
+     * See https://github.com/woocommerce/woocommerce/blob/7.4.1/plugins/woocommerce/includes/abstracts/abstract-wc-product.php#L1428-L1431.
      *
      * @since 1.8
      *
      * @param WC_Product $product The product that has been just saved.
+     *
      * @return void
      */
     public function copy_product($product)
@@ -819,6 +836,7 @@ class PLLWC_Products
      * @param WC_Product $from The product we copy information from.
      * @param WC_Product $to   The target product.
      * @param string     $lang Language of the target product.
+     *
      * @return int The id of the target product.
      */
     public function copy_product_props($from, $to, $lang)
@@ -831,7 +849,7 @@ class PLLWC_Products
             $to->set_status($from->get_status());
         }
 
-        if (! empty($to->get_changes())) {
+        if (!empty($to->get_changes())) {
             $to->save();
         }
 
@@ -847,11 +865,12 @@ class PLLWC_Products
      * @param int    $to       ID of the target.
      * @param string $lang     Language slug of the target post.
      * @param string $strategy `sync` if doing synchro, `copy` otherwise.
+     *
      * @return void
      */
     public function synchronize_product($from, $to, $lang, $strategy)
     {
-        $product        = wc_get_product($from);
+        $product = wc_get_product($from);
         $target_product = wc_get_product($to);
 
         if (empty($product) || empty($target_product)) {
@@ -869,12 +888,13 @@ class PLLWC_Products
      * @since 2.2
      *
      * @param WC_Product_Variable $product The variable product.
+     *
      * @return void
      */
     protected function maybe_set_variations_language(WC_Product_Variable $product): void
     {
         $language = $this->data_store->get_language($product->get_id());
-        if (! $language) {
+        if (!$language) {
             return;
         }
 

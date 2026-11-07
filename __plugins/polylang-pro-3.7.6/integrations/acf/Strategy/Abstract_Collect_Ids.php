@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 use WP_Syntex\Polylang_Pro\Integrations\ACF\Entity\Abstract_Object;
@@ -21,7 +17,7 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
     /**
      * @var int[] Entities IDs linked to an object.
      */
-    protected $linked_ids = array();
+    protected $linked_ids = [];
 
     /**
      * Executes the strategy on a given field.
@@ -33,13 +29,15 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
      * @param mixed           $value  Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   Optional arguments, none here.
+     *
      * @return mixed Untouched custom field value.
      */
-    protected function apply(Abstract_Object $object, $value, array $field, array $args = array()) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-    {$this->linked_ids = array_merge(
-        $this->linked_ids,
-        $this->sanitize_ids($this->get_ids_from_field($value, $field))
-    );
+    protected function apply(Abstract_Object $object, $value, array $field, array $args = []) // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+    {
+        $this->linked_ids = array_merge(
+            $this->linked_ids,
+            $this->sanitize_ids($this->get_ids_from_field($value, $field))
+        );
 
         return $value;
     }
@@ -50,6 +48,7 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return bool
      */
     protected function can_execute_recursive(array $field): bool
@@ -67,19 +66,20 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
      * @since 3.7
      *
      * @param int|int[]|scalar|scalar[] $value Custom field value of the source object.
+     *
      * @return int[]
      */
     protected function sanitize_ids($value): array
     {
         if (is_numeric($value)) {
-            return array( (int) $value );
+            return [(int) $value];
         }
 
         if (is_array($value)) {
             return array_map('intval', $value);
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -88,6 +88,7 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
      * @since 3.7
      *
      * @param Translatable_Entity_Interface $object Object holding the logic to apply the strategy.
+     *
      * @return int[]
      */
     public function get(Translatable_Entity_Interface $object): array
@@ -104,6 +105,7 @@ abstract class Abstract_Collect_Ids extends Abstract_Strategy
      *
      * @param mixed $value Custom field value of the source object.
      * @param array $field Custom field definition.
+     *
      * @return int|int[]|scalar|scalar[] Custom field value.
      */
     abstract protected function get_ids_from_field($value, array $field);

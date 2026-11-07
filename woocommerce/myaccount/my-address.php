@@ -2,7 +2,7 @@
 
 defined('ABSPATH') || exit;
 
-$customer_id   = get_current_user_id();
+$customer_id = get_current_user_id();
 $multi_address = !wc_ship_to_billing_address_only() && wc_shipping_enabled();
 
 if ($multi_address) {

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-WC
- */
-
 defined('ABSPATH') || exit;
 
 /**
@@ -35,8 +31,9 @@ class PLLWC_Order_Language_CPT extends PLLWC_Object_Language
     {
         parent::init();
 
-        add_filter('pll_get_post_types', array( $this, 'translated_post_types' ), 10, 2);
-        add_filter('pll_bulk_translate_post_types', array( $this, 'bulk_translate_post_types' ));
+        add_filter('pll_get_post_types', [$this, 'translated_post_types'], 10, 2);
+        add_filter('pll_bulk_translate_post_types', [$this, 'bulk_translate_post_types']);
+
         return $this;
     }
 
@@ -47,9 +44,11 @@ class PLLWC_Order_Language_CPT extends PLLWC_Object_Language
      *
      * @param string[] $types List of post type names for which Polylang manages language and translations.
      * @param bool     $hide  True when displaying the list in Polylang settings.
+     *
      * @return string[] List of post type names for which Polylang manages language and translations.
      *
      * @phpstan-param array<non-falsy-string> $types
+     *
      * @phpstan-return array<non-falsy-string>
      */
     public function translated_post_types($types, $hide)
@@ -65,9 +64,11 @@ class PLLWC_Order_Language_CPT extends PLLWC_Object_Language
      * @since 1.0.4
      *
      * @param string[] $types List of post type names for which Polylang manages the bulk translate.
+     *
      * @return string[]
      *
      * @phpstan-param array<non-falsy-string> $types
+     *
      * @phpstan-return array<non-falsy-string>
      */
     public function bulk_translate_post_types($types)
@@ -88,7 +89,7 @@ class PLLWC_Order_Language_CPT extends PLLWC_Object_Language
      */
     public function get_post_types($context = 'default')
     {
-        $woo_types = array( 'shop_order' );
+        $woo_types = ['shop_order'];
 
         if ('display' !== $context) {
             $woo_types[] = 'shop_order_placehold';

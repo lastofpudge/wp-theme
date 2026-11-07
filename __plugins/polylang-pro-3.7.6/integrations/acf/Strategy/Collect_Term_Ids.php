@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 /**
@@ -22,13 +18,14 @@ class Collect_Term_Ids extends Abstract_Collect_Ids
      *
      * @param mixed $value Custom field value of the source object.
      * @param array $field Custom field definition.
+     *
      * @return int|int[]|scalar|scalar[] Custom field value.
      */
     protected function get_ids_from_field($value, array $field)
     {
         switch ($field['type']) {
             case 'taxonomy':
-                if (! is_array($value) && ! (is_numeric($value) && ! is_float($value))) {
+                if (!is_array($value) && !(is_numeric($value) && !is_float($value))) {
                     break;
                 }
                 if (pll_is_translated_taxonomy($field['taxonomy'])) {
@@ -37,6 +34,6 @@ class Collect_Term_Ids extends Abstract_Collect_Ids
                 break;
         }
 
-        return array();
+        return [];
     }
 }

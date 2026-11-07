@@ -5,7 +5,7 @@ defined('ABSPATH') || exit;
 do_action('woocommerce_before_account_navigation');
 
 $menu_items = wc_get_account_menu_items();
-$nav_items  = [];
+$nav_items = [];
 
 foreach ($menu_items as $endpoint => $label) {
     $nav_items[] = [

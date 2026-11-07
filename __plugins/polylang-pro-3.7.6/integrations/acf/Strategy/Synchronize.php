@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package  Polylang-Pro
- */
-
 namespace WP_Syntex\Polylang_Pro\Integrations\ACF\Strategy;
 
 use PLL_Language;
@@ -48,17 +44,18 @@ class Synchronize extends Copy
      * @param mixed           $value  Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   {
-     *     Array of arguments.
+     *                                Array of arguments.
      *
-     *     @type mixed $original_value Optional. The translated value of the field, if any.
-     * }
+     * @var mixed $original_value Optional. The translated value of the field, if any.
+     *            }
+     *
      * @return mixed Custom field value of the target object.
      */
-    public function execute(Abstract_Object $object, $value, array $field, array $args = array())
+    public function execute(Abstract_Object $object, $value, array $field, array $args = [])
     {
-        $args = wp_parse_args($args, array( 'original_value' => null ));
+        $args = wp_parse_args($args, ['original_value' => null]);
 
-        if (! $this->can_execute($field)) {
+        if (!$this->can_execute($field)) {
             return $args['original_value'];
         }
 
@@ -66,19 +63,19 @@ class Synchronize extends Copy
             return parent::execute($object, $value, $field, $args);
         }
 
-        if (! isset($args['target_language']) || ! $args['target_language'] instanceof PLL_Language) {
+        if (!isset($args['target_language']) || !$args['target_language'] instanceof PLL_Language) {
             return $value;
         }
 
-        if (! pll_is_translated_taxonomy($field['taxonomy'])
-            || ! in_array($field['taxonomy'], get_object_taxonomies($object->get_type()), true)) {
+        if (!pll_is_translated_taxonomy($field['taxonomy'])
+            || !in_array($field['taxonomy'], get_object_taxonomies($object->get_type()), true)) {
             // Do not go any further if a taxonomy is not registered for the current object type.
             return $value;
         }
 
         $value = $this->translate_term($value, $args['target_language']);
 
-        if (! empty($field['save_terms']) && isset($args['target_id'])) {
+        if (!empty($field['save_terms']) && isset($args['target_id'])) {
             /*
              * Save terms for the target object.
              *
@@ -98,6 +95,7 @@ class Synchronize extends Copy
      * @since 3.7
      *
      * @param array $field Custom field definition.
+     *
      * @return bool
      */
     protected function can_execute_recursive(array $field): bool
@@ -150,15 +148,16 @@ class Synchronize extends Copy
      * @param array           $values Custom field value of the source object.
      * @param array           $field  Custom field definition.
      * @param array           $args   {
-     * Array of arguments.
+     *                                Array of arguments.
      *
-     *      @type PLL_Language $target_language Language object of the target object.
-     *      @type array        $original_value  The value to return if the field must not be synced/copied. Basically it's
-     *                                          the field's original value.
-     * }
+     * @var PLL_Language $target_language Language object of the target object.
+     * @var array        $original_value  The value to return if the field must not be synced/copied. Basically it's
+     *                   the field's original value.
+     *                   }
+     *
      * @return array Custom field value of the target object.
      */
-    protected function apply_on_rows(Abstract_Object $object, array $values, array $field, array $args = array()): array
+    protected function apply_on_rows(Abstract_Object $object, array $values, array $field, array $args = []): array
     {
         if (empty($field['sub_fields'])) {
             return $values;
@@ -168,37 +167,37 @@ class Synchronize extends Copy
             foreach ($values as $row => $subvalues) {
                 if (preg_match('/^row-(?<incr>.+)$/', (string) $row, $matches)) {
                     // Row already exists, let's update it.
-                    if (! is_array($subvalues)) {
+                    if (!is_array($subvalues)) {
                         continue;
                     }
 
-                    $i                   = $matches['incr'];
-                    $parent              = $this->get_field_key($field);
-                    $subfield['pll_key'] = $parent . '_' . $i . '_' . $subfield['key'];  // Adds an entry in `subfield` with the full path of the field.
-                    $values[ $row ]      = $this->apply_on_subfield(
+                    $i = $matches['incr'];
+                    $parent = $this->get_field_key($field);
+                    $subfield['pll_key'] = $parent.'_'.$i.'_'.$subfield['key'];  // Adds an entry in `subfield` with the full path of the field.
+                    $values[$row] = $this->apply_on_subfield(
                         $object,
                         $subvalues,
                         $subfield,
-                        array(
+                        [
                             'target_language' => $args['target_language'],
-                            'original_value'  => $args['original_value'][ $i ] ?? null,
-                        )
+                            'original_value'  => $args['original_value'][$i] ?? null,
+                        ]
                     );
 
                     continue;
                 }
 
                 // New row added, let's copy it.
-                $parent              = $this->get_field_key($field);
-                $subfield['pll_key'] = $parent . '_' . $row . '_' . $subfield['key'];  // Adds an entry in `subfield` with the full path of the field.
-                $values[ $row ]      = $this->copy->apply_on_subfield(
+                $parent = $this->get_field_key($field);
+                $subfield['pll_key'] = $parent.'_'.$row.'_'.$subfield['key'];  // Adds an entry in `subfield` with the full path of the field.
+                $values[$row] = $this->copy->apply_on_subfield(
                     $object,
                     $subvalues,
                     $subfield,
-                    array(
+                    [
                         'target_language' => $args['target_language'],
                         'original_value'  => null,
-                    )
+                    ]
                 );
             }
         }

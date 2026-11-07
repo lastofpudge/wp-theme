@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Customer on-hold order email
+ * Customer on-hold order email.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-on-hold-order.php.
  *
@@ -12,7 +12,7 @@
  * the readme will list any important changes.
  *
  * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates\Emails\Plain
+ *
  * @version 9.8.0
  */
 
@@ -27,12 +27,12 @@ echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
 /* translators: %s: Customer first name */
-echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name())) . "\n\n";
+echo sprintf(esc_html__('Hi %s,', 'woocommerce'), esc_html($order->get_billing_first_name()))."\n\n";
 if ($email_improvements_enabled) {
-    echo esc_html__('We’ve received your order and it’s currently on hold until we can confirm your payment has been processed.', 'woocommerce') . "\n\n";
-    echo esc_html__('Here’s a reminder of what you’ve ordered:', 'woocommerce') . "\n\n";
+    echo esc_html__('We’ve received your order and it’s currently on hold until we can confirm your payment has been processed.', 'woocommerce')."\n\n";
+    echo esc_html__('Here’s a reminder of what you’ve ordered:', 'woocommerce')."\n\n";
 } else {
-    echo esc_html__('Thanks for your order. It’s on-hold until we confirm that payment has been received.', 'woocommerce') . "\n\n";
+    echo esc_html__('Thanks for your order. It’s on-hold until we confirm that payment has been received.', 'woocommerce')."\n\n";
 }
 
 /*

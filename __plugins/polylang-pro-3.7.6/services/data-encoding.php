@@ -1,10 +1,6 @@
 <?php
 
 /**
- * @package Polylang-Pro
- */
-
-/**
  * Allows to decode and encode data in a given format.
  *
  * @since 3.6
@@ -26,14 +22,14 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param string $format Encoding format. Possible values are:
-     *    - An empty string: to (un)serialize.
-     *    - `serialize`.
-     *    - `json`.
-     *    Default is an empty string.
+     *                       - An empty string: to (un)serialize.
+     *                       - `serialize`.
+     *                       - `json`.
+     *                       Default is an empty string.
      */
     public function __construct(string $format = '')
     {
-        $this->format = ! empty($format) ? $format : 'serialize';
+        $this->format = !empty($format) ? $format : 'serialize';
     }
 
     /**
@@ -55,6 +51,7 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param mixed $data Data.
+     *
      * @return mixed|WP_Error Decoded data. A `WP_Error` object upon decoding failure.
      */
     public function decode($data)
@@ -78,6 +75,7 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param mixed $data Data, passed by reference.
+     *
      * @return WP_Error
      */
     public function decode_reference(&$data): WP_Error
@@ -89,6 +87,7 @@ class PLL_Data_Encoding
         }
 
         $data = $value;
+
         return new WP_Error();
     }
 
@@ -99,6 +98,7 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param mixed $data Data.
+     *
      * @return mixed Decoded data. A `WP_Error` object upon encoding failure.
      */
     public function encode($data)
@@ -122,6 +122,7 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param mixed $data Data, passed by reference.
+     *
      * @return WP_Error
      */
     public function encode_reference(&$data): WP_Error
@@ -133,6 +134,7 @@ class PLL_Data_Encoding
         }
 
         $data = $value;
+
         return new WP_Error();
     }
 
@@ -142,11 +144,12 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param mixed $data Data.
+     *
      * @return mixed|WP_Error Decoded data. A `WP_Error` object upon decoding failure.
      */
     private function decode_from_json($data)
     {
-        if (! is_string($data)) {
+        if (!is_string($data)) {
             return new WP_Error('pll-json-not-a-string', 'Value is not a string.');
         }
 
@@ -165,13 +168,14 @@ class PLL_Data_Encoding
      * @since 3.6
      *
      * @param mixed $data Data.
+     *
      * @return string|WP_Error Encoded data. A `WP_Error` object upon decoding failure.
      */
     private function encode_to_json($data)
     {
         $encoded = wp_json_encode($data, JSON_PRESERVE_ZERO_FRACTION); // Cannot trigger an Exception since we use the default value for `$depth`.
 
-        if (! is_string($encoded)) {
+        if (!is_string($encoded)) {
             return new WP_Error('pll-json-encoding-error', json_last_error_msg());
         }
 
